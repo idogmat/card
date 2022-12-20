@@ -1,15 +1,15 @@
-import { AppRouter } from "./components/AppRouter/AppRouter";
-import EditableElement from "./components/EditableElement/EditableElement";
+import { AppRouter } from "../common/components/AppRouter/AppRouter";
+import EditableElement from "../common/components/EditableElement/EditableElement";
 import { HashRouter } from "react-router-dom";
-import { Header } from "./components/Header/Header";
+import { Header } from "../common/components/Header/Header";
 import { Provider } from "react-redux";
 import React from "react";
-import SuperButton from "./components/SuperButton/SuperButton";
-import SuperCheckbox from "./components/SuperCheckbox/SuperCheckbox";
-import SuperInputText from "./components/SuperInput/SuperInput";
-import SuperRadio from "./components/SuperRadio/SuperRadio";
-import SuperSelect from "./components/SuperSelect/SuperSelect";
-import { store } from "./redux/store";
+import SuperButton from "../common/components/SuperButton/SuperButton";
+import SuperCheckbox from "../common/components/SuperCheckbox/SuperCheckbox";
+import SuperInputText from "../common/components/SuperInput/SuperInput";
+import SuperRadio from "../common/components/SuperRadio/SuperRadio";
+import SuperSelect from "../common/components/SuperSelect/SuperSelect";
+import { store } from "./store";
 
 function App() {
   const mockOptions = [1, 2, 3, 4];

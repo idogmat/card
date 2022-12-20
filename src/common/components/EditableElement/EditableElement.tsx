@@ -5,7 +5,7 @@ import React, {
   useState,
 } from "react";
 
-import SuperInputText from "./../SuperInput/SuperInput";
+import SuperInputText from "../SuperInput/SuperInput";
 
 type DefaultInputPropsType = DetailedHTMLProps<
   InputHTMLAttributes<HTMLInputElement>,

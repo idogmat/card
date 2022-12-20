@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import React from "react";
-import { routes } from "./../../routes/index";
+import { routes } from "../../routes";
 
 export const Header = () => {
   const activeClassName = "link-active";

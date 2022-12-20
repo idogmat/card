@@ -1,7 +1,7 @@
-import { ErrorPage } from "./../pages/404/404";
-import { Login } from "./../pages/Login/Login";
-import { Profile } from "./../pages/Profile/Profile";
-import { Register } from "./../pages/Register/Register";
+import { ErrorPage } from "../../features/404/404";
+import { Login } from "../../features/Login/Login";
+import { Profile } from "../../features/Profile/Profile";
+import { Register } from "../../features/Register/Register";
 
 export interface IRoute {
   path: string;
