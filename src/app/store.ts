@@ -8,5 +8,5 @@ export const store = configureStore({
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
-
-
+//@ts-ignore
+window.store=store

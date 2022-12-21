@@ -3,6 +3,7 @@ import {Login} from "../../features/Login/Login";
 import {Profile} from "../../features/Profile/Profile";
 import {Register} from "../../features/Register/Register";
 
+
 export interface IRoute {
     path: string;
     component: React.FC;

@@ -1,7 +1,16 @@
-
 import React from "react";
 import { useFormik } from "formik";
-import { Grid, Typography } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
+import {registerTC} from "./registerThunks";
+import {useAppDispatch} from "../../common/hooks/hooks";
 
 export interface IRegisterFormErrors {
   email: string;
@@ -10,6 +19,7 @@ export interface IRegisterFormErrors {
 }
 
 export const Register = () => {
+  const dispatch = useAppDispatch()
   const registerForm = useFormik({
     validate: (values) => {
       const errors = {} as IRegisterFormErrors;
@@ -24,16 +34,41 @@ export const Register = () => {
       confirmPassword: "",
     },
     onSubmit: (values) => {
-      console.log(values);
+      registerTC({email: values.email, password: values.password})
     },
   });
   return (
     <Grid container justifyContent={"center"} alignContent={"center"}>
       <Grid item>
-        <Typography variant={"h2"}>Sign up</Typography>
-        <form onSubmit={registerForm.handleSubmit}></form>
+        <form onSubmit={registerForm.handleSubmit}>
+          <FormControl>
+            <FormLabel>
+              <Typography variant={'h3'}>Sign up</Typography>
+            </FormLabel>
+            <FormGroup>
+              <TextField
+                label={"Email"}
+                margin={"normal"}
+                {...registerForm.getFieldProps("email")}
+              />
+              <TextField
+                 label={"Password"}
+                 margin={"normal"}
+                 {...registerForm.getFieldProps("password")}
+              />
+              <TextField
+                 label={"Confirm your password"}
+                 margin={"normal"}
+                 {...registerForm.getFieldProps("confirmPassword")}
+              />
+            </FormGroup>
+            <Button type={'submit'} variant={'contained'} color={'primary'}>
+              Register
+            </Button>
+          </FormControl>
+
+        </form>
       </Grid>
     </Grid>
   );
-
 };
