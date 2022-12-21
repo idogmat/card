@@ -9,6 +9,7 @@ import { store } from "./store";
 
 function App() {
   const mockOptions = [1, 2, 3, 4];
+
   return (
     <Provider store={store}>
       <HashRouter>
