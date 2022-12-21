@@ -1,6 +1,5 @@
-
-import {LoginUserType, ResponseType, UserType} from "../../common/api/types";
-
+import {LoginUserType, ResponseType} from "../../common/api/types";
+import {UserType} from "./loginReducer";
 import {instance} from "../../common/api/api";
 
 export const API = {

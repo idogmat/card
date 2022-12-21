@@ -24,19 +24,7 @@ export type LoginUserType = {
     isAdmin: boolean;
     verified: boolean;
     rememberMe: boolean;
-    error?: string;
 
-}
-export type UserType = {
-    id: string;
-    email: string;
-    name: string;
-    avatar?: string;
-    publicCardPacksCount: number;
-    created: Date;
-    updated: Date;
-    token:string;
-    verified: boolean;
     error?: string;
 
 }
