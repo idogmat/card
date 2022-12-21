@@ -12,7 +12,7 @@ type FormikErrorType = {
   password?: string
   rememberMe?: boolean
 }
-const Login = () => {
+export const Login = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const isLogged = useAllSelector(state => state.auth.isLoggedIn)
@@ -42,7 +42,7 @@ const Login = () => {
     },
   })
   if(isLogged){
-    return <Navigate to={'/'}/>
+    return <Navigate to={'/profile'}/>
   }
   return <Grid container justifyContent={'center'}>
     <Grid item justifyContent={'center'}>
@@ -82,5 +82,3 @@ const Login = () => {
     </Grid>
   </Grid>
 };
-
-export default Login;
