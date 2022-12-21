@@ -20,7 +20,6 @@ function App() {
           </main>
         </>
       </HashRouter>
-      <EditableElement value="placeholder" />
     </Provider>
   );
 }

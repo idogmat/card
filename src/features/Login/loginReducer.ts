@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {AppThunkActionType} from "../../app/store";
 import {API} from "../../api/auth";
+import {AppThunkActionType} from "../../common/hooks/hooks";
 
 export type UserType = {
   email: string
@@ -19,7 +19,6 @@ const slice = createSlice({
       state.isLoggedIn = action.payload.value
     }
   }
-
 })
 const authReducer=slice.reducer
 export const loginAC= slice.actions.loginAC

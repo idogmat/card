@@ -8,6 +8,14 @@ const instance = axios.create({
     withCredentials: true,
     baseURL: baseUrl,
 });
+
+
+export interface IRegisterData {
+    email: string;
+    password: string;
+}
+
+
 type ResponseType<D>={
     data:D
 }

@@ -1,7 +1,7 @@
 import { ErrorPage } from "../../features/404/404";
 import  Login  from "../../features/Login/Login";
 import { Profile } from "../../features/Profile/Profile";
-import  Register  from "../../features/Register/Register";
+import  {Register}   from "../../features/Register/Register";
 
 export interface IRoute {
   path: string;
