@@ -16,7 +16,7 @@ export interface IRoute {
 }
 
 export enum RoutesEnum {
-    NOT_FINED = "/*",
+    NOT_FINED = "*",
     LOGIN = "/login",
     PROFILE = "/profile",
     RECOVERY = "/recovery",
