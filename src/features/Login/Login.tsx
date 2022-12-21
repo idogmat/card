@@ -87,6 +87,7 @@ export const Login = () => {
 <<<<<<< HEAD
 
 export default Login;
+<<<<<<< HEAD
 =======
 >>>>>>> d37af5d6f737d6b33432aabc0286387706b2af34
 =======
@@ -94,3 +95,6 @@ export default Login;
 =======
 
 >>>>>>> 666dbfd (k)
+=======
+
+>>>>>>> dev
