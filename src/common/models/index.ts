@@ -1,12 +1,21 @@
-export type IUser = {
+
+// export type IUser = {
+//   _id: string;
+//   email: string;
+//   name: string;
+//   isAdmin: boolean;
+//   avatar: string | null;
+// }
+export interface IUser{
   _id: string;
   email: string;
   name: string;
-  isAdmin:boolean;
-  avatar: string|null;
+  isAdmin: boolean;
+  avatar: string | null;
   publicCardPacksCount: number;
   verified: boolean;
   created: Date;
   updated: Date;
-
 };
+
+
