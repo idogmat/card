@@ -41,7 +41,6 @@ type LoginUserType = {
     isAdmin: boolean;
     verified: boolean;
     rememberMe: boolean;
-
     error?: string;
 
 }
