@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserType } from "../Login/loginReducer";
 import { IUser } from "../../common/models";
 
 export interface IAuthState {
