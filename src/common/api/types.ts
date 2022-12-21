@@ -24,7 +24,6 @@ export type LoginUserType = {
     isAdmin: boolean;
     verified: boolean;
     rememberMe: boolean;
-<<<<<<< HEAD
     error?: string;
 
 }
@@ -38,9 +37,6 @@ export type UserType = {
     updated: Date;
     token:string;
     verified: boolean;
-=======
-
->>>>>>> c95183a (auth)
     error?: string;
 
 }

@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import {registerTC} from "./registerThunks";
+import {useAppDispatch} from "../../common/hooks/hooks";
 
 export interface IRegisterFormErrors {
   email: string;
@@ -18,6 +19,7 @@ export interface IRegisterFormErrors {
 }
 
 export const Register = () => {
+  const dispatch = useAppDispatch()
   const registerForm = useFormik({
     validate: (values) => {
       const errors = {} as IRegisterFormErrors;

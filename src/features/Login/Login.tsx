@@ -4,8 +4,8 @@ import FormControl from "@mui/material/FormControl/FormControl";
 import FormGroup from "@mui/material/FormGroup/FormGroup";
 import {Checkbox, FormControlLabel, Grid, TextField} from "@mui/material";
 import {useFormik} from "formik";
-import {Navigate, useNavigate} from "react-router-dom";
-import {useAllSelector, useAppDispatch} from "../../common/hooks/hooks";
+import {useNavigate} from "react-router-dom";
+import {useAppDispatch} from "../../common/hooks/hooks";
 import {loginThunk} from "./loginThunks";
 
 type FormikErrorType = {
@@ -16,7 +16,7 @@ type FormikErrorType = {
 export const Login = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const isLogged = useAllSelector(state => state.auth.isLoggedIn)
+
 
 
   const formik = useFormik({
@@ -42,9 +42,7 @@ export const Login = () => {
       dispatch(loginThunk(values))
     },
   })
-  if(isLogged){
-    return <Navigate to={'/profile'}/>
-  }
+
   return <Grid container justifyContent={'center'}>
     <Grid item justifyContent={'center'}>
       <form onSubmit={formik.handleSubmit}>
@@ -83,18 +81,4 @@ export const Login = () => {
     </Grid>
   </Grid>
 };
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-export default Login;
-<<<<<<< HEAD
-=======
->>>>>>> d37af5d6f737d6b33432aabc0286387706b2af34
-=======
->>>>>>> fd76c21 (k)
-=======
-
->>>>>>> 666dbfd (k)
-=======
-
->>>>>>> dev

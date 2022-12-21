@@ -1,14 +1,9 @@
-<<<<<<< HEAD
-import { ErrorPage } from "../../features/404/404";
-import  Login  from "../../features/Login/Login";
-import { Profile } from "../../features/Profile/Profile";
-import  {Register}   from "../../features/Register/Register";
-=======
+
 import {ErrorPage} from "../../features/404/404";
 import {Login} from "../../features/Login/Login";
 import {Profile} from "../../features/Profile/Profile";
 import {Register} from "../../features/Register/Register";
->>>>>>> fd76c21 (k)
+
 
 export interface IRoute {
     path: string;

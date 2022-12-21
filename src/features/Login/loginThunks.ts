@@ -1,13 +1,14 @@
 import {AppThunkActionType} from "../../common/hooks/hooks";
 import {API} from "../../api/auth";
-import {loginAC, UserType} from "./loginReducer";
+import {UserType} from "../../common/api/types";
 
-export const loginThunk = (user: UserType): AppThunkActionType => async (dispatch) => {
+
+export const loginThunk = (user: any): AppThunkActionType => async (dispatch) => {
     try {
         const res = await API.login(user)
         console.log(res)
 
-        dispatch(loginAC({value: true}))
+        // dispatch(loginAC({value: true}))
 
     } catch (e: any) {
         // handleServerNetworkError(e, dispatch)
