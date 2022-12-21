@@ -1,6 +1,7 @@
-import {configureStore} from "@reduxjs/toolkit";
-import {rootReducer} from "./rootReducer";
-import thunk from "redux-thunk";
+import {configureStore, ThunkAction} from "@reduxjs/toolkit";
+import { rootReducer } from "./rootReducer";
+import thunk, {ThunkDispatch} from "redux-thunk";
+import {AnyAction} from "redux";
 
 export const store = configureStore({
   reducer: rootReducer,
@@ -8,5 +9,5 @@ export const store = configureStore({
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
-//@ts-ignore
-window.store=store
+
+
