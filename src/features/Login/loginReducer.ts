@@ -1,4 +1,8 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+<<<<<<< HEAD
+=======
+
+>>>>>>> fd76c21 (k)
 import {API} from "../../api/auth";
 import {AppThunkActionType} from "../../common/hooks/hooks";
 
@@ -39,3 +43,20 @@ export const loginThunk = (user: UserType): AppThunkActionType => async (dispatc
 }
 
 
+<<<<<<< HEAD
+=======
+    console.log(e)
+  }
+}
+// export const AuthMeThunk = (): AppThunkActionType => async (dispatch) => {
+//   try {
+//     const res = await API.authMe()
+//     console.log(res)
+//     dispatch(loginAC({isLoggedIn: true}))
+//
+//   } catch (e: any) {
+//
+//     console.log(e)
+//   }
+// }
+>>>>>>> fd76c21 (k)
