@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import Button from "@mui/material/Button/Button";
 import FormControl from "@mui/material/FormControl/FormControl";
 import FormGroup from "@mui/material/FormGroup/FormGroup";
@@ -85,5 +85,4 @@ const Login = () => {
 };
 
 export default Login;
-=======
->>>>>>> d37af5d6f737d6b33432aabc0286387706b2af34
+
