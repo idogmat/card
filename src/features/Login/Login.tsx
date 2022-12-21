@@ -3,9 +3,9 @@ import FormControl from "@mui/material/FormControl/FormControl";
 import FormGroup from "@mui/material/FormGroup/FormGroup";
 import {Checkbox, FormControlLabel, Grid, TextField} from "@mui/material";
 import {useFormik} from "formik";
-import {loginThunk} from "./loginReducer";
 import {Navigate, useNavigate} from "react-router-dom";
 import {useAllSelector, useAppDispatch} from "../../common/hooks/hooks";
+import {loginThunk} from "./loginThunks";
 
 type FormikErrorType = {
   email?: string

@@ -35,25 +35,5 @@ export const loginThunk = (user: UserType): AppThunkActionType => async (dispatc
     console.log(e)
   }
 }
-export const registrationThunk = (user: UserType): AppThunkActionType => async (dispatch) => {
-  try {
-    const res = await API.register(user)
-    console.log(res)
 
-  } catch (e: any) {
 
-    console.log(e)
-  }
-}
-export const AuthMeThunk = (): AppThunkActionType => async (dispatch) => {
-  try {
-    const res = await API.authMe()
-    console.log(res)
-
-    dispatch(loginAC({value: true}))
-
-  } catch (e: any) {
-
-    console.log(e)
-  }
-}
