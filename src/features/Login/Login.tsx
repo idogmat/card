@@ -61,7 +61,7 @@ export const Login = () => {
           alignContent={"center"}
           sx={{ height: "100vh" }}
       >
-        <Grid item justifyContent={"center"} xs={3}>
+        <Grid item justifyContent={"center"} xs={3} sx={{ minWidth: "360px" }}>
           <Paper sx={{ padding: "35px" }}>
             <form onSubmit={loginForm.handleSubmit}>
               <FormControl sx={{ width: "100%", textAlign: "center" }}>
@@ -80,7 +80,9 @@ export const Login = () => {
                       variant={"standard"}
                       {...loginForm.getFieldProps("email")}
                   />
-                  <TextField
+                  <TextField  sx={{
+                    marginBottom: '1rem',
+                  }}
                       error={hasError("password")}
                       label={
                         hasError("password")
