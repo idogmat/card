@@ -73,7 +73,7 @@ export const Login = () => {
             <FormControl sx={{ width: "100%", textAlign: "center" }}>
               <FormLabel>
                 <Typography variant={"h3"} sx={{ textAlign: "center" }}>
-                  Sign up
+                  Sign in
                 </Typography>
               </FormLabel>
               <FormGroup>
@@ -109,6 +109,7 @@ export const Login = () => {
                   }}
                 />
               </FormGroup>
+              <Link to={"/recovery"}>Forgot Password</Link>
               <Button
                 type={"submit"}
                 variant={"contained"}
