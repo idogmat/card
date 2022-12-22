@@ -1,9 +1,10 @@
 import { AppThunkActionType } from "../../common/hooks/hooks";
-import { API } from "../../api/auth";
+
 import { AuthAC } from "../Auth/authReducer";
 import { AppAC } from "../../app/appReducer";
 import { IUser } from "../../common/models";
 import { UserAC } from "../User/userReducer";
+import { API } from "./loginApi";
 
 export interface IUserFields {
   email: string;
@@ -17,7 +18,7 @@ export const loginTC =
     dispatch(AppAC.setIsLoading({ isLoading: true }));
     try {
       const res = await API.login(fields);
-      const { token, error, rememberMe, ...user } = res.data;
+      const { error, ...user } = res.data;
       dispatch(AuthAC.setIsAuth({ isAuth: true }));
       dispatch(UserAC.setUser({ user }));
     } catch (e: any) {
