@@ -72,9 +72,15 @@ export const Register = () => {
       container
       justifyContent={"center"}
       alignContent={"center"}
-      sx={{ height: "100vh" }}
+      sx={{
+        height: "100%",
+        ["@media (max-width: 768px)"]: {
+          paddingTop: "400px",
+          paddingBottom: "5vh",
+        },
+      }}
     >
-      <Grid item justifyContent={"center"} xs={3}>
+      <Grid item justifyContent={"center"} xs={3} sx={{ minWidth: "360px" }}>
         <Paper sx={{ padding: "35px" }}>
           <form onSubmit={registerForm.handleSubmit}>
             <FormControl sx={{ width: "100%", textAlign: "center" }}>

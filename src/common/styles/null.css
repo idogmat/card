@@ -51,6 +51,11 @@ article > * + * {
     margin-top: 1em;
 }
 
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
 input,
 button,
 textarea,
