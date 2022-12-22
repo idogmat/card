@@ -1,12 +1,5 @@
 
-// export type IUser = {
-//   _id: string;
-//   email: string;
-//   name: string;
-//   isAdmin: boolean;
-//   avatar: string | null;
-// }
-export interface IUser{
+export interface IUser {
   _id: string;
   email: string;
   name: string;
@@ -16,6 +9,5 @@ export interface IUser{
   verified: boolean;
   created: Date;
   updated: Date;
-};
-
+}
 

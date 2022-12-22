@@ -1,36 +1,54 @@
-import React from "react";
-import { useFormik } from "formik";
+import React, { useState } from "react";
 import {
   Button,
   FormControl,
   FormGroup,
   FormLabel,
   Grid,
+  IconButton,
+  InputAdornment,
+  Paper,
   TextField,
   Typography,
 } from "@mui/material";
-
 import { registerTC } from "./registerThunks";
-import {useAppDispatch} from "../../common/hooks/hooks";
-
+import { useAppDispatch } from "../../common/hooks/hooks";
+import { Link, NavLink } from "react-router-dom";
+import { useFormik } from "formik";
+import { RegisterFieldError } from "./RegisterFieldError";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export interface IRegisterFormErrors {
   email: string;
   password: string;
   confirmPassword: string;
 }
+export type RegisterFormErrorFieldsType =
+  | "email"
+  | "password"
+  | "confirmPassword";
 
 export const Register = () => {
 
   const dispatch = useAppDispatch();
+  const [showPassword, setShowPassword] = useState(false);
 
   const registerForm = useFormik({
     validate: (values) => {
       const errors = {} as IRegisterFormErrors;
-      if (values.password.length < 8) errors.password = "Incorrect password";
-      if (values.confirmPassword !== values.password)
+      if (values.password.length < 8) {
+        errors.password = "Incorrect password";
+      }
+      if (values.confirmPassword !== values.password) {
         errors.confirmPassword = "Different password";
-      if (!values.email.length) errors.email = "Field is required";
+      }
+      if (
+        !values.email.length ||
+        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+      ) {
+        errors.email = "Enter the correct email";
+      }
+      return errors;
     },
     initialValues: {
       email: "",
@@ -42,51 +60,102 @@ export const Register = () => {
     },
   });
 
+  const changePasswordFieldType = () => setShowPassword((prev) => !prev);
+  const passwordFieldType = showPassword ? "text" : "password";
+
+  const hasError = (prop: RegisterFormErrorFieldsType) => {
+    return !!registerForm.errors[prop] && !!registerForm.touched[prop];
+  };
+
   return (
-    <Grid container justifyContent={"center"} alignContent={"center"}>
-      <Grid item>
-        <form onSubmit={registerForm.handleSubmit}>
-          <FormControl>
-            <FormLabel>
-              <Typography variant={"h3"}>Sign up</Typography>
-            </FormLabel>
-            <FormGroup>
-              <TextField
-                label={"Email"}
-                margin={"normal"}
-                {...registerForm.getFieldProps("email")}
-              />
-              {registerForm.errors.email ? (
-                <p>{registerForm.errors.email}</p>
-              ) : (
-                ""
-              )}
-              <TextField
-                label={"Password"}
-                margin={"normal"}
-                {...registerForm.getFieldProps("password")}
-              />
-              {registerForm.errors.password ? (
-                <p>{registerForm.errors.password}</p>
-              ) : (
-                ""
-              )}
-              <TextField
-                label={"Confirm your password"}
-                margin={"normal"}
-                {...registerForm.getFieldProps("confirmPassword")}
-              />
-              {registerForm.errors.confirmPassword ? (
-                <p>{registerForm.errors.confirmPassword}</p>
-              ) : (
-                ""
-              )}
-            </FormGroup>
-            <Button type={"submit"} variant={"contained"} color={"primary"}>
-              Register
-            </Button>
-          </FormControl>
-        </form>
+    <Grid
+      container
+      justifyContent={"center"}
+      alignContent={"center"}
+      sx={{ height: "100vh" }}
+    >
+      <Grid item justifyContent={"center"} xs={3}>
+        <Paper sx={{ padding: "35px" }}>
+          <form onSubmit={registerForm.handleSubmit}>
+            <FormControl sx={{ width: "100%", textAlign: "center" }}>
+              <FormLabel>
+                <Typography variant={"h3"} sx={{ textAlign: "center" }}>
+                  Sign up
+                </Typography>
+              </FormLabel>
+              <FormGroup>
+                <TextField
+                  error={hasError("email")}
+                  label={
+                    hasError("email") ? registerForm.errors.email : "Email"
+                  }
+                  margin={"normal"}
+                  variant={"standard"}
+                  {...registerForm.getFieldProps("email")}
+                />
+                <TextField
+                  error={hasError("password")}
+                  label={
+                    hasError("password")
+                      ? registerForm.errors.password
+                      : "Password"
+                  }
+                  margin={"normal"}
+                  type={passwordFieldType}
+                  variant={"standard"}
+                  {...registerForm.getFieldProps("password")}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position={"end"}>
+                        <IconButton onClick={changePasswordFieldType}>
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <TextField
+                  error={hasError("confirmPassword")}
+                  label={
+                    hasError("confirmPassword")
+                      ? registerForm.errors.confirmPassword
+                      : "Confirm password"
+                  }
+                  margin={"normal"}
+                  type={passwordFieldType}
+                  variant={"standard"}
+                  sx={{ marginBottom: "20px" }}
+                  {...registerForm.getFieldProps("confirmPassword")}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position={"end"}>
+                        <IconButton onClick={changePasswordFieldType}>
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </FormGroup>
+              <Button
+                type={"submit"}
+                variant={"contained"}
+                color={"primary"}
+                sx={{ borderRadius: "30px", marginBottom: "30px" }}
+              >
+                Sign up
+              </Button>
+              <Typography mb={1} variant={"subtitle1"} component={"span"}>
+                Already have an account?
+              </Typography>
+              <Typography sx={{ fontSize: "16px", color: "#366EFF" }}>
+                <Link to={"/login"} style={{ color: "inherit" }}>
+                  Sign in
+                </Link>
+              </Typography>
+            </FormControl>
+          </form>
+        </Paper>
       </Grid>
     </Grid>
   );

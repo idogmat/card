@@ -1,19 +1,40 @@
-import {Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 import React from "react";
-import {routes} from "../../routes";
+import {useAllSelector} from "../../hooks/hooks";
+import {authSelector} from "../../../features/Auth/selectors";
+import {authRoutes, RoutesEnum, unAuthRoutes} from "../../routes";
 
 export const AppRouter = () => {
+  const { isAuth } = useAllSelector(authSelector);
   return (
     <Routes>
-      {routes.map((route) => {
-        return (
-          <Route
-            key={route.path}
-            path={route.path}
-            element={<route.component />}
-          />
-        );
-      })}
+      {isAuth ? (
+        <>
+          {authRoutes.map((route) => {
+            return (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={<route.component />}
+              />
+            );
+          })}
+          <Route path={"/*"} element={<Navigate to={RoutesEnum.PROFILE} />} />
+        </>
+      ) : (
+        <>
+          {unAuthRoutes.map((route) => {
+            return (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={<route.component />}
+              />
+            );
+          })}
+          <Route path={"/*"} element={<Navigate to={RoutesEnum.REGISTER} />} />
+        </>
+      )}
     </Routes>
   );
 };
