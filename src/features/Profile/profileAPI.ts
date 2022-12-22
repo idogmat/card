@@ -1,6 +1,6 @@
 import { instance } from "../../common/api/baseAPI";
 import { IUser } from "../../common/models";
-import { ResponseType } from "../../common/api/types";
+
 export interface IUpdatedUserInfo {
   name: string;
   avatar: string | null;

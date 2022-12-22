@@ -1,10 +1,18 @@
-import { LoginUserType, ResponseType } from "../../common/api/types";
 import { instance } from "../../common/api/baseAPI";
 import { IUserFields } from "./loginThunks";
+import { LoginUserType } from "../../common/api/types";
 
 export const API = {
   login: (user: IUserFields) =>
-    instance.post<ResponseType<LoginUserType>>("auth/login", user),
-  setNewPassword: () =>
-    instance.post<ResponseType<LoginUserType>>("/auth/me", {}),
+    instance.post<LoginUserType>("auth/login", user),
+  recoveryPassword: (email: any) =>
+    instance.post<{ success: boolean }>(
+      "https://neko-back.herokuapp.com/2.0/auth/forgot",
+      email
+    ),
+  setNewPassword: (email: any) =>
+    instance.post<{ info: string }>(
+      "https://neko-back.herokuapp.com/2.0/auth/set-new-password",
+      email
+    ),
 };

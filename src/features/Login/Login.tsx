@@ -109,6 +109,7 @@ export const Login = () => {
                   }}
                 />
               </FormGroup>
+              <Link to={"/recovery"}>Forgot Password</Link>
               <Button
                 type={"submit"}
                 variant={"contained"}

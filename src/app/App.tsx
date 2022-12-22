@@ -1,11 +1,7 @@
 import { AppRouter } from "../common/components/AppRouter/AppRouter";
-import EditableElement from "../common/components/EditableElement/EditableElement";
-import { HashRouter } from "react-router-dom";
 import { Header } from "../common/components/Header/Header";
-import { Provider } from "react-redux";
 import React, { useEffect } from "react";
 import styles from "./App.module.css";
-import { store } from "./store";
 import { InitAppTC } from "./appThunks";
 import { useAllSelector, useAppDispatch } from "../common/hooks/hooks";
 import { appStateSelect } from "./selectors";
