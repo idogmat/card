@@ -1,5 +1,5 @@
-import {configureStore} from "@reduxjs/toolkit";
-import {rootReducer} from "./rootReducer";
+import { configureStore } from "@reduxjs/toolkit";
+import { rootReducer } from "./rootReducer";
 import thunk from "redux-thunk";
 
 export const store = configureStore({
@@ -9,4 +9,5 @@ export const store = configureStore({
 
 export type RootState = ReturnType<typeof rootReducer>;
 
-
+// @ts-ignore
+window.store = store;

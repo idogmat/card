@@ -4,11 +4,13 @@ import app from "./App";
 export interface IAppState {
   isLoading: boolean;
   error: string | null;
+  isInit: boolean;
 }
 
 const initialState: IAppState = {
   isLoading: false,
   error: null,
+  isInit: false,
 };
 
 const appSlice = createSlice({
@@ -20,6 +22,9 @@ const appSlice = createSlice({
     },
     setError: (draft, action: PayloadAction<{ error: string | null }>) => {
       draft.error = action.payload.error;
+    },
+    setIsInit: (draft, action: PayloadAction<{ isInit: boolean }>) => {
+      draft.isInit = action.payload.isInit;
     },
   },
 });

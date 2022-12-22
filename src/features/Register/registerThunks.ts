@@ -3,6 +3,7 @@ import { AppAC } from "../../app/appReducer";
 import { AuthAC } from "../Auth/authReducer";
 import { IRegisterData } from "../../api/auth";
 import { AppThunkActionType } from "../../common/hooks/hooks";
+import { UserAC } from "../User/userReducer";
 
 export const registerTC = ({
   email,
@@ -19,7 +20,7 @@ export const registerTC = ({
         avatar: null,
       };
       dispatch(AuthAC.setIsAuth({ isAuth: true }));
-      dispatch(AuthAC.setUser({ user }));
+      dispatch(UserAC.setUser({ user }));
     } catch (e) {
       console.log(e);
     } finally {
