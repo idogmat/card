@@ -12,10 +12,10 @@ export interface IRegisterData {
   password: string;
 }
 
-export type ResponseType<D> = {
+type ResponseType<D> = {
   data: D;
 };
-export type RegisterNewUserType = {
+type RegisterNewUserType = {
   addedUser: {
     _id: string;
     email: string;
@@ -28,7 +28,7 @@ export type RegisterNewUserType = {
     updated: Date;
   };
 };
-export type LoginUserType = {
+type LoginUserType = {
   _id: string;
   email: string;
   name: string;

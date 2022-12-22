@@ -56,7 +56,7 @@ const RecoveryPassword = () => {
           </Typography>
           <img src={svg} alt="checkMail" />
           <Typography variant={"h5"} sx={{ textAlign: "center" }}>
-            We’ve sent an Email with instructions to example@mail.com
+            We’ve sent an Email with instructions to {recoveryForm.values.email}
           </Typography>
           <Button
             type={"submit"}

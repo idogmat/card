@@ -4,13 +4,13 @@ import { AppAC } from "./appReducer";
 
 export const InitAppTC = (): AppThunkActionType => {
   return async (dispatch) => {
-    try {
-      dispatch(AppAC.setIsLoading({ isLoading: true }));
-      const res = await dispatch(AuthMeTC());
-    } catch (e) {
-    } finally {
-      dispatch(AppAC.setIsLoading({ isLoading: false }));
-      dispatch(AppAC.setIsInit({ isInit: true }));
-    }
+    dispatch(AppAC.setIsLoading({ isLoading: true }));
+    dispatch(AuthMeTC())
+      .then(() => {})
+      .finally(() => {
+        console.log("in finally");
+        dispatch(AppAC.setIsLoading({ isLoading: false }));
+        dispatch(AppAC.setIsInit({ isInit: true }));
+      });
   };
 };

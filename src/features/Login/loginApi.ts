@@ -1,6 +1,6 @@
 import { instance } from "../../common/api/baseAPI";
 import { IUserFields } from "./loginThunks";
-import { LoginUserType } from "../../api/auth";
+import { LoginUserType } from "../../common/api/types";
 
 export const API = {
   login: (user: IUserFields) =>

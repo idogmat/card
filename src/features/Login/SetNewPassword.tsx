@@ -22,7 +22,6 @@ const SetNewPassword = () => {
       } else if (values.password.length < 8) {
         errors.password = "Incorrect password";
       }
-
       return errors;
     },
     onSubmit: async (values, { resetForm }) => {
