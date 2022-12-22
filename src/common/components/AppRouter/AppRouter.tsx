@@ -1,12 +1,22 @@
-import {Navigate, Route, Routes} from "react-router-dom";
-import React from "react";
-import {useAllSelector} from "../../hooks/hooks";
-import {authSelector} from "../../../features/Auth/selectors";
-import {authRoutes, RoutesEnum, unAuthRoutes} from "../../routes";
+import { Navigate, Route, Routes } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useAllSelector, useAppDispatch } from "../../hooks/hooks";
+import { authSelector } from "../../../features/Auth/selectors";
+import { authRoutes, RoutesEnum, unAuthRoutes } from "../../routes";
+import { appStateSelect } from "../../../app/selectors";
+import { Preloader } from "../Preloader/Preloader";
+import { InitAppTC } from "../../../app/appThunks";
 
 export const AppRouter = () => {
+  const { isInit } = useAllSelector(appStateSelect);
   const { isAuth } = useAllSelector(authSelector);
-  return (
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(InitAppTC());
+  }, []);
+
+  return isInit ? (
     <Routes>
       {isAuth ? (
         <>
@@ -36,5 +46,7 @@ export const AppRouter = () => {
         </>
       )}
     </Routes>
+  ) : (
+    <Preloader />
   );
 };
