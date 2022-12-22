@@ -1,14 +1,35 @@
-import React, { FC, useEffect, useState } from "react";
-import { Button, InputAdornment, TextField } from "@mui/material";
+import React, {
+  ComponentType,
+  DetailedHTMLProps,
+  FC,
+  HTMLAttributes,
+  useEffect,
+  useState,
+} from "react";
+import {
+  Button,
+  InputAdornment,
+  TextField,
+  Typography,
+  TypographyProps,
+  TypographyTypeMap,
+} from "@mui/material";
+
+type DefaultSpanPropsType = DetailedHTMLProps<
+  HTMLAttributes<HTMLSpanElement>,
+  HTMLSpanElement
+>;
 
 interface IEditableTextProps {
   valueToDisplay: string;
-  onChange: (value: string) => void;
+  onChangeText: (value: string) => void;
+  displayProps?: TypographyProps;
 }
 
 export const EditableText: FC<IEditableTextProps> = ({
   valueToDisplay,
-  onChange,
+  onChangeText,
+  displayProps,
 }) => {
   const [editMode, setIsEditMode] = useState(false);
   const [fieldText, setFieldText] = useState("");
@@ -21,7 +42,7 @@ export const EditableText: FC<IEditableTextProps> = ({
     setFieldText(e.currentTarget.value);
   };
   const submitChanges = () => {
-    onChange(fieldText);
+    onChangeText(fieldText);
     setIsEditMode(false);
   };
 
@@ -30,7 +51,12 @@ export const EditableText: FC<IEditableTextProps> = ({
   };
 
   return !editMode ? (
-    <p onDoubleClick={doubleClickHandler}> {valueToDisplay}</p>
+    // <Typography
+    //   {...displayProps}
+    // >
+
+    // </Typography>
+    <Typography {...displayProps}>{valueToDisplay}</Typography>
   ) : (
     <TextField
       variant={"standard"}

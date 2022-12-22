@@ -8,6 +8,7 @@ import {
   IconButton,
   Paper,
   Typography,
+  TypographyProps,
 } from "@mui/material";
 import { useAllSelector, useAppDispatch } from "../../common/hooks/hooks";
 import { Logout, PhotoCameraBackOutlined } from "@mui/icons-material";
@@ -88,7 +89,10 @@ export const Profile = () => {
             </Box>
             <EditableText
               valueToDisplay={user.name}
-              onChange={changeNameHandler}
+              onChangeText={changeNameHandler}
+              displayProps={
+                { variant: "subtitle1", component: "span" } as TypographyProps
+              }
             />
 
             <Typography
@@ -107,18 +111,20 @@ export const Profile = () => {
                   "0px 2px 10px rgba(109, 109, 109, 0.25), inset 0px 1px 0px rgba(255, 255, 255, 0.3)",
                 backgroundColor: "#fff",
                 color: "#000",
-                fontSize: "16px",
+                fontSize: "14px",
                 display: "flex",
                 gap: "10px",
                 padding: "10px 15px",
                 ":hover": {
                   color: "#fff",
                 },
+                textTransform: "none",
+                fontWeight: 500,
               }}
               onClick={handleLogout}
             >
-              <Logout />
-              <Typography>Log out</Typography>
+              <Logout fontSize={"small"} />
+              Log out
             </Button>
           </Box>
         </Paper>
