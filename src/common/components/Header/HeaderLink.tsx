@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { Button, ListItem } from "@mui/material";
+import { NavLink } from "react-router-dom";
 
 interface IHeaderLinkProps {
   page: string;
@@ -7,9 +8,8 @@ interface IHeaderLinkProps {
 
 export const HeaderLink: FC<IHeaderLinkProps> = ({ page }) => {
   return (
-    <ListItem disablePadding>
+    <ListItem disablePadding sx={{ justifyContent: "center" }}>
       <Button
-        href={`/${page}`}
         variant={"contained"}
         color={"primary"}
         sx={{
@@ -17,7 +17,9 @@ export const HeaderLink: FC<IHeaderLinkProps> = ({ page }) => {
           padding: "10px 25px",
         }}
       >
-        {page}
+        <NavLink to={`/${page}`} style={{ color: "inherit" }}>
+          {page}
+        </NavLink>
       </Button>
     </ListItem>
   );

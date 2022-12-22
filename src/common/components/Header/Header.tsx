@@ -13,12 +13,15 @@ export const Header = () => {
 
   return (
     <AppBar
-      position={"static"}
+      position={"absolute"}
       sx={{
+        top: "0",
+        left: "0",
         backgroundColor: "white",
         boxShadow:
           " 0px 2px 10px rgba(109, 109, 109, 0.25), inset 0px 1px 0px rgba(255, 255, 255, 0.3)",
         padding: "10px 0px",
+        zIndex: "50",
       }}
     >
       <Container maxWidth={"xl"}>
@@ -28,11 +31,22 @@ export const Header = () => {
             gap: "10px",
             justifyContent: "space-between",
             alignItems: "center",
+            ["@media (max-width: 768px)"]: {
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            },
           }}
         >
           <img src={logo} alt="IT-Incubator" />
           {/*<Typography color={"black"}>Logo placeholder</Typography>*/}
-          <List sx={{ display: "flex", gap: "10px" }}>
+          <List
+            sx={{
+              display: "flex",
+              gap: "10px",
+              justifyContent: "center",
+            }}
+          >
             {isAuth
               ? authPages.map((page) => <HeaderLink page={page} key={page} />)
               : unAuthPages.map((page) => (
