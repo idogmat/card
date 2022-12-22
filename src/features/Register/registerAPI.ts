@@ -1,4 +1,4 @@
-import { instance } from "../../common/api/api";
+import { instance } from "../../common/api/baseAPI";
 
 import { RegisterNewUserType, ResponseType } from "../../common/api/types";
 import { IRegisterData } from "../../api/auth";

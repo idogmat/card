@@ -1,13 +1,10 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IUser } from "../../common/models";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 export interface IAuthState {
-  user: IUser;
   isAuth: boolean;
 }
 
 const initialState: IAuthState = {
-  user: {} as IUser,
   isAuth: false,
 };
 
@@ -17,10 +14,7 @@ const authSlice = createSlice({
   reducers: {
     setIsAuth: (draft, action: PayloadAction<{ isAuth: boolean }>) => {
       draft.isAuth = action.payload.isAuth;
-    },
-    setUser: (draft, action: PayloadAction<{ user: IUser }>) => {
-      draft.user = action.payload.user;
-    },
+    }
   },
 });
 
