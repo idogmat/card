@@ -1,6 +1,8 @@
 import {AppThunkActionType} from "../../common/hooks/hooks";
-import {API} from "../../api/auth";
+
 import {AuthAC} from "../Auth/authReducer";
+import {API} from "./loginApi";
+import {IUser} from "../../common/models";
 
 export type UserFieldsType = {
     email: string;
@@ -16,7 +18,6 @@ export const loginThunk =
                 const res = await API.login(fields);
                 console.log(res);
                 const {token, error, rememberMe, ...user} = res.data
-                console.log(user)
                 dispatch(AuthAC.setIsAuth({isAuth: true}));
                 dispatch(AuthAC.setUser({user}));
             } catch (e: any) {

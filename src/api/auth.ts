@@ -1,6 +1,5 @@
 import axios from "axios";
-import {IUser} from "../common/models";
-
+import {UserFieldsType} from "../features/Login/loginThunks";
 
 
 const baseUrl = 'http://localhost:7542/2.0/'
@@ -49,8 +48,8 @@ type LoginUserType = {
 
 }
 export const API = {
-    login: (user: any) => instance.post<LoginUserType>('auth/login', user),
+
     register: (user: any) => instance.post<ResponseType<RegisterNewUserType>>('auth/register', user),
     authMe: () => instance.post<ResponseType<LoginUserType>>('/auth/me',{}),
-    setNewPassword: () => instance.post<ResponseType<LoginUserType>>('/auth/me',{}),
+
 }
