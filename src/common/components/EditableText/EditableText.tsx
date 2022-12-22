@@ -10,7 +10,7 @@ export const EditableText: FC<IEditableTextProps> = ({
   valueToDisplay,
   onChange,
 }) => {
-  const [editMode, setIsEditMode] = useState(true);
+  const [editMode, setIsEditMode] = useState(false);
   const [fieldText, setFieldText] = useState("");
 
   useEffect(() => {

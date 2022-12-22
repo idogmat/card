@@ -8,15 +8,9 @@ import { Preloader } from "../Preloader/Preloader";
 import { InitAppTC } from "../../../app/appThunks";
 
 export const AppRouter = () => {
-  const { isInit } = useAllSelector(appStateSelect);
   const { isAuth } = useAllSelector(authSelector);
-  const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(InitAppTC());
-  }, []);
-
-  return isInit ? (
+  return (
     <Routes>
       {isAuth ? (
         <>
@@ -46,7 +40,5 @@ export const AppRouter = () => {
         </>
       )}
     </Routes>
-  ) : (
-    <Preloader />
   );
 };

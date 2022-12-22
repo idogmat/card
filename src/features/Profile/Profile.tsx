@@ -9,12 +9,12 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { authSelector } from "../Auth/selectors";
 import { useAllSelector, useAppDispatch } from "../../common/hooks/hooks";
 import { Logout, PhotoCameraBackOutlined } from "@mui/icons-material";
 import { logOutTC } from "../Login/loginThunks";
 import { EditableText } from "../../common/components/EditableText/EditableText";
 import { userStateSelector } from "../User/selectors";
+import { updateUserInfoTC } from "./profileThunks";
 
 export const Profile = () => {
   const dispatch = useAppDispatch();
@@ -26,7 +26,9 @@ export const Profile = () => {
     dispatch(logOutTC());
   };
 
-  const changeNameHandler = (name: string) => {};
+  const changeNameHandler = (name: string) => {
+    dispatch(updateUserInfoTC({ name, avatar: user.avatar }));
+  };
 
   return (
     <Grid
@@ -45,13 +47,14 @@ export const Profile = () => {
               flexDirection: "column",
             }}
           >
-            <Typography variant={"h3"} component={"h1"}>
+            <Typography variant={"h4"} component={"h1"} mb={"20px"}>
               Personal Information
             </Typography>
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "center",
+                marginBottom: "30px",
               }}
             >
               <Badge
@@ -87,18 +90,12 @@ export const Profile = () => {
               valueToDisplay={user.name}
               onChange={changeNameHandler}
             />
-            {/*<Typography*/}
-            {/*  variant={"subtitle1"}*/}
-            {/*  component={"p"}*/}
-            {/*  sx={{ marginBottom: "5px" }}*/}
-            {/*>*/}
-            {/*  {user.name}*/}
-            {/*</Typography>*/}
+
             <Typography
               variant={"subtitle2"}
               component={"p"}
               color={"gray"}
-              sx={{ marginBottom: "20px" }}
+              sx={{ marginBottom: "25px" }}
             >
               {user.email}
             </Typography>

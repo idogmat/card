@@ -1,4 +1,3 @@
-
 export interface IUser {
   _id: string;
   email: string;
@@ -10,4 +9,3 @@ export interface IUser {
   created: Date;
   updated: Date;
 }
-

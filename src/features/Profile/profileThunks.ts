@@ -10,8 +10,10 @@ export const updateUserInfoTC = (
     try {
       dispatch(AppAC.setIsLoading({ isLoading: true }));
       const { data } = await profileAPI.sendUpdateUserRequest(model);
-      dispatch(UserAC.setUser({ user: data.data.updatedUser }));
+      console.log(data);
+      dispatch(UserAC.setUser({ user: data.updatedUser }));
     } catch (e) {
+      console.log(e);
     } finally {
       dispatch(AppAC.setIsLoading({ isLoading: false }));
     }
