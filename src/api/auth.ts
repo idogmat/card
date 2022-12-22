@@ -37,19 +37,19 @@ type LoginUserType = {
     _id: string;
     email: string;
     name: string;
-    avatar?: string;
+    isAdmin: boolean;
+    avatar: string | null;
     publicCardPacksCount: number;
+    verified: boolean;
     created: Date;
     updated: Date;
     token:string;
-    isAdmin: boolean;
-    verified: boolean;
     rememberMe: boolean;
-    error?: string;
+    error: string | null;
 
 }
 export const API = {
-    login: (user: any) => instance.post<ResponseType<LoginUserType>>('auth/login', user),
+    login: (user: any) => instance.post<LoginUserType>('auth/login', user),
     register: (user: any) => instance.post<ResponseType<RegisterNewUserType>>('auth/register', user),
     authMe: () => instance.post<ResponseType<LoginUserType>>('/auth/me',{}),
     setNewPassword: () => instance.post<ResponseType<LoginUserType>>('/auth/me',{}),

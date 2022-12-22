@@ -1,32 +1,35 @@
 import Button from "@mui/material/Button/Button";
 import FormControl from "@mui/material/FormControl/FormControl";
 import FormGroup from "@mui/material/FormGroup/FormGroup";
-import { Checkbox, FormControlLabel, Grid, TextField } from "@mui/material";
-import { useFormik } from "formik";
-import { Navigate, useNavigate } from "react-router-dom";
-import { useAllSelector, useAppDispatch } from "../../common/hooks/hooks";
-import { loginThunk } from "./loginThunks";
-import { authSelector } from "../Auth/selectors";
+import {FormLabel, Grid, IconButton, InputAdornment, Paper, TextField, Typography} from "@mui/material";
+import {useFormik} from "formik";
+import {Link} from "react-router-dom";
+import {useAppDispatch} from "../../common/hooks/hooks";
+import {loginThunk} from "./loginThunks";
+import {Visibility, VisibilityOff} from "@mui/icons-material";
+import React, {useState} from "react";
 
-type FormikErrorType = {
+
+interface ILoginErrorType  {
   email?: string;
   password?: string;
   rememberMe?: boolean;
 };
+type LoginFormErrorFieldsType = "email"
+| "password";
 
 export const Login = () => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { isAuth: isLogged } = useAllSelector(authSelector);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const formik = useFormik({
+  const loginForm = useFormik({
     initialValues: {
       email: "",
       password: "",
       rememberMe: false,
     },
     validate: (values) => {
-      const errors: FormikErrorType = {};
+      const errors: ILoginErrorType = {};
       if (!values.email) {
         errors.email = "Required";
       } else if (
@@ -44,48 +47,83 @@ export const Login = () => {
       dispatch(loginThunk(values));
     },
   });
-  if (isLogged) {
-    return <Navigate to={"/profile"} />;
-  }
+
+  const changePasswordFieldType = () => setShowPassword((prev) => !prev);
+  const passwordFieldType = showPassword ? "text" : "password";
+
+  const hasError = (prop: LoginFormErrorFieldsType) => {
+    return !!loginForm.errors[prop] && !!loginForm.touched[prop];
+  };
   return (
-    <Grid container justifyContent={"center"}>
-      <Grid item justifyContent={"center"}>
-        <form onSubmit={formik.handleSubmit}>
-          <FormControl>
-            <FormGroup>
-              <TextField
-                label="Email"
-                margin="normal"
-                {...formik.getFieldProps("email")}
-              />
-              <TextField
-                type="password"
-                label="Password"
-                margin="normal"
-                {...formik.getFieldProps("password")}
-              />
-              {formik.errors.password && formik.touched.password && (
-                <article>{formik.errors.password}</article>
-              )}
-              {formik.errors.email && formik.touched.email && (
-                <article>{formik.errors.email}</article>
-              )}
-
-              <FormControlLabel
-                label={"Remember me"}
-                control={<Checkbox />}
-                {...formik.getFieldProps("rememberMe")}
-              />
-              <p onClick={() => navigate("/resetPassword")}>Forgot Password?</p>
-
-              <Button type={"submit"} variant={"contained"} color={"primary"}>
-                Login
-              </Button>
-            </FormGroup>
-          </FormControl>
-        </form>
+      <Grid
+          container
+          justifyContent={"center"}
+          alignContent={"center"}
+          sx={{ height: "100vh" }}
+      >
+        <Grid item justifyContent={"center"} xs={3}>
+          <Paper sx={{ padding: "35px" }}>
+            <form onSubmit={loginForm.handleSubmit}>
+              <FormControl sx={{ width: "100%", textAlign: "center" }}>
+                <FormLabel>
+                  <Typography variant={"h3"} sx={{ textAlign: "center" }}>
+                    Sign up
+                  </Typography>
+                </FormLabel>
+                <FormGroup>
+                  <TextField
+                      error={hasError("email")}
+                      label={
+                        hasError("email") ? loginForm.errors.email : "Email"
+                      }
+                      margin={"normal"}
+                      variant={"standard"}
+                      {...loginForm.getFieldProps("email")}
+                  />
+                  <TextField
+                      error={hasError("password")}
+                      label={
+                        hasError("password")
+                            ? loginForm.errors.password
+                            : "Password"
+                      }
+                      margin={"normal"}
+                      type={passwordFieldType}
+                      variant={"standard"}
+                      {...loginForm.getFieldProps("password")}
+                      InputProps={{
+                        endAdornment: (
+                            <InputAdornment position={"end"}>
+                              <IconButton onClick={changePasswordFieldType}>
+                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                              </IconButton>
+                            </InputAdornment>
+                        ),
+                      }}
+                  />
+                </FormGroup>
+                <Button
+                    type={"submit"}
+                    variant={"contained"}
+                    disabled={hasError('email') || hasError('password')}
+                    color={"primary"}
+                    sx={{ borderRadius: "30px", marginBottom: "30px" }}
+                >
+                  Sign in
+                </Button>
+                <Typography mb={1} variant={"subtitle1"} component={"span"}>
+                  Haven't account?
+                </Typography>
+                <Typography sx={{ fontSize: "16px", color: "#366EFF" }}>
+                  <Link to={"/register"} style={{ color: "inherit" }}>
+                    Sign up
+                  </Link>
+                </Typography>
+              </FormControl>
+            </form>
+          </Paper>
+        </Grid>
       </Grid>
-    </Grid>
   );
 };
 
