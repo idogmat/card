@@ -16,10 +16,14 @@ import { logOutTC } from "../Login/loginThunks";
 import { EditableText } from "../../common/components/EditableText/EditableText";
 import { userStateSelector } from "../User/selectors";
 import { updateUserInfoTC } from "./profileThunks";
+import { appStateSelect } from "../../app/selectors";
+import styles from "../../common/styles/common.module.css";
+import { Preloader } from "../../common/components/Preloader/Preloader";
 
 export const Profile = () => {
   const dispatch = useAppDispatch();
   const user = useAllSelector(userStateSelector);
+  const { isLoading } = useAllSelector(appStateSelect);
   const avatarPlaceholder =
     "https://i0.wp.com/boingboing.net/wp-content/uploads/2020/06/IMG_20200602_082003_707.jpg?fit=1&resize=620%2C4000&ssl=1";
 
@@ -28,7 +32,9 @@ export const Profile = () => {
   };
 
   const changeNameHandler = (name: string) => {
-    dispatch(updateUserInfoTC({ name, avatar: user.avatar }));
+    if (user.name !== name) {
+      dispatch(updateUserInfoTC({ name, avatar: user.avatar }));
+    }
   };
 
   return (
@@ -39,6 +45,11 @@ export const Profile = () => {
       alignItems={"center"}
     >
       <Grid item sx={{ minWidth: "360px" }}>
+        {isLoading && (
+          <div className={styles.preventSending}>
+            <Preloader />
+          </div>
+        )}
         <Paper sx={{ padding: "25px 80px" }}>
           <Box
             sx={{
@@ -93,6 +104,7 @@ export const Profile = () => {
               displayProps={
                 { variant: "subtitle1", component: "span" } as TypographyProps
               }
+              disabled={isLoading}
             />
 
             <Typography
@@ -122,6 +134,7 @@ export const Profile = () => {
                 fontWeight: 500,
               }}
               onClick={handleLogout}
+              disabled={isLoading}
             >
               <Logout fontSize={"small"} />
               Log out

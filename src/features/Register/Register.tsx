@@ -16,20 +16,21 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { hasError } from "../../common/utils/errorHandlers";
-import { useAppDispatch } from "../../common/hooks";
+import { useAllSelector, useAppDispatch } from "../../common/hooks";
+import { validMail } from "../../common/utils/regExp";
+import { appStateSelect } from "../../app/selectors";
+import styles from "../../common/styles/common.module.css";
+import { Preloader } from "../../common/components/Preloader/Preloader";
 
 export interface IRegisterFormErrors {
   email: string;
   password: string;
   confirmPassword: string;
 }
-export type RegisterFormErrorFieldsType =
-  | "email"
-  | "password"
-  | "confirmPassword";
 
 export const Register = () => {
   const dispatch = useAppDispatch();
+  const { isLoading } = useAllSelector(appStateSelect);
   const [showPassword, setShowPassword] = useState(false);
 
   const registerForm = useFormik({
@@ -41,10 +42,7 @@ export const Register = () => {
       if (values.confirmPassword !== values.password) {
         errors.confirmPassword = "Different password";
       }
-      if (
-        !values.email.length ||
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-      ) {
+      if (!values.email.length || !validMail.test(values.email)) {
         errors.email = "Enter the correct email";
       }
       return errors;
@@ -77,7 +75,21 @@ export const Register = () => {
         },
       }}
     >
-      <Grid item justifyContent={"center"} xs={3} sx={{ minWidth: "360px" }}>
+      <Grid
+        item
+        justifyContent={"center"}
+        xs={3}
+        sx={{
+          minWidth: "360px",
+          position: "relative",
+          pointerEvents: `${isLoading ? "none" : "auto"}`,
+        }}
+      >
+        {isLoading && (
+          <div className={styles.preventSending}>
+            <Preloader />
+          </div>
+        )}
         <Paper sx={{ padding: "35px" }}>
           <form onSubmit={registerForm.handleSubmit}>
             <FormControl sx={{ width: "100%", textAlign: "center" }}>
@@ -147,6 +159,7 @@ export const Register = () => {
                 variant={"contained"}
                 color={"primary"}
                 sx={{ borderRadius: "30px", marginBottom: "30px" }}
+                disabled={isLoading}
               >
                 Sign up
               </Button>
