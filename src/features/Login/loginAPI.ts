@@ -1,7 +1,6 @@
 import { instance } from "../../common/api/baseAPI";
 import { IUserFields } from "./loginThunks";
 import { LoginUserType } from "../../common/api/types";
-import { ISetPWD } from "./setNewPasswordThunk";
 
 type EmailType = `${string}@${string}.${string}`;
 
