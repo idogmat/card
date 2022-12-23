@@ -32,7 +32,8 @@ const SetNewPassword = () => {
           resetPasswordToken: params.id + "",
         })
       );
-      !!res.data.info && navigate("/login");
+      console.dir(res);
+      !!res && navigate("/login");
     },
   });
 

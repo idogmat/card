@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios";
 import { Dispatch } from "react";
 type SetAppErrorActionType = any;
 
-export const defaultErrorMessage = "Some errors occured";
+export const defaultErrorMessage = "Some errors occurred";
 
 export const errorUtils = (
   e: Error | AxiosError<{ error: string }>,

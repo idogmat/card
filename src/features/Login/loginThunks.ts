@@ -26,8 +26,8 @@ export const loginTC =
         AppAC.setSuccessMessage({ message: "You have successfully authorized" })
       );
     } catch (e: any) {
-      // handleServerNetworkError(e, dispatch)
-      console.log(e);
+      dispatch(AppAC.setError({ error: e.message }));
+      // console.log(e);
     } finally {
       dispatch(AppAC.setIsLoading({ isLoading: false }));
     }
