@@ -18,6 +18,7 @@ import { useAppDispatch } from "../../common/hooks/hooks";
 import { loginTC } from "./loginThunks";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import React, { useState } from "react";
+import { hasError } from "../../common/utils/errorHandlers";
 
 interface ILoginErrorType {
   email?: string;
@@ -58,10 +59,10 @@ export const Login = () => {
 
   const changePasswordFieldType = () => setShowPassword((prev) => !prev);
   const passwordFieldType = showPassword ? "text" : "password";
-
-  const hasError = (prop: LoginFormErrorFieldsType) => {
-    return !!loginForm.errors[prop] && !!loginForm.touched[prop];
-  };
+  const loginHasError = hasError.bind(null, loginForm);
+  // const hasError = (prop: LoginFormErrorFieldsType) => {
+  //   return !!loginForm.errors[prop] && !!loginForm.touched[prop];
+  // };
   return (
     <Grid
       container
@@ -80,8 +81,10 @@ export const Login = () => {
               </FormLabel>
               <FormGroup>
                 <TextField
-                  error={hasError("email")}
-                  label={hasError("email") ? loginForm.errors.email : "Email"}
+                  error={loginHasError("email")}
+                  label={
+                    loginHasError("email") ? loginForm.errors.email : "Email"
+                  }
                   margin={"normal"}
                   variant={"standard"}
                   {...loginForm.getFieldProps("email")}
@@ -90,9 +93,9 @@ export const Login = () => {
                   sx={{
                     marginBottom: "1rem",
                   }}
-                  error={hasError("password")}
+                  error={loginHasError("password")}
                   label={
-                    hasError("password")
+                    loginHasError("password")
                       ? loginForm.errors.password
                       : "Password"
                   }
@@ -124,7 +127,7 @@ export const Login = () => {
               <Button
                 type={"submit"}
                 variant={"contained"}
-                disabled={hasError("email") || hasError("password")}
+                disabled={loginHasError("email") || loginHasError("password")}
                 color={"primary"}
                 sx={{ borderRadius: "30px", marginBottom: "30px" }}
               >

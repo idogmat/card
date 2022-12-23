@@ -17,6 +17,7 @@ import { Link, NavLink } from "react-router-dom";
 import { useFormik } from "formik";
 import { RegisterFieldError } from "./RegisterFieldError";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { hasError } from "../../common/utils/errorHandlers";
 
 export interface IRegisterFormErrors {
   email: string;
@@ -29,7 +30,6 @@ export type RegisterFormErrorFieldsType =
   | "confirmPassword";
 
 export const Register = () => {
-
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -63,9 +63,7 @@ export const Register = () => {
   const changePasswordFieldType = () => setShowPassword((prev) => !prev);
   const passwordFieldType = showPassword ? "text" : "password";
 
-  const hasError = (prop: RegisterFormErrorFieldsType) => {
-    return !!registerForm.errors[prop] && !!registerForm.touched[prop];
-  };
+  const registerHasError = hasError.bind(null, registerForm);
 
   return (
     <Grid
@@ -91,18 +89,20 @@ export const Register = () => {
               </FormLabel>
               <FormGroup>
                 <TextField
-                  error={hasError("email")}
+                  error={registerHasError("email")}
                   label={
-                    hasError("email") ? registerForm.errors.email : "Email"
+                    registerHasError("email")
+                      ? registerForm.errors.email
+                      : "Email"
                   }
                   margin={"normal"}
                   variant={"standard"}
                   {...registerForm.getFieldProps("email")}
                 />
                 <TextField
-                  error={hasError("password")}
+                  error={registerHasError("password")}
                   label={
-                    hasError("password")
+                    registerHasError("password")
                       ? registerForm.errors.password
                       : "Password"
                   }
@@ -121,9 +121,9 @@ export const Register = () => {
                   }}
                 />
                 <TextField
-                  error={hasError("confirmPassword")}
+                  error={registerHasError("confirmPassword")}
                   label={
-                    hasError("confirmPassword")
+                    registerHasError("confirmPassword")
                       ? registerForm.errors.confirmPassword
                       : "Confirm password"
                   }

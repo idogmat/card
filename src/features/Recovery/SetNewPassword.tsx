@@ -32,11 +32,10 @@ const SetNewPassword = () => {
           resetPasswordToken: params.id + "",
         })
       );
-      console.dir(res);
       !!res && navigate("/login");
     },
   });
-
+  //fix
   const hasError = (prop: "password") => {
     return !!setPasswordForm.errors[prop] && !!setPasswordForm.touched[prop];
   };

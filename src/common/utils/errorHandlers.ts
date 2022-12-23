@@ -1,8 +1,14 @@
 import axios, { AxiosError } from "axios";
 import { Dispatch } from "react";
+import { RegisterFormErrorFieldsType } from "../../features/Register/Register";
+import { FormikConfig, FormikProps } from "formik";
 type SetAppErrorActionType = any;
 
 export const defaultErrorMessage = "Some errors occurred";
+
+export function hasError(form: FormikProps<any>, prop: string): boolean {
+  return !!form.errors[prop] && !!form.touched[prop];
+}
 
 export const errorUtils = (
   e: Error | AxiosError<{ error: string }>,

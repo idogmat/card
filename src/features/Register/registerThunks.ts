@@ -15,7 +15,6 @@ export const registerTC = ({
     try {
       const payload = { email, password };
       const { data } = await registerAPI.sendRegisterRequest(payload);
-      console.log(data.addedUser);
       const user = {
         ...data.addedUser,
         avatar: null,

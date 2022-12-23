@@ -1,12 +1,10 @@
-
 import { FC } from "react";
 import { ErrorPage } from "../../features/404/404";
 import { Login } from "../../features/Login/Login";
 import { Profile } from "../../features/Profile/Profile";
 import { Register } from "../../features/Register/Register";
-import RecoveryPassword from "../../features/Login/RecoveryPassword";
-import SetNewPassword from "../../features/Login/SetNewPassword";
-
+import RecoveryPassword from "../../features/Recovery/RecoveryPassword";
+import SetNewPassword from "../../features/Recovery/SetNewPassword";
 
 export interface IRoute {
   path: string;

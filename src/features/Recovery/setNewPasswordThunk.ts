@@ -1,9 +1,10 @@
 import { AppThunkActionType } from "../../common/hooks/hooks";
-import { ISetPWD, loginAPI } from "./loginApi";
+import { ISetPWD, loginAPI } from "../Login/loginApi";
 import { AppAC } from "../../app/appReducer";
+import { defaultErrorMessage } from "../../common/utils/errorHandlers";
 
 export const setNewPassword =
-  (setParams: ISetPWD): AppThunkActionType<any> =>
+  (setParams: ISetPWD): AppThunkActionType<Promise<any>> =>
   (dispatch) => {
     return loginAPI
       .setNewPassword(setParams)
@@ -11,9 +12,8 @@ export const setNewPassword =
         if (!!e.data.info) {
           dispatch(AppAC.setSuccessMessage({ message: e.data.info }));
           return e.data.info;
-        } else {
-          dispatch(AppAC.setError({ error: "some error" }));
         }
+        dispatch(AppAC.setError({ error: defaultErrorMessage }));
       })
       .catch((e) => {
         dispatch(AppAC.setError({ error: e.message }));
