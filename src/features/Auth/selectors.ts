@@ -1,4 +1,3 @@
 import { RootState } from "../../app/store";
 
-export const authSelector = (state: RootState) => state.auth;
-
+export const authStateSelector = (state: RootState) => state.auth;

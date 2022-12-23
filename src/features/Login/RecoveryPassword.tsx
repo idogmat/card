@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Grid, Link, Paper, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
-import { useAppDispatch } from "../../common/hooks/hooks";
+import { useAppDispatch } from "../../common/hooks";
 import Button from "@mui/material/Button/Button";
 import FormControl from "@mui/material/FormControl/FormControl";
-import { recoveryThunk } from "./recoveryThunk";
+import { recoveryTC } from "./recoveryTC";
 import { useNavigate } from "react-router-dom";
 import svg from "./../../assets/img/mail.svg";
 const RecoveryPassword = () => {
@@ -28,7 +28,7 @@ const RecoveryPassword = () => {
       return errors;
     },
     onSubmit: async (values, { resetForm }) => {
-      const res = await dispatch(recoveryThunk(values.email));
+      const res = await dispatch(recoveryTC(values.email));
       !!res && setSent(true);
     },
   });

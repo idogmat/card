@@ -1,11 +1,10 @@
-import { AppThunkActionType } from "../../common/hooks/hooks";
-
 import { AuthAC } from "../Auth/authReducer";
 import { AppAC } from "../../app/appReducer";
 import { IUser } from "../../common/models";
 import { UserAC } from "../User/userReducer";
-import { loginAPI } from "./loginApi";
+import { loginAPI } from "./loginAPI";
 import { defaultErrorMessage } from "../../common/utils/errorHandlers";
+import { AppThunkActionType } from "../../common/hooks/useAllSelector";
 
 export interface IUserFields {
   email: string;
@@ -26,7 +25,6 @@ export const loginTC =
         AppAC.setSuccessMessage({ message: "You have successfully authorized" })
       );
     } catch (e: any) {
-      // handleServerNetworkError(e, dispatch)
       console.log(e);
     } finally {
       dispatch(AppAC.setIsLoading({ isLoading: false }));

@@ -1,6 +1,6 @@
-import { AppThunkActionType } from "../common/hooks/hooks";
 import { AuthMeTC } from "../features/Auth/authThunks";
 import { AppAC } from "./appReducer";
+import { AppThunkActionType } from "../common/hooks/useAllSelector";
 
 export const InitAppTC = (): AppThunkActionType => {
   return async (dispatch) => {

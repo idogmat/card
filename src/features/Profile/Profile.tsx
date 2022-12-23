@@ -10,7 +10,7 @@ import {
   Typography,
   TypographyProps,
 } from "@mui/material";
-import { useAllSelector, useAppDispatch } from "../../common/hooks/hooks";
+import { useAllSelector, useAppDispatch } from "../../common/hooks";
 import { Logout, PhotoCameraBackOutlined } from "@mui/icons-material";
 import { logOutTC } from "../Login/loginThunks";
 import { EditableText } from "../../common/components/EditableText/EditableText";

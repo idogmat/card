@@ -1,7 +1,7 @@
-import { AppThunkActionType } from "../../common/hooks/hooks";
-import { loginAPI } from "./loginApi";
+import { loginAPI } from "./loginAPI";
+import { AppThunkActionType } from "../../common/hooks/useAllSelector";
 
-export const recoveryThunk =
+export const recoveryTC =
   (field: string): AppThunkActionType<any> =>
   async (dispatch) => {
     const recoveryRequest = {

@@ -1,11 +1,11 @@
 import React from "react";
 import { Grid, Paper, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
-import { useAppDispatch } from "../../common/hooks/hooks";
 import Button from "@mui/material/Button/Button";
 import FormControl from "@mui/material/FormControl/FormControl";
 import { useNavigate, useParams } from "react-router-dom";
-import { setNewPassword } from "./setNewPasswordThunk";
+import { useAppDispatch } from "../../common/hooks";
+import { setNewPasswordTC } from "./setNewPasswordThunk";
 
 const SetNewPassword = () => {
   const navigate = useNavigate();
@@ -24,15 +24,14 @@ const SetNewPassword = () => {
       }
       return errors;
     },
-    onSubmit: async (values, { resetForm }) => {
-      console.log(values, params);
+    onSubmit: async (values) => {
       const res = await dispatch(
-        setNewPassword({
+        setNewPasswordTC({
           password: values.password,
           resetPasswordToken: params.id + "",
         })
       );
-      !!res.data.info && navigate("/login");
+      !!res && navigate("/login");
     },
   });
 

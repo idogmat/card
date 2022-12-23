@@ -14,10 +14,11 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import { Link } from "react-router-dom";
-import { useAppDispatch } from "../../common/hooks/hooks";
+import { useAppDispatch } from "../../common/hooks";
 import { loginTC } from "./loginThunks";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import React, { useState } from "react";
+import { validMail } from "../../common/utils/regExp";
 
 interface ILoginErrorType {
   email?: string;
@@ -38,11 +39,7 @@ export const Login = () => {
     },
     validate: (values) => {
       const errors: ILoginErrorType = {};
-      if (!values.email) {
-        errors.email = "Required";
-      } else if (
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-      ) {
+      if (!values.email && !validMail.test(values.email)) {
         errors.email = "Invalid email address";
       }
       if (values.password.length < 8) {
@@ -51,7 +48,6 @@ export const Login = () => {
       return errors;
     },
     onSubmit: (values, { resetForm }) => {
-      console.log(values);
       dispatch(loginTC(values));
     },
   });

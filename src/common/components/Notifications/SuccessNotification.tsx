@@ -1,6 +1,6 @@
 import React from "react";
 import { AppAC } from "../../../app/appReducer";
-import { useAllSelector, useAppDispatch } from "../../hooks/hooks";
+import { useAllSelector, useAppDispatch } from "../../hooks";
 import { appStateSelect } from "../../../app/selectors";
 import { Alert, Snackbar } from "@mui/material";
 

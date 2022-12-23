@@ -3,7 +3,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export interface IAuthState {
   isAuth: boolean;
 }
-
 const initialState: IAuthState = {
   isAuth: false,
 };

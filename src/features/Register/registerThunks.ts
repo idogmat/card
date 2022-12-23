@@ -2,9 +2,9 @@ import { registerAPI } from "./registerAPI";
 import { AppAC } from "../../app/appReducer";
 import { AuthAC } from "../Auth/authReducer";
 import { IRegisterData } from "../../api/auth";
-import { AppThunkActionType } from "../../common/hooks/hooks";
 import { UserAC } from "../User/userReducer";
 import { defaultErrorMessage } from "../../common/utils/errorHandlers";
+import { AppThunkActionType } from "../../common/hooks/useAllSelector";
 
 export const registerTC = ({
   email,
@@ -15,7 +15,6 @@ export const registerTC = ({
     try {
       const payload = { email, password };
       const { data } = await registerAPI.sendRegisterRequest(payload);
-      console.log(data.addedUser);
       const user = {
         ...data.addedUser,
         avatar: null,

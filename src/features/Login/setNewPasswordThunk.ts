@@ -1,12 +1,14 @@
-import { AppThunkActionType } from "../../common/hooks/hooks";
-import { loginAPI } from "./loginApi";
+import { loginAPI } from "./loginAPI";
+import { AppThunkActionType } from "../../common/hooks/useAllSelector";
 
-interface ISetPWD {
+export interface ISetPWD {
   password: string;
   resetPasswordToken: string;
 }
-export const setNewPassword =
-  (setParams: ISetPWD): AppThunkActionType<any> =>
-  (dispatch) => {
+export const setNewPasswordTC = (
+  setParams: ISetPWD
+): AppThunkActionType<any> => {
+  return (dispatch) => {
     return loginAPI.setNewPassword(setParams);
   };
+};
