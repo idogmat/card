@@ -4,6 +4,7 @@ import { AuthAC } from "../Auth/authReducer";
 import { IRegisterData } from "../../api/auth";
 import { AppThunkActionType } from "../../common/hooks/hooks";
 import { UserAC } from "../User/userReducer";
+import { defaultErrorMessage } from "../../common/utils/errorHandlers";
 
 export const registerTC = ({
   email,
@@ -22,9 +23,9 @@ export const registerTC = ({
       dispatch(AuthAC.setIsAuth({ isAuth: true }));
       dispatch(UserAC.setUser({ user }));
     } catch (e) {
-      console.log(e);
+      dispatch(AppAC.setError({ error: defaultErrorMessage }));
     } finally {
-      AppAC.setIsLoading({ isLoading: false });
+      dispatch(AppAC.setIsLoading({ isLoading: false }));
     }
   };
 };

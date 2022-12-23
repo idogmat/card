@@ -1,5 +1,5 @@
 import { AppThunkActionType } from "../../common/hooks/hooks";
-import { API } from "./loginApi";
+import { loginAPI } from "./loginApi";
 
 interface ISetPWD {
   password: string;
@@ -8,5 +8,5 @@ interface ISetPWD {
 export const setNewPassword =
   (setParams: ISetPWD): AppThunkActionType<any> =>
   (dispatch) => {
-    return API.setNewPassword(setParams);
+    return loginAPI.setNewPassword(setParams);
   };

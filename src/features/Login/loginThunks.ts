@@ -4,7 +4,8 @@ import { AuthAC } from "../Auth/authReducer";
 import { AppAC } from "../../app/appReducer";
 import { IUser } from "../../common/models";
 import { UserAC } from "../User/userReducer";
-import { API } from "./loginApi";
+import { loginAPI } from "./loginApi";
+import { defaultErrorMessage } from "../../common/utils/errorHandlers";
 
 export interface IUserFields {
   email: string;
@@ -17,7 +18,7 @@ export const loginTC =
   async (dispatch) => {
     dispatch(AppAC.setIsLoading({ isLoading: true }));
     try {
-      const res = await API.login(fields);
+      const res = await loginAPI.login(fields);
       const { error, ...user } = res.data;
       dispatch(AuthAC.setIsAuth({ isAuth: true }));
       dispatch(UserAC.setUser({ user }));
@@ -30,8 +31,14 @@ export const loginTC =
   };
 
 export const logOutTC = (): AppThunkActionType => {
-  return (dispatch) => {
-    dispatch(AuthAC.setIsAuth({ isAuth: false }));
-    dispatch(UserAC.setUser({ user: {} as IUser }));
+  return async (dispatch) => {
+    try {
+      const res = await loginAPI.logout();
+      dispatch(AppAC.setError({ error: "test" }));
+      dispatch(AuthAC.setIsAuth({ isAuth: false }));
+      dispatch(UserAC.setUser({ user: {} as IUser }));
+    } catch (e) {
+      AppAC.setError({ error: defaultErrorMessage });
+    }
   };
 };

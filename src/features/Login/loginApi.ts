@@ -2,7 +2,7 @@ import { instance } from "../../common/api/baseAPI";
 import { IUserFields } from "./loginThunks";
 import { LoginUserType } from "../../common/api/types";
 
-export const API = {
+export const loginAPI = {
   login: (user: IUserFields) =>
     instance.post<LoginUserType>("auth/login", user),
   recoveryPassword: (email: any) =>
@@ -15,4 +15,7 @@ export const API = {
       "https://neko-back.herokuapp.com/2.0/auth/set-new-password",
       email
     ),
+  logout: () => {
+    instance.delete("/auth/me", {});
+  },
 };

@@ -2,6 +2,7 @@ import { IUpdatedUserInfo, profileAPI } from "./profileAPI";
 import { AppThunkActionType } from "../../common/hooks/hooks";
 import { AppAC } from "../../app/appReducer";
 import { UserAC } from "../User/userReducer";
+import { defaultErrorMessage } from "../../common/utils/errorHandlers";
 
 export const updateUserInfoTC = (
   model: IUpdatedUserInfo
@@ -13,7 +14,7 @@ export const updateUserInfoTC = (
       console.log(data);
       dispatch(UserAC.setUser({ user: data.updatedUser }));
     } catch (e) {
-      console.log(e);
+      dispatch(AppAC.setError({ error: defaultErrorMessage }));
     } finally {
       dispatch(AppAC.setIsLoading({ isLoading: false }));
     }

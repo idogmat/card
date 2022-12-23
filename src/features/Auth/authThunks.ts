@@ -6,10 +6,13 @@ import { Dispatch } from "redux";
 
 export const AuthMeTC = () => {
   return (dispatch: Dispatch) => {
-    return baseAPI.authMeRequest().then(({ data }) => {
-      const user = { ...data, avatar: null };
-      dispatch(UserAC.setUser({ user }));
-      dispatch(AuthAC.setIsAuth({ isAuth: true }));
-    });
+    return baseAPI
+      .authMeRequest()
+      .then(({ data }) => {
+        const user = { ...data, avatar: null };
+        dispatch(UserAC.setUser({ user }));
+        dispatch(AuthAC.setIsAuth({ isAuth: true }));
+      })
+      .catch((e) => {});
   };
 };

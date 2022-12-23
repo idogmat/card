@@ -1,5 +1,5 @@
 import { AppThunkActionType } from "../../common/hooks/hooks";
-import { API } from "./loginApi";
+import { loginAPI } from "./loginApi";
 
 export const recoveryThunk =
   (field: string): AppThunkActionType<any> =>
@@ -12,7 +12,7 @@ Password recovery
 <a href='http://localhost:3000/#/recovery/$token$'>
 link</a></div>`,
     };
-    return API.recoveryPassword(recoveryRequest).then((res) => {
+    return loginAPI.recoveryPassword(recoveryRequest).then((res) => {
       if (res.data.success === true) {
         return res.data.success;
       } else {
