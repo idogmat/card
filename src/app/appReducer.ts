@@ -4,12 +4,14 @@ import app from "./App";
 export interface IAppState {
   isLoading: boolean;
   error: string | null;
+  successMessage: string | null;
   isInit: boolean;
 }
 
 const initialState: IAppState = {
   isLoading: false,
   error: null,
+  successMessage: null,
   isInit: false,
 };
 
@@ -25,6 +27,13 @@ const appSlice = createSlice({
     },
     setIsInit: (draft, action: PayloadAction<{ isInit: boolean }>) => {
       draft.isInit = action.payload.isInit;
+    },
+    setSuccessMessage: (
+      draft,
+      action: PayloadAction<{ message: string | null }>
+    ) => {
+      console.log("settings message", action.payload.message);
+      draft.successMessage = action.payload.message;
     },
   },
 });

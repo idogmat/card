@@ -5,20 +5,64 @@ import { appStateSelect } from "../../../app/selectors";
 import { AppAC } from "../../../app/appReducer";
 
 export const Notification = () => {
-  const { error } = useAllSelector(appStateSelect);
+  const { error, successMessage } = useAllSelector(appStateSelect);
   const dispatch = useAppDispatch();
-  const isOpen = error !== null;
-  console.log("in notification", error, isOpen);
+  const shouldDisplayError = !!error;
+  const shouldDisplaySuccess = !!successMessage;
 
-  const handleClose = () => {
+  const closeErrorNotification = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    console.log(event?.currentTarget);
     dispatch(AppAC.setError({ error: null }));
+  };
+  const closeSuccessNotification = () => {
+    dispatch(AppAC.setSuccessMessage({ message: null }));
   };
 
   return (
-    <Snackbar open={isOpen} autoHideDuration={3000} onClose={handleClose}>
-      <Alert onClose={handleClose} severity={"error"}>
-        {error}
-      </Alert>
-    </Snackbar>
+    <>
+      {error && (
+        <Snackbar
+          open={shouldDisplayError}
+          autoHideDuration={3000}
+          onClose={closeErrorNotification}
+        >
+          <Alert onClose={closeErrorNotification} severity={"error"}>
+            {error}
+          </Alert>
+        </Snackbar>
+      )}
+      {successMessage && (
+        <Snackbar
+          open={shouldDisplaySuccess}
+          autoHideDuration={3000}
+          onClose={closeSuccessNotification}
+        >
+          <Alert onClose={closeErrorNotification} severity={"success"}>
+            {successMessage}
+          </Alert>
+        </Snackbar>
+      )}
+    </>
+    // <Snackbar
+    //   open={isOpen}
+    //   autoHideDuration={3000}
+    //   onClose={closeErrorNotification}
+    // >
+    //   <>
+    //     {error && (
+    //       <Alert onClose={closeErrorNotification} severity={"error"}>
+    //         {error}
+    //       </Alert>
+    //     )}
+    //     {successMessage && (
+    //       <Alert onClose={closeErrorNotification} severity={"success"}>
+    //         {successMessage}
+    //       </Alert>
+    //     )}
+    //   </>
+    // </Snackbar>
   );
 };

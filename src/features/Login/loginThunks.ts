@@ -22,6 +22,9 @@ export const loginTC =
       const { error, ...user } = res.data;
       dispatch(AuthAC.setIsAuth({ isAuth: true }));
       dispatch(UserAC.setUser({ user }));
+      dispatch(
+        AppAC.setSuccessMessage({ message: "You have successfully authorized" })
+      );
     } catch (e: any) {
       // handleServerNetworkError(e, dispatch)
       console.log(e);
@@ -34,9 +37,11 @@ export const logOutTC = (): AppThunkActionType => {
   return async (dispatch) => {
     try {
       const res = await loginAPI.logout();
-      dispatch(AppAC.setError({ error: "test" }));
       dispatch(AuthAC.setIsAuth({ isAuth: false }));
       dispatch(UserAC.setUser({ user: {} as IUser }));
+      dispatch(
+        AppAC.setSuccessMessage({ message: "You have successfully logged out" })
+      );
     } catch (e) {
       AppAC.setError({ error: defaultErrorMessage });
     }
