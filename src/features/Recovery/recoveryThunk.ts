@@ -4,7 +4,7 @@ import { AppAC } from "../../app/appReducer";
 import { recoveryEmail } from "../../common/components/RecoveryEmail/RecoveryEmail";
 
 export const recoveryThunk =
-  (field: string): AppThunkActionType<Promise<any>> =>
+  (field: string): AppThunkActionType<Promise<boolean | undefined>> =>
   async (dispatch) => {
     const recoveryRequest = {
       email: field,
