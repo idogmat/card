@@ -2,6 +2,8 @@ import Button from "@mui/material/Button/Button";
 import FormControl from "@mui/material/FormControl/FormControl";
 import FormGroup from "@mui/material/FormGroup/FormGroup";
 import {
+  Checkbox,
+  FormControlLabel,
   FormLabel,
   Grid,
   IconButton,
@@ -109,7 +111,16 @@ export const Login = () => {
                   }}
                 />
               </FormGroup>
-              <Link to={"/recovery"}>Forgot Password</Link>
+              <FormControlLabel
+                label={"Remember me"}
+                control={<Checkbox />}
+                {...loginForm.getFieldProps("rememberMe")}
+                checked={loginForm.values.rememberMe}
+              />
+              <Typography sx={{ marginBottom: "1rem", textAlign: "end" }}>
+                <Link to={"/recovery"}>Forgot Password?</Link>
+              </Typography>
+
               <Button
                 type={"submit"}
                 variant={"contained"}

@@ -51,20 +51,34 @@ const SetNewPassword = () => {
         <Paper sx={{ padding: "35px" }}>
           <form onSubmit={setPasswordForm.handleSubmit}>
             <FormControl sx={{ width: "100%", textAlign: "center" }}>
-              <Typography variant={"h5"} sx={{ textAlign: "center" }}>
-                Set your new password
+              <Typography
+                style={{ marginBottom: "3rem" }}
+                variant={"h5"}
+                sx={{ textAlign: "center" }}
+              >
+                Create new password
               </Typography>
               <TextField
+                style={{ marginBottom: "3rem" }}
                 error={hasError("password")}
                 label={
                   hasError("password")
                     ? setPasswordForm.errors.password
-                    : "password"
+                    : "Password"
                 }
                 margin={"normal"}
                 variant={"standard"}
                 {...setPasswordForm.getFieldProps("password")}
               />
+              <Typography
+                style={{ marginBottom: "3rem" }}
+                sx={{ textAlign: "start" }}
+              >
+                <p style={{ opacity: ".7" }}>
+                  Enter your email address and we will send you further
+                  instructions
+                </p>
+              </Typography>
               <Button
                 type={"submit"}
                 variant={"contained"}
@@ -72,7 +86,7 @@ const SetNewPassword = () => {
                 color={"primary"}
                 sx={{ borderRadius: "30px", marginBottom: "30px" }}
               >
-                Set
+                Create new password
               </Button>
             </FormControl>
           </form>
