@@ -12,6 +12,8 @@ export const AuthMeTC = () => {
         dispatch(UserAC.setUser({ user }));
         dispatch(AuthAC.setIsAuth({ isAuth: true }));
       })
-      .catch((e) => {});
+      .catch((e) => {
+        return;
+      });
   };
 };

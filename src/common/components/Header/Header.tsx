@@ -4,12 +4,14 @@ import { useAllSelector } from "../../hooks";
 import { authStateSelector } from "../../../features/Auth/selectors";
 import { HeaderLink } from "./HeaderLink";
 import logo from "../../../assets/img/logo.svg";
+import { authRoutes, IRoute, unAuthRoutes } from "../../routes";
+import { getRouteName } from "../../utils";
 
 export const Header = () => {
   const { isAuth } = useAllSelector(authStateSelector);
 
-  const unAuthPages = ["login", "register"];
-  const authPages = ["profile"];
+  const unAuthPages = getRouteName(unAuthRoutes);
+  const authPages = getRouteName(authRoutes);
 
   return (
     <AppBar
@@ -39,7 +41,6 @@ export const Header = () => {
           }}
         >
           <img src={logo} alt="IT-Incubator" />
-          {/*<Typography color={"black"}>Logo placeholder</Typography>*/}
           <List
             sx={{
               display: "flex",

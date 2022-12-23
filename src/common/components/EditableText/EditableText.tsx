@@ -1,35 +1,24 @@
-import React, {
-  ComponentType,
-  DetailedHTMLProps,
-  FC,
-  HTMLAttributes,
-  useEffect,
-  useState,
-} from "react";
+import React, { FC, useEffect, useState } from "react";
 import {
   Button,
   InputAdornment,
   TextField,
   Typography,
   TypographyProps,
-  TypographyTypeMap,
 } from "@mui/material";
-
-type DefaultSpanPropsType = DetailedHTMLProps<
-  HTMLAttributes<HTMLSpanElement>,
-  HTMLSpanElement
->;
 
 interface IEditableTextProps {
   valueToDisplay: string;
   onChangeText: (value: string) => void;
   displayProps?: TypographyProps;
+  disabled: boolean;
 }
 
 export const EditableText: FC<IEditableTextProps> = ({
   valueToDisplay,
   onChangeText,
   displayProps,
+  disabled,
 }) => {
   const [editMode, setIsEditMode] = useState(false);
   const [fieldText, setFieldText] = useState("");
@@ -41,6 +30,7 @@ export const EditableText: FC<IEditableTextProps> = ({
   const fieldTextChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFieldText(e.currentTarget.value);
   };
+
   const submitChanges = () => {
     onChangeText(fieldText);
     setIsEditMode(false);
@@ -51,12 +41,9 @@ export const EditableText: FC<IEditableTextProps> = ({
   };
 
   return !editMode ? (
-    // <Typography
-    //   {...displayProps}
-    // >
-
-    // </Typography>
-    <Typography {...displayProps}>{valueToDisplay}</Typography>
+    <Typography onDoubleClick={doubleClickHandler} {...displayProps}>
+      {valueToDisplay}
+    </Typography>
   ) : (
     <TextField
       variant={"standard"}
@@ -75,6 +62,7 @@ export const EditableText: FC<IEditableTextProps> = ({
               variant={"contained"}
               onClick={submitChanges}
               sx={{ fontSize: "12px", padding: "5px 10px", margin: "5px 0px" }}
+              disabled={disabled}
             >
               Save
             </Button>

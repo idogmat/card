@@ -27,7 +27,6 @@ export const loginTC =
       );
     } catch (e: any) {
       dispatch(AppAC.setError({ error: e.message }));
-      // console.log(e);
     } finally {
       dispatch(AppAC.setIsLoading({ isLoading: false }));
     }

@@ -2,7 +2,10 @@ import { instance } from "../../common/api/baseAPI";
 import { IUserFields } from "./loginThunks";
 import { LoginUserType } from "../../common/api/types";
 
-type EmailType = `${string}@${string}.${string}`;
+export interface ISetPWD {
+  password: string;
+  resetPasswordToken: string;
+}
 
 export interface IRecoveryRequest {
   email: string;

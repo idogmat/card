@@ -1,6 +1,7 @@
 import { instance } from "../../common/api/baseAPI";
 
-import { IRegisterData, RegisterNewUserType } from "../../common/api/types";
+import { RegisterNewUserType } from "../../common/api/types";
+import { IRegisterData } from "./registerThunks";
 
 const sendRegisterRequest = ({ email, password }: IRegisterData) => {
   return instance.post<RegisterNewUserType>("/auth/register", {

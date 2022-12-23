@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import svg from "./../../assets/img/mail.svg";
 import { recoveryThunk } from "../Recovery/recoveryThunk";
 import { useAppDispatch } from "../../common/hooks";
+import { validMail } from "../../common/utils/regExp";
 const RecoveryPassword = () => {
   const [sent, setSent] = useState(false);
   const dispatch = useAppDispatch();
@@ -19,9 +20,7 @@ const RecoveryPassword = () => {
       const errors: any = {};
       if (!values.email) {
         errors.email = "Required";
-      } else if (
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-      ) {
+      } else if (!validMail.test(values.email)) {
         errors.email = "Invalid email address";
       }
 

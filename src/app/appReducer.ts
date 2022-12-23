@@ -32,7 +32,6 @@ const appSlice = createSlice({
       draft,
       action: PayloadAction<{ message: string | null }>
     ) => {
-      console.log("settings message", action.payload.message);
       draft.successMessage = action.payload.message;
     },
   },

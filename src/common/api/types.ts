@@ -28,20 +28,3 @@ export type LoginUserType = {
   rememberMe: boolean;
   error: string | null;
 };
-export type UserType = {
-  id: string;
-  email: string;
-  name: string;
-  avatar?: string;
-  publicCardPacksCount: number;
-  created: Date;
-  updated: Date;
-  token: string;
-  verified: boolean;
-  error?: string;
-};
-
-export interface IRegisterData {
-  email: string;
-  password: string;
-}

@@ -4,10 +4,12 @@ import { AuthAC } from "../Auth/authReducer";
 import { UserAC } from "../User/userReducer";
 import { defaultErrorMessage } from "../../common/utils/errorHandlers";
 import { AppThunkActionType } from "../../common/hooks/useAllSelector";
+
 export interface IRegisterData {
   email: string;
   password: string;
 }
+
 export const registerTC = ({
   email,
   password,
