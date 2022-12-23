@@ -18,7 +18,6 @@ import { useAppDispatch } from "../../common/hooks/hooks";
 import { loginTC } from "./loginThunks";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import React, { useState } from "react";
-import { hasError } from "../../common/utils/errorHandlers";
 
 interface ILoginErrorType {
   email?: string;

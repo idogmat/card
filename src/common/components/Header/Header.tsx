@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { AppBar, Box, Container, List, Typography } from "@mui/material";
-import { useAllSelector } from "../../hooks/hooks";
-import { authSelector } from "../../../features/Auth/selectors";
+import { useAllSelector } from "../../hooks";
+import { authStateSelector } from "../../../features/Auth/selectors";
 import { HeaderLink } from "./HeaderLink";
 import logo from "../../../assets/img/logo.svg";
 
 export const Header = () => {
-  const { isAuth } = useAllSelector(authSelector);
+  const { isAuth } = useAllSelector(authStateSelector);
 
   const unAuthPages = ["login", "register"];
   const authPages = ["profile"];

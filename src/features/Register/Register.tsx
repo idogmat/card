@@ -12,12 +12,11 @@ import {
   Typography,
 } from "@mui/material";
 import { registerTC } from "./registerThunks";
-import { useAppDispatch } from "../../common/hooks/hooks";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useFormik } from "formik";
-import { RegisterFieldError } from "./RegisterFieldError";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { hasError } from "../../common/utils/errorHandlers";
+import { useAppDispatch } from "../../common/hooks";
 
 export interface IRegisterFormErrors {
   email: string;

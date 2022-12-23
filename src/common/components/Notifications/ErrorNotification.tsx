@@ -1,5 +1,5 @@
 import React from "react";
-import { useAllSelector, useAppDispatch } from "../../hooks/hooks";
+import { useAllSelector, useAppDispatch } from "../../hooks";
 import { appStateSelect } from "../../../app/selectors";
 import { AppAC } from "../../../app/appReducer";
 import { Alert, Snackbar } from "@mui/material";

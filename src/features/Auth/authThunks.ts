@@ -1,4 +1,3 @@
-import { AppThunkActionType } from "../../common/hooks/hooks";
 import { baseAPI } from "../../common/api/baseAPI";
 import { AuthAC } from "./authReducer";
 import { UserAC } from "../User/userReducer";

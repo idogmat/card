@@ -4,7 +4,7 @@ import { AuthAC } from "../Auth/authReducer";
 import { AppAC } from "../../app/appReducer";
 import { IUser } from "../../common/models";
 import { UserAC } from "../User/userReducer";
-import { loginAPI } from "./loginApi";
+import { loginAPI } from "./loginAPI";
 import { defaultErrorMessage } from "../../common/utils/errorHandlers";
 
 export interface IUserFields {
