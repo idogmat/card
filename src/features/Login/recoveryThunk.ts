@@ -7,8 +7,8 @@ export const recoveryThunk =
     const recoveryRequest = {
       email: field,
       from: "test-front-admin <ai73a@yandex.by>",
-      message: `<div style="background-color: darkslateblue; padding: 15px">
-password recovery link: 
+      message: `<div style="padding: 15px">
+Password recovery
 <a href='http://localhost:3000/#/recovery/$token$'>
 link</a></div>`,
     };

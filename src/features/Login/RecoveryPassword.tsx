@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Grid, Paper, TextField, Typography } from "@mui/material";
+import { Grid, Link, Paper, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useAppDispatch } from "../../common/hooks/hooks";
 import Button from "@mui/material/Button/Button";
@@ -51,14 +51,29 @@ const RecoveryPassword = () => {
             flexDirection: "column",
           }}
         >
-          <Typography variant={"h3"} sx={{ textAlign: "center" }}>
-            Check your Email
+          <Typography
+            style={{ marginBottom: "1rem" }}
+            variant={"h4"}
+            sx={{ textAlign: "center" }}
+          >
+            Check Email
           </Typography>
-          <img src={svg} alt="checkMail" />
-          <Typography variant={"h5"} sx={{ textAlign: "center" }}>
-            We’ve sent an Email with instructions to {recoveryForm.values.email}
+          <img
+            style={{ width: "30%", margin: "auto" }}
+            src={svg}
+            alt="checkMail"
+          />
+          <Typography
+            style={{ marginBottom: "1rem" }}
+            sx={{ textAlign: "center" }}
+          >
+            <p style={{ opacity: ".7" }}>
+              We’ve sent an Email with instructions to{" "}
+              {recoveryForm.values.email}
+            </p>
           </Typography>
           <Button
+            style={{ marginBottom: "1rem" }}
             type={"submit"}
             variant={"contained"}
             disabled={hasError("email")}
@@ -83,7 +98,7 @@ const RecoveryPassword = () => {
           <form onSubmit={recoveryForm.handleSubmit}>
             <FormControl sx={{ width: "100%", textAlign: "center" }}>
               <Typography variant={"h5"} sx={{ textAlign: "center" }}>
-                Enter your email for recovery password
+                Forgot your password?
               </Typography>
               <TextField
                 error={hasError("email")}
@@ -92,6 +107,12 @@ const RecoveryPassword = () => {
                 variant={"standard"}
                 {...recoveryForm.getFieldProps("email")}
               />
+              <Typography>
+                <p style={{ opacity: ".7" }}>
+                  Enter your email address and we will send you further
+                  instructions
+                </p>
+              </Typography>
               <Button
                 type={"submit"}
                 variant={"contained"}
@@ -101,6 +122,15 @@ const RecoveryPassword = () => {
               >
                 Recovery
               </Button>
+              <Typography>
+                <p style={{ opacity: ".7" }}>Did you remember your password?</p>
+              </Typography>
+              <Typography
+                style={{ cursor: "pointer" }}
+                sx={{ textAlign: "center" }}
+              >
+                <Link>Try logging in</Link>
+              </Typography>
             </FormControl>
           </form>
         </Paper>
