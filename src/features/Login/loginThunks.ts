@@ -37,6 +37,7 @@ export const logOutTC = (): AppThunkActionType => {
   return async (dispatch) => {
     try {
       const res = await loginAPI.logout();
+      console.log("inlogout");
       dispatch(AuthAC.setIsAuth({ isAuth: false }));
       dispatch(UserAC.setUser({ user: {} as IUser }));
       dispatch(

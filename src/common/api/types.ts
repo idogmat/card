@@ -40,3 +40,8 @@ export type UserType = {
   verified: boolean;
   error?: string;
 };
+
+export interface IRegisterData {
+  email: string;
+  password: string;
+}
