@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
-import { useAppDispatch } from "../../common/hooks/hooks";
 import { recoveryThunk } from "./recoveryThunk";
 import CheckMail from "./CheckMail";
 import SendMailForm from "./SendMailForm";
+import { useAppDispatch } from "../../common/hooks";
 
 const RecoveryPassword = () => {
   const [sent, setSent] = useState(false);

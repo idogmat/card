@@ -1,11 +1,11 @@
-import { AppThunkActionType } from "../../common/hooks/hooks";
-
 import { AuthAC } from "../Auth/authReducer";
 import { AppAC } from "../../app/appReducer";
 import { IUser } from "../../common/models";
 import { UserAC } from "../User/userReducer";
-import { loginAPI } from "./loginAPI";
+
 import { defaultErrorMessage } from "../../common/utils/errorHandlers";
+import { AppThunkActionType } from "../../common/hooks/useAllSelector";
+import { loginAPI } from "./loginAPI";
 
 export interface IUserFields {
   email: string;

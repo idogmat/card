@@ -5,7 +5,7 @@ import Button from "@mui/material/Button/Button";
 import FormControl from "@mui/material/FormControl/FormControl";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "../../common/hooks";
-import { setNewPasswordTC } from "./setNewPasswordThunk";
+import { setNewPassword } from "./setNewPasswordThunk";
 
 const SetNewPassword = () => {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ const SetNewPassword = () => {
     },
     onSubmit: async (values) => {
       const res = await dispatch(
-        setNewPasswordTC({
+        setNewPassword({
           password: values.password,
           resetPasswordToken: params.id + "",
         })

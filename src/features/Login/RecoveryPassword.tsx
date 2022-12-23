@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Grid, Link, Paper, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
-import { useAppDispatch } from "../../common/hooks/hooks";
 import Button from "@mui/material/Button/Button";
 import FormControl from "@mui/material/FormControl/FormControl";
-import { recoveryThunk } from "./recoveryThunk";
 import { useNavigate } from "react-router-dom";
 import svg from "./../../assets/img/mail.svg";
+import { recoveryThunk } from "../Recovery/recoveryThunk";
+import { useAppDispatch } from "../../common/hooks";
 const RecoveryPassword = () => {
   const [sent, setSent] = useState(false);
   const dispatch = useAppDispatch();

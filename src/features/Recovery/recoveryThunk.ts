@@ -1,7 +1,7 @@
-import { AppThunkActionType } from "../../common/hooks/hooks";
-import { loginAPI } from "../Login/loginApi";
 import { AppAC } from "../../app/appReducer";
 import { recoveryEmail } from "../../common/components/RecoveryEmail/RecoveryEmail";
+import { AppThunkActionType } from "../../common/hooks/useAllSelector";
+import { loginAPI } from "../Login/loginAPI";
 
 export const recoveryThunk =
   (field: string): AppThunkActionType<Promise<boolean | undefined>> =>

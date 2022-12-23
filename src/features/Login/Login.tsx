@@ -14,10 +14,11 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import { Link } from "react-router-dom";
-import { useAppDispatch } from "../../common/hooks/hooks";
 import { loginTC } from "./loginThunks";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import React, { useState } from "react";
+import { hasError } from "../../common/utils/errorHandlers";
+import { useAppDispatch } from "../../common/hooks";
 
 interface ILoginErrorType {
   email?: string;
@@ -55,13 +56,9 @@ export const Login = () => {
       dispatch(loginTC(values));
     },
   });
-
   const changePasswordFieldType = () => setShowPassword((prev) => !prev);
   const passwordFieldType = showPassword ? "text" : "password";
   const loginHasError = hasError.bind(null, loginForm);
-  // const hasError = (prop: LoginFormErrorFieldsType) => {
-  //   return !!loginForm.errors[prop] && !!loginForm.touched[prop];
-  // };
   return (
     <Grid
       container

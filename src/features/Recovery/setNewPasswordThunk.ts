@@ -1,7 +1,7 @@
-import { AppThunkActionType } from "../../common/hooks/hooks";
-import { ISetPWD, loginAPI } from "../Login/loginApi";
 import { AppAC } from "../../app/appReducer";
 import { defaultErrorMessage } from "../../common/utils/errorHandlers";
+import { ISetPWD, loginAPI } from "../Login/loginAPI";
+import { AppThunkActionType } from "../../common/hooks/useAllSelector";
 
 export const setNewPassword =
   (setParams: ISetPWD): AppThunkActionType<Promise<any>> =>
