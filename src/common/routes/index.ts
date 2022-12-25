@@ -5,6 +5,7 @@ import { Profile } from "../../features/Profile/Profile";
 import { Register } from "../../features/Register/Register";
 import RecoveryPassword from "../../features/Recovery/RecoveryPassword";
 import SetNewPassword from "../../features/Recovery/SetNewPassword";
+import Packs from "../../features/Packs/Packs";
 
 export interface IRoute {
   path: string;
@@ -19,12 +20,18 @@ export enum RoutesEnum {
   RECOVERY = "/recovery",
   RECOVERY_ID = "/recovery/:id",
   REGISTER = "/register",
+  PACKS = "/packs",
 }
 
 export const authRoutes: IRoute[] = [
   {
     path: RoutesEnum.PROFILE,
     component: Profile,
+    isPage: true,
+  },
+  {
+    path: RoutesEnum.PACKS,
+    component: Packs,
     isPage: true,
   },
   {
