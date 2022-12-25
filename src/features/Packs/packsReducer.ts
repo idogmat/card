@@ -16,7 +16,7 @@ const initialState: IInitialState | null = {
   maxCardsCount: 10,
   minCardsCount: 1,
   page: 1,
-  pageCount: 1,
+  pageCount: 10,
   sortPacks: "",
   cardPacksTotalCount: 10,
   min: 0,
@@ -30,7 +30,11 @@ const packsSlice = createSlice({
       draft,
       action: PayloadAction<{ packs: ResponseGetPacks }>
     ): IInitialState => {
-      return { ...action.payload.packs, min: 0, max: 100 };
+      return {
+        ...action.payload.packs,
+        min: action.payload.packs.minCardsCount,
+        max: action.payload.packs.maxCardsCount,
+      };
     },
     setCurrentPage: (draft, action: PayloadAction<{ page: number }>) => {
       draft.page = action.payload.page;
@@ -46,4 +50,5 @@ const packsSlice = createSlice({
 });
 
 export const packsReducer = packsSlice.reducer;
-export const { setPacks, setCurrentPage, setPageCount } = packsSlice.actions;
+export const { setPacks, setCurrentPage, setPageCount, setRangeValue } =
+  packsSlice.actions;

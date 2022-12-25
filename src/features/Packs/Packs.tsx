@@ -26,18 +26,26 @@ import { packsStateSelect, userStateSelect } from "../../app/selectors";
 import AddNewPack from "./AddNewPack";
 import SuperRange from "./SuperRange";
 import SuperSearch from "./SuperSearch";
-import { setCurrentPage, setPageCount } from "./packsReducer";
+import { setCurrentPage, setPageCount, setRangeValue } from "./packsReducer";
 
 const Packs = () => {
   const user = useAllSelector(userStateSelect);
-  const { cardPacks, page, pageCount, cardPacksTotalCount } =
-    useAllSelector(packsStateSelect);
-  const [rangeValue, setRangeValue] = useState<number[]>([0, 10]);
-  const [minPackCount, setMinPackCount] = useState(rangeValue[0]);
-  const [maxPackCount, setMaxPackCount] = useState(rangeValue[1]);
+  const {
+    cardPacks,
+    page,
+    pageCount,
+    cardPacksTotalCount,
+    maxCardsCount,
+    minCardsCount,
+  } = useAllSelector(packsStateSelect);
   const [addPackMode, setAddPackMode] = useState(false);
+  const [range, setterRange] = useState<number[]>([
+    minCardsCount,
+    maxCardsCount,
+  ]);
   const dispatch = useAppDispatch();
   useEffect(() => {
+    setRange(range);
     dispatch(setPacksTC(user._id));
     // PacksAPI.getCardsPack(id).then((e) => {
     //   console.log(e);
@@ -53,11 +61,14 @@ const Packs = () => {
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    dispatch(setPageCount({ pageCount: +event.target.value }));
+    dispatch(setPageCount({ pageCount: maxCardsCount - minCardsCount }));
     dispatch(setCurrentPage({ page: 1 }));
   };
   const removePack = (id: string) => {
     dispatch(removePackTC(id));
+  };
+  const setRange = (newValue: number[]) => {
+    dispatch(setRangeValue({ range: newValue }));
   };
   return (
     <Box>
@@ -83,12 +94,10 @@ const Packs = () => {
               </RadioGroup>
             </FormControl>
             <SuperRange
-              min={minPackCount}
-              max={maxPackCount}
-              value={rangeValue}
-              onChange={(e, newValue) => {
-                Array.isArray(newValue) && setRangeValue(newValue);
-              }}
+              value={range}
+              onChange={(e, newValue) =>
+                Array.isArray(newValue) && setterRange(newValue)
+              }
             />
           </Container>
 
@@ -132,18 +141,17 @@ const Packs = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <TablePagination
-            count={cardPacksTotalCount}
-            page={page}
-            onPageChange={changePage}
-            rowsPerPage={pageCount}
-            rowsPerPageOptions={[5, 10, 20, 30]}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
         </Paper>
       ) : (
         <AddNewPack setAddPackMode={setAddPackMode} />
       )}
+      <TablePagination
+        count={cardPacksTotalCount}
+        page={page - 1}
+        onPageChange={changePage}
+        rowsPerPage={10}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </Box>
   );
 };

@@ -5,8 +5,13 @@ import { setPacks } from "./packsReducer";
 export const setPacksTC = (id: string): AppThunkActionType => {
   return async (dispatch, getState) => {
     try {
-      const { pageCount, page } = getState().packs;
-      const res = await PacksAPI.getCardsPack(id, { pageCount, page });
+      const { pageCount, page, min, max } = getState().packs;
+      const res = await PacksAPI.getCardsPack(id, {
+        pageCount,
+        page,
+        min,
+        max,
+      });
       console.log(res);
       dispatch(setPacks({ packs: res.data }));
     } catch (e) {}
