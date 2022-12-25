@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper/Paper";
 import Table from "@mui/material/Table/Table";
 import TableContainer from "@mui/material/TableContainer/TableContainer";
@@ -17,15 +17,19 @@ import {
   styled,
   TableBody,
   TableCell,
+  TextField,
   Toolbar,
+  Typography,
 } from "@mui/material";
 import Button from "@mui/material/Button/Button";
 
 import FormControl from "@mui/material/FormControl/FormControl";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
 import { PacksAPI } from "./packsAPI";
-import { setPacksTC } from "./packsThunks";
+import { removePackTC, setPacksTC } from "./packsThunks";
 import { packsStateSelect, userStateSelect } from "../../app/selectors";
+import AddNewPack from "./AddNewPack";
+import SuperRange from "./SuperRange";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -57,6 +61,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Packs = () => {
   const user = useAllSelector(userStateSelect);
   const packs = useAllSelector(packsStateSelect);
+  const [minPackCount, setMinPackCount] = useState(0);
+  const [maxPackCount, setMaxPackCount] = useState(10);
+  const [rangeValue, setRangeValue] = useState<number[]>([0, 10]);
+  const [addPackMode, setAddPackMode] = useState(false);
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(setPacksTC(user._id));
@@ -65,7 +73,9 @@ const Packs = () => {
     // });
     console.log(packs);
   }, [user._id]);
-
+  const removePack = (id: string) => {
+    dispatch(removePackTC(id));
+  };
   return (
     <div>
       <Box sx={{ flexGrow: 1 }}>
@@ -95,15 +105,25 @@ const Packs = () => {
                 />
               </div>
             </Search>
+            <SuperRange
+              min={minPackCount}
+              max={maxPackCount}
+              value={rangeValue}
+              onChange={(e, newValue) => {
+                Array.isArray(newValue) && setRangeValue(newValue);
+              }}
+            />
           </div>
           <div>
-            <Button>Add new card</Button>
-            {/*<Button>Add new Pack</Button>*/}
+            {/*<Button>Add new card</Button>*/}
+            <Button onClick={() => setAddPackMode((mode) => !mode)}>
+              Add new Pack
+            </Button>
           </div>
         </Toolbar>
       </Box>
       {/*TABLE*/}
-      {!!packs.length ? (
+      {!addPackMode ? (
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 400 }} aria-label="simple table">
             <TableHead>
@@ -117,18 +137,18 @@ const Packs = () => {
             </TableHead>
             <TableBody>
               {packs.map((pack) => (
-                <TableRow>
+                <TableRow key={pack._id}>
                   <TableCell component="th" scope="row">
                     {pack.name}
                   </TableCell>
                   <TableCell align="center">{pack.cardsCount}</TableCell>
                   <TableCell align="center">{pack.created}</TableCell>
                   <TableCell align="center">
-                    <Rating name="read-only" value={pack.rating} readOnly />
+                    <Typography>{pack.user_name}</Typography>
                   </TableCell>
 
                   <TableCell>
-                    <Button>Delete</Button>
+                    <Button onClick={() => removePack(pack._id)}>Delete</Button>
                     <Button>Edit</Button>
                   </TableCell>
                 </TableRow>
@@ -137,9 +157,7 @@ const Packs = () => {
           </Table>
         </TableContainer>
       ) : (
-        <TableRow>
-          <TableCell>{"NO CARDS FOUND"}</TableCell>
-        </TableRow>
+        <AddNewPack setAddPackMode={setAddPackMode} />
       )}
     </div>
   );

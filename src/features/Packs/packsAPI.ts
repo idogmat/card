@@ -48,9 +48,14 @@ const getCardsPack = (cardsPack_id: string, params?: IPacksParams) => {
   });
 };
 const addPack = (name: string, deckCover: string, isPrivate?: boolean) => {
-  return instance.post("/cards/pack", {
-    cardsPack: { name, deckCover, private: isPrivate },
-  });
+  return instance
+    .post("/cards/pack", {
+      cardsPack: { name, deckCover, private: isPrivate },
+    })
+    .then((e) => {
+      console.log(e);
+      return e;
+    });
 };
 const deletePack = (id: string) => {
   return instance.delete(`/cards/pack?id=${id}`);
