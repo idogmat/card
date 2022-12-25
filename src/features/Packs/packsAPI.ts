@@ -1,7 +1,7 @@
 import { instance } from "../../common/api/baseAPI";
 import { AxiosResponse } from "axios";
 
-export interface IPack {
+export interface IPackResponse {
   _id: string;
   user_id: string;
   user_name: string;
@@ -19,8 +19,8 @@ export interface IPack {
   __v: number;
   deckCover: string;
 }
-interface ResponseGetPacks {
-  cardPacks: IPack[];
+export interface ResponseGetPacks {
+  cardPacks: IPackResponse[];
   page: number;
   pageCount: number;
   cardPacksTotalCount: number;

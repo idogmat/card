@@ -3,7 +3,7 @@ import { Box, Slider, SliderProps } from "@mui/material";
 
 const SuperRange: React.FC<SliderProps> = (props) => {
   return (
-    <Box sx={{ maxWidth: 200 }}>
+    <Box sx={{ width: 200 }}>
       <Slider color={"primary"} valueLabelDisplay="on" disableSwap {...props} />
     </Box>
   );
