@@ -17,7 +17,6 @@ export const Header = () => {
     <AppBar
       position={"absolute"}
       sx={{
-        position: "relative",
         //потом убрать
         top: "0",
         left: "0",
