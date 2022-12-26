@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { alpha, InputBase, styled } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { useDebounce } from "usehooks-ts";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -52,16 +51,16 @@ const SuperSearch: React.FC<IProps> = ({ setSearch, searchPacks }) => {
   }, [searchValue]);
 
   return (
-    <Search>
-      <SearchIconWrapper>
-        <SearchIcon />
-      </SearchIconWrapper>
-      <StyledInputBase
-        placeholder="Search…"
-        value={searchName}
-        onChange={(e) => setSearchName(e.target.value)}
-      />
-    </Search>
+      <Search>
+        <SearchIconWrapper>
+          <SearchIcon />
+        </SearchIconWrapper>
+        <StyledInputBase
+            placeholder="Search…"
+            value={searchName}
+            onChange={(e) => setSearchName(e.target.value)}
+        />
+      </Search>
   );
 };
 
