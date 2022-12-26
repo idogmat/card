@@ -10,6 +10,7 @@ interface IInitialState {
   max: number;
   sortPacks: string;
   cardPacksTotalCount: number;
+  isMyPack: boolean;
 }
 const initialState: IInitialState | null = {
   cardPacks: [],
@@ -21,6 +22,7 @@ const initialState: IInitialState | null = {
   cardPacksTotalCount: 10,
   min: 0,
   max: 100,
+  isMyPack: false,
 };
 const packsSlice = createSlice({
   name: "packs",
@@ -34,6 +36,7 @@ const packsSlice = createSlice({
         ...action.payload.packs,
         min: action.payload.packs.minCardsCount,
         max: action.payload.packs.maxCardsCount,
+        isMyPack: false,
       };
     },
     setCurrentPage: (draft, action: PayloadAction<{ page: number }>) => {
@@ -46,9 +49,20 @@ const packsSlice = createSlice({
     setPageCount: (draft, action: PayloadAction<{ pageCount: number }>) => {
       draft.pageCount = action.payload.pageCount;
     },
+    setPreferencePacks: (
+      draft,
+      action: PayloadAction<{ param: "my" | "all" }>
+    ) => {
+      draft.isMyPack = action.payload.param === "my" ? true : false;
+    },
   },
 });
 
 export const packsReducer = packsSlice.reducer;
-export const { setPacks, setCurrentPage, setPageCount, setRangeValue } =
-  packsSlice.actions;
+export const {
+  setPacks,
+  setCurrentPage,
+  setPageCount,
+  setRangeValue,
+  setPreferencePacks,
+} = packsSlice.actions;

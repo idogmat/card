@@ -17,6 +17,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import { useDebounce } from "usehooks-ts";
 import Button from "@mui/material/Button/Button";
 
 import FormControl from "@mui/material/FormControl/FormControl";
@@ -26,7 +27,12 @@ import { packsStateSelect, userStateSelect } from "../../app/selectors";
 import AddNewPack from "./AddNewPack";
 import SuperRange from "./SuperRange";
 import SuperSearch from "./SuperSearch";
-import { setCurrentPage, setPageCount, setRangeValue } from "./packsReducer";
+import {
+  setCurrentPage,
+  setPageCount,
+  setPreferencePacks,
+  setRangeValue,
+} from "./packsReducer";
 
 const Packs = () => {
   const user = useAllSelector(userStateSelect);
@@ -35,23 +41,24 @@ const Packs = () => {
     page,
     pageCount,
     cardPacksTotalCount,
-    maxCardsCount,
-    minCardsCount,
+    max,
+    min,
+    isMyPack,
   } = useAllSelector(packsStateSelect);
   const [addPackMode, setAddPackMode] = useState(false);
-  const [range, setterRange] = useState<number[]>([
-    minCardsCount,
-    maxCardsCount,
-  ]);
+  const [range, setterRange] = useState<number[]>([min, max]);
+  const debouncedValue = useDebounce<number[]>(range, 500);
   const dispatch = useAppDispatch();
   useEffect(() => {
+    console.log("k");
     setRange(range);
-    dispatch(setPacksTC(user._id));
+    dispatch(setPacksTC());
+
     // PacksAPI.getCardsPack(id).then((e) => {
     //   console.log(e);
     // });
     console.log(cardPacks);
-  }, [user._id, page, pageCount]);
+  }, [user._id, page, pageCount, debouncedValue, isMyPack]);
   const changePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -61,7 +68,7 @@ const Packs = () => {
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    dispatch(setPageCount({ pageCount: maxCardsCount - minCardsCount }));
+    dispatch(setPageCount({ pageCount: +event.target.value }));
     dispatch(setCurrentPage({ page: 1 }));
   };
   const removePack = (id: string) => {
@@ -70,28 +77,28 @@ const Packs = () => {
   const setRange = (newValue: number[]) => {
     dispatch(setRangeValue({ range: newValue }));
   };
+  const handlerIsMyPack = (param: "my" | "all") => {
+    dispatch(setPreferencePacks({ param }));
+  };
   return (
     <Box>
       <Box sx={{ flexGrow: 1 }}>
         <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
           <Container style={{ display: "flex", flexDirection: "row" }}>
             <SuperSearch />
-            <FormControl>
-              <RadioGroup
-                style={{ display: "flex", flexDirection: "row" }}
-                onChange={() => {}}
+            <FormControl style={{ display: "flex", flexDirection: "row" }}>
+              <Button
+                variant={isMyPack ? "contained" : "outlined"}
+                onClick={() => handlerIsMyPack("my")}
               >
-                <FormControlLabel
-                  value="My"
-                  control={<Radio color={"primary"} />}
-                  label="My"
-                />
-                <FormControlLabel
-                  value="All"
-                  control={<Radio color={"primary"} />}
-                  label="All"
-                />
-              </RadioGroup>
+                My
+              </Button>
+              <Button
+                variant={!isMyPack ? "contained" : "outlined"}
+                onClick={() => handlerIsMyPack("all")}
+              >
+                All
+              </Button>
             </FormControl>
             <SuperRange
               value={range}
@@ -130,12 +137,24 @@ const Packs = () => {
                       <TableCell align="center">{pack.cardsCount}</TableCell>
                       <TableCell align="center">{pack.created}</TableCell>
                       <TableCell align="center">{pack.user_name}</TableCell>
-                      <TableCell>
-                        <Button onClick={() => removePack(pack._id)}>
-                          Delete
-                        </Button>
-                        <Button>Edit</Button>
-                      </TableCell>
+                      {isMyPack ? (
+                        <TableCell>
+                          <Button onClick={() => removePack(pack._id)}>
+                            Delete
+                          </Button>
+                          <Button>Edit</Button>
+                        </TableCell>
+                      ) : (
+                        <TableCell>
+                          <Button onClick={() => removePack(pack._id)}>
+                            Learn
+                          </Button>
+                          <Button onClick={() => removePack(pack._id)}>
+                            Delete
+                          </Button>
+                          <Button>Edit</Button>
+                        </TableCell>
+                      )}
                     </TableRow>
                   ))}
               </TableBody>
@@ -149,7 +168,7 @@ const Packs = () => {
         count={cardPacksTotalCount}
         page={page - 1}
         onPageChange={changePage}
-        rowsPerPage={10}
+        rowsPerPage={pageCount}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Box>

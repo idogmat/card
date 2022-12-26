@@ -42,7 +42,7 @@ interface INewPack {
   deckCover: string;
   isPrivate?: boolean;
 }
-const getCardsPack = (cardsPack_id: string, params?: IPacksParams) => {
+const getPacks = (params?: IPacksParams) => {
   return instance.get<ResponseGetPacks>("/cards/pack", {
     params,
   });
@@ -61,7 +61,7 @@ const deletePack = (id: string) => {
   return instance.delete(`/cards/pack?id=${id}`);
 };
 export const PacksAPI = {
-  getCardsPack,
+  getPacks,
   addPack,
   deletePack,
 };
