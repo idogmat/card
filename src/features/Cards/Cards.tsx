@@ -46,6 +46,7 @@ export const Cards = () => {
   };
 
   const [searchRequest, setSearchRequest] = useState("");
+  const [sort, setSort] = useState({ direction: 0, field: "updated" });
 
   const isPackMine = user._id === packUserId;
   const totalPages = Math.ceil(cardsTotalCount / +pageCount);
@@ -56,8 +57,9 @@ export const Cards = () => {
       currentPage: page.toString(),
       showPerPage: pageCount.toString(),
       search: searchRequest,
+      sortCards: sort.field ? `${sort.direction}${sort.field}` : "0updated",
     });
-  }, [pageCount, page, searchRequest, setSearchParams]);
+  }, [sort, pageCount, page, searchRequest, setSearchParams]);
 
   useEffect(() => {
     const model = {
@@ -65,14 +67,16 @@ export const Cards = () => {
       pageCount: params.showPerPage || pageCount,
       page: params.currentPage || page,
       cardQuestion: params.search || searchRequest,
+      sortCards: sort.field ? `${sort.direction}${sort.field}` : "0updated",
     } as IGetCardsRequest;
     dispatch(getCardsTC(model));
   }, [searchParams]);
 
   const changeShowPerPage = (event: SelectChangeEvent) => {
     const rowsPerPage = +event.target.value;
-    if (cardsTotalCount / rowsPerPage < totalPages) {
-      dispatch(CardsAC.setPage({ page: page - 1 }));
+    const existingPages = cardsTotalCount / rowsPerPage;
+    if (Math.ceil(existingPages) < totalPages) {
+      dispatch(CardsAC.setPage({ page: Math.floor(existingPages) }));
     }
     dispatch(CardsAC.setPageCount({ showPerPage: rowsPerPage }));
   };
@@ -156,6 +160,8 @@ export const Cards = () => {
                 isPackMine={isPackMine}
                 deleteCardHandler={deleteCardHandler}
                 updateCardHandler={updateCardHandler}
+                sort={sort}
+                setSort={setSort}
               />
             </Box>
             <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
