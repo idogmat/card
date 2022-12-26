@@ -33,6 +33,7 @@ import {
   setPreferencePacks,
   setRangeValue,
 } from "./packsReducer";
+import { NavLink } from "react-router-dom";
 
 const Packs = () => {
   const user = useAllSelector(userStateSelect);
@@ -132,7 +133,7 @@ const Packs = () => {
                   cardPacks.map((pack) => (
                     <TableRow key={pack._id}>
                       <TableCell component="th" scope="row">
-                        {pack.name}
+                        <NavLink to={`/packs/${pack._id}`}>{pack.name}</NavLink>
                       </TableCell>
                       <TableCell align="center">{pack.cardsCount}</TableCell>
                       <TableCell align="center">{pack.created}</TableCell>
