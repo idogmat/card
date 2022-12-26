@@ -6,7 +6,7 @@ import { Register } from "../../features/Register/Register";
 import RecoveryPassword from "../../features/Recovery/RecoveryPassword";
 import SetNewPassword from "../../features/Recovery/SetNewPassword";
 import Packs from "../../features/Packs/Packs";
-import {Cards} from "../../features/Cards/Cards";
+import { Cards } from "../../features/Cards/Cards";
 
 export interface IRoute {
   path: string;
@@ -22,7 +22,7 @@ export enum RoutesEnum {
   RECOVERY_ID = "/recovery/:id",
   REGISTER = "/register",
   PACKS = "/packs",
-  CARDS = '/packs/:cardID'
+  CARDS = "/packs/:packID",
 }
 
 export const authRoutes: IRoute[] = [

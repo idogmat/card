@@ -1,82 +1,132 @@
-import React, { useEffect } from 'react';
-import {useParams} from "react-router-dom";
-import {BackTo} from "../../common/components/BackTo/BackTo";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { BackTo } from "../../common/components/BackTo/BackTo";
 import {
-   Box,
-   IconButton,
-   Paper,
-   Rating,
-   Table,
-   TableBody,
-   TableCell,
-   TableContainer,
-   TableHead,
-   TableRow
+  Box,
+  Button,
+  MenuItem,
+  Pagination,
+  Select,
+  SelectChangeEvent,
+  Typography,
 } from "@mui/material";
-import {getCardsTC} from "./cardsThunks";
-import {IGetCardsRequest} from "./cardsAPI";
-import {useAllSelector, useAppDispatch} from "../../common/hooks";
-import {cardsStateSelector} from "./selectors";
-import {Edit, Remove} from "@mui/icons-material";
-import {userStateSelector} from "../User/selectors";
+import { addCardTC, deleteCardTC, getCardsTC } from "./cardsThunks";
+import { IAddCardRequest, IGetCardsRequest } from "./cardsAPI";
+import { useAllSelector, useAppDispatch } from "../../common/hooks";
+import { cardsStateSelector } from "./selectors";
+import { KeyboardArrowDownOutlined } from "@mui/icons-material";
+import { userStateSelector } from "../User/selectors";
+import { CardsTable } from "./CardsTable";
+import { CardsAC } from "./cardsSlice";
 
 export const Cards = () => {
-   const {cardID} = useParams()
-   const dispatch = useAppDispatch()
-   const {cards} = useAllSelector(cardsStateSelector)
-   const user = useAllSelector(userStateSelector)
+  const { packID } = useParams();
+  const dispatch = useAppDispatch();
+  const user = useAllSelector(userStateSelector);
+  const { cards, packUserId, cardsTotalCount, page } =
+    useAllSelector(cardsStateSelector);
 
-   useEffect(() => {
-      const model = {cardsPack_id: cardID} as IGetCardsRequest
-      dispatch(getCardsTC(model))
-   }, []);
+  const [showPerPage, setShowPerPage] = useState("4");
 
+  const isPackMine = user._id === packUserId;
+  const pageCount = Math.ceil(cardsTotalCount / +showPerPage);
+  console.log(pageCount);
 
-   return (
-      <Box sx={{height: '100vh', display: 'flex', justifyContent: 'center', flexDirection: 'column'}}>
-         <Box sx={{marginBottom: 5}}>
-            <BackTo title={'Back to packs'} route={'/packs'} />
-         </Box>
-         <TableContainer component={Paper}>
-            <Table sx={{minWidth: 500}}>
-               <TableHead>
-                  <TableCell>Question</TableCell>
-                  <TableCell>Answer</TableCell>
-                  <TableCell>Last Updated</TableCell>
-                  <TableCell>Grade</TableCell>
-               </TableHead>
-               <TableBody>
-                  {cards.map((card) => {
-                     return (
-                        <TableRow>
-                           <TableCell>
-                              {card.question}
-                           </TableCell>
-                           <TableCell>
-                              {card.answer}
-                           </TableCell>
-                           <TableCell>
-                              {card.updated.toString()}
-                           </TableCell>
-                           <TableCell>
-                              <Box sx={{display: 'flex', alignItems: 'center', gap: 10}}>
-                                 <Rating name={'read-only'} value={Math.floor(card.grade)} readOnly precision={0.5} />
+  useEffect(() => {
+    const model = {
+      cardsPack_id: packID,
+      pageCount: showPerPage,
+      page,
+    } as IGetCardsRequest;
+    dispatch(getCardsTC(model));
+  }, [showPerPage, page]);
 
-                                 <IconButton>
-                                    <Edit />
-                                 </IconButton>
-                                 <IconButton>
-                                    <Remove />
-                                 </IconButton>
-                              </Box>
-                           </TableCell>
-                        </TableRow>
-                     )
-                  })}
-               </TableBody>
-            </Table>
-         </TableContainer>
+  const changeShowPerPage = (event: SelectChangeEvent) => {
+    setShowPerPage(event.target.value);
+  };
+
+  const addNewCardHandler = () => {
+    const mockCard: IAddCardRequest = {
+      card: {
+        cardsPack_id: packID ? packID : "",
+        answer: "answer placeholder",
+        question: "question placeholder",
+      },
+    };
+    dispatch(addCardTC(mockCard));
+  };
+
+  const deleteCardHandler = (cardID: string) => {
+    dispatch(deleteCardTC(cardID, packID ? packID : ""));
+  };
+
+  const changePageHandler = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    dispatch(CardsAC.setPage({ page: value }));
+  };
+
+  return (
+    <Box
+      sx={{
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+      }}
+    >
+      <Box sx={{ marginBottom: 5 }}>
+        <BackTo title={"Back to packs"} route={"/packs"} />
       </Box>
-   );
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          gap: 2,
+          alignItem: "center",
+        }}
+      >
+        <Typography>Name placeholder</Typography>
+        <Button
+          sx={{ borderRadius: "24px", marginBottom: 5 }}
+          variant={"contained"}
+          onClick={addNewCardHandler}
+        >
+          Add new card
+        </Button>
+      </Box>
+      <Box sx={{ marginBottom: 3 }}>
+        <CardsTable
+          cards={cards}
+          isPackMine={isPackMine}
+          deleteCardHandler={deleteCardHandler}
+        />
+      </Box>
+      <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+        <Pagination
+          color={"primary"}
+          variant={"outlined"}
+          shape={"rounded"}
+          count={pageCount}
+          page={page}
+          onChange={changePageHandler}
+        />
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Typography>Show</Typography>
+          <Select
+            value={showPerPage}
+            onChange={changeShowPerPage}
+            sx={{ padding: "0", height: 20 }}
+            IconComponent={() => <KeyboardArrowDownOutlined />}
+          >
+            <MenuItem value={4}>4</MenuItem>
+            <MenuItem value={7}>7</MenuItem>
+            <MenuItem value={10}>10</MenuItem>
+          </Select>
+          <Typography>Cards per page</Typography>
+        </Box>
+      </Box>
+    </Box>
+  );
 };
-
