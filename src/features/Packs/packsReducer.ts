@@ -41,7 +41,7 @@ const packsSlice = createSlice({
     },
     setRangeValue: (draft, action: PayloadAction<{ range: number[] }>) => {
       draft.minCardsCount = action.payload.range[0];
-      draft.minCardsCount = action.payload.range[1];
+      draft.maxCardsCount = action.payload.range[1];
     },
     setPageCount: (draft, action: PayloadAction<{ pageCount: number }>) => {
       draft.pageCount = action.payload.pageCount;

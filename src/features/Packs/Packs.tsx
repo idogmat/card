@@ -14,7 +14,6 @@ import {
   Select,
   TableBody,
   TableCell,
-  TablePagination,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -36,13 +35,12 @@ import {
   setPreferencePacks,
   setRangeValue,
 } from "./packsReducer";
-import { NavLink } from "react-router-dom";
+import { NavLink, useSearchParams } from "react-router-dom";
 import {
   DeleteOutline,
   Edit,
   KeyboardArrowDownOutlined,
 } from "@mui/icons-material";
-import { CardsAC } from "../Cards/cardsSlice";
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
 
 const Packs = () => {
@@ -59,7 +57,8 @@ const Packs = () => {
     sortPacks,
   } = useAllSelector(packsStateSelect);
   const [addPackMode, setAddPackMode] = useState(false);
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  const params = Object.fromEntries(searchParams);
   const [range, setterRange] = useState<number[]>([
     minCardsCount,
     maxCardsCount,
@@ -67,24 +66,35 @@ const Packs = () => {
   const rangeValueD = useDebounce<number[]>(range, 1000);
   const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
   const dispatch = useAppDispatch();
+  useEffect(() => {
+    setSearchParams({
+      currentPage: page.toString(),
+      showPerPage: pageCount.toString(),
+    });
+  }, [pageCount, page]);
 
   useEffect(() => {
-    dispatch(setPacksTC());
     if (range !== rangeValueD) dispatch(setRangeValue({ range: rangeValueD }));
+
+    const model = {
+      pageCount: params.showPerPage,
+      page: params.currentPage,
+    };
+
+    dispatch(setPacksTC(model));
+
     // PacksAPI.getCardsPack(id).then((e) => {
     //   console.log(e);
     // });
     console.log(cardPacks);
   }, [
     user._id,
-    page,
-    pageCount,
-    rangeValueD,
     minCardsCount,
     maxCardsCount,
     packName,
     isMyPack,
     sortPacks,
+    searchParams,
   ]);
 
   const changePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
@@ -108,7 +118,7 @@ const Packs = () => {
     dispatch(setPreferencePacks({ param }));
   };
   return (
-    <Box>
+    <Box style={{ padding: "6rem 2rem" }}>
       <Box sx={{ flexGrow: 1 }}>
         <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
           <Container style={{ display: "flex", flexDirection: "row" }}>
@@ -207,7 +217,7 @@ const Packs = () => {
               <Typography>Show</Typography>
               <Select
                 value={pageCount.toString()}
-                onChange={(e, value) => handleChangeRowsPerPage(e)}
+                onChange={(e) => handleChangeRowsPerPage(e)}
                 sx={{ padding: "0", height: 20 }}
                 IconComponent={() => <KeyboardArrowDownOutlined />}
               >

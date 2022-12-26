@@ -1,11 +1,18 @@
 import { AppThunkActionType } from "../../common/hooks/useAllSelector";
 import { PacksAPI } from "./packsAPI";
-import { setPacks } from "./packsReducer";
+import { setPacks, setRangeValue } from "./packsReducer";
 import { AppAC } from "../../app/appReducer";
 
-export const setPacksTC = (): AppThunkActionType => {
+export const setPacksTC = (model?: Partial<any>): AppThunkActionType => {
   return (dispatch, getState) => {
     try {
+      // if (!!model) {
+      //   PacksAPI.getPacks(model).then((res) => {
+      //     console.log(res);
+      //     dispatch(setPacks({ packs: res.data }));
+      //     // dispatch(setRangeValue({ range: [res.data.minCardsCount, res.data.maxCardsCount]}));
+      //   });
+      // } else {
       const {
         pageCount,
         page,
@@ -27,6 +34,7 @@ export const setPacksTC = (): AppThunkActionType => {
       }).then((res) => {
         console.log(res);
         dispatch(setPacks({ packs: res.data }));
+        // dispatch(setRangeValue({ range: [minCardsCount, maxCardsCount] }));
       });
     } catch (e: any) {
       dispatch(AppAC.setError({ error: e.message }));
