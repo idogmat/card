@@ -43,7 +43,7 @@ export const removePackTC = (id: string): AppThunkActionType => {
   return async (dispatch) => {
     try {
       const { data } = await PacksAPI.deletePack(id);
-      console.log(data);
+      dispatch(setPacksTC());
     } catch (e) {}
   };
 };
