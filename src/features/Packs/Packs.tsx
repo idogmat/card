@@ -9,10 +9,14 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import {
   Box,
   Container,
+  MenuItem,
+  Pagination,
+  Select,
   TableBody,
   TableCell,
   TablePagination,
   Toolbar,
+  Typography,
 } from "@mui/material";
 import { useDebounce } from "usehooks-ts";
 import Button from "@mui/material/Button/Button";
@@ -33,7 +37,13 @@ import {
   setRangeValue,
 } from "./packsReducer";
 import { NavLink } from "react-router-dom";
-import { DeleteOutline, Edit } from "@mui/icons-material";
+import {
+  DeleteOutline,
+  Edit,
+  KeyboardArrowDownOutlined,
+} from "@mui/icons-material";
+import { CardsAC } from "../Cards/cardsSlice";
+import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
 
 const Packs = () => {
   const user = useAllSelector(userStateSelect);
@@ -55,7 +65,7 @@ const Packs = () => {
     maxCardsCount,
   ]);
   const rangeValueD = useDebounce<number[]>(range, 1000);
-
+  const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -76,17 +86,13 @@ const Packs = () => {
     isMyPack,
     sortPacks,
   ]);
-  const changePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    dispatch(setCurrentPage({ page: newPage + 1 }));
+
+  const changePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
+    dispatch(setCurrentPage({ page: newPage }));
   };
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChangeRowsPerPage = (event: SelectChangeEvent) => {
     dispatch(setPageCount({ pageCount: +event.target.value }));
-    dispatch(setCurrentPage({ page: 1 }));
+    // dispatch(setCurrentPage({ page: 1 }));
   };
   const removePack = (id: string) => {
     dispatch(removePackTC(id));
@@ -188,13 +194,30 @@ const Packs = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <TablePagination
-            count={cardPacksTotalCount}
-            page={page - 1}
-            onPageChange={changePage}
-            rowsPerPage={pageCount}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+            <Pagination
+              color={"primary"}
+              variant={"outlined"}
+              shape={"rounded"}
+              count={totalPageCount}
+              page={page}
+              onChange={(e, value) => changePage(e, value)}
+            />
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Typography>Show</Typography>
+              <Select
+                value={pageCount.toString()}
+                onChange={(e, value) => handleChangeRowsPerPage(e)}
+                sx={{ padding: "0", height: 20 }}
+                IconComponent={() => <KeyboardArrowDownOutlined />}
+              >
+                <MenuItem value={4}>4</MenuItem>
+                <MenuItem value={7}>7</MenuItem>
+                <MenuItem value={10}>10</MenuItem>
+              </Select>
+              <Typography>Cards per page</Typography>
+            </Box>
+          </Box>
         </Paper>
       ) : (
         <AddNewPack setAddPackMode={setAddPackMode} />
