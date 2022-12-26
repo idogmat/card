@@ -40,7 +40,7 @@ export const Profile = () => {
   return (
     <Grid
       container
-      sx={{ height: "100%" }}
+      sx={{ height: "100vh" }}
       justifyContent={"center"}
       alignItems={"center"}
     >
