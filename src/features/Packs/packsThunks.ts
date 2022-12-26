@@ -3,8 +3,11 @@ import { PacksAPI } from "./packsAPI";
 import { setPacks, setRangeValue } from "./packsReducer";
 import { AppAC } from "../../app/appReducer";
 interface IGetModel {
-  pageCount: string;
-  page: string;
+  currentPage: string;
+  showPerPage: string;
+  max: string;
+  min: string;
+  isMyPack: string;
 }
 export const setPacksTC = (model?: Partial<any>): AppThunkActionType => {
   return (dispatch, getState) => {
@@ -16,6 +19,7 @@ export const setPacksTC = (model?: Partial<any>): AppThunkActionType => {
       //     // dispatch(setRangeValue({ range: [res.data.minCardsCount, res.data.maxCardsCount]}));
       //   });
       // } else {
+
       const {
         pageCount,
         page,

@@ -69,16 +69,17 @@ const Packs = () => {
   useEffect(() => {
     setSearchParams({
       currentPage: page.toString(),
-      showPerPage: pageCount.toString(),
+      pageCount: pageCount.toString(),
       max: range[1].toString(),
       min: range[0].toString(),
+      isMyPack: isMyPack.toString(),
     });
-  }, [pageCount, page]);
-  useEffect(() => {
     dispatch(setRangeValue({ range: rangeValueD }));
-  }, [params.max, params.min, rangeValueD]);
+  }, [pageCount, page, setSearchParams, rangeValueD, isMyPack]);
+
   useEffect(() => {
     const model = {
+      isMyPack: params.isMyPack,
       pageCount: params.showPerPage,
       page: params.currentPage,
       max: +params.max,
@@ -86,7 +87,7 @@ const Packs = () => {
     };
     dispatch(setPacksTC(model));
     console.log(cardPacks);
-  }, [user._id, packName, isMyPack, sortPacks, searchParams]);
+  }, [user._id, packName, sortPacks, rangeValueD, isMyPack]);
 
   const changePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
     dispatch(setCurrentPage({ page: newPage }));
