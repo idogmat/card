@@ -1,13 +1,8 @@
-import React, { useState } from "react";
-import {
-  alpha,
-  Box,
-  InputBase,
-  Slider,
-  SliderProps,
-  styled,
-} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { alpha, InputBase, styled } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import { useDebounce } from "usehooks-ts";
+
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -45,8 +40,17 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "center",
 }));
-const SuperSearch: React.FC<any> = (props) => {
-  const [value, setValue] = useState("");
+interface IProps {
+  setSearch: (type: string) => void;
+  searchPacks: string;
+}
+const SuperSearch: React.FC<IProps> = ({ setSearch, searchPacks }) => {
+  const [searchName, setSearchName] = useState("");
+  const searchValue = useDebounce<string>(searchName, 500);
+  useEffect(() => {
+    setSearch(searchValue);
+  }, [searchValue]);
+
   return (
     <Search>
       <SearchIconWrapper>
@@ -54,8 +58,8 @@ const SuperSearch: React.FC<any> = (props) => {
       </SearchIconWrapper>
       <StyledInputBase
         placeholder="Search…"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
+        value={searchName}
+        onChange={(e) => setSearchName(e.target.value)}
       />
     </Search>
   );

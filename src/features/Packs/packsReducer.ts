@@ -6,11 +6,10 @@ interface IInitialState {
   minCardsCount: number;
   page: number;
   pageCount: number;
-  min: number;
-  max: number;
   sortPacks: string;
   cardPacksTotalCount: number;
   isMyPack: boolean;
+  packName: string;
 }
 const initialState: IInitialState | null = {
   cardPacks: [],
@@ -20,9 +19,8 @@ const initialState: IInitialState | null = {
   pageCount: 10,
   sortPacks: "",
   cardPacksTotalCount: 10,
-  min: 0,
-  max: 100,
   isMyPack: false,
+  packName: "",
 };
 const packsSlice = createSlice({
   name: "packs",
@@ -34,20 +32,25 @@ const packsSlice = createSlice({
     ): IInitialState => {
       return {
         ...action.payload.packs,
-        min: action.payload.packs.minCardsCount,
-        max: action.payload.packs.maxCardsCount,
-        isMyPack: false,
+        isMyPack: draft.isMyPack,
+        packName: draft.packName,
       };
     },
     setCurrentPage: (draft, action: PayloadAction<{ page: number }>) => {
       draft.page = action.payload.page;
     },
     setRangeValue: (draft, action: PayloadAction<{ range: number[] }>) => {
-      draft.min = action.payload.range[0];
-      draft.max = action.payload.range[1];
+      draft.minCardsCount = action.payload.range[0];
+      draft.minCardsCount = action.payload.range[1];
     },
     setPageCount: (draft, action: PayloadAction<{ pageCount: number }>) => {
       draft.pageCount = action.payload.pageCount;
+    },
+    setPackName: (draft, action: PayloadAction<{ packName: string }>) => {
+      draft.packName = action.payload.packName;
+    },
+    setPacksSort: (draft, action: PayloadAction<{ type: string }>) => {
+      draft.sortPacks = action.payload.type;
     },
     setPreferencePacks: (
       draft,
@@ -65,4 +68,6 @@ export const {
   setPageCount,
   setRangeValue,
   setPreferencePacks,
+  setPackName,
+  setPacksSort,
 } = packsSlice.actions;

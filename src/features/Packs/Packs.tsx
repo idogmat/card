@@ -4,22 +4,19 @@ import Table from "@mui/material/Table/Table";
 import TableContainer from "@mui/material/TableContainer/TableContainer";
 import TableHead from "@mui/material/TableHead/TableHead";
 import TableRow from "@mui/material/TableRow/TableRow";
-
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import {
   Box,
   Container,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
   TableBody,
   TableCell,
   TablePagination,
   Toolbar,
-  Typography,
 } from "@mui/material";
 import { useDebounce } from "usehooks-ts";
 import Button from "@mui/material/Button/Button";
-
+import SchoolIcon from "@mui/icons-material/School";
 import FormControl from "@mui/material/FormControl/FormControl";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
 import { removePackTC, setPacksTC } from "./packsThunks";
@@ -29,37 +26,56 @@ import SuperRange from "./SuperRange";
 import SuperSearch from "./SuperSearch";
 import {
   setCurrentPage,
+  setPackName,
+  setPacksSort,
   setPageCount,
   setPreferencePacks,
   setRangeValue,
 } from "./packsReducer";
 import { NavLink } from "react-router-dom";
+import { DeleteOutline, Edit } from "@mui/icons-material";
 
 const Packs = () => {
   const user = useAllSelector(userStateSelect);
   const {
+    packName,
     cardPacks,
     page,
     pageCount,
     cardPacksTotalCount,
-    max,
-    min,
+    maxCardsCount,
+    minCardsCount,
     isMyPack,
+    sortPacks,
   } = useAllSelector(packsStateSelect);
   const [addPackMode, setAddPackMode] = useState(false);
-  const [range, setterRange] = useState<number[]>([min, max]);
-  const debouncedValue = useDebounce<number[]>(range, 500);
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    console.log("k");
-    setRange(range);
-    dispatch(setPacksTC());
 
+  const [range, setterRange] = useState<number[]>([
+    minCardsCount,
+    maxCardsCount,
+  ]);
+  const rangeValueD = useDebounce<number[]>(range, 1000);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setPacksTC());
+    if (range !== rangeValueD) dispatch(setRangeValue({ range: rangeValueD }));
     // PacksAPI.getCardsPack(id).then((e) => {
     //   console.log(e);
     // });
     console.log(cardPacks);
-  }, [user._id, page, pageCount, debouncedValue, isMyPack]);
+  }, [
+    user._id,
+    page,
+    pageCount,
+    rangeValueD,
+    minCardsCount,
+    maxCardsCount,
+    packName,
+    isMyPack,
+    sortPacks,
+  ]);
   const changePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -75,8 +91,12 @@ const Packs = () => {
   const removePack = (id: string) => {
     dispatch(removePackTC(id));
   };
-  const setRange = (newValue: number[]) => {
-    dispatch(setRangeValue({ range: newValue }));
+
+  const setSearch = (searchName: string) => {
+    dispatch(setPackName({ packName: searchName }));
+  };
+  const setSortForPacks = (type: string) => {
+    dispatch(setPacksSort({ type }));
   };
   const handlerIsMyPack = (param: "my" | "all") => {
     dispatch(setPreferencePacks({ param }));
@@ -86,7 +106,7 @@ const Packs = () => {
       <Box sx={{ flexGrow: 1 }}>
         <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
           <Container style={{ display: "flex", flexDirection: "row" }}>
-            <SuperSearch />
+            <SuperSearch searchPacks={packName} setSearch={setSearch} />
             <FormControl style={{ display: "flex", flexDirection: "row" }}>
               <Button
                 variant={isMyPack ? "contained" : "outlined"}
@@ -101,6 +121,7 @@ const Packs = () => {
                 All
               </Button>
             </FormControl>
+
             <SuperRange
               value={range}
               onChange={(e, newValue) =>
@@ -123,7 +144,17 @@ const Packs = () => {
                 <TableRow>
                   <TableCell>Name</TableCell>
                   <TableCell align={"center"}>CardsCount</TableCell>
-                  <TableCell align={"center"}>Updated</TableCell>
+                  <TableCell
+                    onClick={() => setSortForPacks("updated")}
+                    align={"center"}
+                  >
+                    Updated
+                    {sortPacks === "update" ? (
+                      <KeyboardArrowDownIcon />
+                    ) : (
+                      <KeyboardArrowUpIcon />
+                    )}
+                  </TableCell>
                   <TableCell align={"center"}>Author Name</TableCell>
                   <TableCell align={"center"}>Actions</TableCell>
                 </TableRow>
@@ -138,40 +169,36 @@ const Packs = () => {
                       <TableCell align="center">{pack.cardsCount}</TableCell>
                       <TableCell align="center">{pack.created}</TableCell>
                       <TableCell align="center">{pack.user_name}</TableCell>
-                      {isMyPack ? (
-                        <TableCell>
-                          <Button onClick={() => removePack(pack._id)}>
-                            Delete
-                          </Button>
-                          <Button>Edit</Button>
-                        </TableCell>
-                      ) : (
-                        <TableCell>
-                          <Button onClick={() => removePack(pack._id)}>
-                            Learn
-                          </Button>
-                          <Button onClick={() => removePack(pack._id)}>
-                            Delete
-                          </Button>
-                          <Button>Edit</Button>
-                        </TableCell>
-                      )}
+                      <TableCell>
+                        <Button>
+                          <SchoolIcon />
+                        </Button>
+                        <Button
+                          disabled={pack.user_id !== user._id}
+                          onClick={() => removePack(pack._id)}
+                        >
+                          <DeleteOutline />
+                        </Button>
+                        <Button disabled={pack.user_id !== user._id}>
+                          <Edit />
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
               </TableBody>
             </Table>
           </TableContainer>
+          <TablePagination
+            count={cardPacksTotalCount}
+            page={page - 1}
+            onPageChange={changePage}
+            rowsPerPage={pageCount}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </Paper>
       ) : (
         <AddNewPack setAddPackMode={setAddPackMode} />
       )}
-      <TablePagination
-        count={cardPacksTotalCount}
-        page={page - 1}
-        onPageChange={changePage}
-        rowsPerPage={pageCount}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
     </Box>
   );
 };
