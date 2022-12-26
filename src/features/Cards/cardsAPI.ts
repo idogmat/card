@@ -35,6 +35,13 @@ export interface IAddCardRequest {
   };
 }
 
+export interface IUpdateCardRequest {
+  card: {
+    _id: string;
+    question: string;
+  };
+}
+
 const getCardsRequest = (data: IGetCardsRequest) => {
   const requestConfig = { params: data };
   return instance.get<IGetCardsResponse>("/cards/card", requestConfig);
@@ -53,8 +60,13 @@ const deleteCardRequest = (cardID: string) => {
   return instance.delete(`/cards/card/`, requestConfig);
 };
 
+const updateCardRequest = (model: IUpdateCardRequest) => {
+  return instance.put("/cards/card", model);
+};
+
 export const cardsAPI = {
   getCardsRequest,
   addCardRequest,
   deleteCardRequest,
+  updateCardRequest,
 };

@@ -18,12 +18,14 @@ interface ICardsTableProps {
   cards: ICard[];
   isPackMine: boolean;
   deleteCardHandler: (cardID: string) => void;
+  updateCardHandler: (cardID: string) => void;
 }
 
 export const CardsTable: FC<ICardsTableProps> = ({
   cards,
   isPackMine,
   deleteCardHandler,
+  updateCardHandler,
 }) => {
   return (
     <TableContainer component={Paper}>
@@ -52,7 +54,7 @@ export const CardsTable: FC<ICardsTableProps> = ({
                     {isPackMine && (
                       <>
                         <IconButton>
-                          <Edit />
+                          <Edit onClick={() => updateCardHandler(card._id)} />
                         </IconButton>
                         <IconButton onClick={() => deleteCardHandler(card._id)}>
                           <DeleteOutline />

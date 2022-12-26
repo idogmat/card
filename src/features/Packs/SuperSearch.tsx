@@ -1,13 +1,7 @@
 import React, { useState } from "react";
-import {
-  alpha,
-  Box,
-  InputBase,
-  Slider,
-  SliderProps,
-  styled,
-} from "@mui/material";
+import { alpha, InputBase, styled } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
