@@ -70,32 +70,23 @@ const Packs = () => {
     setSearchParams({
       currentPage: page.toString(),
       showPerPage: pageCount.toString(),
+      max: range[1].toString(),
+      min: range[0].toString(),
     });
   }, [pageCount, page]);
-
   useEffect(() => {
-    if (range !== rangeValueD) dispatch(setRangeValue({ range: rangeValueD }));
-
+    dispatch(setRangeValue({ range: rangeValueD }));
+  }, [params.max, params.min, rangeValueD]);
+  useEffect(() => {
     const model = {
       pageCount: params.showPerPage,
       page: params.currentPage,
+      max: +params.max,
+      min: +params.min,
     };
-
     dispatch(setPacksTC(model));
-
-    // PacksAPI.getCardsPack(id).then((e) => {
-    //   console.log(e);
-    // });
     console.log(cardPacks);
-  }, [
-    user._id,
-    minCardsCount,
-    maxCardsCount,
-    packName,
-    isMyPack,
-    sortPacks,
-    searchParams,
-  ]);
+  }, [user._id, packName, isMyPack, sortPacks, searchParams]);
 
   const changePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
     dispatch(setCurrentPage({ page: newPage }));

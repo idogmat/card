@@ -2,7 +2,10 @@ import { AppThunkActionType } from "../../common/hooks/useAllSelector";
 import { PacksAPI } from "./packsAPI";
 import { setPacks, setRangeValue } from "./packsReducer";
 import { AppAC } from "../../app/appReducer";
-
+interface IGetModel {
+  pageCount: string;
+  page: string;
+}
 export const setPacksTC = (model?: Partial<any>): AppThunkActionType => {
   return (dispatch, getState) => {
     try {
@@ -26,10 +29,10 @@ export const setPacksTC = (model?: Partial<any>): AppThunkActionType => {
       PacksAPI.getPacks({
         user_id: isMyPack ? _id : "",
         packName,
-        pageCount,
-        page,
-        min: minCardsCount,
-        max: maxCardsCount,
+        pageCount: !!model?.pageCount ? model?.pageCount : pageCount,
+        page: !!model?.page ? model?.page : page,
+        min: !!model?.min ? model?.min : minCardsCount,
+        max: !!model?.max ? model?.max : maxCardsCount,
         sortPacks,
       }).then((res) => {
         console.log(res);
