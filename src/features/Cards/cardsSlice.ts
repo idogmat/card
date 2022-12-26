@@ -16,8 +16,8 @@ const initialState: ICardsState = {
   cardsTotalCount: 0,
   maxGrade: 0,
   minGrade: 0,
-  page: 0,
-  pageCount: 0,
+  page: 1,
+  pageCount: 4,
   packUserId: "",
 };
 
@@ -33,6 +33,9 @@ const cardsSlice = createSlice({
     },
     setPage: (draft, action: PayloadAction<{ page: number }>) => {
       draft.page = action.payload.page;
+    },
+    setPageCount: (draft, action: PayloadAction<{ showPerPage: number }>) => {
+      draft.pageCount = action.payload.showPerPage;
     },
   },
 });

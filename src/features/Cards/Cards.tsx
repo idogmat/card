@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { BackTo } from "../../common/components/BackTo/BackTo";
 import {
   Box,
@@ -23,26 +23,34 @@ export const Cards = () => {
   const { packID } = useParams();
   const dispatch = useAppDispatch();
   const user = useAllSelector(userStateSelector);
-  const { cards, packUserId, cardsTotalCount, page } =
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { cards, packUserId, cardsTotalCount, page, pageCount } =
     useAllSelector(cardsStateSelector);
 
-  const [showPerPage, setShowPerPage] = useState("4");
+  // const [showPerPage, setShowPerPage] = useState("4");
 
   const isPackMine = user._id === packUserId;
-  const pageCount = Math.ceil(cardsTotalCount / +showPerPage);
-  console.log(pageCount);
+  const totalPages = Math.ceil(cardsTotalCount / +pageCount);
+  const params = Object.fromEntries(searchParams);
+  useEffect(() => {
+    setSearchParams({
+      currentPage: page.toString(),
+      showPerPage: pageCount.toString(),
+    });
+  }, [pageCount, page]);
 
   useEffect(() => {
     const model = {
       cardsPack_id: packID,
-      pageCount: showPerPage,
-      page,
+      pageCount: params.showPerPage,
+      page: params.currentPage,
     } as IGetCardsRequest;
     dispatch(getCardsTC(model));
-  }, [showPerPage, page]);
+  }, [searchParams]);
 
   const changeShowPerPage = (event: SelectChangeEvent) => {
-    setShowPerPage(event.target.value);
+    // setShowPerPage(event.target.value);
+    dispatch(CardsAC.setPageCount({ showPerPage: +event.target.value }));
   };
 
   const addNewCardHandler = () => {
@@ -108,14 +116,14 @@ export const Cards = () => {
           color={"primary"}
           variant={"outlined"}
           shape={"rounded"}
-          count={pageCount}
+          count={totalPages}
           page={page}
           onChange={changePageHandler}
         />
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <Typography>Show</Typography>
           <Select
-            value={showPerPage}
+            value={pageCount.toString()}
             onChange={changeShowPerPage}
             sx={{ padding: "0", height: 20 }}
             IconComponent={() => <KeyboardArrowDownOutlined />}
