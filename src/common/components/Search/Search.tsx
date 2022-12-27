@@ -8,10 +8,12 @@ interface ISearchProps {
 
 export const Search: FC<ISearchProps> = ({ onChangeCb }) => {
   const [inputText, setInputText] = useState("");
+
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(e.currentTarget.value);
     onChangeCb(e.currentTarget.value);
   };
+
   return (
     <FormControl
       sx={{

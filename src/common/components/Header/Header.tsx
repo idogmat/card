@@ -100,7 +100,7 @@ export const Header = () => {
               <Avatar
                 sx={{ bgcolor: lime[600] }}
                 alt={user.name}
-                src={avatarPlaceholder}
+                src={user.avatar ? user.avatar : undefined}
               >
                 {/*{user.name[0]}*/}
               </Avatar>
@@ -126,12 +126,12 @@ export const Header = () => {
               }}
             >
               {isAuth ? (
-                <>
+                <div>
                   {authPages.map((page) => (
                     <HeaderLink page={page} key={page} icon={pageIcons[page]} />
                   ))}
                   <HeaderLink page={"logout"} icon={pageIcons["logout"]} />
-                </>
+                </div>
               ) : (
                 unAuthPages.map((page) => (
                   <HeaderLink icon={pageIcons[page]} page={page} key={page} />
