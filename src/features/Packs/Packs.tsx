@@ -1,27 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Paper from "@mui/material/Paper/Paper";
-import Table from "@mui/material/Table/Table";
-import TableContainer from "@mui/material/TableContainer/TableContainer";
-import TableHead from "@mui/material/TableHead/TableHead";
-import TableRow from "@mui/material/TableRow/TableRow";
-import {
-  Box,
-  Container,
-  MenuItem,
-  Pagination,
-  Select,
-  TableBody,
-  TableCell,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { Box, Container, Grid, Toolbar, Typography } from "@mui/material";
 import Button from "@mui/material/Button/Button";
-import SchoolIcon from "@mui/icons-material/School";
 import FormControl from "@mui/material/FormControl/FormControl";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
 import { removePackTC, setPacksTC } from "./packsThunks";
 import { packsStateSelect, userStateSelect } from "../../app/selectors";
-import AddNewPack from "./AddNewPack";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import SuperRange from "./SuperRange";
 import {
   setCurrentPage,
@@ -31,14 +15,11 @@ import {
   setPreferencePacks,
   setRangeValue,
 } from "./packsReducer";
-import { NavLink, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import {
   ArrowDropDown,
   ArrowDropUp,
-  DeleteOutline,
-  Edit,
   HorizontalRule,
-  KeyboardArrowDownOutlined,
 } from "@mui/icons-material";
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
 import { Search } from "../../common/components/Search/Search";
@@ -90,14 +71,15 @@ const Packs = () => {
       sortPacks: sort.field ? `${sort.direction}${sort.field}` : "0updated",
     });
   }, [
+    cardPacks,
     pageCount,
     page,
-    setSearchParams,
     isMyPack,
     sortPacks,
     minCardsCount,
     maxCardsCount,
     packName,
+    setSearchParams,
   ]);
 
   useEffect(() => {
@@ -143,6 +125,9 @@ const Packs = () => {
   const showSortIcon = (field: string) => {
     return sort.field === field ? sortIcon : <HorizontalRule />;
   };
+  const removeSort = () => {
+    setSearchParams({});
+  };
   return (
     <Box
       style={{ padding: "6rem 2rem", display: "flex", flexDirection: "column" }}
@@ -187,8 +172,14 @@ const Packs = () => {
             </FormControl>
 
             <SuperRange onChangeSlider={changeRangeHandler} />
-            <Button onClick={() => setAddPackMode((mode) => !mode)}>
+            <Button
+              variant="contained"
+              onClick={() => setAddPackMode((mode) => !mode)}
+            >
               Add new Pack
+            </Button>
+            <Button onClick={() => removeSort()} style={{ margin: "auto 0" }}>
+              <DeleteForeverIcon />
             </Button>
           </Container>
         </Toolbar>

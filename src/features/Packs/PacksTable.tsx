@@ -24,6 +24,16 @@ import {
 import AddNewPack from "./AddNewPack";
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
 import { IPackResponse } from "./packsAPI";
+import {
+  ITablePaginationOption,
+  TablePagination,
+} from "../Cards/TablePagination";
+import PacksRow from "./PacksRow";
+const selectOptions: ITablePaginationOption[] = [
+  { title: 4, value: 4 },
+  { title: 7, value: 7 },
+  { title: 10, value: 10 },
+];
 interface ITableProps {
   id: string;
   cardPacks: IPackResponse[];
@@ -72,57 +82,19 @@ const PacksTable: React.FC<ITableProps> = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {!!cardPacks &&
-                cardPacks.map((pack) => (
-                  <TableRow key={pack._id}>
-                    <TableCell component="th" scope="row">
-                      <NavLink to={`/packs/${pack._id}`}>{pack.name}</NavLink>
-                    </TableCell>
-                    <TableCell align="center">{pack.cardsCount}</TableCell>
-                    <TableCell align="center">{pack.created}</TableCell>
-                    <TableCell align="center">{pack.user_name}</TableCell>
-                    <TableCell>
-                      <Button>
-                        <SchoolIcon />
-                      </Button>
-                      <Button
-                        disabled={pack.user_id !== id}
-                        onClick={() => removePack(pack._id)}
-                      >
-                        <DeleteOutline />
-                      </Button>
-                      <Button disabled={pack.user_id !== id}>
-                        <Edit />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+              <PacksRow id={id} removePack={removePack} cardPacks={cardPacks} />
             </TableBody>
           </Table>
         </TableContainer>
         <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-          <Pagination
-            color={"primary"}
-            variant={"outlined"}
-            shape={"rounded"}
-            count={totalPageCount}
-            page={page}
-            onChange={(e, value) => changePage(e, value)}
+          <TablePagination
+            totalPages={totalPageCount}
+            elementsPerPage={pageCount}
+            changePageHandler={changePage}
+            changeElementsPerPage={handleChangeRowsPerPage}
+            currentPage={page}
+            selectOptions={selectOptions}
           />
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <Typography>Show</Typography>
-            <Select
-              value={pageCount.toString()}
-              onChange={(e) => handleChangeRowsPerPage(e)}
-              sx={{ padding: "0", height: 20 }}
-              IconComponent={() => <KeyboardArrowDownOutlined />}
-            >
-              <MenuItem value={4}>4</MenuItem>
-              <MenuItem value={7}>7</MenuItem>
-              <MenuItem value={10}>10</MenuItem>
-            </Select>
-            <Typography>Cards per page</Typography>
-          </Box>
         </Box>
       </Paper>
       {!addPackMode && <AddNewPack setAddPackMode={setAddPackMode} />}

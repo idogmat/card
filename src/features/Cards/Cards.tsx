@@ -44,7 +44,7 @@ export const Cards = () => {
       search: searchRequest,
       sortCards: sort.field ? `${sort.direction}${sort.field}` : "0updated",
     });
-  }, [sort, pageCount, page, searchRequest, setSearchParams]);
+  }, [sort, pageCount, page, searchRequest]);
 
   useEffect(() => {
     const model = {

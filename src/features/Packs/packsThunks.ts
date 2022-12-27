@@ -5,11 +5,13 @@ import { AppAC } from "../../app/appReducer";
 import { defaultErrorMessage } from "../../common/utils/errorHandlers";
 interface IGetModel {
   page: string | number;
+  packName: string;
   pageCount: string | number;
   max: string | number;
   min: string | number;
   isMyPack: string;
   sortPacks: string;
+  user_id: string;
 }
 export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
   return (dispatch, getState) => {
@@ -27,16 +29,15 @@ export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
       const { _id } = getState().user;
       PacksAPI.getPacks({
         user_id: model?.isMyPack === "true" ? _id : "",
-        packName,
-        pageCount: !!model?.pageCount ? +model.pageCount : pageCount,
-        page: !!model?.page ? +model.page : page,
-        min: !!model?.min ? +model.min : minCardsCount,
-        max: !!model?.max ? +model.max : maxCardsCount,
-        sortPacks: model?.sortPacks,
+        packName: !!model?.packName ? model.packName : packName,
+        pageCount: !!model?.pageCount ? model.pageCount : pageCount,
+        page: !!model?.page ? model.page : page,
+        min: !!model?.min ? model.min : minCardsCount,
+        max: !!model?.max ? model.max : maxCardsCount,
+        sortPacks: !!model?.sortPacks ? model.sortPacks : sortPacks,
       }).then((res) => {
         console.log(res);
         dispatch(setPacks({ packs: res.data }));
-        // dispatch(setRangeValue({ range: [minCardsCount, maxCardsCount] }));
       });
     } catch {
       dispatch(AppAC.setError({ error: defaultErrorMessage }));
@@ -53,17 +54,27 @@ export const addPackTC = (
   return async (dispatch, getState) => {
     dispatch(AppAC.setIsLoading({ isLoading: true }));
     try {
-      const { page, pageCount, minCardsCount, maxCardsCount, sortPacks } =
-        getState().packs;
+      const { _id } = getState().user;
+      const {
+        pageCount,
+        page,
+        minCardsCount,
+        maxCardsCount,
+        isMyPack,
+        sortPacks,
+        packName,
+      } = getState().packs;
       PacksAPI.addPack(name, deckCover, isPrivate).then((res) => {
         if (res.statusText === "Created") {
           dispatch(
             setPacksTC({
-              page,
               pageCount,
+              page,
               min: minCardsCount,
               max: maxCardsCount,
+              isMyPack: isMyPack ? "true" : "false",
               sortPacks,
+              packName,
             })
           );
         } else {
@@ -81,16 +92,27 @@ export const removePackTC = (id: string): AppThunkActionType => {
   return async (dispatch, getState) => {
     dispatch(AppAC.setIsLoading({ isLoading: true }));
     try {
+      const { _id } = getState().user;
       const { data } = await PacksAPI.deletePack(id);
-      const { page, pageCount, minCardsCount, maxCardsCount, sortPacks } =
-        getState().packs;
+      const {
+        pageCount,
+        page,
+        minCardsCount,
+        maxCardsCount,
+        isMyPack,
+        sortPacks,
+        packName,
+      } = getState().packs;
+      console.log(isMyPack);
       dispatch(
         setPacksTC({
-          page,
           pageCount,
+          page,
           min: minCardsCount,
           max: maxCardsCount,
+          isMyPack: isMyPack ? "true" : "false",
           sortPacks,
+          packName,
         })
       );
       dispatch(AppAC.setSuccessMessage({ message: "Successfully updated" }));

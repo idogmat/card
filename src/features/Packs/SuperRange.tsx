@@ -12,7 +12,7 @@ const SuperRange: React.FC<ISuperRangeProps> = ({ onChangeSlider }) => {
     onChangeSlider(value as number[]);
   };
   return (
-    <Box sx={{ width: 200 }}>
+    <Box style={{ margin: "auto 0" }} sx={{ width: 200 }}>
       <Slider
         color={"primary"}
         valueLabelDisplay="on"
