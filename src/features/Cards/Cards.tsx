@@ -157,7 +157,7 @@ export const Cards = () => {
           <Typography
             variant={"h3"}
             component={"h3"}
-            sx={{ displayt: "flex", alignItems: "center" }}
+            sx={{ display: "flex", alignItems: "center" }}
           >
             Name placeholder
             {isPackMine && (
