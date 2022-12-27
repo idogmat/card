@@ -14,7 +14,7 @@ interface IInitialState {
 const initialState: IInitialState | null = {
   cardPacks: [],
   maxCardsCount: 10,
-  minCardsCount: 1,
+  minCardsCount: 0,
   page: 1,
   pageCount: 10,
   sortPacks: "",
@@ -32,6 +32,8 @@ const packsSlice = createSlice({
     ): IInitialState => {
       return {
         ...action.payload.packs,
+        minCardsCount: draft.minCardsCount,
+        maxCardsCount: draft.maxCardsCount,
         isMyPack: draft.isMyPack,
         packName: draft.packName,
       };

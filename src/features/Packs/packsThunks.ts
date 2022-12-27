@@ -2,24 +2,19 @@ import { AppThunkActionType } from "../../common/hooks/useAllSelector";
 import { PacksAPI } from "./packsAPI";
 import { setPacks, setRangeValue } from "./packsReducer";
 import { AppAC } from "../../app/appReducer";
+import { defaultErrorMessage } from "../../common/utils/errorHandlers";
 interface IGetModel {
-  currentPage: string;
-  showPerPage: string;
-  max: string;
-  min: string;
+  page: string | number;
+  pageCount: string | number;
+  max: string | number;
+  min: string | number;
   isMyPack: string;
+  sortPacks: string;
 }
-export const setPacksTC = (model?: Partial<any>): AppThunkActionType => {
+export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
   return (dispatch, getState) => {
+    dispatch(AppAC.setIsLoading({ isLoading: true }));
     try {
-      // if (!!model) {
-      //   PacksAPI.getPacks(model).then((res) => {
-      //     console.log(res);
-      //     dispatch(setPacks({ packs: res.data }));
-      //     // dispatch(setRangeValue({ range: [res.data.minCardsCount, res.data.maxCardsCount]}));
-      //   });
-      // } else {
-
       const {
         pageCount,
         page,
@@ -31,20 +26,22 @@ export const setPacksTC = (model?: Partial<any>): AppThunkActionType => {
       } = getState().packs;
       const { _id } = getState().user;
       PacksAPI.getPacks({
-        user_id: isMyPack ? _id : "",
+        user_id: model?.isMyPack === "true" ? _id : "",
         packName,
-        pageCount: !!model?.pageCount ? model?.pageCount : pageCount,
-        page: !!model?.page ? model?.page : page,
-        min: !!model?.min ? model?.min : minCardsCount,
-        max: !!model?.max ? model?.max : maxCardsCount,
-        sortPacks,
+        pageCount: !!model?.pageCount ? +model.pageCount : pageCount,
+        page: !!model?.page ? +model.page : page,
+        min: !!model?.min ? +model.min : minCardsCount,
+        max: !!model?.max ? +model.max : maxCardsCount,
+        sortPacks: model?.sortPacks,
       }).then((res) => {
         console.log(res);
         dispatch(setPacks({ packs: res.data }));
         // dispatch(setRangeValue({ range: [minCardsCount, maxCardsCount] }));
       });
-    } catch (e: any) {
-      dispatch(AppAC.setError({ error: e.message }));
+    } catch {
+      dispatch(AppAC.setError({ error: defaultErrorMessage }));
+    } finally {
+      dispatch(AppAC.setIsLoading({ isLoading: false }));
     }
   };
 };
@@ -53,27 +50,54 @@ export const addPackTC = (
   deckCover: string,
   isPrivate?: boolean
 ): AppThunkActionType => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    dispatch(AppAC.setIsLoading({ isLoading: true }));
     try {
+      const { page, pageCount, minCardsCount, maxCardsCount, sortPacks } =
+        getState().packs;
       PacksAPI.addPack(name, deckCover, isPrivate).then((res) => {
         if (res.statusText === "Created") {
-          dispatch(setPacksTC());
+          dispatch(
+            setPacksTC({
+              page,
+              pageCount,
+              min: minCardsCount,
+              max: maxCardsCount,
+              sortPacks,
+            })
+          );
         } else {
-          dispatch(AppAC.setError({ error: "err" }));
+          dispatch(AppAC.setError({ error: defaultErrorMessage }));
         }
       });
-    } catch (e: any) {
-      dispatch(AppAC.setError({ error: e.message }));
+    } catch {
+      dispatch(AppAC.setError({ error: defaultErrorMessage }));
+    } finally {
+      dispatch(AppAC.setIsLoading({ isLoading: false }));
     }
   };
 };
 export const removePackTC = (id: string): AppThunkActionType => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    dispatch(AppAC.setIsLoading({ isLoading: true }));
     try {
       const { data } = await PacksAPI.deletePack(id);
-      dispatch(setPacksTC());
-    } catch (e: any) {
-      dispatch(AppAC.setError({ error: e.message }));
+      const { page, pageCount, minCardsCount, maxCardsCount, sortPacks } =
+        getState().packs;
+      dispatch(
+        setPacksTC({
+          page,
+          pageCount,
+          min: minCardsCount,
+          max: maxCardsCount,
+          sortPacks,
+        })
+      );
+      dispatch(AppAC.setSuccessMessage({ message: "Successfully updated" }));
+    } catch {
+      dispatch(AppAC.setError({ error: defaultErrorMessage }));
+    } finally {
+      dispatch(AppAC.setIsLoading({ isLoading: false }));
     }
   };
 };

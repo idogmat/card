@@ -52,7 +52,7 @@ const SuperSearch: React.FC<IProps> = ({ setSearch, searchPacks }) => {
   }, [searchValue]);
 
   return (
-    <Search>
+    <Search style={{ margin: " auto 0" }}>
       <SearchIconWrapper>
         <SearchIcon />
       </SearchIconWrapper>

@@ -37,8 +37,11 @@ import {
 } from "./packsReducer";
 import { NavLink, useSearchParams } from "react-router-dom";
 import {
+  ArrowDropDown,
+  ArrowDropUp,
   DeleteOutline,
   Edit,
+  HorizontalRule,
   KeyboardArrowDownOutlined,
 } from "@mui/icons-material";
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
@@ -56,38 +59,60 @@ const Packs = () => {
     isMyPack,
     sortPacks,
   } = useAllSelector(packsStateSelect);
+
   const [addPackMode, setAddPackMode] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const params = Object.fromEntries(searchParams);
-  const [range, setterRange] = useState<number[]>([
+
+  const [sort, setSort] = useState({ direction: 0, field: "updated" });
+
+  const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
+  const isAsc = sort.direction === 1;
+  const sortIcon = isAsc ? (
+    <ArrowDropDown style={{ margin: "-5px 0px" }} />
+  ) : (
+    <ArrowDropUp style={{ margin: "-5px 0px" }} />
+  );
+  const dispatch = useAppDispatch();
+
+  let timer: number;
+  const changeRangeHandler = (valueRange: number[]) => {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => {
+      dispatch(setRangeValue({ range: valueRange }));
+    }, 200);
+  };
+  useEffect(() => {
+    setSearchParams({
+      page: page.toString(),
+      packName: packName,
+      pageCount: pageCount.toString(),
+      max: maxCardsCount.toString(),
+      min: minCardsCount.toString(),
+      isMyPack: isMyPack.toString(),
+      sortPacks: sort.field ? `${sort.direction}${sort.field}` : "0updated",
+    });
+  }, [
+    pageCount,
+    page,
+    setSearchParams,
+    isMyPack,
+    sortPacks,
     minCardsCount,
     maxCardsCount,
   ]);
-  const rangeValueD = useDebounce<number[]>(range, 1000);
-  const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    setSearchParams({
-      currentPage: page.toString(),
-      pageCount: pageCount.toString(),
-      max: range[1].toString(),
-      min: range[0].toString(),
-      isMyPack: isMyPack.toString(),
-    });
-    dispatch(setRangeValue({ range: rangeValueD }));
-  }, [pageCount, page, setSearchParams, rangeValueD, isMyPack]);
 
   useEffect(() => {
     const model = {
       isMyPack: params.isMyPack,
       pageCount: params.showPerPage,
-      page: params.currentPage,
-      max: +params.max,
-      min: +params.min,
+      page: params.page,
+      max: params.max,
+      min: params.min,
+      sortPacks: sort.field ? `${sort.direction}${sort.field}` : "0updated",
     };
     dispatch(setPacksTC(model));
-    console.log(cardPacks);
-  }, [user._id, packName, sortPacks, rangeValueD, isMyPack]);
+  }, [searchParams]);
 
   const changePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
     dispatch(setCurrentPage({ page: newPage }));
@@ -109,14 +134,43 @@ const Packs = () => {
   const handlerIsMyPack = (param: "my" | "all") => {
     dispatch(setPreferencePacks({ param }));
   };
+  const changeSort = async (field: string) => {
+    await setSort({ direction: sort.direction === 0 ? 1 : 0, field });
+    setSortForPacks((sort.direction + sort.field).toString());
+  };
+  const showSortIcon = (field: string) => {
+    return sort.field === field ? sortIcon : <HorizontalRule />;
+  };
   return (
-    <Box style={{ padding: "6rem 2rem" }}>
+    <Box
+      style={{ padding: "6rem 2rem", display: "flex", flexDirection: "column" }}
+    >
       <Box sx={{ flexGrow: 1 }}>
-        <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
-          <Container style={{ display: "flex", flexDirection: "row" }}>
+        <Toolbar
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            padding: "0",
+          }}
+        >
+          <Container
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              padding: "0",
+            }}
+          >
             <SuperSearch searchPacks={packName} setSearch={setSearch} />
-            <FormControl style={{ display: "flex", flexDirection: "row" }}>
+            <FormControl
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                margin: "auto 1rem",
+              }}
+            >
               <Button
+                style={{ margin: "auto 1rem" }}
                 variant={isMyPack ? "contained" : "outlined"}
                 onClick={() => handlerIsMyPack("my")}
               >
@@ -130,17 +184,11 @@ const Packs = () => {
               </Button>
             </FormControl>
 
-            <SuperRange
-              value={range}
-              onChange={(e, newValue) =>
-                Array.isArray(newValue) && setterRange(newValue)
-              }
-            />
+            <SuperRange onChangeSlider={changeRangeHandler} />
+            <Button onClick={() => setAddPackMode((mode) => !mode)}>
+              Add new Pack
+            </Button>
           </Container>
-
-          <Button onClick={() => setAddPackMode((mode) => !mode)}>
-            Add new Pack
-          </Button>
         </Toolbar>
       </Box>
       {/*TABLE*/}
@@ -153,15 +201,10 @@ const Packs = () => {
                   <TableCell>Name</TableCell>
                   <TableCell align={"center"}>CardsCount</TableCell>
                   <TableCell
-                    onClick={() => setSortForPacks("updated")}
+                    onClick={() => changeSort("updated")}
                     align={"center"}
                   >
-                    Updated
-                    {sortPacks === "update" ? (
-                      <KeyboardArrowDownIcon />
-                    ) : (
-                      <KeyboardArrowUpIcon />
-                    )}
+                    <Box>Updated{showSortIcon("updated")}</Box>
                   </TableCell>
                   <TableCell align={"center"}>Author Name</TableCell>
                   <TableCell align={"center"}>Actions</TableCell>

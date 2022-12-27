@@ -31,11 +31,11 @@ export interface ResponseGetPacks {
 
 interface IPacksParams {
   packName: string;
-  min: number;
-  max: number;
+  min: string | number;
+  max: string | number;
   sortPacks: string;
-  page: number;
-  pageCount: number;
+  page: string | number;
+  pageCount: string | number;
   user_id: string;
 }
 interface INewPack {
