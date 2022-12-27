@@ -22,7 +22,7 @@ export const Search: FC<ISearchProps> = ({ onChangeCb }) => {
         borderRadius: "10px",
       }}
     >
-      <IconButton>
+      <IconButton disabled sx={{ color: "#000 !important" }}>
         <SearchIcon />
       </IconButton>
       <TextField

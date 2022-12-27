@@ -4,6 +4,8 @@ import { BackTo } from "../../common/components/BackTo/BackTo";
 import {
   Box,
   Button,
+  IconButton,
+  Menu,
   MenuItem,
   Pagination,
   Select,
@@ -19,7 +21,13 @@ import {
 import { IAddCardRequest, IGetCardsRequest } from "./cardsAPI";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
 import { cardsStateSelector } from "./selectors";
-import { KeyboardArrowDownOutlined } from "@mui/icons-material";
+import {
+  DeleteOutline,
+  Edit,
+  KeyboardArrowDownOutlined,
+  MoreHoriz,
+  School,
+} from "@mui/icons-material";
 import { userStateSelector } from "../User/selectors";
 import { CardsTable } from "./CardsTable";
 import { CardsAC } from "./cardsSlice";
@@ -47,10 +55,12 @@ export const Cards = () => {
 
   const [searchRequest, setSearchRequest] = useState("");
   const [sort, setSort] = useState({ direction: 0, field: "updated" });
+  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
 
   const isPackMine = user._id === packUserId;
   const totalPages = Math.ceil(cardsTotalCount / +pageCount);
   const params = Object.fromEntries(searchParams);
+  const isMenuOpen = !!menuAnchor;
 
   useEffect(() => {
     setSearchParams({
@@ -71,6 +81,14 @@ export const Cards = () => {
     } as IGetCardsRequest;
     dispatch(getCardsTC(model));
   }, [searchParams]);
+
+  const openMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setMenuAnchor(e.currentTarget);
+  };
+
+  const closeMenu = () => {
+    setMenuAnchor(null);
+  };
 
   const changeShowPerPage = (event: SelectChangeEvent) => {
     const rowsPerPage = +event.target.value;
@@ -136,8 +154,50 @@ export const Cards = () => {
             marginBottom: 5,
           }}
         >
-          <Typography variant={"h3"} component={"h3"}>
+          <Typography
+            variant={"h3"}
+            component={"h3"}
+            sx={{ displayt: "flex", alignItems: "center" }}
+          >
             Name placeholder
+            {isPackMine && (
+              <>
+                <IconButton onClick={openMenu}>
+                  <MoreHoriz />
+                </IconButton>
+                <Menu
+                  open={isMenuOpen}
+                  onClose={closeMenu}
+                  anchorEl={menuAnchor}
+                  sx={{
+                    "& .menu-text-icon": {
+                      display: "flex",
+                      gap: 1,
+                      alignItems: "center",
+                    },
+                  }}
+                >
+                  <MenuItem>
+                    <Typography className={"menu-text-icon"}>
+                      <Edit />
+                      Edit
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem>
+                    <Typography className={"menu-text-icon"}>
+                      <DeleteOutline />
+                      Delete
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem>
+                    <Typography className={"menu-text-icon"}>
+                      <School />
+                      Learn
+                    </Typography>
+                  </MenuItem>
+                </Menu>
+              </>
+            )}
           </Typography>
           {isPackMine && (
             <Button

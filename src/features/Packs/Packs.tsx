@@ -78,7 +78,7 @@ const Packs = () => {
     dispatch(setPreferencePacks({ param }));
   };
   return (
-    <Box>
+    <Box sx={{ paddingTop: 18 }}>
       <Box sx={{ flexGrow: 1 }}>
         <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
           <Container style={{ display: "flex", flexDirection: "row" }}>
