@@ -5,9 +5,7 @@ import {
   Box,
   Button,
   Container,
-  List,
   Menu,
-  MenuItem,
   Typography,
 } from "@mui/material";
 import { useAllSelector } from "../../hooks";
@@ -18,7 +16,6 @@ import { authRoutes, unAuthRoutes } from "../../routes";
 import { getRouteName } from "../../utils";
 import { userStateSelector } from "../../../features/User/selectors";
 import { lime } from "@mui/material/colors";
-import { avatarPlaceholder } from "../../utils/assets";
 import {
   Inventory,
   LockOpen,

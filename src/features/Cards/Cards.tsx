@@ -15,6 +15,7 @@ import styles from "../../common/styles/common.module.css";
 import CardsHeader from "./CardsHeader";
 import { ITablePaginationOption, TablePagination } from "./TablePagination";
 import { NotFoundElements } from "../../common/components/NotFoundElements/NotFoundElements";
+import { useWhatChanged } from "@simbathesailor/use-what-changed";
 
 export const Cards = () => {
   const { packID } = useParams();
@@ -44,9 +45,11 @@ export const Cards = () => {
       search: searchRequest,
       sortCards: sort.field ? `${sort.direction}${sort.field}` : "0updated",
     });
-  }, [sort, pageCount, page, searchRequest, setSearchParams]);
+  }, []);
 
+  useWhatChanged([params.showPerPage, params.currentPage, params.search]);
   useEffect(() => {
+    const isParamsSet = Object.keys(params).length > 0;
     const model = {
       cardsPack_id: packID,
       pageCount: params.showPerPage || pageCount,
@@ -54,8 +57,8 @@ export const Cards = () => {
       cardQuestion: params.search || searchRequest,
       sortCards: sort.field ? `${sort.direction}${sort.field}` : "0updated",
     } as IGetCardsRequest;
-    dispatch(getCardsTC(model));
-  }, [searchParams]);
+    isParamsSet && dispatch(getCardsTC(model));
+  }, [params.showPerPage, params.currentPage, params.search]);
 
   const changeShowPerPage = (event: SelectChangeEvent) => {
     const rowsPerPage = +event.target.value;
@@ -64,6 +67,7 @@ export const Cards = () => {
       dispatch(CardsAC.setPage({ page: Math.floor(existingPages) }));
     }
     dispatch(CardsAC.setPageCount({ showPerPage: rowsPerPage }));
+    setSearchParams({ ...params, showPerPage: rowsPerPage.toString() });
   };
 
   const changePageHandler = (
@@ -71,6 +75,7 @@ export const Cards = () => {
     value: number
   ) => {
     dispatch(CardsAC.setPage({ page: value }));
+    setSearchParams({ ...params, currentPage: value.toString() });
   };
 
   const deleteCardHandler = (cardID: string) => {
@@ -81,6 +86,10 @@ export const Cards = () => {
     const mockQuestion = "new question";
     const model = { card: { _id: cardID, question: mockQuestion } };
     dispatch(updateCardTC(packID ? packID : "", model));
+  };
+
+  const changeSearchRequestHandler = (value: string) => {
+    setSearchParams({ ...params, search: value });
   };
 
   return (
@@ -104,7 +113,7 @@ export const Cards = () => {
         <CardsHeader
           isPackMine={isPackMine}
           packID={packID ? packID : ""}
-          setSearchRequest={setSearchRequest}
+          setSearchRequest={changeSearchRequestHandler}
         />
         {cards.length > 0 ? (
           <>
