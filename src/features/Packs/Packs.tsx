@@ -4,8 +4,6 @@ import Table from "@mui/material/Table/Table";
 import TableContainer from "@mui/material/TableContainer/TableContainer";
 import TableHead from "@mui/material/TableHead/TableHead";
 import TableRow from "@mui/material/TableRow/TableRow";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import {
   Box,
   Container,
@@ -17,7 +15,6 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useDebounce } from "usehooks-ts";
 import Button from "@mui/material/Button/Button";
 import SchoolIcon from "@mui/icons-material/School";
 import FormControl from "@mui/material/FormControl/FormControl";
@@ -26,7 +23,6 @@ import { removePackTC, setPacksTC } from "./packsThunks";
 import { packsStateSelect, userStateSelect } from "../../app/selectors";
 import AddNewPack from "./AddNewPack";
 import SuperRange from "./SuperRange";
-import SuperSearch from "./SuperSearch";
 import {
   setCurrentPage,
   setPackName,
@@ -45,6 +41,8 @@ import {
   KeyboardArrowDownOutlined,
 } from "@mui/icons-material";
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
+import { Search } from "../../common/components/Search/Search";
+import PacksTable from "./PacksTable";
 
 const Packs = () => {
   const user = useAllSelector(userStateSelect);
@@ -60,12 +58,11 @@ const Packs = () => {
     sortPacks,
   } = useAllSelector(packsStateSelect);
 
-  const [addPackMode, setAddPackMode] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const params = Object.fromEntries(searchParams);
 
   const [sort, setSort] = useState({ direction: 0, field: "updated" });
-
+  const [addPackMode, setAddPackMode] = useState(false);
   const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
   const isAsc = sort.direction === 1;
   const sortIcon = isAsc ? (
@@ -100,6 +97,7 @@ const Packs = () => {
     sortPacks,
     minCardsCount,
     maxCardsCount,
+    packName,
   ]);
 
   useEffect(() => {
@@ -124,10 +122,14 @@ const Packs = () => {
   const removePack = (id: string) => {
     dispatch(removePackTC(id));
   };
-
-  const setSearch = (searchName: string) => {
-    dispatch(setPackName({ packName: searchName }));
+  let timer1: number;
+  const setSearch = (value: string) => {
+    if (timer1) clearTimeout(timer1);
+    timer1 = setTimeout(() => {
+      dispatch(setPackName({ packName: value }));
+    }, 500);
   };
+
   const setSortForPacks = (type: string) => {
     dispatch(setPacksSort({ type }));
   };
@@ -161,7 +163,7 @@ const Packs = () => {
               padding: "0",
             }}
           >
-            <SuperSearch searchPacks={packName} setSearch={setSearch} />
+            <Search onChangeCb={setSearch} />
             <FormControl
               style={{
                 display: "flex",
@@ -192,81 +194,20 @@ const Packs = () => {
         </Toolbar>
       </Box>
       {/*TABLE*/}
-      {!addPackMode ? (
-        <Paper>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell align={"center"}>CardsCount</TableCell>
-                  <TableCell
-                    onClick={() => changeSort("updated")}
-                    align={"center"}
-                  >
-                    <Box>Updated{showSortIcon("updated")}</Box>
-                  </TableCell>
-                  <TableCell align={"center"}>Author Name</TableCell>
-                  <TableCell align={"center"}>Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {!!cardPacks &&
-                  cardPacks.map((pack) => (
-                    <TableRow key={pack._id}>
-                      <TableCell component="th" scope="row">
-                        <NavLink to={`/packs/${pack._id}`}>{pack.name}</NavLink>
-                      </TableCell>
-                      <TableCell align="center">{pack.cardsCount}</TableCell>
-                      <TableCell align="center">{pack.created}</TableCell>
-                      <TableCell align="center">{pack.user_name}</TableCell>
-                      <TableCell>
-                        <Button>
-                          <SchoolIcon />
-                        </Button>
-                        <Button
-                          disabled={pack.user_id !== user._id}
-                          onClick={() => removePack(pack._id)}
-                        >
-                          <DeleteOutline />
-                        </Button>
-                        <Button disabled={pack.user_id !== user._id}>
-                          <Edit />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-            <Pagination
-              color={"primary"}
-              variant={"outlined"}
-              shape={"rounded"}
-              count={totalPageCount}
-              page={page}
-              onChange={(e, value) => changePage(e, value)}
-            />
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-              <Typography>Show</Typography>
-              <Select
-                value={pageCount.toString()}
-                onChange={(e) => handleChangeRowsPerPage(e)}
-                sx={{ padding: "0", height: 20 }}
-                IconComponent={() => <KeyboardArrowDownOutlined />}
-              >
-                <MenuItem value={4}>4</MenuItem>
-                <MenuItem value={7}>7</MenuItem>
-                <MenuItem value={10}>10</MenuItem>
-              </Select>
-              <Typography>Cards per page</Typography>
-            </Box>
-          </Box>
-        </Paper>
-      ) : (
-        <AddNewPack setAddPackMode={setAddPackMode} />
-      )}
+      <PacksTable
+        id={user._id}
+        cardPacks={cardPacks}
+        totalPageCount={totalPageCount}
+        pageCount={pageCount}
+        page={page}
+        addPackMode={addPackMode}
+        setAddPackMode={setAddPackMode}
+        changePage={changePage}
+        handleChangeRowsPerPage={handleChangeRowsPerPage}
+        changeSort={changeSort}
+        showSortIcon={showSortIcon}
+        removePack={removePack}
+      />
     </Box>
   );
 };
