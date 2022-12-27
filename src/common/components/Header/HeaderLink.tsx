@@ -30,10 +30,8 @@ export const HeaderLink: FC<IHeaderLinkProps> = ({ page, icon }) => {
   return (
     <MenuItem sx={{ justifyContent: "center" }}>
       <NavLink to={`/${page}`} className={styles.link}>
-        <>
-          {icon && icon}
-          {formattedPageName}
-        </>
+        {icon && icon}
+        {formattedPageName}
       </NavLink>
     </MenuItem>
   );

@@ -1,24 +1,20 @@
 import React, { FC } from "react";
 import {
   Box,
-  IconButton,
   Paper,
-  Rating,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
 } from "@mui/material";
 import {
   ArrowDropDown,
   ArrowDropUp,
-  DeleteOutline,
-  Edit,
   HorizontalRule,
 } from "@mui/icons-material";
 import { ICard } from "../../common/models";
+import { CardsTableRow } from "./CardsTableRow";
 
 interface ICardsSort {
   direction: number;
@@ -44,12 +40,14 @@ export const CardsTable: FC<ICardsTableProps> = ({
 }) => {
   const isAsc = sort.direction === 1;
   const sortIcon = isAsc ? <ArrowDropDown /> : <ArrowDropUp />;
+
   const changeSort = (field: string) => {
     setSort({ direction: sort.direction === 0 ? 1 : 0, field });
   };
   const showSortIcon = (field: string) => {
     return sort.field === field ? sortIcon : <HorizontalRule />;
   };
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 500 }}>
@@ -80,31 +78,13 @@ export const CardsTable: FC<ICardsTableProps> = ({
         <TableBody>
           {cards.map((card) => {
             return (
-              <TableRow key={card._id}>
-                <TableCell>{card.question}</TableCell>
-                <TableCell>{card.answer}</TableCell>
-                <TableCell>{card.updated.toString()}</TableCell>
-                <TableCell>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Rating
-                      name={"read-only"}
-                      value={Math.floor(card.grade)}
-                      readOnly
-                      precision={0.5}
-                    />
-                    {isPackMine && (
-                      <>
-                        <IconButton>
-                          <Edit onClick={() => updateCardHandler(card._id)} />
-                        </IconButton>
-                        <IconButton onClick={() => deleteCardHandler(card._id)}>
-                          <DeleteOutline />
-                        </IconButton>
-                      </>
-                    )}
-                  </Box>
-                </TableCell>
-              </TableRow>
+              <CardsTableRow
+                key={card._id}
+                card={card}
+                updateCardHandler={updateCardHandler}
+                deleteCardHandler={deleteCardHandler}
+                isPackMine={isPackMine}
+              />
             );
           })}
         </TableBody>
