@@ -21,6 +21,7 @@ interface ITablePaginationProps {
   changeElementsPerPage: (event: SelectChangeEvent) => void;
   currentPage: number;
   selectOptions: ITablePaginationOption[];
+  title: string;
 }
 
 export const TablePagination: FC<ITablePaginationProps> = ({
@@ -30,6 +31,7 @@ export const TablePagination: FC<ITablePaginationProps> = ({
   elementsPerPage,
   changePageHandler,
   selectOptions,
+  title,
 }) => {
   return (
     <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
@@ -50,10 +52,14 @@ export const TablePagination: FC<ITablePaginationProps> = ({
           IconComponent={() => <KeyboardArrowDownOutlined />}
         >
           {selectOptions.map((option) => {
-            return <MenuItem value={option.value}>{option.title}</MenuItem>;
+            return (
+              <MenuItem key={option.value} value={option.value}>
+                {option.title}
+              </MenuItem>
+            );
           })}
         </Select>
-        <Typography>Cards per page</Typography>
+        <Typography>{title} per page</Typography>
       </Box>
     </Box>
   );

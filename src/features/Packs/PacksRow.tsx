@@ -7,19 +7,14 @@ import SchoolIcon from "@mui/icons-material/School";
 import { DeleteOutline, Edit } from "@mui/icons-material";
 import { IPackResponse } from "./packsAPI";
 import { NotFoundElements } from "../../common/components/NotFoundElements/NotFoundElements";
+import { formDate } from "../../common/utils/date";
 
 interface IRowProps {
   id: string;
   cardPacks: IPackResponse[];
   removePack: (id: string) => void;
 }
-const formDate = (str: string) => {
-  return new Date(str).toLocaleString("ru", {
-    day: "numeric",
-    month: "numeric",
-    year: "numeric",
-  });
-};
+
 const PacksRow: React.FC<IRowProps> = ({ id, cardPacks, removePack }) => {
   return (
     <>

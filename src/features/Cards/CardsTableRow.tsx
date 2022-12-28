@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { ICard } from "../../common/models";
 import { Box, IconButton, Rating, TableCell, TableRow } from "@mui/material";
 import { DeleteOutline, Edit } from "@mui/icons-material";
+import { formDate } from "../../common/utils/date";
 
 interface ICardsTableRowProps {
   card: ICard;
@@ -20,7 +21,7 @@ export const CardsTableRow: FC<ICardsTableRowProps> = ({
     <TableRow key={card._id}>
       <TableCell>{card.question}</TableCell>
       <TableCell>{card.answer}</TableCell>
-      <TableCell>{card.updated.toString()}</TableCell>
+      <TableCell>{formDate(`${card.updated}`)}</TableCell>
       <TableCell>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Rating

@@ -3,20 +3,13 @@ import { Box, Container, Toolbar } from "@mui/material";
 import Button from "@mui/material/Button/Button";
 import FormControl from "@mui/material/FormControl/FormControl";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
-import {
-  addPackTC,
-  removePackTC,
-  resetFilter,
-  setPacksTC,
-} from "./packsThunks";
+import { addPackTC, removePackTC, setPacksTC } from "./packsThunks";
 import { packsStateSelect, userStateSelect } from "../../app/selectors";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import SuperRange from "./SuperRange";
 import {
-  initialState,
   setCurrentPage,
   setPackName,
-  setPacks,
   setPacksSort,
   setPageCount,
   setPreferencePacks,
@@ -29,13 +22,13 @@ import {
   HorizontalRule,
 } from "@mui/icons-material";
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
-import { Search } from "../../common/components/Search/Search";
 import PacksTable from "./PacksTable";
+import { getSortIcon } from "../../common/utils/assets";
 
 const Packs = () => {
+  // Selectors
   const user = useAllSelector(userStateSelect);
   const {
-    packName,
     cardPacks,
     page,
     pageCount,
@@ -43,23 +36,22 @@ const Packs = () => {
     max,
     min,
     isMyPack,
-    sortPacks,
   } = useAllSelector(packsStateSelect);
+  const dispatch = useAppDispatch();
 
+  // URL & Query
   const [searchParams, setSearchParams] = useSearchParams();
   const params = Object.fromEntries(searchParams);
 
+  // Local states
   const [sort, setSort] = useState({ direction: 0, field: "updated" });
   const [addPackMode, setAddPackMode] = useState(false);
-  const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
+
+  // Utils
   const isAsc = sort.direction === 1;
+  const sortIcon = getSortIcon(isAsc);
+  const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
   const isParamsSet = Object.keys(params).length > 0;
-  const sortIcon = isAsc ? (
-    <ArrowDropDown style={{ margin: "-5px 0px" }} />
-  ) : (
-    <ArrowDropUp style={{ margin: "-5px 0px" }} />
-  );
-  const dispatch = useAppDispatch();
 
   let timer: number;
   const changeRangeHandler = (valueRange: number[]) => {
@@ -75,7 +67,6 @@ const Packs = () => {
   };
   useEffect(() => {
     if (!isParamsSet) {
-      console.log("dispatch clear model");
       dispatch(setPacksTC({}));
       return;
     }
@@ -92,17 +83,16 @@ const Packs = () => {
 
   const changePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
     dispatch(setCurrentPage({ page: newPage }));
-    setSearchParams({ ...params, page: newPage + "" });
+    setSearchParams({ ...params, page: `${newPage}` });
   };
   const handleChangeRowsPerPage = (event: SelectChangeEvent) => {
     dispatch(setPageCount({ pageCount: +event.target.value }));
     setSearchParams({ ...params, pageCount: event.target.value });
-    // dispatch(setCurrentPage({ page: 1 }));
   };
   const removePack = (id: string) => {
     dispatch(removePackTC(id));
-    setSearchParams({ ...params });
   };
+
   let timer1: number;
   const setSearch = (value: string) => {
     if (timer1) clearTimeout(timer1);
@@ -117,7 +107,6 @@ const Packs = () => {
     isPrivate: boolean
   ) => {
     dispatch(addPackTC(newPackName, newDeckCover, isPrivate));
-    setSearchParams({ ...params });
   };
   const setSortForPacks = (type: string) => {
     dispatch(setPacksSort({ type }));
@@ -134,7 +123,7 @@ const Packs = () => {
   const showSortIcon = (field: string) => {
     return sort.field === field ? sortIcon : <HorizontalRule />;
   };
-  const removeSort = () => {
+  const refreshFilters = () => {
     setSearchParams({});
   };
   return (
@@ -191,7 +180,10 @@ const Packs = () => {
             >
               Add new Pack
             </Button>
-            <Button onClick={() => removeSort()} style={{ margin: "auto 0" }}>
+            <Button
+              onClick={() => refreshFilters()}
+              style={{ margin: "auto 0" }}
+            >
               <DeleteForeverIcon />
             </Button>
           </Container>

@@ -1,5 +1,4 @@
 import { instance } from "../../common/api/baseAPI";
-import { AxiosResponse } from "axios";
 
 export interface IPackResponse {
   _id: string;
@@ -38,25 +37,15 @@ interface IPacksParams {
   pageCount: string | number;
   user_id: string;
 }
-interface INewPack {
-  name: string;
-  deckCover: string;
-  isPrivate?: boolean;
-}
+
 const getPacks = (params: Partial<IPacksParams>) => {
   return instance.get<ResponseGetPacks>("/cards/pack", {
     params,
   });
 };
 const addPack = (name: string, deckCover: string, isPrivate?: boolean) => {
-  return instance
-    .post("/cards/pack", {
-      cardsPack: { name, deckCover, private: isPrivate },
-    })
-    .then((e) => {
-      console.log(e);
-      return e;
-    });
+  const cardsPack = { name, deckCover, private: isPrivate };
+  return instance.post("/cards/pack", { cardsPack });
 };
 const deletePack = (id: string) => {
   return instance.delete(`/cards/pack?id=${id}`);

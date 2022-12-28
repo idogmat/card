@@ -14,10 +14,8 @@ export const getCardsTC = (model: IGetCardsRequest): AppThunkActionType => {
     try {
       dispatch(AppAC.setIsLoading({ isLoading: true }));
       const { data } = await cardsAPI.getCardsRequest(model);
-      console.log(data);
       dispatch(CardsAC.setCardsData({ data }));
     } catch (e) {
-      console.log(e);
       dispatch(AppAC.setError({ error: defaultErrorMessage }));
     } finally {
       dispatch(AppAC.setIsLoading({ isLoading: false }));
