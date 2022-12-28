@@ -52,7 +52,6 @@ export const Cards = () => {
     const isPageCountValid = selectOptions.some((option) => {
       return option.value === +params.showPerPage;
     });
-    console.log(isPageCountValid);
     const model = {
       cardsPack_id: packID,
       pageCount: isPageCountValid ? params.showPerPage : pageCount,
