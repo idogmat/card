@@ -1,39 +1,17 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode } from "react";
 import Paper from "@mui/material/Paper/Paper";
 import TableContainer from "@mui/material/TableContainer/TableContainer";
 import Table from "@mui/material/Table/Table";
 import TableHead from "@mui/material/TableHead/TableHead";
 import TableRow from "@mui/material/TableRow/TableRow";
-import {
-  Box,
-  MenuItem,
-  Pagination,
-  Select,
-  TableBody,
-  TableCell,
-  Typography,
-} from "@mui/material";
-import { NavLink } from "react-router-dom";
-import Button from "@mui/material/Button/Button";
-import SchoolIcon from "@mui/icons-material/School";
-import {
-  DeleteOutline,
-  Edit,
-  KeyboardArrowDownOutlined,
-} from "@mui/icons-material";
+import { Box, TableBody, TableCell } from "@mui/material";
 import AddNewPack from "./AddNewPack";
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
 import { IPackResponse } from "./packsAPI";
-import {
-  ITablePaginationOption,
-  TablePagination,
-} from "../Cards/TablePagination";
+import { TablePagination } from "../../common/TablePagination/TablePagination";
 import PacksRow from "./PacksRow";
-const selectOptions: ITablePaginationOption[] = [
-  { title: 4, value: 4 },
-  { title: 7, value: 7 },
-  { title: 10, value: 10 },
-];
+import { selectOptions } from "./Packs.data";
+
 interface ITableProps {
   id: string;
   cardPacks: IPackResponse[];
@@ -49,6 +27,7 @@ interface ITableProps {
   handleChangeRowsPerPage: (event: SelectChangeEvent) => void;
   changePage: (event: React.ChangeEvent<unknown>, newPage: number) => void;
 }
+
 const PacksTable: React.FC<ITableProps> = ({
   addPack,
   id,
@@ -90,6 +69,7 @@ const PacksTable: React.FC<ITableProps> = ({
         </TableContainer>
         <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
           <TablePagination
+            title={"Packs"}
             totalPages={totalPageCount}
             elementsPerPage={pageCount}
             changePageHandler={changePage}
@@ -99,9 +79,7 @@ const PacksTable: React.FC<ITableProps> = ({
           />
         </Box>
       </Paper>
-      {!addPackMode && (
-        <AddNewPack addPack={addPack} setAddPackMode={setAddPackMode} />
-      )}
+      <AddNewPack addPack={addPack} setAddPackMode={setAddPackMode} />
     </>
   );
 };

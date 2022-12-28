@@ -16,6 +16,7 @@ import {
 import { ICard } from "../../common/models";
 import { CardsTableRow } from "./CardsTableRow";
 import { IFieldSort } from "./Cards";
+import { getSortIcon } from "../../common/utils/assets";
 
 interface ICardsTableProps {
   cards: ICard[];
@@ -35,11 +36,12 @@ export const CardsTable: FC<ICardsTableProps> = ({
   setSort,
 }) => {
   const isAsc = sort.direction === 1;
-  const sortIcon = isAsc ? <ArrowDropDown /> : <ArrowDropUp />;
+  const sortIcon = getSortIcon(isAsc);
 
   const changeSort = (field: string) => {
     setSort({ direction: sort.direction === 0 ? 1 : 0, field });
   };
+
   const showSortIcon = (field: string) => {
     return sort.field === field ? sortIcon : <HorizontalRule />;
   };

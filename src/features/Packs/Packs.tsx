@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Box, Container, debounce, Toolbar } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Container, Toolbar } from "@mui/material";
 import Button from "@mui/material/Button/Button";
 import FormControl from "@mui/material/FormControl/FormControl";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
@@ -31,7 +31,6 @@ import {
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
 import { Search } from "../../common/components/Search/Search";
 import PacksTable from "./PacksTable";
-import PacksHeader from "./PacksHeader";
 
 const Packs = () => {
   const user = useAllSelector(userStateSelect);
@@ -50,10 +49,16 @@ const Packs = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const params = Object.fromEntries(searchParams);
 
+  // Local states
   const [sort, setSort] = useState({ direction: 0, field: "updated" });
+  const [addPackMode, setAddPackMode] = useState(false);
+
+  // Utils
   const [addPackMode, setAddPackMode] = useState<boolean>(false);
   const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
   const isAsc = sort.direction === 1;
+  const sortIcon = getSortIcon(isAsc);
+  const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
   const isParamsSet = Object.keys(params).length > 0;
   const sortIcon = isAsc ? (
     <ArrowDropDown style={{ margin: "-5px 0px" }} />
@@ -96,7 +101,7 @@ const Packs = () => {
 
   const changePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
     dispatch(setCurrentPage({ page: newPage }));
-    setSearchParams({ ...params, page: newPage + "" });
+    setSearchParams({ ...params, page: `${newPage}` });
   };
   const handleChangeRowsPerPage = (event: SelectChangeEvent) => {
     dispatch(setPageCount({ pageCount: +event.target.value }));
@@ -142,7 +147,6 @@ const Packs = () => {
     return sort.field === field ? sortIcon : <HorizontalRule />;
   };
   const removeSort = () => {
-    // dispatch(resetFilter());
     setSearchParams({});
   };
   return (

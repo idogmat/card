@@ -13,7 +13,7 @@ import { appStateSelect } from "../../app/selectors";
 import { Preloader } from "../../common/components/Preloader/Preloader";
 import styles from "../../common/styles/common.module.css";
 import CardsHeader from "./CardsHeader";
-import { TablePagination } from "./TablePagination";
+import { TablePagination } from "../../common/TablePagination/TablePagination";
 import { NotFoundElements } from "../../common/components/NotFoundElements/NotFoundElements";
 import { selectOptions } from "./Cards.data";
 
@@ -39,25 +39,27 @@ export const Cards = () => {
   const params = Object.fromEntries(searchParams);
 
   // Local states
+  const defaultSort = { direction: 0, field: "updated" };
   const [searchRequest, setSearchRequest] = useState(params.search || "");
-  const [sort, setSort] = useState<IFieldSort>({
-    direction: 0,
-    field: "updated",
-  });
+  const [sort, setSort] = useState<IFieldSort>(defaultSort);
 
   // Utils
   const isPackMine = user._id === packUserId;
   const totalPages = Math.ceil(cardsTotalCount / +pageCount);
+  const isPageCountValid = selectOptions.some((option) => {
+    return option.value === +params.showPerPage;
+  });
+
   useEffect(() => {
-    const isPageCountValid = selectOptions.some((option) => {
-      return option.value === +params.showPerPage;
-    });
+    const cardsSort = sort.field
+      ? `${sort.direction}${sort.field}`
+      : "0updated";
     const model = {
       cardsPack_id: packID,
       pageCount: isPageCountValid ? params.showPerPage : pageCount,
       page: params.currentPage || page,
       cardQuestion: params.search || searchRequest,
-      sortCards: sort.field ? `${sort.direction}${sort.field}` : "0updated",
+      sortCards: params.sortCards || sort,
     } as IGetCardsRequest;
     dispatch(getCardsTC(model));
   }, [searchParams]);
@@ -155,6 +157,7 @@ export const Cards = () => {
               />
             </Box>
             <TablePagination
+              title={"Cards"}
               totalPages={totalPages}
               elementsPerPage={pageCount}
               changePageHandler={changePageHandler}

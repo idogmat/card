@@ -14,14 +14,14 @@ interface IGetModel {
   sortPacks: string;
   user_id: string;
 }
+
 export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
   return (dispatch, getState) => {
     dispatch(AppAC.setIsLoading({ isLoading: true }));
     try {
-      const { pageCount, page, min, max, isMyPack, sortPacks, packName } =
+      const { pageCount, page, min, max, sortPacks, packName } =
         getState().packs;
       if (Object.keys(model).length === 0) {
-        console.log("CLEAR MODEL");
         PacksAPI.getPacks({}).then(({ data }) => {
           dispatch(setPacks({ packs: data, min: 0, max: 15, packName: "" }));
         });
@@ -37,7 +37,6 @@ export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
         max: model.max || max,
         sortPacks: !!model?.sortPacks ? model.sortPacks : sortPacks,
       }).then((res) => {
-        console.log("SETTING VALUES");
         dispatch(
           setPacks({
             packs: res.data,
@@ -62,7 +61,6 @@ export const addPackTC = (
   return async (dispatch, getState) => {
     dispatch(AppAC.setIsLoading({ isLoading: true }));
     try {
-      const { _id } = getState().user;
       const { pageCount, page, min, max, isMyPack, sortPacks, packName } =
         getState().packs;
       PacksAPI.addPack(name, deckCover, isPrivate).then((res) => {
@@ -119,7 +117,6 @@ export const removePackTC = (id: string): AppThunkActionType => {
       const { data } = await PacksAPI.deletePack(id);
       const { pageCount, page, min, max, isMyPack, sortPacks, packName } =
         getState().packs;
-      console.log(isMyPack);
       dispatch(
         setPacksTC({
           pageCount,
