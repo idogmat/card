@@ -1,6 +1,6 @@
 import { AppThunkActionType } from "../../common/hooks/useAllSelector";
 import { PacksAPI } from "./packsAPI";
-import { initialState, setPacks } from "./packsReducer";
+import { initialState, packsAC } from "./packsReducer";
 import { AppAC } from "../../app/appReducer";
 import { defaultErrorMessage } from "../../common/utils/errorHandlers";
 
@@ -19,11 +19,19 @@ export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
   return (dispatch, getState) => {
     dispatch(AppAC.setIsLoading({ isLoading: true }));
     try {
-      const { pageCount, page, min, max, sortPacks, packName } =
+      const { pageCount, page, min, max, sortPacks, packName, isMyPack } =
         getState().packs;
       if (Object.keys(model).length === 0) {
         PacksAPI.getPacks({}).then(({ data }) => {
-          dispatch(setPacks({ packs: data, min: 0, max: 15, packName: "" }));
+          dispatch(
+            packsAC.setPacks({
+              packs: data,
+              min: 0,
+              max: 15,
+              packName: "",
+              isMyPack,
+            })
+          );
         });
         return;
       }
@@ -38,11 +46,12 @@ export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
         sortPacks: !!model?.sortPacks ? model.sortPacks : sortPacks,
       }).then((res) => {
         dispatch(
-          setPacks({
+          packsAC.setPacks({
             packs: res.data,
             min: model.min || min,
             max: model.max || max,
             packName: packName,
+            isMyPack: model.isMyPack === "true" ? true : false,
           })
         );
       });
@@ -61,27 +70,14 @@ export const addPackTC = (
   return async (dispatch, getState) => {
     dispatch(AppAC.setIsLoading({ isLoading: true }));
     try {
-      const { pageCount, page, min, max, isMyPack, sortPacks, packName } =
-        getState().packs;
+      const { isMyPack } = getState().packs;
       PacksAPI.addPack(name, deckCover, isPrivate).then((res) => {
-        if (res.statusText === "Created") {
-          dispatch(
-            setPacksTC({
-              pageCount,
-              page,
-              min: min,
-              max: max,
-              isMyPack: isMyPack ? "true" : "false",
-              sortPacks,
-              packName,
-            })
-          );
-          dispatch(
-            AppAC.setSuccessMessage({ message: "Successfully updated" })
-          );
-        } else {
-          dispatch(AppAC.setError({ error: defaultErrorMessage }));
-        }
+        dispatch(
+          setPacksTC({
+            isMyPack: isMyPack ? "true" : "false",
+          })
+        );
+        dispatch(AppAC.setSuccessMessage({ message: "Successfully updated" }));
       });
     } catch {
       dispatch(AppAC.setError({ error: defaultErrorMessage }));
@@ -90,26 +86,7 @@ export const addPackTC = (
     }
   };
 };
-export const resetFilter = (): AppThunkActionType => {
-  return async (dispatch, getState) => {
-    dispatch(AppAC.setIsLoading({ isLoading: true }));
-    try {
-      dispatch(
-        setPacks({
-          packs: initialState,
-          min: initialState.min,
-          max: initialState.max,
-          packName: initialState.packName,
-        })
-      );
-      dispatch(AppAC.setSuccessMessage({ message: "Successfully updated" }));
-    } catch {
-      dispatch(AppAC.setError({ error: defaultErrorMessage }));
-    } finally {
-      dispatch(AppAC.setIsLoading({ isLoading: false }));
-    }
-  };
-};
+
 export const removePackTC = (id: string): AppThunkActionType => {
   return async (dispatch, getState) => {
     dispatch(AppAC.setIsLoading({ isLoading: true }));
@@ -121,8 +98,8 @@ export const removePackTC = (id: string): AppThunkActionType => {
         setPacksTC({
           pageCount,
           page,
-          min: min,
-          max: max,
+          min,
+          max,
           isMyPack: isMyPack ? "true" : "false",
           sortPacks,
           packName,

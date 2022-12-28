@@ -9,8 +9,9 @@ import AddNewPack from "./AddNewPack";
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
 import { IPackResponse } from "./packsAPI";
 import { TablePagination } from "../../common/TablePagination/TablePagination";
-import PacksRow from "./PacksRow";
 import { selectOptions } from "./Packs.data";
+import { NotFoundElements } from "../../common/components/NotFoundElements/NotFoundElements";
+import PacksElement from "./PacksElement";
 
 interface ITableProps {
   id: string;
@@ -18,6 +19,7 @@ interface ITableProps {
   totalPageCount: number;
   pageCount: number;
   page: number;
+  isMyPack: boolean;
   addPackMode: boolean;
   setAddPackMode: (set: boolean) => void;
   addPack: (s: string, d: string, b: boolean) => void;
@@ -29,8 +31,8 @@ interface ITableProps {
 }
 
 const PacksTable: React.FC<ITableProps> = ({
-  addPack,
   id,
+  addPack,
   changeSort,
   removePack,
   handleChangeRowsPerPage,
@@ -42,6 +44,7 @@ const PacksTable: React.FC<ITableProps> = ({
   pageCount,
   addPackMode,
   setAddPackMode,
+  isMyPack,
 }) => {
   return (
     <>
@@ -63,7 +66,20 @@ const PacksTable: React.FC<ITableProps> = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              <PacksRow id={id} removePack={removePack} cardPacks={cardPacks} />
+              {!!cardPacks ? (
+                cardPacks.map((pack) => (
+                  <PacksElement
+                    id={id}
+                    removePack={removePack}
+                    pack={pack}
+                    isMyPack={isMyPack}
+                  />
+                ))
+              ) : (
+                <TableRow>
+                  <NotFoundElements title={"Empty"} />
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>

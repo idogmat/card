@@ -37,13 +37,14 @@ const packsSlice = createSlice({
         max: number | string;
         min: number | string;
         packName: string;
+        isMyPack: boolean;
       }>
     ): IInitialState => {
       return {
         ...action.payload.packs,
         min: +action.payload.min,
         max: +action.payload.max,
-        isMyPack: draft.isMyPack,
+        isMyPack: action.payload.isMyPack,
         packName: action.payload.packName,
       };
     },
@@ -63,22 +64,11 @@ const packsSlice = createSlice({
     setPacksSort: (draft, action: PayloadAction<{ type: string }>) => {
       draft.sortPacks = action.payload.type;
     },
-    setPreferencePacks: (
-      draft,
-      action: PayloadAction<{ param: "my" | "all" }>
-    ) => {
-      draft.isMyPack = action.payload.param === "my" ? true : false;
+    setPreferencePacks: (draft, action: PayloadAction<{ isMine: boolean }>) => {
+      draft.isMyPack = action.payload.isMine;
     },
   },
 });
 
 export const packsReducer = packsSlice.reducer;
-export const {
-  setPacks,
-  setCurrentPage,
-  setPageCount,
-  setRangeValue,
-  setPreferencePacks,
-  setPackName,
-  setPacksSort,
-} = packsSlice.actions;
+export const packsAC = packsSlice.actions;

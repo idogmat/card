@@ -9,7 +9,7 @@ interface IHeaderProps {
   packName: string;
   changeSearchHandler: (s: string) => void;
   isMyPack: boolean;
-  handlerIsMyPack: (param: "my" | "all") => void;
+  handlerIsMyPack: (param: boolean) => void;
   cardPacksTotalCount: number;
   max: number | string;
   min: number | string;
@@ -62,13 +62,13 @@ const PacksHeader: FC<IHeaderProps> = ({
             <Button
               style={{ margin: "auto 1rem" }}
               variant={isMyPack ? "contained" : "outlined"}
-              onClick={() => handlerIsMyPack("my")}
+              onClick={() => handlerIsMyPack(true)}
             >
               My
             </Button>
             <Button
               variant={!isMyPack ? "contained" : "outlined"}
-              onClick={() => handlerIsMyPack("all")}
+              onClick={() => handlerIsMyPack(false)}
             >
               All
             </Button>
