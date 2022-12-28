@@ -3,15 +3,16 @@ import { FormControl, IconButton, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 interface ISearchProps {
-  onChangeCb: (value: string) => void;
+  searchValue: string;
+  searchChangeHandler: (value: string) => void;
 }
 
-export const Search: FC<ISearchProps> = ({ onChangeCb }) => {
-  const [inputText, setInputText] = useState("");
-
+export const Search: FC<ISearchProps> = ({
+  searchValue,
+  searchChangeHandler,
+}) => {
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputText(e.currentTarget.value);
-    onChangeCb(e.currentTarget.value);
+    searchChangeHandler(e.currentTarget.value);
   };
 
   return (
@@ -28,7 +29,7 @@ export const Search: FC<ISearchProps> = ({ onChangeCb }) => {
         <SearchIcon />
       </IconButton>
       <TextField
-        value={inputText}
+        value={searchValue}
         onChange={onChangeHandler}
         sx={{
           border: "none",

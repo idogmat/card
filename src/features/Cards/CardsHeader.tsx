@@ -19,6 +19,7 @@ interface ICardsHeaderProps {
   isPackMine: boolean;
   setSearchRequest: (value: string) => void;
   packName: string;
+  searchValue: string;
 }
 
 const CardsHeader: FC<ICardsHeaderProps> = ({
@@ -26,6 +27,7 @@ const CardsHeader: FC<ICardsHeaderProps> = ({
   isPackMine,
   setSearchRequest,
   packName,
+  searchValue,
 }) => {
   const dispatch = useAppDispatch();
 
@@ -51,14 +53,6 @@ const CardsHeader: FC<ICardsHeaderProps> = ({
     dispatch(addCardTC(mockCard));
   };
 
-  const searchRequestChangeHandler = (value: string) => {
-    setSearchRequest(value);
-  };
-  const handleSearchRequestChange = useCallback(
-    debounce(searchRequestChangeHandler, 500),
-    []
-  );
-
   return (
     <>
       <Box
@@ -75,7 +69,7 @@ const CardsHeader: FC<ICardsHeaderProps> = ({
           component={"h3"}
           sx={{ display: "flex", alignItems: "center" }}
         >
-          {packName ? packName : Name Placeholder}
+          {packName ? packName : "Name placeholder"}
           {isPackMine && (
             <>
               <IconButton onClick={openMenu}>
@@ -126,7 +120,10 @@ const CardsHeader: FC<ICardsHeaderProps> = ({
         )}
       </Box>
       <Box sx={{ marginBottom: 2 }}>
-        <Search onChangeCb={handleSearchRequestChange} />
+        <Search
+          searchChangeHandler={setSearchRequest}
+          searchValue={searchValue}
+        />
       </Box>
     </>
   );

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import { BackTo } from "../../common/components/BackTo/BackTo";
-import { Box, SelectChangeEvent } from "@mui/material";
+import { Box, debounce, SelectChangeEvent } from "@mui/material";
 import { deleteCardTC, getCardsTC, updateCardTC } from "./cardsThunks";
 import { IGetCardsRequest } from "./cardsAPI";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
@@ -23,31 +23,39 @@ export interface IFieldSort {
 }
 
 export const Cards = () => {
-  const { packID } = useParams();
+  // Selectors
   const dispatch = useAppDispatch();
   const user = useAllSelector(userStateSelector);
   const { isLoading } = useAllSelector(appStateSelect);
   const { cards, packUserId, cardsTotalCount, page, pageCount } =
     useAllSelector(cardsStateSelector);
+
+  // Url & Query
+  const { packID } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const { state } = useLocation();
   const previousURL = state ? state.previousURL : null;
   const packName = state ? state.packName : null;
+  const params = Object.fromEntries(searchParams);
 
-  const [searchRequest, setSearchRequest] = useState("");
+  // Local states
+  const [searchRequest, setSearchRequest] = useState(params.search || "");
   const [sort, setSort] = useState<IFieldSort>({
     direction: 0,
     field: "updated",
   });
 
+  // Utils
   const isPackMine = user._id === packUserId;
   const totalPages = Math.ceil(cardsTotalCount / +pageCount);
-  const params = Object.fromEntries(searchParams);
-
   useEffect(() => {
+    const isPageCountValid = selectOptions.some((option) => {
+      return option.value === +params.showPerPage;
+    });
+    console.log(isPageCountValid);
     const model = {
       cardsPack_id: packID,
-      pageCount: params.showPerPage || pageCount,
+      pageCount: isPageCountValid ? params.showPerPage : pageCount,
       page: params.currentPage || page,
       cardQuestion: params.search || searchRequest,
       sortCards: sort.field ? `${sort.direction}${sort.field}` : "0updated",
@@ -59,7 +67,7 @@ export const Cards = () => {
     const rowsPerPage = +event.target.value;
     const existingPages = cardsTotalCount / rowsPerPage;
     const lastPage = Math.ceil(existingPages);
-    if (lastPage < totalPages) {
+    if (lastPage < totalPages && page >= lastPage) {
       dispatch(CardsAC.setPage({ page: lastPage }));
       setSearchParams({
         ...params,
@@ -90,8 +98,16 @@ export const Cards = () => {
     dispatch(updateCardTC(packID ? packID : "", model));
   };
 
+  const setSearchRequestToQuery = useCallback(
+    debounce((value: string) => {
+      setSearchParams({ ...params, search: value });
+    }, 200),
+    []
+  );
+
   const changeSearchRequestHandler = (value: string) => {
-    setSearchParams({ ...params, search: value });
+    setSearchRequest(value);
+    setSearchRequestToQuery(value);
   };
 
   const handleChangeSort = (value: IFieldSort) => {
@@ -125,6 +141,7 @@ export const Cards = () => {
           packID={packID ? packID : ""}
           setSearchRequest={changeSearchRequestHandler}
           packName={packName}
+          searchValue={searchRequest}
         />
         {cards.length > 0 ? (
           <>
