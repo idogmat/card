@@ -24,6 +24,7 @@ import {
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
 import { Search } from "../../common/components/Search/Search";
 import PacksTable from "./PacksTable";
+import { useWhatChanged } from "@simbathesailor/use-what-changed";
 
 const Packs = () => {
   const user = useAllSelector(userStateSelect);
@@ -60,6 +61,7 @@ const Packs = () => {
       dispatch(setRangeValue({ range: valueRange }));
     }, 200);
   };
+  // useWhatChanged([params.page, params.packName, params.pageCount,params.max,params.min,params.isMyPack,params.sortPacks]);
   useEffect(() => {
     setSearchParams({
       page: page.toString(),
