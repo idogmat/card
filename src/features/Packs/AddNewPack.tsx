@@ -5,13 +5,16 @@ import { Box, Checkbox, IconButton, Modal, TextField } from "@mui/material";
 import Button from "@mui/material/Button/Button";
 import { addPackTC } from "./packsThunks";
 
-const AddNewPack = (props: any) => {
+const AddNewPack = (props: {
+  addPack: (s: string, d: string, b: boolean) => void;
+  setAddPackMode: (b: boolean) => void;
+}) => {
   const [newPackName, setNewPackName] = useState("");
   const [newDeckCover, setNewDeckCover] = useState("1");
   const [isPrivate, setPrivate] = React.useState(false);
   const dispatch = useAppDispatch();
   const addPack = () => {
-    dispatch(addPackTC(newPackName, newDeckCover, isPrivate));
+    props.addPack(newPackName, newDeckCover, isPrivate);
     props.setAddPackMode(false);
   };
 

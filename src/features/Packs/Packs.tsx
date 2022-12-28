@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Box, Container, Grid, Toolbar, Typography } from "@mui/material";
+import { Box, Container, Toolbar } from "@mui/material";
 import Button from "@mui/material/Button/Button";
 import FormControl from "@mui/material/FormControl/FormControl";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
-import { removePackTC, setPacksTC } from "./packsThunks";
+import {
+  addPackTC,
+  removePackTC,
+  resetFilter,
+  setPacksTC,
+} from "./packsThunks";
 import { packsStateSelect, userStateSelect } from "../../app/selectors";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import SuperRange from "./SuperRange";
 import {
+  initialState,
   setCurrentPage,
   setPackName,
+  setPacks,
   setPacksSort,
   setPageCount,
   setPreferencePacks,
@@ -24,7 +31,6 @@ import {
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
 import { Search } from "../../common/components/Search/Search";
 import PacksTable from "./PacksTable";
-import { useWhatChanged } from "@simbathesailor/use-what-changed";
 
 const Packs = () => {
   const user = useAllSelector(userStateSelect);
@@ -34,8 +40,8 @@ const Packs = () => {
     page,
     pageCount,
     cardPacksTotalCount,
-    maxCardsCount,
-    minCardsCount,
+    max,
+    min,
     isMyPack,
     sortPacks,
   } = useAllSelector(packsStateSelect);
@@ -60,31 +66,25 @@ const Packs = () => {
     if (timer) clearTimeout(timer);
     timer = setTimeout(() => {
       dispatch(setRangeValue({ range: valueRange }));
+      setSearchParams({
+        ...params,
+        min: valueRange[0].toString(),
+        max: valueRange[1].toString(),
+      });
     }, 200);
   };
-  // useWhatChanged([params.page, params.packName, params.pageCount,params.max,params.min,params.isMyPack,params.sortPacks]);
+  let rem = false;
   useEffect(() => {
-    setSearchParams({
-      page: page.toString(),
-      packName: packName,
-      pageCount: pageCount.toString(),
-      max: maxCardsCount.toString(),
-      min: minCardsCount.toString(),
-      isMyPack: isMyPack.toString(),
-      sortPacks: sort.field ? `${sort.direction}${sort.field}` : "0updated",
-    });
-  }, [
-    cardPacks,
-    pageCount,
-    page,
-    isMyPack,
-    sortPacks,
-    minCardsCount,
-    maxCardsCount,
-    packName,
-  ]);
-
-  useEffect(() => {
+    if (rem) {
+      const model = {
+        isMyPack: params.isMyPack,
+        page: params.page,
+        max: params.max,
+        min: params.min,
+      };
+      console.log(model, "rem-true");
+      dispatch(setPacksTC({}, rem));
+    }
     const model = {
       isMyPack: params.isMyPack,
       pageCount: params.showPerPage,
@@ -93,41 +93,63 @@ const Packs = () => {
       min: params.min,
       sortPacks: sort.field ? `${sort.direction}${sort.field}` : "0updated",
     };
-    isParamsSet && dispatch(setPacksTC(model));
+    console.log(model, "rem-false");
+    dispatch(setPacksTC(model, rem));
   }, [searchParams]);
 
   const changePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
     dispatch(setCurrentPage({ page: newPage }));
+    setSearchParams({ ...params, page: newPage + "" });
   };
   const handleChangeRowsPerPage = (event: SelectChangeEvent) => {
     dispatch(setPageCount({ pageCount: +event.target.value }));
+    setSearchParams({ ...params, pageCount: event.target.value });
     // dispatch(setCurrentPage({ page: 1 }));
   };
   const removePack = (id: string) => {
     dispatch(removePackTC(id));
+    setSearchParams({ ...params });
   };
   let timer1: number;
   const setSearch = (value: string) => {
     if (timer1) clearTimeout(timer1);
     timer1 = setTimeout(() => {
       dispatch(setPackName({ packName: value }));
+      setSearchParams({ ...params, packName: value });
     }, 500);
   };
-
+  const addPack = (
+    newPackName: string,
+    newDeckCover: string,
+    isPrivate: boolean
+  ) => {
+    dispatch(addPackTC(newPackName, newDeckCover, isPrivate));
+    setSearchParams({ ...params });
+  };
   const setSortForPacks = (type: string) => {
     dispatch(setPacksSort({ type }));
   };
   const handlerIsMyPack = (param: "my" | "all") => {
     dispatch(setPreferencePacks({ param }));
+    setSearchParams({ ...params, isMyPack: param === "my" ? "true" : "false" });
   };
   const changeSort = async (field: string) => {
     await setSort({ direction: sort.direction === 0 ? 1 : 0, field });
     setSortForPacks((sort.direction + sort.field).toString());
+    setSearchParams((sort.direction + sort.field).toString());
   };
   const showSortIcon = (field: string) => {
     return sort.field === field ? sortIcon : <HorizontalRule />;
   };
   const removeSort = () => {
+    // dispatch(
+    //   setPacks({
+    //     packs: initialState,
+    //     min: initialState.min,
+    //     max: initialState.max,
+    //   })
+    // );
+    rem = true;
     setSearchParams({});
   };
   return (
@@ -173,7 +195,11 @@ const Packs = () => {
               </Button>
             </FormControl>
 
-            <SuperRange onChangeSlider={changeRangeHandler} />
+            <SuperRange
+              max={max}
+              min={min}
+              onChangeSlider={changeRangeHandler}
+            />
             <Button
               variant="contained"
               onClick={() => setAddPackMode((mode) => !mode)}
@@ -193,6 +219,7 @@ const Packs = () => {
         totalPageCount={totalPageCount}
         pageCount={pageCount}
         page={page}
+        addPack={addPack}
         addPackMode={addPackMode}
         setAddPackMode={setAddPackMode}
         changePage={changePage}

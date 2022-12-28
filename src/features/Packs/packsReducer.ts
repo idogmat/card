@@ -10,14 +10,18 @@ interface IInitialState {
   cardPacksTotalCount: number;
   isMyPack: boolean;
   packName: string;
+  max: string | number;
+  min: string | number;
 }
-const initialState: IInitialState | null = {
+export const initialState: IInitialState = {
   cardPacks: [],
   maxCardsCount: 10,
   minCardsCount: 0,
+  max: 15,
+  min: 0,
   page: 1,
   pageCount: 10,
-  sortPacks: "",
+  sortPacks: "0updated",
   cardPacksTotalCount: 10,
   isMyPack: false,
   packName: "",
@@ -28,12 +32,16 @@ const packsSlice = createSlice({
   reducers: {
     setPacks: (
       draft,
-      action: PayloadAction<{ packs: ResponseGetPacks }>
+      action: PayloadAction<{
+        packs: ResponseGetPacks;
+        max: number | string;
+        min: number | string;
+      }>
     ): IInitialState => {
       return {
         ...action.payload.packs,
-        minCardsCount: draft.minCardsCount,
-        maxCardsCount: draft.maxCardsCount,
+        min: +action.payload.min,
+        max: +action.payload.max,
         isMyPack: draft.isMyPack,
         packName: draft.packName,
       };
@@ -42,8 +50,8 @@ const packsSlice = createSlice({
       draft.page = action.payload.page;
     },
     setRangeValue: (draft, action: PayloadAction<{ range: number[] }>) => {
-      draft.minCardsCount = action.payload.range[0];
-      draft.maxCardsCount = action.payload.range[1];
+      draft.min = action.payload.range[0];
+      draft.max = action.payload.range[1];
     },
     setPageCount: (draft, action: PayloadAction<{ pageCount: number }>) => {
       draft.pageCount = action.payload.pageCount;

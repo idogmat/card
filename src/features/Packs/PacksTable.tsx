@@ -42,6 +42,7 @@ interface ITableProps {
   page: number;
   addPackMode: boolean;
   setAddPackMode: (set: boolean) => void;
+  addPack: (s: string, d: string, b: boolean) => void;
   changeSort: (field: string) => void;
   showSortIcon: (field: string) => ReactNode;
   removePack: (id: string) => void;
@@ -49,6 +50,7 @@ interface ITableProps {
   changePage: (event: React.ChangeEvent<unknown>, newPage: number) => void;
 }
 const PacksTable: React.FC<ITableProps> = ({
+  addPack,
   id,
   changeSort,
   removePack,
@@ -97,7 +99,9 @@ const PacksTable: React.FC<ITableProps> = ({
           />
         </Box>
       </Paper>
-      {!addPackMode && <AddNewPack setAddPackMode={setAddPackMode} />}
+      {!addPackMode && (
+        <AddNewPack addPack={addPack} setAddPackMode={setAddPackMode} />
+      )}
     </>
   );
 };
