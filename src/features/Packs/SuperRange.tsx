@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Slider, SliderProps } from "@mui/material";
 
 interface ISuperRangeProps {
@@ -20,6 +20,7 @@ const SuperRange: React.FC<ISuperRangeProps> = ({
   useEffect(() => {
     setRange([Number(min), Number(max)]);
   }, [min, max]);
+
   return (
     <Box style={{ margin: "auto 0" }} sx={{ width: 200 }}>
       <Slider
