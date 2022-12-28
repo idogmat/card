@@ -1,13 +1,9 @@
 import { AppThunkActionType } from "../../common/hooks/useAllSelector";
 import { PacksAPI } from "./packsAPI";
-import {
-  initialState,
-  setPacks,
-  setPreferencePacks,
-  setRangeValue,
-} from "./packsReducer";
+import { initialState, setPacks } from "./packsReducer";
 import { AppAC } from "../../app/appReducer";
 import { defaultErrorMessage } from "../../common/utils/errorHandlers";
+
 interface IGetModel {
   page: string | number;
   packName: string;
@@ -35,8 +31,8 @@ export const setPacksTC = (
           dispatch(
             setPacks({
               packs: res.data,
-              min: model.min || min,
-              max: model.max || max,
+              min: initialState.min,
+              max: initialState.max,
             })
           );
         });
@@ -101,25 +97,6 @@ export const addPackTC = (
           dispatch(AppAC.setError({ error: defaultErrorMessage }));
         }
       });
-    } catch {
-      dispatch(AppAC.setError({ error: defaultErrorMessage }));
-    } finally {
-      dispatch(AppAC.setIsLoading({ isLoading: false }));
-    }
-  };
-};
-export const resetFilter = (): AppThunkActionType => {
-  return async (dispatch, getState) => {
-    dispatch(AppAC.setIsLoading({ isLoading: true }));
-    try {
-      dispatch(
-        setPacks({
-          packs: initialState,
-          min: initialState.min,
-          max: initialState.max,
-        })
-      );
-      dispatch(AppAC.setSuccessMessage({ message: "Successfully updated" }));
     } catch {
       dispatch(AppAC.setError({ error: defaultErrorMessage }));
     } finally {

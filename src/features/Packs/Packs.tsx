@@ -3,20 +3,13 @@ import { Box, Container, Toolbar } from "@mui/material";
 import Button from "@mui/material/Button/Button";
 import FormControl from "@mui/material/FormControl/FormControl";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
-import {
-  addPackTC,
-  removePackTC,
-  resetFilter,
-  setPacksTC,
-} from "./packsThunks";
+import { addPackTC, removePackTC, setPacksTC } from "./packsThunks";
 import { packsStateSelect, userStateSelect } from "../../app/selectors";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import SuperRange from "./SuperRange";
 import {
-  initialState,
   setCurrentPage,
   setPackName,
-  setPacks,
   setPacksSort,
   setPageCount,
   setPreferencePacks,
@@ -51,6 +44,7 @@ const Packs = () => {
 
   const [sort, setSort] = useState({ direction: 0, field: "updated" });
   const [addPackMode, setAddPackMode] = useState(false);
+  const [rem, setrem] = useState(false);
   const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
   const isAsc = sort.direction === 1;
   const isParamsSet = Object.keys(params).length > 0;
@@ -73,7 +67,6 @@ const Packs = () => {
       });
     }, 200);
   };
-  let rem = false;
   useEffect(() => {
     if (rem) {
       const model = {
@@ -84,18 +77,19 @@ const Packs = () => {
       };
       console.log(model, "rem-true");
       dispatch(setPacksTC({}, rem));
+    } else {
+      const model = {
+        isMyPack: params.isMyPack,
+        pageCount: params.showPerPage,
+        page: params.page,
+        max: params.max,
+        min: params.min,
+        sortPacks: sort.field ? `${sort.direction}${sort.field}` : "0updated",
+      };
+      console.log(model, "rem-false");
+      dispatch(setPacksTC(model, rem));
     }
-    const model = {
-      isMyPack: params.isMyPack,
-      pageCount: params.showPerPage,
-      page: params.page,
-      max: params.max,
-      min: params.min,
-      sortPacks: sort.field ? `${sort.direction}${sort.field}` : "0updated",
-    };
-    console.log(model, "rem-false");
-    dispatch(setPacksTC(model, rem));
-  }, [searchParams]);
+  }, [searchParams, rem]);
 
   const changePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
     dispatch(setCurrentPage({ page: newPage }));
@@ -142,14 +136,7 @@ const Packs = () => {
     return sort.field === field ? sortIcon : <HorizontalRule />;
   };
   const removeSort = () => {
-    // dispatch(
-    //   setPacks({
-    //     packs: initialState,
-    //     min: initialState.min,
-    //     max: initialState.max,
-    //   })
-    // );
-    rem = true;
+    setrem(true);
     setSearchParams({});
   };
   return (
