@@ -73,17 +73,11 @@ const Packs = () => {
       });
     }, 200);
   };
-  let rem = false;
   useEffect(() => {
-    if (rem) {
-      const model = {
-        isMyPack: params.isMyPack,
-        page: params.page,
-        max: params.max,
-        min: params.min,
-      };
-      console.log(model, "rem-true");
-      dispatch(setPacksTC({}, rem));
+    if (!isParamsSet) {
+      console.log("dispatch clear model");
+      dispatch(setPacksTC({}));
+      return;
     }
     const model = {
       isMyPack: params.isMyPack,
@@ -93,8 +87,7 @@ const Packs = () => {
       min: params.min,
       sortPacks: sort.field ? `${sort.direction}${sort.field}` : "0updated",
     };
-    console.log(model, "rem-false");
-    dispatch(setPacksTC(model, rem));
+    dispatch(setPacksTC(model));
   }, [searchParams]);
 
   const changePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
@@ -142,14 +135,6 @@ const Packs = () => {
     return sort.field === field ? sortIcon : <HorizontalRule />;
   };
   const removeSort = () => {
-    // dispatch(
-    //   setPacks({
-    //     packs: initialState,
-    //     min: initialState.min,
-    //     max: initialState.max,
-    //   })
-    // );
-    rem = true;
     setSearchParams({});
   };
   return (
@@ -172,7 +157,7 @@ const Packs = () => {
               padding: "0",
             }}
           >
-            <Search onChangeCb={setSearch} />
+            {/*<Search onChangeCb={setSearch} />*/}
             <FormControl
               style={{
                 display: "flex",
