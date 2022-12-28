@@ -1,17 +1,40 @@
 import React, { useState } from "react";
-import { AppBar, Box, Container, List, Typography } from "@mui/material";
+import {
+  AppBar,
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Menu,
+  Typography,
+} from "@mui/material";
 import { useAllSelector } from "../../hooks";
 import { authStateSelector } from "../../../features/Auth/selectors";
 import { HeaderLink } from "./HeaderLink";
 import logo from "../../../assets/img/logo.svg";
-import { authRoutes, IRoute, unAuthRoutes } from "../../routes";
+import { authRoutes, unAuthRoutes } from "../../routes";
 import { getRouteName } from "../../utils";
-
+import { userStateSelector } from "../../../features/User/selectors";
+import { lime } from "@mui/material/colors";
+import { pageIcons } from "./Header.data";
 export const Header = () => {
   const { isAuth } = useAllSelector(authStateSelector);
+  const user = useAllSelector(userStateSelector);
 
   const unAuthPages = getRouteName(unAuthRoutes);
   const authPages = getRouteName(authRoutes);
+
+  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
+
+  const isMenuOpen = !!menuAnchor;
+
+  const openMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setMenuAnchor(e.currentTarget);
+  };
+
+  const closeMenu = () => {
+    setMenuAnchor(null);
+  };
 
   return (
     <AppBar
@@ -41,19 +64,59 @@ export const Header = () => {
           }}
         >
           <img src={logo} alt="IT-Incubator" />
-          <List
-            sx={{
-              display: "flex",
-              gap: "10px",
-              justifyContent: "center",
-            }}
-          >
-            {isAuth
-              ? authPages.map((page) => <HeaderLink page={page} key={page} />)
-              : unAuthPages.map((page) => (
-                  <HeaderLink page={page} key={page} />
-                ))}
-          </List>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <Button
+              onClick={openMenu}
+              sx={{
+                color: "#000",
+                display: "flex",
+                gap: 1,
+                alignItems: "center",
+              }}
+            >
+              <Typography>{user.name}</Typography>
+              <Avatar
+                sx={{ bgcolor: lime[600] }}
+                alt={user.name}
+                src={user.avatar ? user.avatar : undefined}
+              >
+                {/*{user.name[0]}*/}
+              </Avatar>
+            </Button>
+            <Menu
+              open={isMenuOpen}
+              onClose={closeMenu}
+              anchorEl={menuAnchor}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              sx={{
+                "& .menu-text-icon": {
+                  display: "flex",
+                  gap: 1,
+                  alignItems: "center",
+                },
+              }}
+            >
+              {isAuth ? (
+                <div>
+                  {authPages.map((page) => (
+                    <HeaderLink page={page} key={page} icon={pageIcons[page]} />
+                  ))}
+                  <HeaderLink page={"logout"} icon={pageIcons["logout"]} />
+                </div>
+              ) : (
+                unAuthPages.map((page) => (
+                  <HeaderLink icon={pageIcons[page]} page={page} key={page} />
+                ))
+              )}
+            </Menu>
+          </Box>
         </Box>
       </Container>
     </AppBar>

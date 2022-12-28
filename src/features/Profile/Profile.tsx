@@ -19,13 +19,13 @@ import { updateUserInfoTC } from "./profileThunks";
 import { appStateSelect } from "../../app/selectors";
 import styles from "../../common/styles/common.module.css";
 import { Preloader } from "../../common/components/Preloader/Preloader";
+import { avatarPlaceholder } from "../../common/utils/assets";
+import { lime } from "@mui/material/colors";
 
 export const Profile = () => {
   const dispatch = useAppDispatch();
   const user = useAllSelector(userStateSelector);
   const { isLoading } = useAllSelector(appStateSelect);
-  const avatarPlaceholder =
-    "https://i0.wp.com/boingboing.net/wp-content/uploads/2020/06/IMG_20200602_082003_707.jpg?fit=1&resize=620%2C4000&ssl=1";
 
   const handleLogout = () => {
     dispatch(logOutTC());
@@ -40,7 +40,7 @@ export const Profile = () => {
   return (
     <Grid
       container
-      sx={{ height: "100%" }}
+      sx={{ height: "100vh" }}
       justifyContent={"center"}
       alignItems={"center"}
     >
@@ -92,10 +92,14 @@ export const Profile = () => {
                     width: "100px",
                     height: "100px",
                     borderRadius: "50%",
+                    bgcolor: lime[400],
                   }}
                   alt={"ProfilePicture"}
-                  src={user.avatar ? user.avatar : avatarPlaceholder}
-                />
+
+                  // src={user.avatar ? user.avatar : avatarPlaceholder}
+                >
+                  {user.name[0]}
+                </Avatar>
               </Badge>
             </Box>
             <EditableText

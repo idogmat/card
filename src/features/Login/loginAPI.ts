@@ -12,6 +12,10 @@ export interface IRecoveryRequest {
   from: string;
   message: string;
 }
+export interface ISetPWD {
+  password: string;
+  resetPasswordToken: string;
+}
 
 const login = (user: IUserFields) => {
   return instance.post<LoginUserType>("auth/login", user);

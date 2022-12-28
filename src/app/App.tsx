@@ -7,6 +7,7 @@ import { useAllSelector, useAppDispatch } from "../common/hooks";
 import { appStateSelect } from "./selectors";
 import { Preloader } from "../common/components/Preloader/Preloader";
 import { Notifications } from "../common/components/Notifications/Notifications";
+import {Container} from "@mui/material";
 
 function App() {
   const { isInit } = useAllSelector(appStateSelect);
@@ -20,7 +21,9 @@ function App() {
     <div className={styles.wrapper}>
       <Header />
       <main className={styles.page}>
-        <AppRouter />
+         <Container maxWidth='lg'>
+            <AppRouter />
+         </Container>
         <Notifications />
       </main>
     </div>

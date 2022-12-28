@@ -68,7 +68,7 @@ export const Register = () => {
       justifyContent={"center"}
       alignContent={"center"}
       sx={{
-        height: "100%",
+        height: "100vh",
         ["@media (max-width: 768px)"]: {
           paddingTop: "400px",
           paddingBottom: "5vh",
