@@ -47,6 +47,7 @@ const Packs = () => {
   const [addPackMode, setAddPackMode] = useState(false);
   const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
   const isAsc = sort.direction === 1;
+  const isParamsSet = Object.keys(params).length > 0;
   const sortIcon = isAsc ? (
     <ArrowDropDown style={{ margin: "-5px 0px" }} />
   ) : (
@@ -81,7 +82,6 @@ const Packs = () => {
     minCardsCount,
     maxCardsCount,
     packName,
-    setSearchParams,
   ]);
 
   useEffect(() => {
@@ -93,7 +93,7 @@ const Packs = () => {
       min: params.min,
       sortPacks: sort.field ? `${sort.direction}${sort.field}` : "0updated",
     };
-    dispatch(setPacksTC(model));
+    isParamsSet && dispatch(setPacksTC(model));
   }, [searchParams]);
 
   const changePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
