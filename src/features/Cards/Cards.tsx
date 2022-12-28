@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import React, { useCallback, useEffect, useState } from "react";
+import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import { BackTo } from "../../common/components/BackTo/BackTo";
-import { Box, SelectChangeEvent } from "@mui/material";
+import { Box, debounce, SelectChangeEvent } from "@mui/material";
 import { deleteCardTC, getCardsTC, updateCardTC } from "./cardsThunks";
 import { IGetCardsRequest } from "./cardsAPI";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
@@ -17,51 +17,66 @@ import { TablePagination } from "./TablePagination";
 import { NotFoundElements } from "../../common/components/NotFoundElements/NotFoundElements";
 import { selectOptions } from "./Cards.data";
 
+export interface IFieldSort {
+  direction: number;
+  field: string;
+}
+
 export const Cards = () => {
-  const { packID } = useParams();
+  // Selectors
   const dispatch = useAppDispatch();
   const user = useAllSelector(userStateSelector);
   const { isLoading } = useAllSelector(appStateSelect);
   const { cards, packUserId, cardsTotalCount, page, pageCount } =
     useAllSelector(cardsStateSelector);
+
+  // Url & Query
+  const { packID } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { state } = useLocation();
+  const previousURL = state ? state.previousURL : null;
+  const packName = state ? state.packName : null;
+  const params = Object.fromEntries(searchParams);
 
-  const [searchRequest, setSearchRequest] = useState("");
-  const [sort, setSort] = useState({ direction: 0, field: "updated" });
+  // Local states
+  const [searchRequest, setSearchRequest] = useState(params.search || "");
+  const [sort, setSort] = useState<IFieldSort>({
+    direction: 0,
+    field: "updated",
+  });
 
+  // Utils
   const isPackMine = user._id === packUserId;
   const totalPages = Math.ceil(cardsTotalCount / +pageCount);
-  const params = Object.fromEntries(searchParams);
-  const isParamsSet = Object.keys(params).length > 0;
-
   useEffect(() => {
-    setSearchParams({
-      currentPage: page.toString(),
-      showPerPage: pageCount.toString(),
-      search: searchRequest,
-      sortCards: sort.field ? `${sort.direction}${sort.field}` : "0updated",
+    const isPageCountValid = selectOptions.some((option) => {
+      return option.value === +params.showPerPage;
     });
-  }, []);
-
-  useEffect(() => {
     const model = {
       cardsPack_id: packID,
-      pageCount: params.showPerPage || pageCount,
+      pageCount: isPageCountValid ? params.showPerPage : pageCount,
       page: params.currentPage || page,
       cardQuestion: params.search || searchRequest,
       sortCards: sort.field ? `${sort.direction}${sort.field}` : "0updated",
     } as IGetCardsRequest;
-    isParamsSet && dispatch(getCardsTC(model));
-  }, [params.showPerPage, params.currentPage, params.search]);
+    dispatch(getCardsTC(model));
+  }, [searchParams]);
 
   const changeShowPerPage = (event: SelectChangeEvent) => {
     const rowsPerPage = +event.target.value;
     const existingPages = cardsTotalCount / rowsPerPage;
-    if (Math.ceil(existingPages) < totalPages) {
-      dispatch(CardsAC.setPage({ page: Math.floor(existingPages) }));
+    const lastPage = Math.ceil(existingPages);
+    if (lastPage < totalPages && page >= lastPage) {
+      dispatch(CardsAC.setPage({ page: lastPage }));
+      setSearchParams({
+        ...params,
+        currentPage: lastPage.toString(),
+        showPerPage: rowsPerPage.toString(),
+      });
+    } else {
+      setSearchParams({ ...params, showPerPage: rowsPerPage.toString() });
     }
     dispatch(CardsAC.setPageCount({ showPerPage: rowsPerPage }));
-    setSearchParams({ ...params, showPerPage: rowsPerPage.toString() });
   };
 
   const changePageHandler = (
@@ -82,8 +97,24 @@ export const Cards = () => {
     dispatch(updateCardTC(packID ? packID : "", model));
   };
 
+  const setSearchRequestToQuery = useCallback(
+    debounce((value: string) => {
+      setSearchParams({ ...params, search: value });
+    }, 200),
+    []
+  );
+
   const changeSearchRequestHandler = (value: string) => {
-    setSearchParams({ ...params, search: value });
+    setSearchRequest(value);
+    setSearchRequestToQuery(value);
+  };
+
+  const handleChangeSort = (value: IFieldSort) => {
+    setSort(value);
+    setSearchParams({
+      ...params,
+      sortCards: `${value.direction}${value.field}`,
+    });
   };
 
   return (
@@ -102,12 +133,14 @@ export const Cards = () => {
           </div>
         )}
         <Box sx={{ marginBottom: 5 }}>
-          <BackTo title={"Back to packs"} route={""} />
+          <BackTo title={"Back to packs"} route={previousURL} />
         </Box>
         <CardsHeader
           isPackMine={isPackMine}
           packID={packID ? packID : ""}
           setSearchRequest={changeSearchRequestHandler}
+          packName={packName}
+          searchValue={searchRequest}
         />
         {cards.length > 0 ? (
           <>
@@ -118,7 +151,7 @@ export const Cards = () => {
                 deleteCardHandler={deleteCardHandler}
                 updateCardHandler={updateCardHandler}
                 sort={sort}
-                setSort={setSort}
+                setSort={handleChangeSort}
               />
             </Box>
             <TablePagination
