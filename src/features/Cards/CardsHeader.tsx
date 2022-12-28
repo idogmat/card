@@ -18,12 +18,14 @@ interface ICardsHeaderProps {
   packID: string;
   isPackMine: boolean;
   setSearchRequest: (value: string) => void;
+  packName: string;
 }
 
 const CardsHeader: FC<ICardsHeaderProps> = ({
   packID,
   isPackMine,
   setSearchRequest,
+  packName,
 }) => {
   const dispatch = useAppDispatch();
 
@@ -73,7 +75,7 @@ const CardsHeader: FC<ICardsHeaderProps> = ({
           component={"h3"}
           sx={{ display: "flex", alignItems: "center" }}
         >
-          Name placeholder
+          {packName ? packName : Name Placeholder}
           {isPackMine && (
             <>
               <IconButton onClick={openMenu}>

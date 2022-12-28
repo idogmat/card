@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import { BackTo } from "../../common/components/BackTo/BackTo";
 import { Box, SelectChangeEvent } from "@mui/material";
 import { deleteCardTC, getCardsTC, updateCardTC } from "./cardsThunks";
@@ -30,6 +30,9 @@ export const Cards = () => {
   const { cards, packUserId, cardsTotalCount, page, pageCount } =
     useAllSelector(cardsStateSelector);
   const [searchParams, setSearchParams] = useSearchParams();
+  const { state } = useLocation();
+  const previousURL = state ? state.previousURL : null;
+  const packName = state ? state.packName : null;
 
   const [searchRequest, setSearchRequest] = useState("");
   const [sort, setSort] = useState<IFieldSort>({
@@ -49,7 +52,6 @@ export const Cards = () => {
       cardQuestion: params.search || searchRequest,
       sortCards: sort.field ? `${sort.direction}${sort.field}` : "0updated",
     } as IGetCardsRequest;
-    console.log("in effect", params.currentPage);
     dispatch(getCardsTC(model));
   }, [searchParams]);
 
@@ -116,12 +118,13 @@ export const Cards = () => {
           </div>
         )}
         <Box sx={{ marginBottom: 5 }}>
-          <BackTo title={"Back to packs"} route={""} />
+          <BackTo title={"Back to packs"} route={previousURL} />
         </Box>
         <CardsHeader
           isPackMine={isPackMine}
           packID={packID ? packID : ""}
           setSearchRequest={changeSearchRequestHandler}
+          packName={packName}
         />
         {cards.length > 0 ? (
           <>

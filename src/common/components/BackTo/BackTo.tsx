@@ -12,7 +12,7 @@ export const BackTo: FC<IBackToProps> = ({ title, route }) => {
   const navigate = useNavigate();
 
   const onClickHandler = () => {
-    navigate(-2);
+    navigate(route);
   };
 
   return (
