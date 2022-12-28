@@ -11,7 +11,6 @@ import { defaultErrorMessage } from "../../common/utils/errorHandlers";
 
 export const getCardsTC = (model: IGetCardsRequest): AppThunkActionType => {
   return async (dispatch) => {
-    console.log("IN GET CARDS THUNK");
     try {
       dispatch(AppAC.setIsLoading({ isLoading: true }));
       const { data } = await cardsAPI.getCardsRequest(model);

@@ -17,6 +17,11 @@ import { TablePagination } from "./TablePagination";
 import { NotFoundElements } from "../../common/components/NotFoundElements/NotFoundElements";
 import { selectOptions } from "./Cards.data";
 
+export interface IFieldSort {
+  direction: number;
+  field: string;
+}
+
 export const Cards = () => {
   const { packID } = useParams();
   const dispatch = useAppDispatch();
@@ -27,21 +32,14 @@ export const Cards = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [searchRequest, setSearchRequest] = useState("");
-  const [sort, setSort] = useState({ direction: 0, field: "updated" });
+  const [sort, setSort] = useState<IFieldSort>({
+    direction: 0,
+    field: "updated",
+  });
 
   const isPackMine = user._id === packUserId;
   const totalPages = Math.ceil(cardsTotalCount / +pageCount);
   const params = Object.fromEntries(searchParams);
-  const isParamsSet = Object.keys(params).length > 0;
-
-  useEffect(() => {
-    setSearchParams({
-      currentPage: page.toString(),
-      showPerPage: pageCount.toString(),
-      search: searchRequest,
-      sortCards: sort.field ? `${sort.direction}${sort.field}` : "0updated",
-    });
-  }, []);
 
   useEffect(() => {
     const model = {
@@ -51,17 +49,25 @@ export const Cards = () => {
       cardQuestion: params.search || searchRequest,
       sortCards: sort.field ? `${sort.direction}${sort.field}` : "0updated",
     } as IGetCardsRequest;
-    isParamsSet && dispatch(getCardsTC(model));
-  }, [params.showPerPage, params.currentPage, params.search]);
+    console.log("in effect", params.currentPage);
+    dispatch(getCardsTC(model));
+  }, [searchParams]);
 
   const changeShowPerPage = (event: SelectChangeEvent) => {
     const rowsPerPage = +event.target.value;
     const existingPages = cardsTotalCount / rowsPerPage;
-    if (Math.ceil(existingPages) < totalPages) {
-      dispatch(CardsAC.setPage({ page: Math.floor(existingPages) }));
+    const lastPage = Math.ceil(existingPages);
+    if (lastPage < totalPages) {
+      dispatch(CardsAC.setPage({ page: lastPage }));
+      setSearchParams({
+        ...params,
+        currentPage: lastPage.toString(),
+        showPerPage: rowsPerPage.toString(),
+      });
+    } else {
+      setSearchParams({ ...params, showPerPage: rowsPerPage.toString() });
     }
     dispatch(CardsAC.setPageCount({ showPerPage: rowsPerPage }));
-    setSearchParams({ ...params, showPerPage: rowsPerPage.toString() });
   };
 
   const changePageHandler = (
@@ -84,6 +90,14 @@ export const Cards = () => {
 
   const changeSearchRequestHandler = (value: string) => {
     setSearchParams({ ...params, search: value });
+  };
+
+  const handleChangeSort = (value: IFieldSort) => {
+    setSort(value);
+    setSearchParams({
+      ...params,
+      sortCards: `${value.direction}${value.field}`,
+    });
   };
 
   return (
@@ -118,7 +132,7 @@ export const Cards = () => {
                 deleteCardHandler={deleteCardHandler}
                 updateCardHandler={updateCardHandler}
                 sort={sort}
-                setSort={setSort}
+                setSort={handleChangeSort}
               />
             </Box>
             <TablePagination

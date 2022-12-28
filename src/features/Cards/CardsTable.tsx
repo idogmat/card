@@ -15,11 +15,7 @@ import {
 } from "@mui/icons-material";
 import { ICard } from "../../common/models";
 import { CardsTableRow } from "./CardsTableRow";
-
-interface ICardsSort {
-  direction: number;
-  field: string;
-}
+import { IFieldSort } from "./Cards";
 
 interface ICardsTableProps {
   cards: ICard[];
@@ -27,7 +23,7 @@ interface ICardsTableProps {
   sort: { direction: number; field: string };
   deleteCardHandler: (cardID: string) => void;
   updateCardHandler: (cardID: string) => void;
-  setSort: (value: ICardsSort) => void;
+  setSort: (value: IFieldSort) => void;
 }
 
 export const CardsTable: FC<ICardsTableProps> = ({
