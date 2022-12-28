@@ -1,0 +1,16 @@
+
+.sliderInput input::-webkit-outer-spin-button,
+.sliderInput input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+.sliderInput input[type=number] {
+    -moz-appearance: textfield;
+}
+.sliderInput input{
+    margin: auto;
+    padding: 0 10px;
+
+}

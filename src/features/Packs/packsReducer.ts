@@ -20,7 +20,7 @@ export const initialState: IInitialState = {
   max: 15,
   min: 0,
   page: 1,
-  pageCount: 10,
+  pageCount: 4,
   sortPacks: "0updated",
   cardPacksTotalCount: 10,
   isMyPack: false,
@@ -36,6 +36,7 @@ const packsSlice = createSlice({
         packs: ResponseGetPacks;
         max: number | string;
         min: number | string;
+        packName: string;
       }>
     ): IInitialState => {
       return {
@@ -43,7 +44,7 @@ const packsSlice = createSlice({
         min: +action.payload.min,
         max: +action.payload.max,
         isMyPack: draft.isMyPack,
-        packName: draft.packName,
+        packName: action.payload.packName,
       };
     },
     setCurrentPage: (draft, action: PayloadAction<{ page: number }>) => {

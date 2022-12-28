@@ -1,13 +1,9 @@
 import { AppThunkActionType } from "../../common/hooks/useAllSelector";
 import { PacksAPI } from "./packsAPI";
-import {
-  initialState,
-  setPacks,
-  setPreferencePacks,
-  setRangeValue,
-} from "./packsReducer";
+import { initialState, setPacks } from "./packsReducer";
 import { AppAC } from "../../app/appReducer";
 import { defaultErrorMessage } from "../../common/utils/errorHandlers";
+
 interface IGetModel {
   page: string | number;
   packName: string;
@@ -27,7 +23,7 @@ export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
       if (Object.keys(model).length === 0) {
         console.log("CLEAR MODEL");
         PacksAPI.getPacks({}).then(({ data }) => {
-          dispatch(setPacks({ packs: data, min: 0, max: 15 }));
+          dispatch(setPacks({ packs: data, min: 0, max: 15, packName: "" }));
         });
         return;
       }
@@ -37,8 +33,8 @@ export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
         packName: model.packName || packName,
         pageCount: model.pageCount || pageCount,
         page: model.page || page,
-        min: model.min || max,
-        max: model.max || min,
+        min: model.min || min,
+        max: model.max || max,
         sortPacks: !!model?.sortPacks ? model.sortPacks : sortPacks,
       }).then((res) => {
         console.log("SETTING VALUES");
@@ -47,6 +43,7 @@ export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
             packs: res.data,
             min: model.min || min,
             max: model.max || max,
+            packName: packName,
           })
         );
       });
@@ -104,6 +101,7 @@ export const resetFilter = (): AppThunkActionType => {
           packs: initialState,
           min: initialState.min,
           max: initialState.max,
+          packName: initialState.packName,
         })
       );
       dispatch(AppAC.setSuccessMessage({ message: "Successfully updated" }));

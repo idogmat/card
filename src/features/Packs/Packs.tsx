@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Box, Container, Toolbar } from "@mui/material";
+import React, { useCallback, useEffect, useState } from "react";
+import { Box, Container, debounce, Toolbar } from "@mui/material";
 import Button from "@mui/material/Button/Button";
 import FormControl from "@mui/material/FormControl/FormControl";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
@@ -31,6 +31,7 @@ import {
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
 import { Search } from "../../common/components/Search/Search";
 import PacksTable from "./PacksTable";
+import PacksHeader from "./PacksHeader";
 
 const Packs = () => {
   const user = useAllSelector(userStateSelect);
@@ -50,7 +51,7 @@ const Packs = () => {
   const params = Object.fromEntries(searchParams);
 
   const [sort, setSort] = useState({ direction: 0, field: "updated" });
-  const [addPackMode, setAddPackMode] = useState(false);
+  const [addPackMode, setAddPackMode] = useState<boolean>(false);
   const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
   const isAsc = sort.direction === 1;
   const isParamsSet = Object.keys(params).length > 0;
@@ -61,17 +62,19 @@ const Packs = () => {
   );
   const dispatch = useAppDispatch();
 
-  let timer: number;
-  const changeRangeHandler = (valueRange: number[]) => {
-    if (timer) clearTimeout(timer);
-    timer = setTimeout(() => {
-      dispatch(setRangeValue({ range: valueRange }));
+  const changeRangeQueryParams = useCallback(
+    debounce((valueRange: number[]) => {
       setSearchParams({
         ...params,
         min: valueRange[0].toString(),
         max: valueRange[1].toString(),
       });
-    }, 200);
+    }, 500),
+    []
+  );
+  const changeRangeHandler = (valueRange: number[]) => {
+    changeRangeQueryParams(valueRange);
+    dispatch(setRangeValue({ range: valueRange }));
   };
   useEffect(() => {
     if (!isParamsSet) {
@@ -85,6 +88,7 @@ const Packs = () => {
       page: params.page,
       max: params.max,
       min: params.min,
+      packName: params.packName,
       sortPacks: sort.field ? `${sort.direction}${sort.field}` : "0updated",
     };
     dispatch(setPacksTC(model));
@@ -103,13 +107,16 @@ const Packs = () => {
     dispatch(removePackTC(id));
     setSearchParams({ ...params });
   };
-  let timer1: number;
-  const setSearch = (value: string) => {
-    if (timer1) clearTimeout(timer1);
-    timer1 = setTimeout(() => {
-      dispatch(setPackName({ packName: value }));
+  const setSearchQueryParams = useCallback(
+    debounce((value: string) => {
       setSearchParams({ ...params, packName: value });
-    }, 500);
+    }, 500),
+    []
+  );
+
+  const changeSearchHandler = (value: string) => {
+    setSearchQueryParams(value);
+    dispatch(setPackName({ packName: value }));
   };
   const addPack = (
     newPackName: string,
@@ -135,68 +142,26 @@ const Packs = () => {
     return sort.field === field ? sortIcon : <HorizontalRule />;
   };
   const removeSort = () => {
+    // dispatch(resetFilter());
     setSearchParams({});
   };
   return (
     <Box
       style={{ padding: "6rem 2rem", display: "flex", flexDirection: "column" }}
     >
-      <Box sx={{ flexGrow: 1 }}>
-        <Toolbar
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            padding: "0",
-          }}
-        >
-          <Container
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              padding: "0",
-            }}
-          >
-            {/*<Search onChangeCb={setSearch} />*/}
-            <FormControl
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                margin: "auto 1rem",
-              }}
-            >
-              <Button
-                style={{ margin: "auto 1rem" }}
-                variant={isMyPack ? "contained" : "outlined"}
-                onClick={() => handlerIsMyPack("my")}
-              >
-                My
-              </Button>
-              <Button
-                variant={!isMyPack ? "contained" : "outlined"}
-                onClick={() => handlerIsMyPack("all")}
-              >
-                All
-              </Button>
-            </FormControl>
-
-            <SuperRange
-              max={max}
-              min={min}
-              onChangeSlider={changeRangeHandler}
-            />
-            <Button
-              variant="contained"
-              onClick={() => setAddPackMode((mode) => !mode)}
-            >
-              Add new Pack
-            </Button>
-            <Button onClick={() => removeSort()} style={{ margin: "auto 0" }}>
-              <DeleteForeverIcon />
-            </Button>
-          </Container>
-        </Toolbar>
-      </Box>
+      <PacksHeader
+        removeSort={removeSort}
+        setAddPackMode={setAddPackMode}
+        changeRangeHandler={changeRangeHandler}
+        packName={packName}
+        changeSearchHandler={changeSearchHandler}
+        isMyPack={isMyPack}
+        max={max}
+        min={min}
+        addPackMode={addPackMode}
+        cardPacksTotalCount={cardPacksTotalCount}
+        handlerIsMyPack={handlerIsMyPack}
+      />
       {/*TABLE*/}
       <PacksTable
         id={user._id}
