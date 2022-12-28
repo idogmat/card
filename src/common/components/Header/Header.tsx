@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   Avatar,
@@ -16,18 +16,7 @@ import { authRoutes, unAuthRoutes } from "../../routes";
 import { getRouteName } from "../../utils";
 import { userStateSelector } from "../../../features/User/selectors";
 import { lime } from "@mui/material/colors";
-import {
-  Inventory,
-  LockOpen,
-  Login,
-  Logout,
-  Person4,
-} from "@mui/icons-material";
-
-interface IPageIcons {
-  [key: string]: ReactElement;
-}
-
+import { pageIcons } from "./Header.data";
 export const Header = () => {
   const { isAuth } = useAllSelector(authStateSelector);
   const user = useAllSelector(userStateSelector);
@@ -35,15 +24,9 @@ export const Header = () => {
   const unAuthPages = getRouteName(unAuthRoutes);
   const authPages = getRouteName(authRoutes);
 
-  const pageIcons: IPageIcons = {
-    profile: <Person4 />,
-    packs: <Inventory />,
-    login: <Login />,
-    register: <LockOpen />,
-    logout: <Logout />,
-  };
-
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
+
+  const isMenuOpen = !!menuAnchor;
 
   const openMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
     setMenuAnchor(e.currentTarget);
@@ -52,8 +35,6 @@ export const Header = () => {
   const closeMenu = () => {
     setMenuAnchor(null);
   };
-
-  const isMenuOpen = !!menuAnchor;
 
   return (
     <AppBar

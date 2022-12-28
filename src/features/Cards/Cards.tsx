@@ -13,9 +13,9 @@ import { appStateSelect } from "../../app/selectors";
 import { Preloader } from "../../common/components/Preloader/Preloader";
 import styles from "../../common/styles/common.module.css";
 import CardsHeader from "./CardsHeader";
-import { ITablePaginationOption, TablePagination } from "./TablePagination";
+import { TablePagination } from "./TablePagination";
 import { NotFoundElements } from "../../common/components/NotFoundElements/NotFoundElements";
-import { useWhatChanged } from "@simbathesailor/use-what-changed";
+import { selectOptions } from "./Cards.data";
 
 export const Cards = () => {
   const { packID } = useParams();
@@ -32,11 +32,7 @@ export const Cards = () => {
   const isPackMine = user._id === packUserId;
   const totalPages = Math.ceil(cardsTotalCount / +pageCount);
   const params = Object.fromEntries(searchParams);
-  const selectOptions: ITablePaginationOption[] = [
-    { title: 4, value: 4 },
-    { title: 7, value: 7 },
-    { title: 10, value: 10 },
-  ];
+  const isParamsSet = Object.keys(params).length > 0;
 
   useEffect(() => {
     setSearchParams({
@@ -47,9 +43,7 @@ export const Cards = () => {
     });
   }, []);
 
-  useWhatChanged([params.showPerPage, params.currentPage, params.search]);
   useEffect(() => {
-    const isParamsSet = Object.keys(params).length > 0;
     const model = {
       cardsPack_id: packID,
       pageCount: params.showPerPage || pageCount,
@@ -108,7 +102,7 @@ export const Cards = () => {
           </div>
         )}
         <Box sx={{ marginBottom: 5 }}>
-          <BackTo title={"Back to packs"} route={"/packs"} />
+          <BackTo title={"Back to packs"} route={""} />
         </Box>
         <CardsHeader
           isPackMine={isPackMine}
