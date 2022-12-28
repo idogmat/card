@@ -1,7 +1,8 @@
-import React, { FC, useState } from "react";
+import React, { FC, useCallback, useState } from "react";
 import {
   Box,
   Button,
+  debounce,
   IconButton,
   Menu,
   MenuItem,
@@ -48,13 +49,13 @@ const CardsHeader: FC<ICardsHeaderProps> = ({
     dispatch(addCardTC(mockCard));
   };
 
-  let timer: number;
-  const handleSearchRequestChange = (value: string) => {
-    if (timer) clearTimeout(timer);
-    timer = setTimeout(() => {
-      setSearchRequest(value);
-    }, 500);
+  const searchRequestChangeHandler = (value: string) => {
+    setSearchRequest(value);
   };
+  const handleSearchRequestChange = useCallback(
+    debounce(searchRequestChangeHandler, 500),
+    []
+  );
 
   return (
     <>
