@@ -28,21 +28,22 @@ export interface ResponseGetPacks {
   maxCardsCount: number;
   sortPacks: string;
 }
+
 interface IPacksParams {
-  packName?: string;
-  min?: number;
-  max?: number;
-  sortPacks?: string;
-  page?: number;
-  pageCount?: number;
-  user_id?: string;
+  packName: string;
+  min: string | number;
+  max: string | number;
+  sortPacks: string;
+  page: string | number;
+  pageCount: string | number;
+  user_id: string;
 }
 interface INewPack {
   name: string;
   deckCover: string;
   isPrivate?: boolean;
 }
-const getPacks = (params?: IPacksParams) => {
+const getPacks = (params: Partial<IPacksParams>) => {
   return instance.get<ResponseGetPacks>("/cards/pack", {
     params,
   });

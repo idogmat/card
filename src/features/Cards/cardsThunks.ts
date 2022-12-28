@@ -15,8 +15,10 @@ export const getCardsTC = (model: IGetCardsRequest): AppThunkActionType => {
     try {
       dispatch(AppAC.setIsLoading({ isLoading: true }));
       const { data } = await cardsAPI.getCardsRequest(model);
+      console.log(data);
       dispatch(CardsAC.setCardsData({ data }));
     } catch (e) {
+      console.log(e);
       dispatch(AppAC.setError({ error: defaultErrorMessage }));
     } finally {
       dispatch(AppAC.setIsLoading({ isLoading: false }));
@@ -79,7 +81,6 @@ export const updateCardTC = (
       const res = await cardsAPI.updateCardRequest(model);
       const { data } = await cardsAPI.getCardsRequest(cardsRequestConfig);
       dispatch(CardsAC.setCardsData({ data }));
-      dispatch(AppAC.setError({ error: defaultErrorMessage }));
       dispatch(AppAC.setSuccessMessage({ message: "Successfully updated" }));
     } catch {
       dispatch(AppAC.setError({ error: defaultErrorMessage }));

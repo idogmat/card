@@ -12,6 +12,7 @@ const AddNewPack = (props: any) => {
   const dispatch = useAppDispatch();
   const addPack = () => {
     dispatch(addPackTC(newPackName, newDeckCover, isPrivate));
+    props.setAddPackMode(false);
   };
 
   return (
