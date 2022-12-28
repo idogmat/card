@@ -37,6 +37,7 @@ export const Cards = () => {
   const previousURL = state ? state.previousURL : null;
   const packName = state ? state.packName : null;
   const params = Object.fromEntries(searchParams);
+  console.log(previousURL);
 
   // Local states
   const defaultSort = { direction: 0, field: "updated" };
@@ -59,7 +60,7 @@ export const Cards = () => {
       pageCount: isPageCountValid ? params.showPerPage : pageCount,
       page: params.currentPage || page,
       cardQuestion: params.search || searchRequest,
-      sortCards: params.sortCards || sort,
+      sortCards: params.sortCards || cardsSort,
     } as IGetCardsRequest;
     dispatch(getCardsTC(model));
   }, [searchParams]);
@@ -135,7 +136,7 @@ export const Cards = () => {
           </div>
         )}
         <Box sx={{ marginBottom: 5 }}>
-          <BackTo title={"Back to packs"} route={previousURL} />
+          <BackTo title={"Back to packs"} route={`/packs?${previousURL}`} />
         </Box>
         <CardsHeader
           isPackMine={isPackMine}
