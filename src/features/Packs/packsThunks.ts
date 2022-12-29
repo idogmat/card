@@ -1,8 +1,8 @@
+import { AppAC } from "../../app/appReducer";
 import { AppThunkActionType } from "../../common/hooks/useAllSelector";
 import { PacksAPI } from "./packsAPI";
-import { initialState, packsAC } from "./packsReducer";
-import { AppAC } from "../../app/appReducer";
 import { defaultErrorMessage } from "../../common/utils/errorHandlers";
+import { packsAC } from "./packsReducer";
 
 interface IGetModel {
   page: string | number;

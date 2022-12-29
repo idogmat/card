@@ -1,26 +1,27 @@
-import React, { FC } from "react";
-import { useNavigate } from "react-router-dom";
+import { Button, Typography } from "@mui/material";
+import { Navigate, useNavigate } from "react-router-dom";
+import React, { FC, useRef, useState } from "react";
+
 import { ArrowBack } from "@mui/icons-material";
 import styles from "./BackTo.module.css";
-import { Button, Typography } from "@mui/material";
 
 interface IBackToProps {
   title: string;
   route: string;
 }
 
-export const BackTo: FC<IBackToProps> = ({ title, route }) => {
-  const navigate = useNavigate();
+export const BackTo: FC<IBackToProps> = React.memo(({ title, route }) => {
+  const [shouldNavigate, setShouldNavigate] = useState(false);
 
   const onClickHandler = () => {
-    console.log(route);
-    navigate(route);
+    setShouldNavigate(true);
   };
 
   return (
     <Button className={styles.link} onClick={onClickHandler}>
+      {shouldNavigate && <Navigate to={route} />}
       <ArrowBack />
       <Typography>{title}</Typography>
     </Button>
   );
-};
+});
