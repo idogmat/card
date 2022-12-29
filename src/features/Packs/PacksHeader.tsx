@@ -11,7 +11,7 @@ interface IHeaderProps {
   changeSearchHandler: (s: string) => void;
   isMyPack: boolean;
   handlerIsMyPack: (param: boolean) => void;
-  cardPacksTotalCount: number;
+  maxCardsCount: number;
   max: number | string;
   min: number | string;
   addPackMode: boolean;
@@ -29,10 +29,11 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
     isMyPack,
     max,
     min,
-    cardPacksTotalCount,
+    maxCardsCount,
     handlerIsMyPack,
     addPackMode,
   }) => {
+    console.log("header-render");
     return (
       <Box sx={{ flexGrow: 1 }}>
         <Toolbar
@@ -79,7 +80,7 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
             <SuperRange
               max={max}
               min={min}
-              maxPacks={cardPacksTotalCount}
+              maxCardsCount={maxCardsCount}
               onChangeSlider={changeRangeHandler}
             />
             <Button

@@ -6,11 +6,11 @@ interface ISuperRangeProps {
   onChangeSlider: (valueRange: number[]) => void;
   max: number | string;
   min: number | string;
-  maxPacks: number | string;
+  maxCardsCount: number | string;
 }
 
 const SuperRange: React.FC<ISuperRangeProps> = React.memo(
-  ({ onChangeSlider, min, max, maxPacks }) => {
+  ({ onChangeSlider, min, max, maxCardsCount }) => {
     const [range, setRange] = useState([Number(min), Number(max)]);
     const onChangeHandler = useCallback((e: any, value: number | number[]) => {
       setRange(value as number[]);
@@ -33,7 +33,7 @@ const SuperRange: React.FC<ISuperRangeProps> = React.memo(
             inputProps={{
               step: 1,
               min: 0,
-              max: maxPacks,
+              max: maxCardsCount,
               type: "number",
             }}
           />
@@ -57,7 +57,7 @@ const SuperRange: React.FC<ISuperRangeProps> = React.memo(
             inputProps={{
               step: 1,
               min: 0,
-              max: maxPacks,
+              max: maxCardsCount,
               type: "number",
             }}
           />

@@ -4,7 +4,16 @@ import { useAllSelector, useAppDispatch } from "../../common/hooks";
 import { addPackTC, removePackTC, setPacksTC } from "./packsThunks";
 import {
   appStateSelect,
-  packsStateSelect,
+  packsCardsPacksSelector,
+  packsIsMyPackSelector,
+  packsMaxCardsPacksSelector,
+  packsMaxSelector,
+  packsMinSelector,
+  packsNameSelector,
+  packsPageCountSelector,
+  packsPageSelector,
+  packsSortPacksSelector,
+  packsTotalCardsSelector,
   userStateSelect,
 } from "../../app/selectors";
 import { packsAC } from "./packsReducer";
@@ -19,17 +28,17 @@ import { Preloader } from "../../common/components/Preloader/Preloader";
 
 const Packs = () => {
   const user = useAllSelector(userStateSelect);
-  const {
-    packName,
-    cardPacks,
-    page,
-    pageCount,
-    cardPacksTotalCount,
-    max,
-    min,
-    isMyPack,
-    sortPacks,
-  } = useAllSelector(packsStateSelect);
+  const { isLoading } = useAllSelector(appStateSelect);
+  const packName = useAllSelector(packsNameSelector);
+  const cardPacks = useAllSelector(packsCardsPacksSelector);
+  const page = useAllSelector(packsPageSelector);
+  const pageCount = useAllSelector(packsPageCountSelector);
+  const cardPacksTotalCount = useAllSelector(packsTotalCardsSelector);
+  const max = useAllSelector(packsMaxSelector);
+  const min = useAllSelector(packsMinSelector);
+  const isMyPack = useAllSelector(packsIsMyPackSelector);
+  const sortPacks = useAllSelector(packsSortPacksSelector);
+  const maxCardsCount = useAllSelector(packsMaxCardsPacksSelector);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const params = Object.fromEntries(searchParams);
@@ -138,9 +147,9 @@ const Packs = () => {
   const showSortIcon = useCallback((field: string) => {
     return sort.field === field ? sortIcon : <HorizontalRule />;
   }, []);
-  const removeSort = () => {
+  const removeSort = useCallback(() => {
     setSearchParams({});
-  };
+  }, []);
 
   return (
     <Box
@@ -151,6 +160,11 @@ const Packs = () => {
         flexDirection: "column",
       }}
     >
+      {isLoading && (
+        <div className={styles.preventSending}>
+          <Preloader />
+        </div>
+      )}
       <PacksHeader
         removeSort={removeSort}
         setAddPackMode={setAddPackMode}
@@ -161,7 +175,7 @@ const Packs = () => {
         max={max}
         min={min}
         addPackMode={addPackMode}
-        cardPacksTotalCount={cardPacksTotalCount}
+        maxCardsCount={maxCardsCount}
         handlerIsMyPack={handlerIsMyPack}
       />
       {/*TABLE*/}

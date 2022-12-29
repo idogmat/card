@@ -51,14 +51,8 @@ const PacksTable: React.FC<ITableProps> = React.memo(
     setAddPackMode,
     isMyPack,
   }) => {
-    const { isLoading } = useAllSelector(appStateSelect);
     return (
       <Paper sx={{ position: "relative" }}>
-        {isLoading && (
-          <div className={styles.preventSending}>
-            <Preloader />
-          </div>
-        )}
         <Paper>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">

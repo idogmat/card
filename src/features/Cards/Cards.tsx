@@ -99,14 +99,7 @@ export const Cards = React.memo(() => {
       }
       dispatch(CardsAC.setPageCount({ showPerPage: rowsPerPage }));
     },
-    [
-      cardsTotalCount,
-      totalPages,
-      page,
-      params.showPerPage,
-      dispatch,
-      setSearchParams,
-    ]
+    [cardsTotalCount, totalPages, page, params.showPerPage]
   );
 
   const changePageHandler = useCallback(
