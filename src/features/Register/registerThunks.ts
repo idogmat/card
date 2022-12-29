@@ -20,10 +20,7 @@ export const registerTC = ({
     try {
       const payload = { email, password };
       const { data } = await registerAPI.sendRegisterRequest(payload);
-      const user = {
-        ...data.addedUser,
-        avatar: null,
-      };
+      const user = { ...data.addedUser, avatar: null };
       dispatch(AuthAC.setIsAuth({ isAuth: true }));
       dispatch(UserAC.setUser({ user }));
       dispatch(loginTC(payload));

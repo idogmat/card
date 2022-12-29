@@ -37,7 +37,7 @@ export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
       }
       const { _id } = getState().user;
       PacksAPI.getPacks({
-        user_id: model.isMyPack === "true" ? _id : "",
+        user_id: model.isMyPack === "true" || isMyPack ? _id : "",
         packName: model.packName || packName,
         pageCount: model.pageCount || pageCount,
         page: model.page || page,
@@ -51,7 +51,7 @@ export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
             min: model.min || min,
             max: model.max || max,
             packName: packName,
-            isMyPack: model.isMyPack === "true" ? true : false,
+            isMyPack: model.isMyPack === "true" || isMyPack,
           })
         );
       });
@@ -72,11 +72,7 @@ export const addPackTC = (
     try {
       const { isMyPack } = getState().packs;
       PacksAPI.addPack(name, deckCover, isPrivate).then((res) => {
-        dispatch(
-          setPacksTC({
-            isMyPack: isMyPack ? "true" : "false",
-          })
-        );
+        dispatch(setPacksTC({ isMyPack: isMyPack ? "true" : "false" }));
         dispatch(AppAC.setSuccessMessage({ message: "Successfully updated" }));
       });
     } catch {
@@ -92,19 +88,8 @@ export const removePackTC = (id: string): AppThunkActionType => {
     dispatch(AppAC.setIsLoading({ isLoading: true }));
     try {
       const { data } = await PacksAPI.deletePack(id);
-      const { pageCount, page, min, max, isMyPack, sortPacks, packName } =
-        getState().packs;
-      dispatch(
-        setPacksTC({
-          pageCount,
-          page,
-          min,
-          max,
-          isMyPack: isMyPack ? "true" : "false",
-          sortPacks,
-          packName,
-        })
-      );
+      const { isMyPack } = getState().packs;
+      dispatch(setPacksTC({ isMyPack: isMyPack ? "true" : "false" }));
       dispatch(AppAC.setSuccessMessage({ message: "Successfully updated" }));
     } catch {
       dispatch(AppAC.setError({ error: defaultErrorMessage }));

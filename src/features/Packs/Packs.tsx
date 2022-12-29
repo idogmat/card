@@ -31,6 +31,7 @@ const Packs = () => {
   // Local states
   const [sort, setSort] = useState({ direction: 0, field: "updated" });
   const [searchField, setSearchField] = useState(params.packName || "");
+
   // Utils
   const [addPackMode, setAddPackMode] = useState<boolean>(false);
   const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
@@ -53,9 +54,11 @@ const Packs = () => {
     changeRangeQueryParams(valueRange);
     dispatch(packsAC.setRangeValue({ range: valueRange }));
   };
+
   useEffect(() => {
-    setSearchField(params.packName);
+    setSearchField(params.packName || "");
   }, [params.packName]);
+
   useEffect(() => {
     if (!isParamsSet) {
       console.log("dispatch clear model");
@@ -104,7 +107,6 @@ const Packs = () => {
     isPrivate: boolean
   ) => {
     dispatch(addPackTC(newPackName, newDeckCover, isPrivate));
-    setSearchParams({ ...params });
   };
   const setSortForPacks = (type: string) => {
     dispatch(packsAC.setPacksSort({ type }));
