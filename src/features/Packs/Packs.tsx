@@ -1,20 +1,20 @@
-import React, { useCallback, useEffect, useState } from "react";
 import { Box, debounce } from "@mui/material";
-import { useAllSelector, useAppDispatch } from "../../common/hooks";
+import React, { useCallback, useEffect, useState } from "react";
 import { addPackTC, removePackTC, setPacksTC } from "./packsThunks";
 import { packsStateSelect, userStateSelect } from "../../app/selectors";
+import { useAllSelector, useAppDispatch } from "../../common/hooks";
+
+import { HorizontalRule } from "@mui/icons-material";
+import PacksHeader from "./PacksHeader";
+import PacksTable from "./PacksTable";
+import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
+import { getSortIcon } from "../../common/utils/assets";
 import { packsAC } from "./packsReducer";
 import { useSearchParams } from "react-router-dom";
-import { HorizontalRule } from "@mui/icons-material";
-import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
-import PacksTable from "./PacksTable";
-import { getSortIcon } from "../../common/utils/assets";
-import PacksHeader from "./PacksHeader";
 
 const Packs = () => {
   const user = useAllSelector(userStateSelect);
   const {
-    packName,
     cardPacks,
     page,
     pageCount,
@@ -22,7 +22,6 @@ const Packs = () => {
     max,
     min,
     isMyPack,
-    sortPacks,
   } = useAllSelector(packsStateSelect);
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -61,7 +60,6 @@ const Packs = () => {
 
   useEffect(() => {
     if (!isParamsSet) {
-      console.log("dispatch clear model");
       dispatch(setPacksTC({}));
       return;
     }

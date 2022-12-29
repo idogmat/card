@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   AppBar,
   Avatar,
@@ -8,16 +7,19 @@ import {
   Menu,
   Typography,
 } from "@mui/material";
-import { useAllSelector } from "../../hooks";
-import { authStateSelector } from "../../../features/Auth/selectors";
-import { HeaderLink } from "./HeaderLink";
-import logo from "../../../assets/img/logo.svg";
+import React, { useState } from "react";
 import { authRoutes, unAuthRoutes } from "../../routes";
+
+import { HeaderLink } from "./HeaderLink";
+import { authStateSelector } from "../../../features/Auth/selectors";
 import { getRouteName } from "../../utils";
-import { userStateSelector } from "../../../features/User/selectors";
 import { lime } from "@mui/material/colors";
+import logo from "../../../assets/img/logo.svg";
 import { pageIcons } from "./Header.data";
-export const Header = () => {
+import { useAllSelector } from "../../hooks";
+import { userStateSelector } from "../../../features/User/selectors";
+
+export const Header = React.memo(() => {
   const { isAuth } = useAllSelector(authStateSelector);
   const user = useAllSelector(userStateSelector);
 
@@ -121,4 +123,4 @@ export const Header = () => {
       </Container>
     </AppBar>
   );
-};
+});
