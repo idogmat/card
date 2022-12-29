@@ -9,6 +9,7 @@ interface ICardsState {
   page: number;
   pageCount: number;
   packUserId: string;
+  cardQuestion?: string;
 }
 
 const initialState: ICardsState = {
@@ -19,6 +20,7 @@ const initialState: ICardsState = {
   page: 1,
   pageCount: 4,
   packUserId: "",
+  cardQuestion: "",
 };
 
 const cardsSlice = createSlice({
@@ -36,6 +38,9 @@ const cardsSlice = createSlice({
     },
     setPageCount: (draft, action: PayloadAction<{ showPerPage: number }>) => {
       draft.pageCount = action.payload.showPerPage;
+    },
+    setCardQuestion: (draft, action: PayloadAction<{ value: string }>) => {
+      draft.cardQuestion = action.payload.value;
     },
   },
 });

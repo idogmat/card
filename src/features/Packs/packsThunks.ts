@@ -37,7 +37,7 @@ export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
       }
       const { _id } = getState().user;
       PacksAPI.getPacks({
-        user_id: model.isMyPack === "true" ? _id : "",
+        user_id: model.isMyPack === "true" || isMyPack ? _id : "",
         packName: model.packName || packName,
         pageCount: model.pageCount || pageCount,
         page: model.page || page,
@@ -51,7 +51,7 @@ export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
             min: model.min || min,
             max: model.max || max,
             packName: packName,
-            isMyPack: model.isMyPack === "true",
+            isMyPack: model.isMyPack === "true" || isMyPack,
           })
         );
       });
