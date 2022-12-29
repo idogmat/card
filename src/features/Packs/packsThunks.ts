@@ -16,9 +16,9 @@ interface IGetModel {
 }
 
 export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
-  return (dispatch, getState) => {
-    dispatch(AppAC.setIsLoading({ isLoading: true }));
+  return async (dispatch, getState) => {
     try {
+      dispatch(AppAC.setIsLoading({ isLoading: true }));
       // debugger;
       const { pageCount, page, min, max, sortPacks, packName, isMyPack } =
         getState().packs;
@@ -27,7 +27,7 @@ export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
         return;
       }
       const { _id } = getState().user;
-      PacksAPI.getPacks({
+      const res = await PacksAPI.getPacks({
         user_id: model.isMyPack === "true" || isMyPack ? _id : "",
         packName: model.packName || packName,
         pageCount: model.pageCount || pageCount,
@@ -35,18 +35,17 @@ export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
         min: model.min || min,
         max: model.max || max,
         sortPacks: !!model?.sortPacks ? model.sortPacks : sortPacks,
-      }).then((res) => {
-        console.log(model.isMyPack);
-        dispatch(
-          packsAC.setPacks({
-            packs: res.data,
-            min: model.min || min,
-            max: model.max || max,
-            packName: packName,
-            isMyPack: model.isMyPack === "true" || isMyPack,
-          })
-        );
       });
+
+      dispatch(
+        packsAC.setPacks({
+          packs: res.data,
+          min: model.min || min,
+          max: model.max || max,
+          packName: model.packName || packName,
+          isMyPack: model.isMyPack === "true" || isMyPack,
+        })
+      );
     } catch {
       dispatch(AppAC.setError({ error: defaultErrorMessage }));
     } finally {

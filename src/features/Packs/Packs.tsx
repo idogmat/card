@@ -2,7 +2,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Box, debounce } from "@mui/material";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
 import { addPackTC, removePackTC, setPacksTC } from "./packsThunks";
-import { packsStateSelect, userStateSelect } from "../../app/selectors";
+import {
+  appStateSelect,
+  packsStateSelect,
+  userStateSelect,
+} from "../../app/selectors";
 import { packsAC } from "./packsReducer";
 import { useSearchParams } from "react-router-dom";
 import { HorizontalRule } from "@mui/icons-material";
@@ -10,6 +14,8 @@ import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
 import PacksTable from "./PacksTable";
 import { getSortIcon } from "../../common/utils/assets";
 import PacksHeader from "./PacksHeader";
+import styles from "../../common/styles/common.module.css";
+import { Preloader } from "../../common/components/Preloader/Preloader";
 
 const Packs = () => {
   const user = useAllSelector(userStateSelect);
@@ -30,11 +36,10 @@ const Packs = () => {
 
   // Local states
   const [sort, setSort] = useState({ direction: 0, field: "updated" });
-  const [searchField, setSearchField] = useState(params.packName || "");
+  // const [searchField, setSearchField] = useState(
+  //   params.packName || packName || ""
+  // );
 
-  const [searchField, setSearchField] = useState(
-    params.packName || packName || ""
-  );
   // Utils
   const [addPackMode, setAddPackMode] = useState<boolean>(false);
   const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
@@ -58,9 +63,9 @@ const Packs = () => {
     dispatch(packsAC.setRangeValue({ range: valueRange }));
   };
 
-  useEffect(() => {
-    setSearchField(params.packName || "");
-  }, [params.packName]);
+  // useEffect(() => {
+  //   setSearchField(params.packName || "");
+  // }, [params.packName]);
 
   useEffect(() => {
     if (!isParamsSet) {
@@ -101,7 +106,6 @@ const Packs = () => {
 
   const changeSearchHandler = (value: string) => {
     setSearchQueryParams(value);
-    setSearchField(value);
     dispatch(packsAC.setPackName({ packName: value }));
   };
   const addPack = (
@@ -130,15 +134,21 @@ const Packs = () => {
   const removeSort = () => {
     setSearchParams({});
   };
+
   return (
     <Box
-      style={{ padding: "6rem 2rem", display: "flex", flexDirection: "column" }}
+      sx={{
+        position: "relative",
+        padding: "6rem 2rem",
+        display: "flex",
+        flexDirection: "column",
+      }}
     >
       <PacksHeader
         removeSort={removeSort}
         setAddPackMode={setAddPackMode}
         changeRangeHandler={changeRangeHandler}
-        packName={searchField}
+        packName={packName}
         changeSearchHandler={changeSearchHandler}
         isMyPack={isMyPack}
         max={max}

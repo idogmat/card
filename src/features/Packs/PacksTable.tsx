@@ -12,6 +12,10 @@ import { TablePagination } from "../../common/TablePagination/TablePagination";
 import { selectOptions } from "./Packs.data";
 import { NotFoundElements } from "../../common/components/NotFoundElements/NotFoundElements";
 import PacksElement from "./PacksElement";
+import { useAllSelector } from "../../common/hooks";
+import { appStateSelect } from "../../app/selectors";
+import styles from "../../common/styles/common.module.css";
+import { Preloader } from "../../common/components/Preloader/Preloader";
 
 interface ITableProps {
   id: string;
@@ -46,8 +50,14 @@ const PacksTable: React.FC<ITableProps> = ({
   setAddPackMode,
   isMyPack,
 }) => {
+  const { isLoading } = useAllSelector(appStateSelect);
   return (
-    <>
+    <Paper sx={{ position: "relative" }}>
+      {isLoading && (
+        <div className={styles.preventSending}>
+          <Preloader />
+        </div>
+      )}
       <Paper>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 400 }} aria-label="simple table">
@@ -97,7 +107,7 @@ const PacksTable: React.FC<ITableProps> = ({
         </Box>
       </Paper>
       <AddNewPack addPack={addPack} setAddPackMode={setAddPackMode} />
-    </>
+    </Paper>
   );
 };
 
