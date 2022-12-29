@@ -1,10 +1,11 @@
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import { Box, Container, Toolbar } from "@mui/material";
 import { Search } from "../../common/components/Search/Search";
 import FormControl from "@mui/material/FormControl/FormControl";
 import Button from "@mui/material/Button/Button";
 import SuperRange from "./SuperRange";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+
 interface IHeaderProps {
   packName: string;
   changeSearchHandler: (s: string) => void;
@@ -18,81 +19,83 @@ interface IHeaderProps {
   setAddPackMode: (b: boolean) => void;
   removeSort: () => void;
 }
-const PacksHeader: FC<IHeaderProps> = ({
-  removeSort,
-  setAddPackMode,
-  changeRangeHandler,
-  packName,
-  changeSearchHandler,
-  isMyPack,
-  max,
-  min,
-  cardPacksTotalCount,
-  handlerIsMyPack,
-  addPackMode,
-}) => {
-  return (
-    <Box sx={{ flexGrow: 1 }}>
-      <Toolbar
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "0",
-        }}
-      >
-        <Container
+const PacksHeader: FC<IHeaderProps> = React.memo(
+  ({
+    removeSort,
+    setAddPackMode,
+    changeRangeHandler,
+    packName,
+    changeSearchHandler,
+    isMyPack,
+    max,
+    min,
+    cardPacksTotalCount,
+    handlerIsMyPack,
+    addPackMode,
+  }) => {
+    return (
+      <Box sx={{ flexGrow: 1 }}>
+        <Toolbar
           style={{
             display: "flex",
-            flexDirection: "row",
             justifyContent: "space-between",
             padding: "0",
           }}
         >
-          <Search
-            searchValue={packName}
-            searchChangeHandler={changeSearchHandler}
-          />
-          <FormControl
+          <Container
             style={{
               display: "flex",
               flexDirection: "row",
-              margin: "auto 1rem",
+              justifyContent: "space-between",
+              padding: "0",
             }}
           >
-            <Button
-              style={{ margin: "auto 1rem" }}
-              variant={isMyPack ? "contained" : "outlined"}
-              onClick={() => handlerIsMyPack(true)}
+            <Search
+              searchValue={packName}
+              searchChangeHandler={changeSearchHandler}
+            />
+            <FormControl
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                margin: "auto 1rem",
+              }}
             >
-              My
-            </Button>
-            <Button
-              variant={!isMyPack ? "contained" : "outlined"}
-              onClick={() => handlerIsMyPack(false)}
-            >
-              All
-            </Button>
-          </FormControl>
+              <Button
+                style={{ margin: "auto 1rem" }}
+                variant={isMyPack ? "contained" : "outlined"}
+                onClick={() => handlerIsMyPack(true)}
+              >
+                My
+              </Button>
+              <Button
+                variant={!isMyPack ? "contained" : "outlined"}
+                onClick={() => handlerIsMyPack(false)}
+              >
+                All
+              </Button>
+            </FormControl>
 
-          <SuperRange
-            max={max}
-            min={min}
-            maxPacks={cardPacksTotalCount}
-            onChangeSlider={changeRangeHandler}
-          />
-          <Button
-            variant="contained"
-            onClick={() => setAddPackMode(!addPackMode)}
-          >
-            Add new Pack
-          </Button>
-          <Button onClick={() => removeSort()} style={{ margin: "auto 0" }}>
-            <DeleteForeverIcon />
-          </Button>
-        </Container>
-      </Toolbar>
-    </Box>
-  );
-};
+            <SuperRange
+              max={max}
+              min={min}
+              maxPacks={cardPacksTotalCount}
+              onChangeSlider={changeRangeHandler}
+            />
+            <Button
+              variant="contained"
+              onClick={() => setAddPackMode(!addPackMode)}
+            >
+              Add new Pack
+            </Button>
+            <Button onClick={() => removeSort()} style={{ margin: "auto 0" }}>
+              <DeleteForeverIcon />
+            </Button>
+          </Container>
+        </Toolbar>
+      </Box>
+    );
+  }
+);
 
 export default PacksHeader;

@@ -58,10 +58,10 @@ const Packs = () => {
     }, 500),
     []
   );
-  const changeRangeHandler = (valueRange: number[]) => {
+  const changeRangeHandler = useCallback((valueRange: number[]) => {
     changeRangeQueryParams(valueRange);
     dispatch(packsAC.setRangeValue({ range: valueRange }));
-  };
+  }, []);
 
   // useEffect(() => {
   //   setSearchField(params.packName || "");
@@ -85,52 +85,59 @@ const Packs = () => {
     dispatch(setPacksTC(model));
   }, [searchParams]);
 
-  const changePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
-    dispatch(packsAC.setCurrentPage({ page: newPage }));
-    setSearchParams({ ...params, page: `${newPage}` });
-  };
-  const handleChangeRowsPerPage = (event: SelectChangeEvent) => {
-    dispatch(packsAC.setPageCount({ pageCount: +event.target.value }));
-    setSearchParams({ ...params, pageCount: event.target.value });
-  };
-  const removePack = (id: string) => {
+  const changePage = useCallback(
+    (event: React.ChangeEvent<unknown>, newPage: number) => {
+      dispatch(packsAC.setCurrentPage({ page: newPage }));
+      setSearchParams({ ...params, page: `${newPage}` });
+    },
+    [page]
+  );
+  const handleChangeRowsPerPage = useCallback(
+    (event: SelectChangeEvent) => {
+      dispatch(packsAC.setPageCount({ pageCount: +event.target.value }));
+      setSearchParams({ ...params, pageCount: event.target.value });
+    },
+    [pageCount]
+  );
+  const removePack = useCallback((id: string) => {
     dispatch(removePackTC(id));
-    setSearchParams({ ...params });
-  };
+  }, []);
   const setSearchQueryParams = useCallback(
     debounce((value: string) => {
       setSearchParams({ ...params, packName: value });
     }, 500),
-    []
+    [packName]
   );
 
-  const changeSearchHandler = (value: string) => {
+  const changeSearchHandler = useCallback((value: string) => {
     setSearchQueryParams(value);
     dispatch(packsAC.setPackName({ packName: value }));
-  };
-  const addPack = (
-    newPackName: string,
-    newDeckCover: string,
-    isPrivate: boolean
-  ) => {
-    dispatch(addPackTC(newPackName, newDeckCover, isPrivate));
-    setSearchParams({ ...params });
-  };
-  const setSortForPacks = (type: string) => {
+  }, []);
+  const addPack = useCallback(
+    (newPackName: string, newDeckCover: string, isPrivate: boolean) => {
+      dispatch(addPackTC(newPackName, newDeckCover, isPrivate));
+      setSearchParams({ ...params });
+    },
+    []
+  );
+  const setSortForPacks = useCallback((type: string) => {
     dispatch(packsAC.setPacksSort({ type }));
-  };
-  const handlerIsMyPack = (param: boolean) => {
+  }, []);
+  const handlerIsMyPack = useCallback((param: boolean) => {
     dispatch(packsAC.setPreferencePacks({ isMine: param }));
     setSearchParams({ ...params, isMyPack: `${param}` });
-  };
-  const changeSort = async (field: string) => {
-    await setSort({ direction: sort.direction === 0 ? 1 : 0, field });
-    setSortForPacks((sort.direction + sort.field).toString());
-    setSearchParams((sort.direction + sort.field).toString());
-  };
-  const showSortIcon = (field: string) => {
+  }, []);
+  const changeSort = useCallback(
+    async (field: string) => {
+      await setSort({ direction: sort.direction === 0 ? 1 : 0, field });
+      setSortForPacks((sort.direction + sort.field).toString());
+      setSearchParams((sort.direction + sort.field).toString());
+    },
+    [sortPacks]
+  );
+  const showSortIcon = useCallback((field: string) => {
     return sort.field === field ? sortIcon : <HorizontalRule />;
-  };
+  }, []);
   const removeSort = () => {
     setSearchParams({});
   };

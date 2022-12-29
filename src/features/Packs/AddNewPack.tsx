@@ -1,27 +1,24 @@
-import React, { useState } from "react";
-import { useAppDispatch } from "../../common/hooks";
-import { useNavigate } from "react-router-dom";
-import { Box, Checkbox, IconButton, Modal, TextField } from "@mui/material";
+import React, { FC, useState } from "react";
+import { Box, Checkbox, IconButton, TextField } from "@mui/material";
 import Button from "@mui/material/Button/Button";
-import { addPackTC } from "./packsThunks";
 
-const AddNewPack = (props: {
+interface INewPack {
   addPack: (s: string, d: string, b: boolean) => void;
   setAddPackMode: (b: boolean) => void;
-}) => {
+}
+const AddNewPack: FC<INewPack> = React.memo(({ addPack, setAddPackMode }) => {
   const [newPackName, setNewPackName] = useState("");
   const [newDeckCover, setNewDeckCover] = useState("1");
   const [isPrivate, setPrivate] = React.useState(false);
-  const dispatch = useAppDispatch();
-  const addPack = () => {
-    props.addPack(newPackName, newDeckCover, isPrivate);
-    props.setAddPackMode(false);
+  const addNewPack = () => {
+    addPack(newPackName, newDeckCover, isPrivate);
+    setAddPackMode(false);
   };
 
   return (
     <Box>
       <div>
-        <IconButton onClick={() => props.setAddPackMode(false)}>X</IconButton>
+        <IconButton onClick={() => setAddPackMode(false)}>X</IconButton>
       </div>
       <TextField
         label="Title"
@@ -48,12 +45,12 @@ const AddNewPack = (props: {
         <Button color="primary" variant="contained">
           Cancel
         </Button>
-        <Button onClick={addPack} color="primary" variant="contained">
+        <Button onClick={addNewPack} color="primary" variant="contained">
           addPack
         </Button>
       </div>
     </Box>
   );
-};
+});
 
 export default AddNewPack;
