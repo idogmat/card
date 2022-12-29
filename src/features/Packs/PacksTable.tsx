@@ -69,6 +69,7 @@ const PacksTable: React.FC<ITableProps> = ({
               {!!cardPacks ? (
                 cardPacks.map((pack) => (
                   <PacksElement
+                    key={pack._id}
                     id={id}
                     removePack={removePack}
                     pack={pack}

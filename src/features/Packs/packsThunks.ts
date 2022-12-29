@@ -19,25 +19,16 @@ export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
   return (dispatch, getState) => {
     dispatch(AppAC.setIsLoading({ isLoading: true }));
     try {
+      // debugger;
       const { pageCount, page, min, max, sortPacks, packName, isMyPack } =
         getState().packs;
       if (Object.keys(model).length === 0) {
-        PacksAPI.getPacks({}).then(({ data }) => {
-          dispatch(
-            packsAC.setPacks({
-              packs: data,
-              min: 0,
-              max: 15,
-              packName: "",
-              isMyPack,
-            })
-          );
-        });
+        dispatch(getDefaultPacksData({}));
         return;
       }
       const { _id } = getState().user;
       PacksAPI.getPacks({
-        user_id: model.isMyPack === "true" ? _id : "",
+        user_id: model.isMyPack === "true" || isMyPack ? _id : "",
         packName: model.packName || packName,
         pageCount: model.pageCount || pageCount,
         page: model.page || page,
@@ -45,13 +36,14 @@ export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
         max: model.max || max,
         sortPacks: !!model?.sortPacks ? model.sortPacks : sortPacks,
       }).then((res) => {
+        console.log(model.isMyPack);
         dispatch(
           packsAC.setPacks({
             packs: res.data,
             min: model.min || min,
             max: model.max || max,
             packName: packName,
-            isMyPack: model.isMyPack === "true",
+            isMyPack: model.isMyPack === "true" || isMyPack,
           })
         );
       });
@@ -95,6 +87,27 @@ export const removePackTC = (id: string): AppThunkActionType => {
       dispatch(AppAC.setError({ error: defaultErrorMessage }));
     } finally {
       dispatch(AppAC.setIsLoading({ isLoading: false }));
+    }
+  };
+};
+export const getDefaultPacksData = (
+  model: Partial<IGetModel>
+): AppThunkActionType => {
+  return (dispatch) => {
+    try {
+      PacksAPI.getPacks({}).then(({ data }) => {
+        dispatch(
+          packsAC.setPacks({
+            packs: data,
+            min: 0,
+            max: 15,
+            packName: "",
+            isMyPack: false,
+          })
+        );
+      });
+    } catch {
+      dispatch(AppAC.setError({ error: defaultErrorMessage }));
     }
   };
 };
