@@ -136,7 +136,7 @@ export const Cards = React.memo(() => {
   const setSearchRequestToQuery = useCallback(
     debounce((value: string) => {
       setSearchParams({ ...params, search: value });
-    }, 200),
+    }, 700),
     []
   );
 
