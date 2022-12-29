@@ -14,7 +14,11 @@ export const getCardsTC = (model: IGetCardsRequest): AppThunkActionType => {
     try {
       dispatch(AppAC.setIsLoading({ isLoading: true }));
       const { data } = await cardsAPI.getCardsRequest(model);
-      dispatch(CardsAC.setCardsData({ data }));
+      dispatch(
+        CardsAC.setCardsData({
+          data: { ...data, cardQuestion: model.cardQuestion },
+        })
+      );
     } catch (e) {
       dispatch(AppAC.setError({ error: defaultErrorMessage }));
     } finally {
@@ -35,8 +39,8 @@ export const addCardTC = (card: IAddCardRequest): AppThunkActionType => {
       };
       const res = await cardsAPI.addCardRequest(card);
       const { data } = await cardsAPI.getCardsRequest(cardsRequestConfig);
-      dispatch(AppAC.setSuccessMessage({ message: "Successfully added" }));
       dispatch(CardsAC.setCardsData({ data }));
+      dispatch(AppAC.setSuccessMessage({ message: "Successfully added" }));
     } catch (e) {
       dispatch(AppAC.setError({ error: defaultErrorMessage }));
     } finally {

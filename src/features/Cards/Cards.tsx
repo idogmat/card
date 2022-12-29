@@ -27,7 +27,7 @@ export const Cards = () => {
   const dispatch = useAppDispatch();
   const user = useAllSelector(userStateSelector);
   const { isLoading } = useAllSelector(appStateSelect);
-  const { cards, packUserId, cardsTotalCount, page, pageCount } =
+  const { cards, packUserId, cardsTotalCount, page, pageCount, cardQuestion } =
     useAllSelector(cardsStateSelector);
 
   // Url & Query
@@ -41,27 +41,28 @@ export const Cards = () => {
 
   // Local states
   const defaultSort = { direction: 0, field: "updated" };
-  const [searchRequest, setSearchRequest] = useState(params.search || "");
   const [sort, setSort] = useState<IFieldSort>(defaultSort);
 
   // Utils
   const isPackMine = user._id === packUserId;
   const totalPages = Math.ceil(cardsTotalCount / +pageCount);
-  const isPageCountValid = selectOptions.some((option) => {
-    return option.value === +params.showPerPage;
-  });
+  const isPageCountValid = selectOptions.some(
+    (option) => option.value === +params.showPerPage
+  );
 
   useEffect(() => {
     const cardsSort = sort.field
       ? `${sort.direction}${sort.field}`
       : "0updated";
+
     const model = {
       cardsPack_id: packID,
       pageCount: isPageCountValid ? params.showPerPage : pageCount,
       page: params.currentPage || page,
-      cardQuestion: params.search || searchRequest,
+      cardQuestion: params.search || cardQuestion,
       sortCards: params.sortCards || cardsSort,
     } as IGetCardsRequest;
+
     dispatch(getCardsTC(model));
   }, [searchParams]);
 
@@ -108,7 +109,7 @@ export const Cards = () => {
   );
 
   const changeSearchRequestHandler = (value: string) => {
-    setSearchRequest(value);
+    dispatch(CardsAC.setCardQuestion({ value }));
     setSearchRequestToQuery(value);
   };
 
@@ -143,7 +144,7 @@ export const Cards = () => {
           packID={packID ? packID : ""}
           setSearchRequest={changeSearchRequestHandler}
           packName={packName}
-          searchValue={searchRequest}
+          searchValue={cardQuestion || ""}
         />
         {cards.length > 0 ? (
           <>

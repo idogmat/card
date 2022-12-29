@@ -67,7 +67,7 @@ const CardsHeader: FC<ICardsHeaderProps> = ({
         <Typography
           variant={"h3"}
           component={"h3"}
-          sx={{ display: "flex", alignItems: "center" }}
+          sx={{ display: "flex", alignItems: "center", maxWidth: "100%" }}
         >
           {packName ? packName : "Name placeholder"}
           {isPackMine && (

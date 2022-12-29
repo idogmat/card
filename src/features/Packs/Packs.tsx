@@ -30,6 +30,8 @@ const Packs = () => {
 
   // Local states
   const [sort, setSort] = useState({ direction: 0, field: "updated" });
+  const [searchField, setSearchField] = useState(params.packName || "");
+
   const [searchField, setSearchField] = useState(
     params.packName || packName || ""
   );
@@ -55,16 +57,17 @@ const Packs = () => {
     changeRangeQueryParams(valueRange);
     dispatch(packsAC.setRangeValue({ range: valueRange }));
   };
+
   useEffect(() => {
-    setSearchField(params.packName);
+    setSearchField(params.packName || "");
   }, [params.packName]);
+
   useEffect(() => {
     if (!isParamsSet) {
       console.log("dispatch clear model");
       dispatch(setPacksTC({}));
       return;
     }
-    console.log(params.isMyPack, "use");
     const model = {
       isMyPack: params.isMyPack,
       pageCount: params.showPerPage,
@@ -107,6 +110,7 @@ const Packs = () => {
     isPrivate: boolean
   ) => {
     dispatch(addPackTC(newPackName, newDeckCover, isPrivate));
+    setSearchParams({ ...params });
   };
   const setSortForPacks = (type: string) => {
     dispatch(packsAC.setPacksSort({ type }));
