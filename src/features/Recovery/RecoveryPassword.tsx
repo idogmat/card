@@ -5,7 +5,7 @@ import CheckMail from "./CheckMail";
 import SendMailForm from "./SendMailForm";
 import { useAppDispatch } from "../../common/hooks";
 
-const RecoveryPassword = () => {
+const RecoveryPassword = React.memo(() => {
   const [sent, setSent] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -36,6 +36,6 @@ const RecoveryPassword = () => {
   ) : (
     <SendMailForm recoveryForm={recoveryForm} />
   );
-};
+});
 
 export default RecoveryPassword;

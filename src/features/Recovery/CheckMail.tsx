@@ -3,8 +3,10 @@ import { Grid, Paper, Typography } from "@mui/material";
 import svg from "../../assets/img/mail.svg";
 import Button from "@mui/material/Button/Button";
 import { useNavigate } from "react-router-dom";
-
-const CheckMail = (props: { email: string }) => {
+interface ICheckMail {
+  email: string;
+}
+const CheckMail: React.FC<ICheckMail> = React.memo(({ email }) => {
   const navigate = useNavigate();
   return (
     <Grid
@@ -39,7 +41,7 @@ const CheckMail = (props: { email: string }) => {
             sx={{ textAlign: "center" }}
           >
             <p style={{ opacity: ".7" }}>
-              We’ve sent an Email with instructions to {props.email}
+              We’ve sent an Email with instructions to {email}
             </p>
           </Typography>
           <Button
@@ -56,6 +58,6 @@ const CheckMail = (props: { email: string }) => {
       </Grid>
     </Grid>
   );
-};
+});
 
 export default CheckMail;

@@ -7,7 +7,7 @@ import { hasError } from "../../common/utils/errorHandlers";
 interface FormValues {
   recoveryForm: FormikProps<{ email: string }>;
 }
-const SendMailForm: FC<FormValues> = ({ recoveryForm }) => {
+const SendMailForm: FC<FormValues> = React.memo(({ recoveryForm }) => {
   const sendMailHasError = hasError.bind(null, recoveryForm);
   return (
     <Grid
@@ -64,6 +64,6 @@ const SendMailForm: FC<FormValues> = ({ recoveryForm }) => {
       </Grid>
     </Grid>
   );
-};
+});
 
 export default SendMailForm;

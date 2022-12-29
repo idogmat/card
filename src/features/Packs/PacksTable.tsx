@@ -12,6 +12,10 @@ import { TablePagination } from "../../common/TablePagination/TablePagination";
 import { selectOptions } from "./Packs.data";
 import { NotFoundElements } from "../../common/components/NotFoundElements/NotFoundElements";
 import PacksElement from "./PacksElement";
+import { useAllSelector } from "../../common/hooks";
+import { appStateSelect } from "../../app/selectors";
+import styles from "../../common/styles/common.module.css";
+import { Preloader } from "../../common/components/Preloader/Preloader";
 
 interface ITableProps {
   id: string;
@@ -30,74 +34,77 @@ interface ITableProps {
   changePage: (event: React.ChangeEvent<unknown>, newPage: number) => void;
 }
 
-const PacksTable: React.FC<ITableProps> = ({
-  id,
-  addPack,
-  changeSort,
-  removePack,
-  handleChangeRowsPerPage,
-  changePage,
-  showSortIcon,
-  cardPacks,
-  totalPageCount,
-  page,
-  pageCount,
-  addPackMode,
-  setAddPackMode,
-  isMyPack,
-}) => {
-  return (
-    <>
-      <Paper>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 400 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell align={"center"}>CardsCount</TableCell>
-                <TableCell
-                  onClick={() => changeSort("updated")}
-                  align={"center"}
-                >
-                  <Box>Updated{showSortIcon("updated")}</Box>
-                </TableCell>
-                <TableCell align={"center"}>Author Name</TableCell>
-                <TableCell align={"center"}>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {!!cardPacks ? (
-                cardPacks.map((pack) => (
-                  <PacksElement
-                    id={id}
-                    removePack={removePack}
-                    pack={pack}
-                    isMyPack={isMyPack}
-                  />
-                ))
-              ) : (
+const PacksTable: React.FC<ITableProps> = React.memo(
+  ({
+    id,
+    addPack,
+    changeSort,
+    removePack,
+    handleChangeRowsPerPage,
+    changePage,
+    showSortIcon,
+    cardPacks,
+    totalPageCount,
+    page,
+    pageCount,
+    addPackMode,
+    setAddPackMode,
+    isMyPack,
+  }) => {
+    return (
+      <Paper sx={{ position: "relative" }}>
+        <Paper>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 400 }} aria-label="simple table">
+              <TableHead>
                 <TableRow>
-                  <NotFoundElements title={"Empty"} />
+                  <TableCell>Name</TableCell>
+                  <TableCell align={"center"}>CardsCount</TableCell>
+                  <TableCell
+                    onClick={() => changeSort("updated")}
+                    align={"center"}
+                  >
+                    <Box>Updated{showSortIcon("updated")}</Box>
+                  </TableCell>
+                  <TableCell align={"center"}>Author Name</TableCell>
+                  <TableCell align={"center"}>Actions</TableCell>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-          <TablePagination
-            title={"Packs"}
-            totalPages={totalPageCount}
-            elementsPerPage={pageCount}
-            changePageHandler={changePage}
-            changeElementsPerPage={handleChangeRowsPerPage}
-            currentPage={page}
-            selectOptions={selectOptions}
-          />
-        </Box>
+              </TableHead>
+              <TableBody>
+                {!!cardPacks ? (
+                  cardPacks.map((pack) => (
+                    <PacksElement
+                      key={pack._id}
+                      id={id}
+                      removePack={removePack}
+                      pack={pack}
+                      isMyPack={isMyPack}
+                    />
+                  ))
+                ) : (
+                  <TableRow>
+                    <NotFoundElements title={"Empty"} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+            <TablePagination
+              title={"Packs"}
+              totalPages={totalPageCount}
+              elementsPerPage={pageCount}
+              changePageHandler={changePage}
+              changeElementsPerPage={handleChangeRowsPerPage}
+              currentPage={page}
+              selectOptions={selectOptions}
+            />
+          </Box>
+        </Paper>
+        <AddNewPack addPack={addPack} setAddPackMode={setAddPackMode} />
       </Paper>
-      <AddNewPack addPack={addPack} setAddPackMode={setAddPackMode} />
-    </>
-  );
-};
+    );
+  }
+);
 
 export default PacksTable;
