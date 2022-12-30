@@ -6,11 +6,12 @@ interface ISuperRangeProps {
   onChangeSlider: (valueRange: number[]) => void;
   max: number | string;
   min: number | string;
-  maxCardsCount: number | string;
+  minCardsCount: number;
+  maxCardsCount: number;
 }
 
 const SuperRange: React.FC<ISuperRangeProps> = React.memo(
-  ({ onChangeSlider, min, max, maxCardsCount }) => {
+  ({ onChangeSlider, min, max, maxCardsCount, minCardsCount }) => {
     const [range, setRange] = useState([Number(min), Number(max)]);
     const onChangeHandler = useCallback((e: any, value: number | number[]) => {
       setRange(value as number[]);
@@ -22,45 +23,34 @@ const SuperRange: React.FC<ISuperRangeProps> = React.memo(
 
     return (
       <Box style={{ margin: "auto 0", display: "flex" }} sx={{ width: 200 }}>
-        <Grid item>
-          <Input
-            className={s.sliderInput}
-            value={range[0]}
-            size="small"
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              onChangeHandler(e, [+e.target.value, +max])
-            }
-            inputProps={{
-              step: 1,
-              min: 0,
-              max: maxCardsCount,
-              type: "number",
-            }}
-          />
+        <Grid
+          sx={{
+            margin: "auto .5rem",
+            border: "1px solid #bebebe",
+            padding: "0 0.5rem",
+          }}
+          item
+        >
+          <span>{minCardsCount}</span>
         </Grid>
         <Slider
           color={"primary"}
-          valueLabelDisplay="on"
           disableSwap
+          valueLabelDisplay="on"
           onChange={onChangeHandler}
           value={range}
+          min={minCardsCount}
+          max={maxCardsCount}
         />
-        <Grid item>
-          <Input
-            className={s.sliderInput}
-            style={{}}
-            value={range[1]}
-            size="small"
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              onChangeHandler(e, [+min, +e.target.value])
-            }
-            inputProps={{
-              step: 1,
-              min: 0,
-              max: maxCardsCount,
-              type: "number",
-            }}
-          />
+        <Grid
+          sx={{
+            margin: "auto .5rem",
+            border: "1px solid #bebebe",
+            padding: "0 0.5rem",
+          }}
+          item
+        >
+          <span>{maxCardsCount}</span>
         </Grid>
       </Box>
     );

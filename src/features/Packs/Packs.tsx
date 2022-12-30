@@ -8,6 +8,7 @@ import {
   packsIsMyPackSelector,
   packsMaxCardsPacksSelector,
   packsMaxSelector,
+  packsMinCardsPacksSelector,
   packsMinSelector,
   packsNameSelector,
   packsPageCountSelector,
@@ -39,6 +40,7 @@ const Packs = () => {
   const isMyPack = useAllSelector(packsIsMyPackSelector);
   const sortPacks = useAllSelector(packsSortPacksSelector);
   const maxCardsCount = useAllSelector(packsMaxCardsPacksSelector);
+  const minCardsCount = useAllSelector(packsMinCardsPacksSelector);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const params = Object.fromEntries(searchParams);
@@ -168,6 +170,7 @@ const Packs = () => {
         min={min}
         addPackMode={addPackMode}
         maxCardsCount={maxCardsCount}
+        minCardsCount={minCardsCount}
         handlerIsMyPack={handlerIsMyPack}
       />
       {/*TABLE*/}
