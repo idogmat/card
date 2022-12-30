@@ -15,7 +15,7 @@ interface IRowProps {
   isMyPack: boolean;
 }
 
-const PacksElement: React.FC<IRowProps> = React.memo(
+const PackElement: React.FC<IRowProps> = React.memo(
   ({ id, removePack, pack }) => {
     const [params, setSearchParams] = useSearchParams();
     return (
@@ -55,4 +55,4 @@ const PacksElement: React.FC<IRowProps> = React.memo(
   }
 );
 
-export default PacksElement;
+export default PackElement;

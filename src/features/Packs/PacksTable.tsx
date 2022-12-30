@@ -11,11 +11,7 @@ import { IPackResponse } from "./packsAPI";
 import { TablePagination } from "../../common/TablePagination/TablePagination";
 import { selectOptions } from "./Packs.data";
 import { NotFoundElements } from "../../common/components/NotFoundElements/NotFoundElements";
-import PacksElement from "./PacksElement";
-import { useAllSelector } from "../../common/hooks";
-import { appStateSelect } from "../../app/selectors";
-import styles from "../../common/styles/common.module.css";
-import { Preloader } from "../../common/components/Preloader/Preloader";
+import PackElement from "./PackElement";
 
 interface ITableProps {
   id: string;
@@ -73,7 +69,7 @@ const PacksTable: React.FC<ITableProps> = React.memo(
               <TableBody>
                 {!!cardPacks ? (
                   cardPacks.map((pack) => (
-                    <PacksElement
+                    <PackElement
                       key={pack._id}
                       id={id}
                       removePack={removePack}
