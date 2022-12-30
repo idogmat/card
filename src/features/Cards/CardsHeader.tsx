@@ -12,7 +12,7 @@ import React, { FC, useState } from "react";
 import { IAddCardRequest } from "./cardsAPI";
 import { Search } from "../../common/components/Search/Search";
 import { addCardTC } from "./cardsThunks";
-import { useAppDispatch } from "../../common/hooks";
+import { useAppDispatch } from "common/hooks";
 
 interface ICardsHeaderProps {
   packID: string;

@@ -9,20 +9,20 @@ import {
   cardsTotalCountSelector,
 } from "./selectors";
 import { deleteCardTC, getCardsTC, updateCardTC } from "./cardsThunks";
-import { useAllSelector, useAppDispatch } from "../../common/hooks";
+import { useAllSelector, useAppDispatch } from "common/hooks";
 import { useLocation, useParams, useSearchParams } from "react-router-dom";
 
-import { BackTo } from "../../common/components/BackTo/BackTo";
+import { BackTo } from "common/components/BackTo/BackTo";
 import { CardsAC } from "./cardsSlice";
 import CardsHeader from "./CardsHeader";
 import { CardsTable } from "./CardsTable";
 import { IGetCardsRequest } from "./cardsAPI";
-import { NotFoundElements } from "../../common/components/NotFoundElements/NotFoundElements";
-import { Preloader } from "../../common/components/Preloader/Preloader";
-import { TablePagination } from "../../common/TablePagination/TablePagination";
-import { appStateSelect } from "../../app/selectors";
+import { NotFoundElements } from "common/components/NotFoundElements/NotFoundElements";
+import { Preloader } from "common/components/Preloader/Preloader";
+import { TablePagination } from "common/TablePagination/TablePagination";
+import { appStateSelect } from "app/selectors";
 import { selectOptions } from "./Cards.data";
-import styles from "../../common/styles/common.module.css";
+import styles from "common/styles/common.module.css";
 import { userStateSelector } from "../User/selectors";
 
 // Types
@@ -167,9 +167,7 @@ export const Cards = React.memo(() => {
             <Preloader />
           </div>
         )}
-        {/* <Box sx={{ marginBottom: 5 }}> */}
         <BackTo title={"Back to packs"} route={`/packs?${previousURL}`} />
-        {/* </Box> */}
         <CardsHeader
           isPackMine={isPackMine}
           packID={packID ? packID : ""}

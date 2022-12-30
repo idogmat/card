@@ -45,9 +45,6 @@ const Packs = () => {
 
   // Local states
   const [sort, setSort] = useState({ direction: 0, field: "updated" });
-  // const [searchField, setSearchField] = useState(
-  //   params.packName || packName || ""
-  // );
 
   // Utils
   const [addPackMode, setAddPackMode] = useState<boolean>(false);
@@ -72,13 +69,8 @@ const Packs = () => {
     dispatch(packsAC.setRangeValue({ range: valueRange }));
   }, []);
 
-  // useEffect(() => {
-  //   setSearchField(params.packName || "");
-  // }, [params.packName]);
-
   useEffect(() => {
     if (!isParamsSet) {
-      console.log("dispatch clear model");
       dispatch(setPacksTC({}));
       return;
     }
