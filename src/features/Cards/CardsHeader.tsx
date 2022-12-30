@@ -37,17 +37,6 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
       setMenuAnchor(null);
     };
 
-    const addNewCardHandler = () => {
-      const mockCard: IAddCardRequest = {
-        card: {
-          cardsPack_id: packID ? packID : "",
-          answer: "answer placeholder",
-          question: "question placeholder",
-        },
-      };
-      dispatch(addCardTC(mockCard));
-    };
-
     return (
       <>
         <Box
@@ -108,7 +97,7 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
             <Button
               sx={{ borderRadius: "24px" }}
               variant={"contained"}
-              onClick={addNewCardHandler}
+              onClick={() => {}}
             >
               Add new card
             </Button>

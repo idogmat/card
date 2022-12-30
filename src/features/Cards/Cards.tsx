@@ -15,6 +15,7 @@ import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import { BackTo } from "common/components/BackTo/BackTo";
 import { CardsAC } from "./cardsSlice";
 import CardsHeader from "./CardsHeader";
+import { CardsModals } from "./CardsModals";
 import { CardsTable } from "./CardsTable";
 import { IGetCardsRequest } from "./cardsAPI";
 import { NotFoundElements } from "common/components/NotFoundElements/NotFoundElements";
@@ -200,6 +201,7 @@ export const Cards = React.memo(() => {
         ) : (
           <NotFoundElements title={"Empty"} />
         )}
+        <CardsModals packID={packID ? packID : ""} />
       </Box>
     </Box>
   );
