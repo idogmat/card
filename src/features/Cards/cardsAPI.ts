@@ -1,5 +1,5 @@
-import { instance } from "../../common/api/baseAPI";
 import { ICard } from "../../common/models";
+import { instance } from "../../common/api/baseAPI";
 
 export interface IGetCardsRequest {
   cardAnswer?: string;
@@ -39,6 +39,7 @@ export interface IUpdateCardRequest {
   card: {
     _id: string;
     question: string;
+    answer: string;
   };
 }
 

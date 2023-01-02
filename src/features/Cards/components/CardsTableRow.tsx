@@ -2,19 +2,39 @@ import { Box, IconButton, Rating, TableCell, TableRow } from "@mui/material";
 import { DeleteOutline, Edit } from "@mui/icons-material";
 import React, { FC } from "react";
 
-import { ICard } from "../../common/models";
-import { formDate } from "../../common/utils/date";
+import { CardsModalsAC } from "../cardsModalsSlice";
+import { ICard } from "../../../common/models";
+import { formDate } from "../../../common/utils/date";
+import { useAppDispatch } from "common/hooks";
 
 interface ICardsTableRowProps {
   card: ICard;
-  updateCardHandler: (cardID: string) => void;
-  deleteCardHandler: (cardID: string) => void;
   isPackMine: boolean;
 }
 
 export const CardsTableRow: FC<ICardsTableRowProps> = React.memo(
-  ({ card, updateCardHandler, deleteCardHandler, isPackMine }) => {
-    console.log("rendering table row");
+  ({ card, isPackMine }) => {
+    // dispatch & selectors
+    const dispatch = useAppDispatch();
+    const updateCardData = {
+      question: card.question,
+      answer: card.answer,
+      cardID: card._id,
+    };
+    const deleteCardData = {
+      cardID: card._id,
+      cardName: card.question,
+    };
+
+    // Utils
+    const openDeleteModal = () => {
+      dispatch(CardsModalsAC.setDeleteCardState({ state: true }));
+      dispatch(CardsModalsAC.setDeleteCardData(deleteCardData));
+    };
+    const openUpdateModal = () => {
+      dispatch(CardsModalsAC.setUpdateCardState({ state: true }));
+      dispatch(CardsModalsAC.setUpdateCardData(updateCardData));
+    };
 
     return (
       <TableRow key={card._id}>
@@ -32,9 +52,9 @@ export const CardsTableRow: FC<ICardsTableRowProps> = React.memo(
             {isPackMine && (
               <>
                 <IconButton>
-                  <Edit onClick={() => updateCardHandler(card._id)} />
+                  <Edit onClick={openUpdateModal} />
                 </IconButton>
-                <IconButton onClick={() => deleteCardHandler(card._id)}>
+                <IconButton onClick={openDeleteModal}>
                   <DeleteOutline />
                 </IconButton>
               </>

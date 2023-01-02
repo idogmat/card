@@ -9,9 +9,8 @@ import {
 import { DeleteOutline, Edit, MoreHoriz, School } from "@mui/icons-material";
 import React, { FC, useState } from "react";
 
-import { IAddCardRequest } from "./cardsAPI";
-import { Search } from "../../common/components/Search/Search";
-import { addCardTC } from "./cardsThunks";
+import { CardsModalsAC } from "features/Cards/cardsModalsSlice";
+import { Search } from "../../../common/components/Search/Search";
 import { useAppDispatch } from "common/hooks";
 
 interface ICardsHeaderProps {
@@ -36,6 +35,9 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
     const closeMenu = () => {
       setMenuAnchor(null);
     };
+
+    const openAddNewCardModal = () =>
+      dispatch(CardsModalsAC.setAddCardState({ state: true }));
 
     return (
       <>
@@ -97,7 +99,7 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
             <Button
               sx={{ borderRadius: "24px" }}
               variant={"contained"}
-              onClick={() => {}}
+              onClick={openAddNewCardModal}
             >
               Add new card
             </Button>
