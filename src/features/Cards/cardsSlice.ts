@@ -1,5 +1,8 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+
+import { BuildCircleSharp } from "@mui/icons-material";
 import { ICard } from "../../common/models";
+import { updateCardGradeTC } from "./cardsThunks";
 
 interface ICardsState {
   cards: ICard[];
@@ -42,6 +45,19 @@ const cardsSlice = createSlice({
     setCardQuestion: (draft, action: PayloadAction<{ value: string }>) => {
       draft.cardQuestion = action.payload.value;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(updateCardGradeTC.fulfilled, (draft, action) => {
+      console.log(action.payload.card_id);
+
+      const card = draft.cards.find(
+        (card) => card._id === action.payload.card_id
+      );
+      if (card) {
+        card.grade = action.payload.grade;
+        card.shots += 1;
+      }
+    });
   },
 });
 

@@ -8,20 +8,20 @@ import {
   cardsShowPerPageSelector,
   cardsTotalCountSelector,
 } from "./selectors";
-import { deleteCardTC, getCardsTC, updateCardTC } from "./cardsThunks";
 import { useAllSelector, useAppDispatch } from "common/hooks";
 import { useLocation, useParams, useSearchParams } from "react-router-dom";
 
 import { BackTo } from "common/components/BackTo/BackTo";
 import { CardsAC } from "./cardsSlice";
-import CardsHeader from "./CardsHeader";
-import { CardsModals } from "./CardsModals";
-import { CardsTable } from "./CardsTable";
+import CardsHeader from "./components/CardsHeader";
+import { CardsModals } from "./components/modals/CardsModals";
+import { CardsTable } from "./components/CardsTable";
 import { IGetCardsRequest } from "./cardsAPI";
 import { NotFoundElements } from "common/components/NotFoundElements/NotFoundElements";
 import { Preloader } from "common/components/Preloader/Preloader";
 import { TablePagination } from "common/TablePagination/TablePagination";
 import { appStateSelect } from "app/selectors";
+import { getCardsTC } from "./cardsThunks";
 import { selectOptions } from "./Cards.data";
 import styles from "common/styles/common.module.css";
 import { userStateSelector } from "../User/selectors";
@@ -111,22 +111,6 @@ export const Cards = React.memo(() => {
     [dispatch, setSearchParams]
   );
 
-  const deleteCardHandler = useCallback(
-    (cardID: string) => {
-      dispatch(deleteCardTC(cardID, packID ? packID : ""));
-    },
-    [dispatch, packID]
-  );
-
-  const updateCardHandler = useCallback(
-    (cardID: string) => {
-      const mockQuestion = "new question";
-      const model = { card: { _id: cardID, question: mockQuestion } };
-      dispatch(updateCardTC(packID ? packID : "", model));
-    },
-    [dispatch, packID]
-  );
-
   const setSearchRequestToQuery = useCallback(
     debounce((value: string) => {
       setSearchParams({ ...params, search: value });
@@ -182,8 +166,6 @@ export const Cards = React.memo(() => {
               <CardsTable
                 cards={cards}
                 isPackMine={isPackMine}
-                deleteCardHandler={deleteCardHandler}
-                updateCardHandler={updateCardHandler}
                 sort={sort}
                 setSort={handleChangeSort}
               />

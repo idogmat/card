@@ -1,12 +1,15 @@
-import { AppThunkActionType } from "../../common/hooks/useAllSelector";
 import {
-  cardsAPI,
   IAddCardRequest,
   IGetCardsRequest,
+  IUpdateCardGradeRequest,
   IUpdateCardRequest,
+  cardsAPI,
 } from "./cardsAPI";
-import { CardsAC } from "./cardsSlice";
+
 import { AppAC } from "../../app/appReducer";
+import { AppThunkActionType } from "../../common/hooks/useAllSelector";
+import { CardsAC } from "./cardsSlice";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import { defaultErrorMessage } from "../../common/utils/errorHandlers";
 
 export const getCardsTC = (model: IGetCardsRequest): AppThunkActionType => {
@@ -90,3 +93,11 @@ export const updateCardTC = (
     }
   };
 };
+
+export const updateCardGradeTC = createAsyncThunk(
+  "cards/updateCardGrade",
+  async (model: IUpdateCardGradeRequest, thunkAPI) => {
+    const { data } = await cardsAPI.updateCardGradeRequest(model);
+    return { card_id: model.card_id, grade: data.updatedGrade.grade };
+  }
+);

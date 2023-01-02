@@ -11,28 +11,19 @@ import React, { FC } from "react";
 
 import { CardsTableRow } from "./CardsTableRow";
 import { HorizontalRule } from "@mui/icons-material";
-import { ICard } from "../../common/models";
-import { IFieldSort } from "./Cards";
-import { getSortIcon } from "../../common/utils/assets";
+import { ICard } from "../../../common/models";
+import { IFieldSort } from "../Cards";
+import { getSortIcon } from "../../../common/utils/assets";
 
 interface ICardsTableProps {
   cards: ICard[];
   isPackMine: boolean;
   sort: { direction: number; field: string };
-  deleteCardHandler: (cardID: string) => void;
-  updateCardHandler: (cardID: string) => void;
   setSort: (value: IFieldSort) => void;
 }
 
 export const CardsTable: FC<ICardsTableProps> = React.memo(
-  ({
-    cards,
-    isPackMine,
-    deleteCardHandler,
-    updateCardHandler,
-    sort,
-    setSort,
-  }) => {
+  ({ cards, isPackMine, sort, setSort }) => {
     const isAsc = sort.direction === 1;
     const sortIcon = getSortIcon(isAsc);
 
@@ -77,8 +68,6 @@ export const CardsTable: FC<ICardsTableProps> = React.memo(
                 <CardsTableRow
                   key={card._id}
                   card={card}
-                  updateCardHandler={updateCardHandler}
-                  deleteCardHandler={deleteCardHandler}
                   isPackMine={isPackMine}
                 />
               );

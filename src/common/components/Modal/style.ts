@@ -5,11 +5,11 @@ export const modalStyle = {
   transform: "translate(-50%, -50%)",
   width: 550,
   bgcolor: "background.paper",
-  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
   display: "flex",
   flexDirection: "column",
+  borderRadius: "10px",
 };
 
 export const modalHeaderStyle = {

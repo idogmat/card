@@ -1,35 +1,26 @@
 import { Button, FormControl, FormGroup, TextField } from "@mui/material";
 import { FC, useState } from "react";
+import { useAllSelector, useAppDispatch } from "common/hooks";
 
 import { Box } from "@mui/system";
-import { IAddCardRequest } from "./cardsAPI";
+import { CardsModalsAC } from "features/Cards/cardsModalsSlice";
+import { IAddCardRequest } from "../../cardsAPI";
+import { ICardData } from "./CardsModals";
 import { ModalBase } from "common/components/Modal";
-import { addCardTC } from "./cardsThunks";
-import { useAppDispatch } from "common/hooks";
+import { addCardModalSelector } from "./modalsSelectors";
+import { addCardTC } from "../../cardsThunks";
 
 interface ICardsAddModalProps {
-  open: boolean;
-  handleClose: () => void;
   packID: string;
 }
 
-interface INewCardData {
-  question: string;
-  answer: string;
-}
-
-export const CardsAddModal: FC<ICardsAddModalProps> = ({
-  open,
-  handleClose,
-  packID,
-}) => {
+export const CardsAddModal: FC<ICardsAddModalProps> = ({ packID }) => {
   // Selectors & dispatch
   const dispatch = useAppDispatch();
+  const { isOpen } = useAllSelector(addCardModalSelector);
 
   // Local States
-  const [newCardData, setNewCardData] = useState<INewCardData>(
-    {} as INewCardData
-  );
+  const [newCardData, setNewCardData] = useState<ICardData>({} as ICardData);
 
   // Utils
   const setNewCardDataQuestion = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,6 +30,9 @@ export const CardsAddModal: FC<ICardsAddModalProps> = ({
   const setNewCardDataAnswer = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewCardData({ ...newCardData, answer: e.currentTarget.value });
   };
+
+  const handleClose = () =>
+    dispatch(CardsModalsAC.setAddCardState({ state: false }));
 
   const addNewCardHandler = () => {
     const cardData: IAddCardRequest = {
@@ -55,7 +49,7 @@ export const CardsAddModal: FC<ICardsAddModalProps> = ({
   return (
     <div>
       <ModalBase
-        open={open}
+        open={isOpen}
         handleClose={handleClose}
         modalTitle="Add new card"
       >
