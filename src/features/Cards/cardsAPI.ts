@@ -8,8 +8,8 @@ export interface IGetCardsRequest {
   min?: string;
   max?: string;
   sortCards?: string;
-  page: string | number;
-  pageCount: string | number;
+  page?: string | number;
+  pageCount?: string | number;
 }
 
 interface IGetCardsResponse {
@@ -43,6 +43,22 @@ export interface IUpdateCardRequest {
   };
 }
 
+export interface IUpdateGradeResponse {
+  updatedGrade: {
+    _id: string;
+    cardsPack_id: number;
+    card_id: string;
+    user_id: string;
+    grade: number;
+    shots: number;
+  };
+}
+
+export interface IUpdateCardGradeRequest {
+  grade: number;
+  card_id: string;
+}
+
 const getCardsRequest = (data: IGetCardsRequest) => {
   const requestConfig = { params: data };
   return instance.get<IGetCardsResponse>("/cards/card", requestConfig);
@@ -65,9 +81,14 @@ const updateCardRequest = (model: IUpdateCardRequest) => {
   return instance.put("/cards/card", model);
 };
 
+const updateCardGradeRequest = (model: IUpdateCardGradeRequest) => {
+  return instance.put<IUpdateGradeResponse>("/cards/grade", model);
+};
+
 export const cardsAPI = {
   getCardsRequest,
   addCardRequest,
   deleteCardRequest,
   updateCardRequest,
+  updateCardGradeRequest,
 };

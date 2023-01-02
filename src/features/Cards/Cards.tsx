@@ -8,7 +8,6 @@ import {
   cardsShowPerPageSelector,
   cardsTotalCountSelector,
 } from "./selectors";
-import { deleteCardTC, getCardsTC, updateCardTC } from "./cardsThunks";
 import { useAllSelector, useAppDispatch } from "common/hooks";
 import { useLocation, useParams, useSearchParams } from "react-router-dom";
 
@@ -22,6 +21,7 @@ import { NotFoundElements } from "common/components/NotFoundElements/NotFoundEle
 import { Preloader } from "common/components/Preloader/Preloader";
 import { TablePagination } from "common/TablePagination/TablePagination";
 import { appStateSelect } from "app/selectors";
+import { getCardsTC } from "./cardsThunks";
 import { selectOptions } from "./Cards.data";
 import styles from "common/styles/common.module.css";
 import { userStateSelector } from "../User/selectors";

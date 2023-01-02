@@ -1,17 +1,18 @@
-import React, { ReactNode } from "react";
-import Paper from "@mui/material/Paper/Paper";
-import TableContainer from "@mui/material/TableContainer/TableContainer";
-import Table from "@mui/material/Table/Table";
-import TableHead from "@mui/material/TableHead/TableHead";
-import TableRow from "@mui/material/TableRow/TableRow";
 import { Box, TableBody, TableCell } from "@mui/material";
+import React, { ReactNode } from "react";
+
 import AddNewPack from "./AddNewPack";
-import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
 import { IPackResponse } from "./packsAPI";
-import { TablePagination } from "../../common/TablePagination/TablePagination";
-import { selectOptions } from "./Packs.data";
 import { NotFoundElements } from "../../common/components/NotFoundElements/NotFoundElements";
 import PackElement from "./PackElement";
+import Paper from "@mui/material/Paper/Paper";
+import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
+import Table from "@mui/material/Table/Table";
+import TableContainer from "@mui/material/TableContainer/TableContainer";
+import TableHead from "@mui/material/TableHead/TableHead";
+import { TablePagination } from "../../common/TablePagination/TablePagination";
+import TableRow from "@mui/material/TableRow/TableRow";
+import { selectOptions } from "./Packs.data";
 
 interface ITableProps {
   id: string;
@@ -43,7 +44,6 @@ const PacksTable: React.FC<ITableProps> = React.memo(
     totalPageCount,
     page,
     pageCount,
-    addPackMode,
     setAddPackMode,
     isMyPack,
   }) => {
