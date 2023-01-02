@@ -17,3 +17,5 @@ export const packsCardsPacksSelector = (state: RootState) =>
   state.packs.cardPacks;
 export const packsMaxCardsPacksSelector = (state: RootState) =>
   state.packs.maxCardsCount;
+export const packsMinCardsPacksSelector = (state: RootState) =>
+  state.packs.minCardsCount;

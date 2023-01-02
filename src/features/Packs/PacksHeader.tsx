@@ -11,6 +11,7 @@ interface IHeaderProps {
   changeSearchHandler: (s: string) => void;
   isMyPack: boolean;
   handlerIsMyPack: (param: boolean) => void;
+  minCardsCount: number;
   maxCardsCount: number;
   max: number | string;
   min: number | string;
@@ -30,6 +31,7 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
     max,
     min,
     maxCardsCount,
+    minCardsCount,
     handlerIsMyPack,
     addPackMode,
   }) => {
@@ -80,6 +82,7 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
             <SuperRange
               max={max}
               min={min}
+              minCardsCount={minCardsCount}
               maxCardsCount={maxCardsCount}
               onChangeSlider={changeRangeHandler}
             />

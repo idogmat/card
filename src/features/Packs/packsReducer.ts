@@ -1,20 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IPackResponse, ResponseGetPacks } from "./packsAPI";
-interface IInitialState {
-  cardPacks: IPackResponse[];
-  maxCardsCount: number;
-  minCardsCount: number;
-  page: number;
-  pageCount: number;
-  sortPacks: string;
-  cardPacksTotalCount: number;
-  isMyPack: boolean;
-  packName: string;
-  max: string | number;
-  min: string | number;
-}
-export const initialState: IInitialState = {
-  cardPacks: [],
+export const initialState = {
+  cardPacks: [] as IPackResponse[],
   maxCardsCount: 10,
   minCardsCount: 0,
   max: 15,
@@ -26,6 +13,7 @@ export const initialState: IInitialState = {
   isMyPack: false,
   packName: "",
 };
+type StateType = typeof initialState;
 const packsSlice = createSlice({
   name: "packs",
   initialState,
@@ -39,7 +27,7 @@ const packsSlice = createSlice({
         packName: string;
         isMyPack: boolean;
       }>
-    ): IInitialState => {
+    ): StateType => {
       return {
         ...action.payload.packs,
         min: +action.payload.min,
