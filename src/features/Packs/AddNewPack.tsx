@@ -38,18 +38,19 @@ const AddNewPack: FC<INewPack> = React.memo(({ addPack, setAddPackMode }) => {
         <Box>
           <label>
             <input style={{ display: "none" }} type="file" accept={"image/*"} />
-            <IconButton
-              component="span"
-              color={"primary"}
-            >
+            <IconButton component="span" color={"primary"}>
               <PhotoCamera />
             </IconButton>
           </label>
         </Box>
       </FormGroup>
 
-      <Box>
-        <Button color="primary" variant="contained">
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Button
+          onClick={() => setAddPackMode(false)}
+          color="primary"
+          variant="contained"
+        >
           Cancel
         </Button>
         <Button onClick={addNewPack} color="primary" variant="contained">

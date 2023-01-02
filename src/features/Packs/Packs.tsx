@@ -189,10 +189,13 @@ const Packs = () => {
         removePack={removePack}
         isMyPack={isMyPack}
       />
-      <PacksModals open={addPackMode} handleClose={()=>setAddPackMode(false)} modalTitle={'Add Pack'}>
-      <AddNewPack addPack={addPack} setAddPackMode={setAddPackMode} />
+      <PacksModals
+        open={addPackMode}
+        handleClose={() => setAddPackMode(false)}
+        modalTitle={"Add New Pack"}
+      >
+        <AddNewPack addPack={addPack} setAddPackMode={setAddPackMode} />
       </PacksModals>
-
     </Box>
   );
 };

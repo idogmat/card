@@ -53,12 +53,9 @@ export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
     }
   };
 };
-export const addPackTC = (
-  name: string,
-  deckCover: string,
-  isPrivate?: boolean
-): AppThunkActionType => {
-  return async (dispatch, getState) => {
+export const addPackTC =
+  (name: string, deckCover: string, isPrivate?: boolean): AppThunkActionType =>
+  async (dispatch, getState) => {
     dispatch(AppAC.setIsLoading({ isLoading: true }));
     try {
       const { isMyPack } = getState().packs;
@@ -72,7 +69,6 @@ export const addPackTC = (
       dispatch(AppAC.setIsLoading({ isLoading: false }));
     }
   };
-};
 
 export const removePackTC = (id: string): AppThunkActionType => {
   return async (dispatch, getState) => {
