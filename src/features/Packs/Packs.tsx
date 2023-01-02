@@ -26,6 +26,8 @@ import { getSortIcon } from "../../common/utils/assets";
 import PacksHeader from "./PacksHeader";
 import styles from "../../common/styles/common.module.css";
 import { Preloader } from "../../common/components/Preloader/Preloader";
+import AddNewPack from "./AddNewPack";
+import PacksModals from "./PacksModals";
 
 const Packs = () => {
   const user = useAllSelector(userStateSelect);
@@ -180,9 +182,6 @@ const Packs = () => {
         totalPageCount={totalPageCount}
         pageCount={pageCount}
         page={page}
-        addPack={addPack}
-        addPackMode={addPackMode}
-        setAddPackMode={setAddPackMode}
         changePage={changePage}
         handleChangeRowsPerPage={handleChangeRowsPerPage}
         changeSort={changeSort}
@@ -190,6 +189,10 @@ const Packs = () => {
         removePack={removePack}
         isMyPack={isMyPack}
       />
+      <PacksModals open={addPackMode} handleClose={()=>setAddPackMode(false)} modalTitle={'Add Pack'}>
+      <AddNewPack addPack={addPack} setAddPackMode={setAddPackMode} />
+      </PacksModals>
+
     </Box>
   );
 };

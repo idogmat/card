@@ -1,11 +1,13 @@
 import React, { FC, useState } from "react";
-import { Box, Checkbox, IconButton, TextField } from "@mui/material";
+import { Box, Checkbox, FormGroup, IconButton, TextField } from "@mui/material";
 import Button from "@mui/material/Button/Button";
+import { PhotoCamera } from "@mui/icons-material";
 
 interface INewPack {
   addPack: (s: string, d: string, b: boolean) => void;
   setAddPackMode: (b: boolean) => void;
 }
+
 const AddNewPack: FC<INewPack> = React.memo(({ addPack, setAddPackMode }) => {
   const [newPackName, setNewPackName] = useState("");
   const [newDeckCover, setNewDeckCover] = useState("1");
@@ -17,38 +19,43 @@ const AddNewPack: FC<INewPack> = React.memo(({ addPack, setAddPackMode }) => {
 
   return (
     <Box>
-      <div>
-        <IconButton onClick={() => setAddPackMode(false)}>X</IconButton>
-      </div>
-      <TextField
-        label="Title"
-        variant="standard"
-        color="primary"
-        value={newPackName}
-        onChange={(e) => setNewPackName(e.currentTarget.value)}
-      />
-
-      <div>
-        <Checkbox
-          checked={isPrivate}
-          onChange={(e) => setPrivate(e.currentTarget.checked)}
+      <FormGroup>
+        <TextField
+          label="Name pack"
+          variant="standard"
           color="primary"
+          value={newPackName}
+          onChange={(e) => setNewPackName(e.currentTarget.value)}
         />
-        Private pack
-      </div>
-      <div>
-        {/*<input type='file'>*/}
-        {/*  <IconButton>pushPhoto</IconButton>*/}
-        {/*</input>*/}
-      </div>
-      <div>
+        <Box>
+          Private pack{" "}
+          <Checkbox
+            checked={isPrivate}
+            onChange={(e) => setPrivate(e.currentTarget.checked)}
+            color="primary"
+          />
+        </Box>
+        <Box>
+          <label>
+            <input style={{ display: "none" }} type="file" accept={"image/*"} />
+            <IconButton
+              component="span"
+              color={"primary"}
+            >
+              <PhotoCamera />
+            </IconButton>
+          </label>
+        </Box>
+      </FormGroup>
+
+      <Box>
         <Button color="primary" variant="contained">
           Cancel
         </Button>
         <Button onClick={addNewPack} color="primary" variant="contained">
-          addPack
+          Add Pack
         </Button>
-      </div>
+      </Box>
     </Box>
   );
 });

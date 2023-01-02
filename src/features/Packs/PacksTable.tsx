@@ -20,9 +20,6 @@ interface ITableProps {
   pageCount: number;
   page: number;
   isMyPack: boolean;
-  addPackMode: boolean;
-  setAddPackMode: (set: boolean) => void;
-  addPack: (s: string, d: string, b: boolean) => void;
   changeSort: (field: string) => void;
   showSortIcon: (field: string) => ReactNode;
   removePack: (id: string) => void;
@@ -33,7 +30,6 @@ interface ITableProps {
 const PacksTable: React.FC<ITableProps> = React.memo(
   ({
     id,
-    addPack,
     changeSort,
     removePack,
     handleChangeRowsPerPage,
@@ -43,8 +39,6 @@ const PacksTable: React.FC<ITableProps> = React.memo(
     totalPageCount,
     page,
     pageCount,
-    addPackMode,
-    setAddPackMode,
     isMyPack,
   }) => {
     return (
@@ -97,7 +91,6 @@ const PacksTable: React.FC<ITableProps> = React.memo(
             />
           </Box>
         </Paper>
-        <AddNewPack addPack={addPack} setAddPackMode={setAddPackMode} />
       </Paper>
     );
   }
