@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Box, Container, Toolbar } from "@mui/material";
-import { Search } from "../../common/components/Search/Search";
+import { Search } from "../../../common/components/Search/Search";
 import FormControl from "@mui/material/FormControl/FormControl";
 import Button from "@mui/material/Button/Button";
 import SuperRange from "./SuperRange";

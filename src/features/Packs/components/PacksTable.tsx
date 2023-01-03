@@ -5,12 +5,12 @@ import Table from "@mui/material/Table/Table";
 import TableHead from "@mui/material/TableHead/TableHead";
 import TableRow from "@mui/material/TableRow/TableRow";
 import { Box, TableBody, TableCell } from "@mui/material";
-import AddNewPack from "./AddNewPack";
+import AddNewPack from "./modals/AddNewPack";
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
-import { IPackResponse } from "./packsAPI";
-import { TablePagination } from "../../common/components/TablePagination/TablePagination";
-import { selectOptions } from "./Packs.data";
-import { NotFoundElements } from "../../common/components/NotFoundElements/NotFoundElements";
+import { IPackResponse } from "../packsAPI";
+import { TablePagination } from "../../../common/components/TablePagination/TablePagination";
+import { selectOptions } from "../Packs.data";
+import { NotFoundElements } from "../../../common/components/NotFoundElements/NotFoundElements";
 import PackElement from "./PackElement";
 
 interface ITableProps {
@@ -25,6 +25,16 @@ interface ITableProps {
   removePack: (id: string) => void;
   handleChangeRowsPerPage: (event: SelectChangeEvent) => void;
   changePage: (event: React.ChangeEvent<unknown>, newPage: number) => void;
+  setDeletePackMode: (state: {
+    id: string;
+    packName: string;
+    mode: boolean;
+  }) => void;
+  setEditPackMode: (state: {
+    id: string;
+    packName: string;
+    mode: boolean;
+  }) => void;
 }
 
 const PacksTable: React.FC<ITableProps> = React.memo(
@@ -32,6 +42,7 @@ const PacksTable: React.FC<ITableProps> = React.memo(
     id,
     changeSort,
     removePack,
+    setEditPackMode,
     handleChangeRowsPerPage,
     changePage,
     showSortIcon,
@@ -40,6 +51,7 @@ const PacksTable: React.FC<ITableProps> = React.memo(
     page,
     pageCount,
     isMyPack,
+    setDeletePackMode,
   }) => {
     return (
       <Paper sx={{ position: "relative" }}>
@@ -66,7 +78,8 @@ const PacksTable: React.FC<ITableProps> = React.memo(
                     <PackElement
                       key={pack._id}
                       id={id}
-                      removePack={removePack}
+                      setDeletePackMode={setDeletePackMode}
+                      setEditPackMode={setEditPackMode}
                       pack={pack}
                       isMyPack={isMyPack}
                     />

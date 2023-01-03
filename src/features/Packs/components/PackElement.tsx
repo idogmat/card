@@ -2,22 +2,31 @@ import { DeleteOutline, Edit } from "@mui/icons-material";
 import { NavLink, useSearchParams } from "react-router-dom";
 
 import Button from "@mui/material/Button/Button";
-import { IPackResponse } from "./packsAPI";
+import { IPackResponse } from "../packsAPI";
 import React from "react";
 import SchoolIcon from "@mui/icons-material/School";
 import { TableCell } from "@mui/material";
 import TableRow from "@mui/material/TableRow/TableRow";
-import { formDate } from "../../common/utils/date";
+import { formDate } from "../../../common/utils/date";
 
 interface IRowProps {
   id: string;
   pack: IPackResponse;
-  removePack: (id: string) => void;
+  setDeletePackMode: (state: {
+    id: string;
+    packName: string;
+    mode: boolean;
+  }) => void;
+  setEditPackMode: (state: {
+    id: string;
+    packName: string;
+    mode: boolean;
+  }) => void;
   isMyPack: boolean;
 }
 
 const PackElement: React.FC<IRowProps> = React.memo(
-  ({ id, removePack, pack }) => {
+  ({ id, setDeletePackMode, pack, setEditPackMode }) => {
     const [params, setSearchParams] = useSearchParams();
     const backToState = { previousURL: params.toString(), packName: pack.name };
 
@@ -41,11 +50,26 @@ const PackElement: React.FC<IRowProps> = React.memo(
             </NavLink>
             <Button
               disabled={pack.user_id !== id}
-              onClick={() => removePack(pack._id)}
+              onClick={() =>
+                setDeletePackMode({
+                  id: pack._id,
+                  packName: pack.name,
+                  mode: true,
+                })
+              }
             >
               <DeleteOutline />
             </Button>
-            <Button disabled={pack.user_id !== id}>
+            <Button
+              disabled={pack.user_id !== id}
+              onClick={() =>
+                setEditPackMode({
+                  id: pack._id,
+                  packName: pack.name,
+                  mode: true,
+                })
+              }
+            >
               <Edit />
             </Button>
           </TableCell>

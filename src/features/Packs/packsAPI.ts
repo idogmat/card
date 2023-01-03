@@ -50,8 +50,19 @@ const addPack = (name: string, deckCover: string, isPrivate?: boolean) => {
 const deletePack = (id: string) => {
   return instance.delete(`/cards/pack?id=${id}`);
 };
+const updatePack = (
+  id: string,
+  name: string,
+  deckCover: string,
+  isPrivate?: boolean
+) => {
+  return instance.put(`/cards/pack`, {
+    cardsPack: { _id: id, name, deckCover, private: isPrivate },
+  });
+};
 export const PacksAPI = {
   getPacks,
   addPack,
   deletePack,
+  updatePack,
 };

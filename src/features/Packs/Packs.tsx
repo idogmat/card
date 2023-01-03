@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Box, debounce } from "@mui/material";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
-import { addPackTC, removePackTC, setPacks } from "./packsThunks";
+import { addPackTC, removePackTC, setPacks, updatePackTC } from "./packsThunks";
 import {
   appStateSelect,
   packsCardsPacksSelector,
@@ -21,13 +21,15 @@ import { packsAC } from "./packsReducer";
 import { useSearchParams } from "react-router-dom";
 import { HorizontalRule } from "@mui/icons-material";
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
-import PacksTable from "./PacksTable";
+import PacksTable from "./components/PacksTable";
 import { getSortIcon } from "../../common/utils/assets";
-import PacksHeader from "./PacksHeader";
+import PacksHeader from "./components/PacksHeader";
 import styles from "../../common/styles/common.module.css";
 import { Preloader } from "../../common/components/Preloader/Preloader";
-import AddNewPack from "./AddNewPack";
-import PacksModals from "./PacksModals";
+import AddNewPack from "./components/modals/AddNewPack";
+import PacksModals from "./components/modals/PacksModals";
+import DeletePack from "./components/modals/DeletePack";
+import EditPack from "./components/modals/EditPack";
 
 const Packs = () => {
   const user = useAllSelector(userStateSelect);
@@ -52,6 +54,16 @@ const Packs = () => {
 
   // Utils
   const [addPackMode, setAddPackMode] = useState<boolean>(false);
+  const [deletePackMode, setDeletePackMode] = useState<{
+    id: string;
+    packName: string;
+    mode: boolean;
+  }>({ id: "", packName: "", mode: false });
+  const [editPackMode, setEditPackMode] = useState<{
+    id: string;
+    packName: string;
+    mode: boolean;
+  }>({ id: "", packName: "", mode: false });
   const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
   const isAsc = sort.direction === 1;
   const sortIcon = getSortIcon(isAsc);
@@ -146,6 +158,13 @@ const Packs = () => {
   const removeSort = useCallback(() => {
     setSearchParams({});
   }, []);
+  const updatePack = useCallback(
+    (id: string, name: string, deckCover: string, isPrivate?: boolean) => {
+      dispatch(updatePackTC({ id, name, deckCover, isPrivate }));
+      setSearchParams({ ...params });
+    },
+    []
+  );
 
   return (
     <Box
@@ -187,6 +206,8 @@ const Packs = () => {
         changeSort={changeSort}
         showSortIcon={showSortIcon}
         removePack={removePack}
+        setDeletePackMode={setDeletePackMode}
+        setEditPackMode={setEditPackMode}
         isMyPack={isMyPack}
       />
       <PacksModals
@@ -195,6 +216,32 @@ const Packs = () => {
         modalTitle={"Add New Pack"}
       >
         <AddNewPack addPack={addPack} setAddPackMode={setAddPackMode} />
+      </PacksModals>
+      <PacksModals
+        open={deletePackMode.mode}
+        handleClose={() =>
+          setDeletePackMode({ id: "", packName: "", mode: false })
+        }
+        modalTitle={"Delete Pack"}
+      >
+        <DeletePack
+          deletePackMode={deletePackMode}
+          removePack={removePack}
+          setDeletePackMode={setDeletePackMode}
+        />
+      </PacksModals>
+      <PacksModals
+        open={editPackMode.mode}
+        handleClose={() =>
+          setEditPackMode({ id: "", packName: "", mode: false })
+        }
+        modalTitle={"Edit Pack"}
+      >
+        <EditPack
+          updatePack={updatePack}
+          setEditPackMode={setEditPackMode}
+          editPackMode={editPackMode}
+        />
       </PacksModals>
     </Box>
   );

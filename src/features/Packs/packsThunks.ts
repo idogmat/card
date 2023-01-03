@@ -28,7 +28,6 @@ export const setPacks = createAppAsyncThunk(
       const { pageCount, page, min, max, sortPacks, packName, isMyPack } =
         thunkAPI.getState().packs;
       if (Object.keys(model).length === 0) {
-        debugger;
         const res = await PacksAPI.getPacks({});
         return {
           packs: res.data,
@@ -48,7 +47,6 @@ export const setPacks = createAppAsyncThunk(
           max: model.max || max,
           sortPacks: !!model?.sortPacks ? model.sortPacks : sortPacks,
         });
-        debugger;
         return {
           packs: res.data,
           min: model.min || min,
@@ -83,10 +81,35 @@ export const addPackTC = createAppAsyncThunk(
   }
 );
 export const removePackTC = createAppAsyncThunk(
-  "packs/addPack",
+  "packs/removePack",
   async (id: string, thunkAPI) => {
     return errorHandlingThunk(thunkAPI, async () => {
       const { data } = await PacksAPI.deletePack(id);
+      const { isMyPack } = thunkAPI.getState().packs;
+      thunkAPI.dispatch(setPacks({ isMyPack: isMyPack ? "true" : "false" }));
+      thunkAPI.dispatch(
+        AppAC.setSuccessMessage({ message: "Successfully updated" })
+      );
+    });
+  }
+);
+export const updatePackTC = createAppAsyncThunk(
+  "packs/updatePack",
+  async (
+    fields: {
+      id: string;
+      name: string;
+      deckCover: string;
+      isPrivate?: boolean;
+    },
+    thunkAPI
+  ) => {
+    return errorHandlingThunk(thunkAPI, async () => {
+      const { data } = await PacksAPI.updatePack(
+        fields.id,
+        fields.name,
+        fields.deckCover
+      );
       const { isMyPack } = thunkAPI.getState().packs;
       thunkAPI.dispatch(setPacks({ isMyPack: isMyPack ? "true" : "false" }));
       thunkAPI.dispatch(
