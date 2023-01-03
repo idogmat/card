@@ -16,6 +16,12 @@ const DeletePack = React.memo(({}) => {
   const dispatch = useAppDispatch();
   const remove = () => {
     dispatch(removePackTC(pack._id));
+    dispatch(
+      packsModalsAC.setDeletePackState({
+        status: false,
+        pack: {} as IPackResponse,
+      })
+    );
   };
   const handleClose = () =>
     dispatch(

@@ -32,6 +32,12 @@ const EditPack = () => {
 
   const updatePack = () => {
     dispatch(updatePackTC({ id: pack._id, ...updatePackData }));
+    dispatch(
+      packsModalsAC.setUpdatePackState({
+        status: false,
+        pack: {} as IPackResponse,
+      })
+    );
   };
   return (
     <ModalBase open={isOpen} handleClose={handleClose} modalTitle={"Edit Pack"}>
