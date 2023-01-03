@@ -8,6 +8,7 @@ import { addNewModalSelector } from "./modalsSelectors";
 import packs from "../../Packs";
 import { packsModalsAC } from "../../packsModalsSlice";
 import { addPackTC } from "../../packsThunks";
+import { IPackResponse } from "../../packsAPI";
 
 interface INewPack {
   name: string;
@@ -24,8 +25,8 @@ const AddNewPack = React.memo(() => {
     private: false,
   });
   const addNewPack = () => {
-    dispatch(packsModalsAC.addPack(newPackData));
     dispatch(addPackTC(newPackData));
+    dispatch(packsModalsAC.setAddPackState({ status: false }));
   };
   const handleClose = () =>
     dispatch(packsModalsAC.setAddPackState({ status: false }));
