@@ -1,4 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { loginTC } from "../Login/loginThunks";
+import { registerTC } from "../Register/registerThunks";
 
 export interface IAuthState {
   isAuth: boolean;
@@ -14,6 +16,11 @@ const authSlice = createSlice({
     setIsAuth: (draft, action: PayloadAction<{ isAuth: boolean }>) => {
       draft.isAuth = action.payload.isAuth;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(loginTC.fulfilled, (state, action) => {
+      state.isAuth = true;
+    });
   },
 });
 
