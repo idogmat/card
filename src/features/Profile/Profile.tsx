@@ -12,15 +12,15 @@ import {
 } from "@mui/material";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
 import { Logout, PhotoCameraBackOutlined } from "@mui/icons-material";
-import { logOutTC } from "../Login/loginThunks";
+
 import { EditableText } from "../../common/components/EditableText/EditableText";
 import { userStateSelector } from "../User/selectors";
 import { updateUserInfoTC } from "./profileThunks";
 import { appStateSelect } from "../../app/selectors";
 import styles from "../../common/styles/common.module.css";
 import { Preloader } from "../../common/components/Preloader/Preloader";
-import { avatarPlaceholder } from "../../common/utils/assets";
 import { lime } from "@mui/material/colors";
+import { logOutTC } from "../Login/loginThunks";
 
 export const Profile = () => {
   const dispatch = useAppDispatch();

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { loginTC } from "../Login/loginThunks";
+import { loginTC, logOutTC } from "../Login/loginThunks";
 import { registerTC } from "../Register/registerThunks";
 
 export interface IAuthState {
@@ -20,6 +20,9 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(loginTC.fulfilled, (state, action) => {
       state.isAuth = true;
+    });
+    builder.addCase(logOutTC.fulfilled, (state, action) => {
+      state.isAuth = false;
     });
   },
 });

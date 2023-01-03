@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IPackResponse, ResponseGetPacks } from "./packsAPI";
+import { setPacks } from "./packsThunks";
 export const initialState = {
   cardPacks: [] as IPackResponse[],
   maxCardsCount: 10,
@@ -18,24 +19,6 @@ const packsSlice = createSlice({
   name: "packs",
   initialState,
   reducers: {
-    setPacks: (
-      draft,
-      action: PayloadAction<{
-        packs: ResponseGetPacks;
-        max: number | string;
-        min: number | string;
-        packName: string;
-        isMyPack: boolean;
-      }>
-    ): StateType => {
-      return {
-        ...action.payload.packs,
-        min: +action.payload.min,
-        max: +action.payload.max,
-        isMyPack: action.payload.isMyPack,
-        packName: action.payload.packName,
-      };
-    },
     setCurrentPage: (draft, action: PayloadAction<{ page: number }>) => {
       draft.page = action.payload.page;
     },
@@ -55,6 +38,27 @@ const packsSlice = createSlice({
     setPreferencePacks: (draft, action: PayloadAction<{ isMine: boolean }>) => {
       draft.isMyPack = action.payload.isMine;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(
+      setPacks.fulfilled,
+      (
+        state,
+        action: PayloadAction<{
+          packs: ResponseGetPacks;
+          max: number | string;
+          min: number | string;
+          packName: string;
+          isMyPack: boolean;
+        }>
+      ) => ({
+        ...action.payload.packs,
+        min: +action.payload.min,
+        max: +action.payload.max,
+        isMyPack: action.payload.isMyPack,
+        packName: action.payload.packName,
+      })
+    );
   },
 });
 

@@ -119,9 +119,9 @@ const Packs = () => {
     dispatch(packsAC.setPackName({ packName: value }));
   }, []);
   const addPack = useCallback(
-    (newPackName: string, newDeckCover: string, isPrivate: boolean) => {
-      dispatch(addPackTC(newPackName, newDeckCover, isPrivate));
-      setSearchParams({ ...params });
+    (name: string, deckCover: string, isPrivate: boolean) => {
+      dispatch(addPackTC({ name, deckCover, isPrivate }));
+      setSearchParams({ ...params, isMyPack: isMyPack ? "true" : "false" });
     },
     []
   );
