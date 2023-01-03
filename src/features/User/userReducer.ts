@@ -1,7 +1,9 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IUser } from "../../common/models";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+
 import { IUpdatedUserInfo } from "../Profile/profileAPI";
+import { IUser } from "../../common/models";
 import { loginTC } from "../Login/loginThunks";
+import { updateUserInfoTC } from "./../Profile/profileThunks";
 
 const initialState: IUser = {
   name: "",
@@ -30,6 +32,9 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(loginTC.fulfilled, (state, action) => {
       return action.payload.user;
+    });
+    builder.addCase(updateUserInfoTC.fulfilled, (state, action) => {
+      return action.payload;
     });
   },
 });

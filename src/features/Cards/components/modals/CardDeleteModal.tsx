@@ -24,7 +24,7 @@ export const CardsDeleteModal: FC<IUpdateCardModalProps> = ({ packID }) => {
     dispatch(CardsModalsAC.setDeleteCardState({ state: false }));
 
   const deleteCardHandler = () => {
-    dispatch(deleteCardTC(cardID, packID));
+    dispatch(deleteCardTC({ cardID, packID }));
     handleClose();
   };
 

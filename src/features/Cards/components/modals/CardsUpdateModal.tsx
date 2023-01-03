@@ -44,7 +44,7 @@ export const CardsUpdateModal: FC<IUpdateCardModalProps> = ({ packID }) => {
         answer,
       },
     };
-    dispatch(updateCardTC(packID, model));
+    dispatch(updateCardTC({ packID, model }));
     handleClose();
   };
 

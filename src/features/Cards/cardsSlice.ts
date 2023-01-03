@@ -1,8 +1,14 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import {
+  addCardTC,
+  deleteCardTC,
+  getCardsTC,
+  updateCardGradeTC,
+} from "./cardsThunks";
 
 import { BuildCircleSharp } from "@mui/icons-material";
 import { ICard } from "../../common/models";
-import { updateCardGradeTC } from "./cardsThunks";
+import { updateCardTC } from "features/Cards/cardsThunks";
 
 interface ICardsState {
   cards: ICard[];
@@ -30,33 +36,31 @@ const cardsSlice = createSlice({
   name: "cards",
   initialState,
   reducers: {
-    setCardsData: (draft, action: PayloadAction<{ data: ICardsState }>) => {
-      return action.payload.data;
+    setCards: (state, action: PayloadAction<{ cards: ICard[] }>) => {
+      state.cards = action.payload.cards;
     },
-    setCards: (draft, action: PayloadAction<{ cards: ICard[] }>) => {
-      draft.cards = action.payload.cards;
+    setPage: (state, action: PayloadAction<{ page: number }>) => {
+      state.page = action.payload.page;
     },
-    setPage: (draft, action: PayloadAction<{ page: number }>) => {
-      draft.page = action.payload.page;
+    setPageCount: (state, action: PayloadAction<{ showPerPage: number }>) => {
+      state.pageCount = action.payload.showPerPage;
     },
-    setPageCount: (draft, action: PayloadAction<{ showPerPage: number }>) => {
-      draft.pageCount = action.payload.showPerPage;
-    },
-    setCardQuestion: (draft, action: PayloadAction<{ value: string }>) => {
-      draft.cardQuestion = action.payload.value;
+    setCardQuestion: (state, action: PayloadAction<{ value: string }>) => {
+      state.cardQuestion = action.payload.value;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(updateCardGradeTC.fulfilled, (draft, action) => {
-      console.log(action.payload.card_id);
-
-      const card = draft.cards.find(
+    builder.addCase(updateCardGradeTC.fulfilled, (state, action) => {
+      const card = state.cards.find(
         (card) => card._id === action.payload.card_id
       );
       if (card) {
         card.grade = action.payload.grade;
         card.shots += 1;
       }
+    });
+    builder.addCase(getCardsTC.fulfilled, (state, action) => {
+      return action.payload;
     });
   },
 });
