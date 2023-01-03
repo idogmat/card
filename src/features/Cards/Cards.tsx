@@ -19,7 +19,7 @@ import { CardsTable } from "./components/CardsTable";
 import { IGetCardsRequest } from "./cardsAPI";
 import { NotFoundElements } from "common/components/NotFoundElements/NotFoundElements";
 import { Preloader } from "common/components/Preloader/Preloader";
-import { TablePagination } from "common/TablePagination/TablePagination";
+import { TablePagination } from "common/components/TablePagination/TablePagination";
 import { appStateSelect } from "app/selectors";
 import { getCardsTC } from "./cardsThunks";
 import { selectOptions } from "./Cards.data";

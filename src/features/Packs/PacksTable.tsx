@@ -8,7 +8,7 @@ import { Box, TableBody, TableCell } from "@mui/material";
 import AddNewPack from "./AddNewPack";
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
 import { IPackResponse } from "./packsAPI";
-import { TablePagination } from "../../common/TablePagination/TablePagination";
+import { TablePagination } from "../../common/components/TablePagination/TablePagination";
 import { selectOptions } from "./Packs.data";
 import { NotFoundElements } from "../../common/components/NotFoundElements/NotFoundElements";
 import PackElement from "./PackElement";

@@ -5,6 +5,7 @@ import { defaultErrorMessage } from "../../common/utils/errorHandlers";
 import { packsAC } from "./packsReducer";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
+import { createAppAsyncThunk } from "../../common/utils/AsyncThunk";
 
 interface IGetModel {
   page: string | number;
@@ -16,46 +17,45 @@ interface IGetModel {
   sortPacks: string;
   user_id: string;
 }
-export const setPacks = createAsyncThunk<
-  unknown,
-  Partial<IGetModel>,
-  { state: RootState }
->("packs/setPacks", async (model: Partial<IGetModel>, thunkAPI) => {
-  try {
-    thunkAPI.dispatch(AppAC.setIsLoading({ isLoading: true }));
-    // debugger;
-    const { pageCount, page, min, max, sortPacks, packName, isMyPack } =
-      thunkAPI.getState().packs;
-    if (Object.keys(model).length === 0) {
-      thunkAPI.dispatch(getDefaultPacksData({}));
-      return;
-    }
-    const { _id } = thunkAPI.getState().user;
-    const res = await PacksAPI.getPacks({
-      user_id: model.isMyPack === "true" || isMyPack ? _id : "",
-      packName: model.packName || packName,
-      pageCount: model.pageCount || pageCount,
-      page: model.page || page,
-      min: model.min || min,
-      max: model.max || max,
-      sortPacks: !!model?.sortPacks ? model.sortPacks : sortPacks,
-    });
-
-    thunkAPI.dispatch(
-      packsAC.setPacks({
-        packs: res.data,
+export const setPacks = createAppAsyncThunk(
+  "packs/setPacks",
+  async (model: Partial<IGetModel>, thunkAPI) => {
+    try {
+      thunkAPI.dispatch(AppAC.setIsLoading({ isLoading: true }));
+      // debugger;
+      const { pageCount, page, min, max, sortPacks, packName, isMyPack } =
+        thunkAPI.getState().packs;
+      if (Object.keys(model).length === 0) {
+        thunkAPI.dispatch(getDefaultPacksData({}));
+        return;
+      }
+      const { _id } = thunkAPI.getState().user;
+      const res = await PacksAPI.getPacks({
+        user_id: model.isMyPack === "true" || isMyPack ? _id : "",
+        packName: model.packName || packName,
+        pageCount: model.pageCount || pageCount,
+        page: model.page || page,
         min: model.min || min,
         max: model.max || max,
-        packName: model.packName || packName,
-        isMyPack: model.isMyPack === "true" || isMyPack,
-      })
-    );
-  } catch {
-    thunkAPI.dispatch(AppAC.setError({ error: defaultErrorMessage }));
-  } finally {
-    thunkAPI.dispatch(AppAC.setIsLoading({ isLoading: false }));
+        sortPacks: !!model?.sortPacks ? model.sortPacks : sortPacks,
+      });
+
+      thunkAPI.dispatch(
+        packsAC.setPacks({
+          packs: res.data,
+          min: model.min || min,
+          max: model.max || max,
+          packName: model.packName || packName,
+          isMyPack: model.isMyPack === "true" || isMyPack,
+        })
+      );
+    } catch {
+      thunkAPI.dispatch(AppAC.setError({ error: defaultErrorMessage }));
+    } finally {
+      thunkAPI.dispatch(AppAC.setIsLoading({ isLoading: false }));
+    }
   }
-});
+);
 
 // export const setPacksTC = (model: Partial<IGetModel>): AppThunkActionType => {
 //   return async (dispatch, getState) => {

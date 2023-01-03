@@ -1,4 +1,4 @@
-import { ITablePaginationOption } from "../../common/TablePagination/TablePagination";
+import { ITablePaginationOption } from "../../common/components/TablePagination/TablePagination";
 
 export const selectOptions: ITablePaginationOption[] = [
   { title: 4, value: 4 },
