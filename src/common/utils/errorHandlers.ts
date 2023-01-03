@@ -1,5 +1,4 @@
 import { AppAC } from "./../../app/appReducer";
-import { AxiosError } from "axios";
 import { FormikProps } from "formik";
 
 export const defaultErrorMessage = "Some errors occurred";
