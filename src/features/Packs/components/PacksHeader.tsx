@@ -5,6 +5,8 @@ import FormControl from "@mui/material/FormControl/FormControl";
 import Button from "@mui/material/Button/Button";
 import SuperRange from "./SuperRange";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { useAppDispatch } from "../../../common/hooks";
+import { packsModalsAC } from "../packsModalsSlice";
 
 interface IHeaderProps {
   packName: string;
@@ -15,15 +17,12 @@ interface IHeaderProps {
   maxCardsCount: number;
   max: number | string;
   min: number | string;
-  addPackMode: boolean;
   changeRangeHandler: (valueRange: number[]) => void;
-  setAddPackMode: (b: boolean) => void;
   removeSort: () => void;
 }
 const PacksHeader: FC<IHeaderProps> = React.memo(
   ({
     removeSort,
-    setAddPackMode,
     changeRangeHandler,
     packName,
     changeSearchHandler,
@@ -33,9 +32,10 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
     maxCardsCount,
     minCardsCount,
     handlerIsMyPack,
-    addPackMode,
   }) => {
-    console.log("header-render");
+    const dispatch = useAppDispatch();
+    const modalAddPack = () =>
+      dispatch(packsModalsAC.setAddPackState({ status: true }));
     return (
       <Box sx={{ flexGrow: 1 }}>
         <Toolbar
@@ -86,10 +86,7 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
               maxCardsCount={maxCardsCount}
               onChangeSlider={changeRangeHandler}
             />
-            <Button
-              variant="contained"
-              onClick={() => setAddPackMode(!addPackMode)}
-            >
+            <Button variant="contained" onClick={modalAddPack}>
               Add new Pack
             </Button>
             <Button onClick={() => removeSort()} style={{ margin: "auto 0" }}>

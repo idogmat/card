@@ -1,24 +1,18 @@
 import React, { FC, ReactElement } from "react";
 import { ModalBase } from "../../../../common/components/Modal";
-interface IModalBaseProps {
-  open: boolean;
-  handleClose: () => void;
-  children: ReactElement;
-  modalTitle: string;
-}
-const PacksModals: FC<IModalBaseProps> = ({
-  open,
-  handleClose,
-  children,
-  modalTitle,
-}) => {
+import EditPack from "./EditPack";
+import { IPackResponse } from "../../packsAPI";
+import { EditModeType } from "../../Packs";
+import DeletePack from "./DeletePack";
+import AddNewPack from "./AddNewPack";
+
+const PacksModals = ({}) => {
   return (
-    <ModalBase
-      open={open}
-      handleClose={handleClose}
-      children={children}
-      modalTitle={modalTitle}
-    />
+    <>
+      <EditPack />
+      <DeletePack />
+      <AddNewPack />
+    </>
   );
 };
 
