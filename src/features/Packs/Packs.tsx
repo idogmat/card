@@ -30,7 +30,8 @@ import AddNewPack from "./components/modals/AddNewPack";
 import PacksModals from "./components/modals/PacksModals";
 import DeletePack from "./components/modals/DeletePack";
 import EditPack from "./components/modals/EditPack";
-
+import { IPackResponse } from "./packsAPI";
+export type EditModeType = "edit" | "delete" | "idle";
 const Packs = () => {
   const user = useAllSelector(userStateSelect);
   const { isLoading } = useAllSelector(appStateSelect);
@@ -54,16 +55,11 @@ const Packs = () => {
 
   // Utils
   const [addPackMode, setAddPackMode] = useState<boolean>(false);
-  const [deletePackMode, setDeletePackMode] = useState<{
-    id: string;
-    packName: string;
-    mode: boolean;
-  }>({ id: "", packName: "", mode: false });
   const [editPackMode, setEditPackMode] = useState<{
-    id: string;
-    packName: string;
-    mode: boolean;
-  }>({ id: "", packName: "", mode: false });
+    pack: IPackResponse;
+    mode: EditModeType;
+  }>({ pack: {} as IPackResponse, mode: "idle" });
+
   const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
   const isAsc = sort.direction === 1;
   const sortIcon = getSortIcon(isAsc);
@@ -206,7 +202,6 @@ const Packs = () => {
         changeSort={changeSort}
         showSortIcon={showSortIcon}
         removePack={removePack}
-        setDeletePackMode={setDeletePackMode}
         setEditPackMode={setEditPackMode}
         isMyPack={isMyPack}
       />
@@ -218,22 +213,22 @@ const Packs = () => {
         <AddNewPack addPack={addPack} setAddPackMode={setAddPackMode} />
       </PacksModals>
       <PacksModals
-        open={deletePackMode.mode}
+        open={editPackMode.mode === "delete"}
         handleClose={() =>
-          setDeletePackMode({ id: "", packName: "", mode: false })
+          setEditPackMode({ pack: {} as IPackResponse, mode: "idle" })
         }
         modalTitle={"Delete Pack"}
       >
         <DeletePack
-          deletePackMode={deletePackMode}
+          editPackMode={editPackMode}
           removePack={removePack}
-          setDeletePackMode={setDeletePackMode}
+          setEditPackMode={setEditPackMode}
         />
       </PacksModals>
       <PacksModals
-        open={editPackMode.mode}
+        open={editPackMode.mode === "edit"}
         handleClose={() =>
-          setEditPackMode({ id: "", packName: "", mode: false })
+          setEditPackMode({ pack: {} as IPackResponse, mode: "idle" })
         }
         modalTitle={"Edit Pack"}
       >

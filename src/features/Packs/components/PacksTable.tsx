@@ -12,6 +12,7 @@ import { TablePagination } from "../../../common/components/TablePagination/Tabl
 import { selectOptions } from "../Packs.data";
 import { NotFoundElements } from "../../../common/components/NotFoundElements/NotFoundElements";
 import PackElement from "./PackElement";
+import { EditModeType } from "../Packs";
 
 interface ITableProps {
   id: string;
@@ -25,16 +26,7 @@ interface ITableProps {
   removePack: (id: string) => void;
   handleChangeRowsPerPage: (event: SelectChangeEvent) => void;
   changePage: (event: React.ChangeEvent<unknown>, newPage: number) => void;
-  setDeletePackMode: (state: {
-    id: string;
-    packName: string;
-    mode: boolean;
-  }) => void;
-  setEditPackMode: (state: {
-    id: string;
-    packName: string;
-    mode: boolean;
-  }) => void;
+  setEditPackMode: (state: { pack: IPackResponse; mode: EditModeType }) => void;
 }
 
 const PacksTable: React.FC<ITableProps> = React.memo(
@@ -51,7 +43,6 @@ const PacksTable: React.FC<ITableProps> = React.memo(
     page,
     pageCount,
     isMyPack,
-    setDeletePackMode,
   }) => {
     return (
       <Paper sx={{ position: "relative" }}>
@@ -78,7 +69,6 @@ const PacksTable: React.FC<ITableProps> = React.memo(
                     <PackElement
                       key={pack._id}
                       id={id}
-                      setDeletePackMode={setDeletePackMode}
                       setEditPackMode={setEditPackMode}
                       pack={pack}
                       isMyPack={isMyPack}

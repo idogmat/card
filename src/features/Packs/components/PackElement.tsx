@@ -8,25 +8,17 @@ import SchoolIcon from "@mui/icons-material/School";
 import { TableCell } from "@mui/material";
 import TableRow from "@mui/material/TableRow/TableRow";
 import { formDate } from "../../../common/utils/date";
+import { EditModeType } from "../Packs";
 
 interface IRowProps {
   id: string;
   pack: IPackResponse;
-  setDeletePackMode: (state: {
-    id: string;
-    packName: string;
-    mode: boolean;
-  }) => void;
-  setEditPackMode: (state: {
-    id: string;
-    packName: string;
-    mode: boolean;
-  }) => void;
+  setEditPackMode: (state: { pack: IPackResponse; mode: EditModeType }) => void;
   isMyPack: boolean;
 }
 
 const PackElement: React.FC<IRowProps> = React.memo(
-  ({ id, setDeletePackMode, pack, setEditPackMode }) => {
+  ({ id, pack, setEditPackMode }) => {
     const [params, setSearchParams] = useSearchParams();
     const backToState = { previousURL: params.toString(), packName: pack.name };
 
@@ -50,25 +42,13 @@ const PackElement: React.FC<IRowProps> = React.memo(
             </NavLink>
             <Button
               disabled={pack.user_id !== id}
-              onClick={() =>
-                setDeletePackMode({
-                  id: pack._id,
-                  packName: pack.name,
-                  mode: true,
-                })
-              }
+              onClick={() => setEditPackMode({ pack, mode: "delete" })}
             >
               <DeleteOutline />
             </Button>
             <Button
               disabled={pack.user_id !== id}
-              onClick={() =>
-                setEditPackMode({
-                  id: pack._id,
-                  packName: pack.name,
-                  mode: true,
-                })
-              }
+              onClick={() => setEditPackMode({ pack, mode: "edit" })}
             >
               <Edit />
             </Button>

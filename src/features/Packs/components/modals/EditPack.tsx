@@ -2,31 +2,32 @@ import React, { FC, useState } from "react";
 import { Box, Checkbox, FormGroup, IconButton, TextField } from "@mui/material";
 import { PhotoCamera } from "@mui/icons-material";
 import Button from "@mui/material/Button/Button";
+import { IPackResponse } from "../../packsAPI";
+import { EditModeType } from "../../Packs";
 interface IEditPack {
-  editPackMode: { id: string; packName: string; mode: boolean };
+  editPackMode: {
+    pack: IPackResponse;
+    mode: EditModeType;
+  };
+  setEditPackMode: (state: { pack: IPackResponse; mode: EditModeType }) => void;
   updatePack: (
     id: string,
     name: string,
     deckCover: string,
     isPrivate?: boolean
   ) => void;
-  setEditPackMode: (state: {
-    id: string;
-    packName: string;
-    mode: boolean;
-  }) => void;
 }
 const EditPack: FC<IEditPack> = ({
   editPackMode,
   setEditPackMode,
   updatePack,
 }) => {
-  const [newPackName, setNewPackName] = useState(editPackMode.packName);
-  const [newDeckCover, setNewDeckCover] = useState("1");
-  const [isPrivate, setPrivate] = React.useState(false);
+  const [newPackName, setNewPackName] = useState(editPackMode.pack.name);
+  const [newDeckCover, setNewDeckCover] = useState(editPackMode.pack.deckCover);
+  const [isPrivate, setPrivate] = React.useState(editPackMode.pack.private);
   const setNewPackForUpdate = () => {
-    updatePack(editPackMode.id, newPackName, newDeckCover, isPrivate);
-    setEditPackMode({ id: "", packName: "", mode: false });
+    updatePack(editPackMode.pack._id, newPackName, newDeckCover, isPrivate);
+    setEditPackMode({ pack: {} as IPackResponse, mode: "idle" });
   };
   return (
     <Box>
@@ -58,7 +59,9 @@ const EditPack: FC<IEditPack> = ({
 
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Button
-          onClick={() => setEditPackMode({ id: "", packName: "", mode: false })}
+          onClick={() =>
+            setEditPackMode({ pack: {} as IPackResponse, mode: "idle" })
+          }
           color="primary"
           variant="contained"
         >

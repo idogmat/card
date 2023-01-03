@@ -1,30 +1,23 @@
-import React, { FC, useState } from "react";
-import {
-  Box,
-  Checkbox,
-  FormGroup,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material";
+import React, { FC } from "react";
+import { Box, FormGroup, Typography } from "@mui/material";
 import Button from "@mui/material/Button/Button";
-import { PhotoCamera } from "@mui/icons-material";
+import { IPackResponse } from "../../packsAPI";
+import { EditModeType } from "../../Packs";
 
 interface IRemovePack {
-  deletePackMode: { id: string; packName: string; mode: boolean };
+  editPackMode: {
+    pack: IPackResponse;
+    mode: EditModeType;
+  };
+  setEditPackMode: (state: { pack: IPackResponse; mode: EditModeType }) => void;
   removePack: (id: string) => void;
-  setDeletePackMode: (state: {
-    id: string;
-    packName: string;
-    mode: boolean;
-  }) => void;
 }
 
 const DeletePack: FC<IRemovePack> = React.memo(
-  ({ removePack, setDeletePackMode, deletePackMode }) => {
+  ({ removePack, editPackMode, setEditPackMode }) => {
     const remove = () => {
-      removePack(deletePackMode.id);
-      setDeletePackMode({ id: "", packName: "", mode: false });
+      removePack(editPackMode.pack._id);
+      setEditPackMode({ pack: {} as IPackResponse, mode: "idle" });
     };
 
     return (
@@ -32,7 +25,7 @@ const DeletePack: FC<IRemovePack> = React.memo(
         <FormGroup>
           <Box sx={{ padding: 2 }}>
             <Typography sx={{ marginBottom: 2 }}>
-              Do you really want to remove <b>{deletePackMode.packName}</b>
+              Do you really want to remove <b>{editPackMode.pack.name}</b>
             </Typography>
           </Box>
         </FormGroup>
@@ -40,7 +33,7 @@ const DeletePack: FC<IRemovePack> = React.memo(
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Button
             onClick={() =>
-              setDeletePackMode({ id: "", packName: "", mode: false })
+              setEditPackMode({ pack: {} as IPackResponse, mode: "idle" })
             }
             color="primary"
             variant="contained"
