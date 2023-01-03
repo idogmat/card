@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Box, debounce } from "@mui/material";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
-import { addPackTC, removePackTC, setPacksTC } from "./packsThunks";
+import { addPackTC, removePackTC, setPacks } from "./packsThunks";
 import {
   appStateSelect,
   packsCardsPacksSelector,
@@ -75,7 +75,7 @@ const Packs = () => {
 
   useEffect(() => {
     if (!isParamsSet) {
-      dispatch(setPacksTC({}));
+      dispatch(setPacks({}));
       return;
     }
     const model = {
@@ -87,7 +87,7 @@ const Packs = () => {
       packName: params.packName,
       sortPacks: sort.field ? `${sort.direction}${sort.field}` : "0updated",
     };
-    dispatch(setPacksTC(model));
+    dispatch(setPacks(model));
   }, [searchParams]);
 
   const changePage = useCallback(
