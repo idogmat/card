@@ -26,15 +26,12 @@ interface ITableProps {
   removePack: (id: string) => void;
   handleChangeRowsPerPage: (event: SelectChangeEvent) => void;
   changePage: (event: React.ChangeEvent<unknown>, newPage: number) => void;
-  setEditPackMode: (state: { pack: IPackResponse; mode: EditModeType }) => void;
 }
 
 const PacksTable: React.FC<ITableProps> = React.memo(
   ({
     id,
     changeSort,
-    removePack,
-    setEditPackMode,
     handleChangeRowsPerPage,
     changePage,
     showSortIcon,
@@ -69,7 +66,6 @@ const PacksTable: React.FC<ITableProps> = React.memo(
                     <PackElement
                       key={pack._id}
                       id={id}
-                      setEditPackMode={setEditPackMode}
                       pack={pack}
                       isMyPack={isMyPack}
                     />

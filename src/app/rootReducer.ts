@@ -5,6 +5,10 @@ import { cardsReducer } from "../features/Cards/cardsSlice";
 import { combineReducers } from "redux";
 import { packsReducer } from "../features/Packs/packsReducer";
 import { userReducer } from "../features/User/userReducer";
+import {
+  packsModalsAC,
+  packsModalsReducer,
+} from "../features/Packs/packsModalsSlice";
 
 export const reducers = {
   auth: authReducer,
@@ -13,6 +17,7 @@ export const reducers = {
   packs: packsReducer,
   cards: cardsReducer,
   cardsModals: cardsModalsReducer,
+  packsModals: packsModalsReducer,
 };
 
 export const rootReducer = combineReducers(reducers);

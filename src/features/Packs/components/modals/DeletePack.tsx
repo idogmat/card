@@ -3,41 +3,45 @@ import { Box, FormGroup, Typography } from "@mui/material";
 import Button from "@mui/material/Button/Button";
 import { IPackResponse } from "../../packsAPI";
 import { EditModeType } from "../../Packs";
+import { ModalBase } from "../../../../common/components/Modal";
+import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
+import { addNewModalSelector, deleteModalSelector } from "./modalsSelectors";
+import { removePackTC } from "../../packsThunks";
+import { packsModalsAC } from "../../packsModalsSlice";
 
-interface IRemovePack {
-  editPackMode: {
-    pack: IPackResponse;
-    mode: EditModeType;
+interface IRemovePack {}
+
+const DeletePack = React.memo(({}) => {
+  const { isOpen, pack } = useAllSelector(deleteModalSelector);
+  const dispatch = useAppDispatch();
+  const remove = () => {
+    dispatch(removePackTC(pack._id));
   };
-  setEditPackMode: (state: { pack: IPackResponse; mode: EditModeType }) => void;
-  removePack: (id: string) => void;
-}
+  const handleClose = () =>
+    dispatch(
+      packsModalsAC.setDeletePackState({
+        status: false,
+        pack: {} as IPackResponse,
+      })
+    );
 
-const DeletePack: FC<IRemovePack> = React.memo(
-  ({ removePack, editPackMode, setEditPackMode }) => {
-    const remove = () => {
-      removePack(editPackMode.pack._id);
-      setEditPackMode({ pack: {} as IPackResponse, mode: "idle" });
-    };
-
-    return (
+  return (
+    <ModalBase
+      open={isOpen}
+      handleClose={handleClose}
+      modalTitle={"Delete Pack"}
+    >
       <Box>
         <FormGroup>
           <Box sx={{ padding: 2 }}>
             <Typography sx={{ marginBottom: 2 }}>
-              Do you really want to remove <b>{editPackMode.pack.name}</b>
+              Do you really want to remove <b>{pack.name}</b>
             </Typography>
           </Box>
         </FormGroup>
 
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Button
-            onClick={() =>
-              setEditPackMode({ pack: {} as IPackResponse, mode: "idle" })
-            }
-            color="primary"
-            variant="contained"
-          >
+          <Button onClick={handleClose} color="primary" variant="contained">
             Cancel
           </Button>
           <Button onClick={remove} color="primary" variant="contained">
@@ -45,8 +49,8 @@ const DeletePack: FC<IRemovePack> = React.memo(
           </Button>
         </Box>
       </Box>
-    );
-  }
-);
+    </ModalBase>
+  );
+});
 
 export default DeletePack;

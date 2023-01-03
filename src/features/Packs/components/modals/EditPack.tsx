@@ -4,78 +4,88 @@ import { PhotoCamera } from "@mui/icons-material";
 import Button from "@mui/material/Button/Button";
 import { IPackResponse } from "../../packsAPI";
 import { EditModeType } from "../../Packs";
-interface IEditPack {
-  editPackMode: {
-    pack: IPackResponse;
-    mode: EditModeType;
-  };
-  setEditPackMode: (state: { pack: IPackResponse; mode: EditModeType }) => void;
-  updatePack: (
-    id: string,
-    name: string,
-    deckCover: string,
-    isPrivate?: boolean
-  ) => void;
+import { ModalBase } from "../../../../common/components/Modal";
+import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
+import { deleteModalSelector, updateModalSelector } from "./modalsSelectors";
+import { packsModalsAC } from "../../packsModalsSlice";
+import { updatePackTC } from "../../packsThunks";
+interface IUpdatePack {
+  name: string;
+  deckCover: string;
+  private: boolean;
 }
-const EditPack: FC<IEditPack> = ({
-  editPackMode,
-  setEditPackMode,
-  updatePack,
-}) => {
-  const [newPackName, setNewPackName] = useState(editPackMode.pack.name);
-  const [newDeckCover, setNewDeckCover] = useState(editPackMode.pack.deckCover);
-  const [isPrivate, setPrivate] = React.useState(editPackMode.pack.private);
-  const setNewPackForUpdate = () => {
-    updatePack(editPackMode.pack._id, newPackName, newDeckCover, isPrivate);
-    setEditPackMode({ pack: {} as IPackResponse, mode: "idle" });
+const EditPack = () => {
+  const { isOpen, pack } = useAllSelector(updateModalSelector);
+  const dispatch = useAppDispatch();
+  const [updatePackData, setUpdatePackData] = useState<IUpdatePack>({
+    name: "",
+    deckCover: "",
+    private: false,
+  });
+  const handleClose = () =>
+    dispatch(
+      packsModalsAC.setUpdatePackState({
+        status: false,
+        pack: {} as IPackResponse,
+      })
+    );
+
+  const updatePack = () => {
+    dispatch(updatePackTC({ id: pack._id, ...updatePackData }));
   };
   return (
-    <Box>
-      <FormGroup>
-        <TextField
-          label="Name pack"
-          variant="standard"
-          color="primary"
-          value={newPackName}
-          onChange={(e) => setNewPackName(e.currentTarget.value)}
-        />
-        <Box>
-          Private pack{" "}
-          <Checkbox
-            checked={isPrivate}
-            onChange={(e) => setPrivate(e.currentTarget.checked)}
+    <ModalBase open={isOpen} handleClose={handleClose} modalTitle={"Edit Pack"}>
+      <Box>
+        <FormGroup>
+          <TextField
+            label="Name pack"
+            variant="standard"
             color="primary"
+            value={updatePackData.name}
+            onChange={(e) =>
+              setUpdatePackData((state) => ({
+                ...state,
+                name: e.target.value,
+              }))
+            }
           />
-        </Box>
-        <Box>
-          <label>
-            <input style={{ display: "none" }} type="file" accept={"image/*"} />
-            <IconButton component="span" color={"primary"}>
-              <PhotoCamera />
-            </IconButton>
-          </label>
-        </Box>
-      </FormGroup>
+          <Box>
+            Private pack{" "}
+            <Checkbox
+              checked={updatePackData.private}
+              onChange={(e) =>
+                setUpdatePackData((state) => ({
+                  ...state,
+                  private: e.target.checked,
+                }))
+              }
+              color="primary"
+            />
+          </Box>
+          <Box>
+            <label>
+              <input
+                style={{ display: "none" }}
+                type="file"
+                accept={"image/*"}
+              />
+              <IconButton component="span" color={"primary"}>
+                <PhotoCamera />
+              </IconButton>
+            </label>
+          </Box>
+        </FormGroup>
 
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Button
-          onClick={() =>
-            setEditPackMode({ pack: {} as IPackResponse, mode: "idle" })
-          }
-          color="primary"
-          variant="contained"
-        >
-          Cancel
-        </Button>
-        <Button
-          onClick={setNewPackForUpdate}
-          color="primary"
-          variant="contained"
-        >
-          Save pack
-        </Button>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Button onClick={handleClose} color="primary" variant="contained">
+            Cancel
+          </Button>
+          <Button onClick={updatePack} color="primary" variant="contained">
+            Save pack
+          </Button>
+        </Box>
       </Box>
-    </Box>
+    </ModalBase>
   );
 };
 

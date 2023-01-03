@@ -2,62 +2,91 @@ import React, { FC, useState } from "react";
 import { Box, Checkbox, FormGroup, IconButton, TextField } from "@mui/material";
 import Button from "@mui/material/Button/Button";
 import { PhotoCamera } from "@mui/icons-material";
+import { ModalBase } from "../../../../common/components/Modal";
+import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
+import { addNewModalSelector } from "./modalsSelectors";
+import packs from "../../Packs";
+import { packsModalsAC } from "../../packsModalsSlice";
+import { addPackTC } from "../../packsThunks";
 
 interface INewPack {
-  addPack: (s: string, d: string, b: boolean) => void;
-  setAddPackMode: (b: boolean) => void;
+  name: string;
+  deckCover: string;
+  private: boolean;
 }
 
-const AddNewPack: FC<INewPack> = React.memo(({ addPack, setAddPackMode }) => {
-  const [newPackName, setNewPackName] = useState("");
-  const [newDeckCover, setNewDeckCover] = useState("1");
-  const [isPrivate, setPrivate] = React.useState(false);
+const AddNewPack = React.memo(() => {
+  const { isOpen } = useAllSelector(addNewModalSelector);
+  const dispatch = useAppDispatch();
+  const [newPackData, setNewPackData] = useState<INewPack>({
+    name: "",
+    deckCover: "",
+    private: false,
+  });
   const addNewPack = () => {
-    addPack(newPackName, newDeckCover, isPrivate);
-    setAddPackMode(false);
+    dispatch(packsModalsAC.addPack(newPackData));
+    dispatch(addPackTC(newPackData));
   };
+  const handleClose = () =>
+    dispatch(packsModalsAC.setAddPackState({ status: false }));
 
   return (
-    <Box>
-      <FormGroup>
-        <TextField
-          label="Name pack"
-          variant="standard"
-          color="primary"
-          value={newPackName}
-          onChange={(e) => setNewPackName(e.currentTarget.value)}
-        />
-        <Box>
-          Private pack{" "}
-          <Checkbox
-            checked={isPrivate}
-            onChange={(e) => setPrivate(e.currentTarget.checked)}
+    <ModalBase
+      open={isOpen}
+      handleClose={handleClose}
+      modalTitle={"Add New Pack"}
+    >
+      <Box>
+        <FormGroup>
+          <TextField
+            label="Name pack"
+            variant="standard"
             color="primary"
+            value={newPackData.name}
+            onChange={(e) =>
+              setNewPackData((state) => ({
+                ...state,
+                name: e.target.value,
+              }))
+            }
           />
-        </Box>
-        <Box>
-          <label>
-            <input style={{ display: "none" }} type="file" accept={"image/*"} />
-            <IconButton component="span" color={"primary"}>
-              <PhotoCamera />
-            </IconButton>
-          </label>
-        </Box>
-      </FormGroup>
+          <Box>
+            Private pack{" "}
+            <Checkbox
+              checked={newPackData.private}
+              onChange={(e) =>
+                setNewPackData((state) => ({
+                  ...state,
+                  isPrivate: e.target.checked,
+                }))
+              }
+              color="primary"
+            />
+          </Box>
+          <Box>
+            <label>
+              <input
+                style={{ display: "none" }}
+                type="file"
+                accept={"image/*"}
+              />
+              <IconButton component="span" color={"primary"}>
+                <PhotoCamera />
+              </IconButton>
+            </label>
+          </Box>
+        </FormGroup>
 
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Button
-          onClick={() => setAddPackMode(false)}
-          color="primary"
-          variant="contained"
-        >
-          Cancel
-        </Button>
-        <Button onClick={addNewPack} color="primary" variant="contained">
-          Add Pack
-        </Button>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Button onClick={handleClose} color="primary" variant="contained">
+            Cancel
+          </Button>
+          <Button onClick={addNewPack} color="primary" variant="contained">
+            Add Pack
+          </Button>
+        </Box>
       </Box>
-    </Box>
+    </ModalBase>
   );
 });
 
