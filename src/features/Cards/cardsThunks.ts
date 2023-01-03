@@ -7,33 +7,33 @@ import {
 } from "./cardsAPI";
 
 import { AppAC } from "../../app/appReducer";
-import { AppThunkActionType } from "../../common/hooks/useAllSelector";
-import { CardsAC } from "./cardsSlice";
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { defaultErrorMessage } from "../../common/utils/errorHandlers";
+import { createAppAsyncThunk } from "./../../common/utils/AsyncThunk";
+import { errorHandlingThunk } from "./../../common/utils/errorHandlers";
 
-export const getCardsTC = (model: IGetCardsRequest): AppThunkActionType => {
-  return async (dispatch) => {
-    try {
-      dispatch(AppAC.setIsLoading({ isLoading: true }));
+interface IDeleteCardData {
+  cardID: string;
+  packID: string;
+}
+
+interface IUpdateCardData {
+  packID: string;
+  model: IUpdateCardRequest;
+}
+
+export const getCardsTC = createAppAsyncThunk(
+  "cards/getCards",
+  async (model: IGetCardsRequest, { dispatch, getState }) => {
+    return errorHandlingThunk({ dispatch, getState }, async () => {
       const { data } = await cardsAPI.getCardsRequest(model);
-      dispatch(
-        CardsAC.setCardsData({
-          data: { ...data, cardQuestion: model.cardQuestion },
-        })
-      );
-    } catch (e) {
-      dispatch(AppAC.setError({ error: defaultErrorMessage }));
-    } finally {
-      dispatch(AppAC.setIsLoading({ isLoading: false }));
-    }
-  };
-};
+      return { ...data, cardQuestion: model.cardQuestion };
+    });
+  }
+);
 
-export const addCardTC = (card: IAddCardRequest): AppThunkActionType => {
-  return async (dispatch, getState) => {
-    try {
-      dispatch(AppAC.setIsLoading({ isLoading: true }));
+export const addCardTC = createAppAsyncThunk(
+  "cards/addCard",
+  async (card: IAddCardRequest, { dispatch, getState }) => {
+    return errorHandlingThunk({ dispatch, getState }, async () => {
       const { page, pageCount } = getState().cards;
       const cardsRequestConfig = {
         page,
@@ -41,63 +41,52 @@ export const addCardTC = (card: IAddCardRequest): AppThunkActionType => {
         cardsPack_id: card.card.cardsPack_id,
       };
       const res = await cardsAPI.addCardRequest(card);
-      const { data } = await cardsAPI.getCardsRequest(cardsRequestConfig);
-      dispatch(CardsAC.setCardsData({ data }));
+      dispatch(getCardsTC(cardsRequestConfig));
       dispatch(AppAC.setSuccessMessage({ message: "Successfully added" }));
-    } catch (e) {
-      dispatch(AppAC.setError({ error: defaultErrorMessage }));
-    } finally {
-      dispatch(AppAC.setIsLoading({ isLoading: false }));
-    }
-  };
-};
+    });
+  }
+);
 
-export const deleteCardTC = (
-  cardID: string,
-  packID: string
-): AppThunkActionType => {
-  return async (dispatch, getState) => {
-    try {
-      dispatch(AppAC.setIsLoading({ isLoading: true }));
+export const deleteCardTC = createAppAsyncThunk(
+  "cards/deleteCard",
+  async (cardData: IDeleteCardData, { dispatch, getState }) => {
+    return errorHandlingThunk({ dispatch, getState }, async () => {
       const { page, pageCount } = getState().cards;
-      const cardsRequestConfig = { page, pageCount, cardsPack_id: packID };
-      const res = await cardsAPI.deleteCardRequest(cardID);
-      const { data } = await cardsAPI.getCardsRequest(cardsRequestConfig);
-      dispatch(CardsAC.setCardsData({ data }));
+      const cardsRequestConfig = {
+        page,
+        pageCount,
+        cardsPack_id: cardData.packID,
+      };
+      const res = await cardsAPI.deleteCardRequest(cardData.cardID);
+      dispatch(getCardsTC(cardsRequestConfig));
       dispatch(AppAC.setSuccessMessage({ message: "Successfully deleted" }));
-    } catch {
-      dispatch(AppAC.setError({ error: defaultErrorMessage }));
-    } finally {
-      dispatch(AppAC.setIsLoading({ isLoading: false }));
-    }
-  };
-};
+    });
+  }
+);
 
-export const updateCardTC = (
-  packID: string,
-  model: IUpdateCardRequest
-): AppThunkActionType => {
-  return async (dispatch, getState) => {
-    try {
-      dispatch(AppAC.setIsLoading({ isLoading: true }));
+export const updateCardTC = createAppAsyncThunk(
+  "cards/updateCard",
+  async (updateData: IUpdateCardData, { dispatch, getState }) => {
+    return errorHandlingThunk({ dispatch, getState }, async () => {
       const { page, pageCount } = getState().cards;
-      const cardsRequestConfig = { cardsPack_id: packID, page, pageCount };
-      const res = await cardsAPI.updateCardRequest(model);
-      const { data } = await cardsAPI.getCardsRequest(cardsRequestConfig);
-      dispatch(CardsAC.setCardsData({ data }));
+      const cardsRequestConfig = {
+        cardsPack_id: updateData.packID,
+        page,
+        pageCount,
+      };
+      const res = await cardsAPI.updateCardRequest(updateData.model);
+      dispatch(getCardsTC(cardsRequestConfig));
       dispatch(AppAC.setSuccessMessage({ message: "Successfully updated" }));
-    } catch {
-      dispatch(AppAC.setError({ error: defaultErrorMessage }));
-    } finally {
-      dispatch(AppAC.setIsLoading({ isLoading: false }));
-    }
-  };
-};
+    });
+  }
+);
 
-export const updateCardGradeTC = createAsyncThunk(
+export const updateCardGradeTC = createAppAsyncThunk(
   "cards/updateCardGrade",
   async (model: IUpdateCardGradeRequest, thunkAPI) => {
-    const { data } = await cardsAPI.updateCardGradeRequest(model);
-    return { card_id: model.card_id, grade: data.updatedGrade.grade };
+    return errorHandlingThunk(thunkAPI, async () => {
+      const { data } = await cardsAPI.updateCardGradeRequest(model);
+      return { card_id: model.card_id, grade: data.updatedGrade.grade };
+    });
   }
 );

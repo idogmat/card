@@ -13,7 +13,7 @@ export const errorHandlingThunk = async (thunkAPI: any, logic: Function) => {
     return await logic();
   } catch (e: any) {
     const error = e.response ? e.response.data.error : e.message;
-    thunkAPI.dispatch(AppAC.setError({ error: e }));
+    thunkAPI.dispatch(AppAC.setError({ error }));
     return thunkAPI.rejectWithValue({ error });
   } finally {
     thunkAPI.dispatch(AppAC.setIsLoading({ isLoading: false }));
