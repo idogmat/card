@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IUser } from "../../common/models";
 import { IUpdatedUserInfo } from "../Profile/profileAPI";
+import { loginTC } from "../Login/loginThunks";
 
 const initialState: IUser = {
   name: "",
@@ -25,6 +26,11 @@ const userSlice = createSlice({
       draft.name = action.payload.model.name;
       draft.avatar = action.payload.model.avatar;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(loginTC.fulfilled, (state, action) => {
+      return action.payload.user;
+    });
   },
 });
 
