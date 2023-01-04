@@ -31,8 +31,10 @@ export const CardsAddModal: FC<ICardsAddModalProps> = ({ packID }) => {
     setNewCardData({ ...newCardData, answer: e.currentTarget.value });
   };
 
-  const handleClose = () =>
+  const handleClose = () => {
     dispatch(CardsModalsAC.setAddCardState({ state: false }));
+    setNewCardData({} as ICardData);
+  };
 
   const addNewCardHandler = () => {
     const cardData: IAddCardRequest = {

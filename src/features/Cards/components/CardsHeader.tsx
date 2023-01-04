@@ -10,19 +10,20 @@ import { DeleteOutline, Edit, MoreHoriz, School } from "@mui/icons-material";
 import React, { FC, useState } from "react";
 
 import { CardsModalsAC } from "features/Cards/cardsModalsSlice";
+import { IPackResponse } from "./../../Packs/packsAPI";
 import { Search } from "../../../common/components/Search/Search";
+import { packsModalsAC } from "./../../Packs/packsModalsSlice";
 import { useAppDispatch } from "common/hooks";
 
 interface ICardsHeaderProps {
-  packID: string;
   isPackMine: boolean;
   setSearchRequest: (value: string) => void;
-  packName: string;
+  pack: IPackResponse;
   searchValue: string;
 }
 
 const CardsHeader: FC<ICardsHeaderProps> = React.memo(
-  ({ packID, isPackMine, setSearchRequest, packName, searchValue }) => {
+  ({ pack, isPackMine, setSearchRequest, searchValue }) => {
     const dispatch = useAppDispatch();
 
     const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
@@ -38,6 +39,16 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
 
     const openAddNewCardModal = () =>
       dispatch(CardsModalsAC.setAddCardState({ state: true }));
+
+    const openEditPackModal = () => {
+      dispatch(packsModalsAC.setUpdatePackState({ status: true }));
+      dispatch(packsModalsAC.setUpdatePackData({ pack }));
+    };
+
+    const openDeletePackModal = () => {
+      dispatch(packsModalsAC.setDeletePackState({ status: true }));
+      dispatch(packsModalsAC.setDeletePackData({ pack }));
+    };
 
     return (
       <>
@@ -55,7 +66,7 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
             component={"h3"}
             sx={{ display: "flex", alignItems: "center", maxWidth: "100%" }}
           >
-            {packName ? packName : "Name placeholder"}
+            {pack.name}
             {isPackMine && (
               <>
                 <IconButton onClick={openMenu}>
@@ -74,13 +85,19 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
                   }}
                 >
                   <MenuItem>
-                    <Typography className={"menu-text-icon"}>
+                    <Typography
+                      className={"menu-text-icon"}
+                      onClick={openEditPackModal}
+                    >
                       <Edit />
                       Edit
                     </Typography>
                   </MenuItem>
                   <MenuItem>
-                    <Typography className={"menu-text-icon"}>
+                    <Typography
+                      className={"menu-text-icon"}
+                      onClick={openDeletePackModal}
+                    >
                       <DeleteOutline />
                       Delete
                     </Typography>

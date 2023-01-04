@@ -17,6 +17,7 @@ import CardsHeader from "./components/CardsHeader";
 import { CardsModals } from "./components/modals/CardsModals";
 import { CardsTable } from "./components/CardsTable";
 import { IGetCardsRequest } from "./cardsAPI";
+import { IPackResponse } from "./../Packs/packsAPI";
 import { NotFoundElements } from "common/components/NotFoundElements/NotFoundElements";
 import { Preloader } from "common/components/Preloader/Preloader";
 import { TablePagination } from "common/components/TablePagination/TablePagination";
@@ -46,12 +47,13 @@ export const Cards = React.memo(() => {
   const cardQuestion = useAllSelector(cardsCardQuestionSelector);
 
   // Url & Query
-  const { packID } = useParams();
+  // const { packID } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const { state } = useLocation();
   const previousURL = state ? state.previousURL : "";
-  const packName = state ? state.packName : "";
+  const pack: IPackResponse = state ? state.pack : {};
   const params = Object.fromEntries(searchParams);
+  console.log(pack);
 
   // Local states
   const defaultSort = { direction: 0, field: "updated" };
@@ -73,7 +75,7 @@ export const Cards = React.memo(() => {
 
   useEffect(() => {
     const model = {
-      cardsPack_id: packID,
+      cardsPack_id: pack._id,
       pageCount: isPageCountValid ? params.showPerPage : pageCount,
       page: params.currentPage || page,
       cardQuestion: params.search || cardQuestion,
@@ -155,9 +157,8 @@ export const Cards = React.memo(() => {
         <BackTo title={"Back to packs"} route={`/packs?${previousURL}`} />
         <CardsHeader
           isPackMine={isPackMine}
-          packID={packID ? packID : ""}
+          pack={pack}
           setSearchRequest={changeSearchRequestHandler}
-          packName={packName}
           searchValue={cardQuestion || ""}
         />
         {cards.length > 0 ? (
@@ -183,7 +184,7 @@ export const Cards = React.memo(() => {
         ) : (
           <NotFoundElements title={"Empty"} />
         )}
-        <CardsModals packID={packID ? packID : ""} />
+        <CardsModals pack={pack} />
       </Box>
     </Box>
   );
