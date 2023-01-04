@@ -1,5 +1,5 @@
 import { Box, Checkbox, FormGroup, IconButton, TextField } from "@mui/material";
-import { memo, useState } from "react";
+import { memo } from "react";
 import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
 
 import Button from "@mui/material/Button/Button";
@@ -22,32 +22,28 @@ export const EditPack = memo(() => {
   const dispatch = useAppDispatch();
 
   // Local state
-  const [updatePackData, setUpdatePackData] = useState<IUpdatePack>({
-    name: pack.name,
-    deckCover: pack.deckCover,
-    isPrivate: pack.private,
-  });
 
   // Utils
   const handleClose = () =>
     dispatch(
       packsModalsAC.setUpdatePackState({
         status: false,
+        pack: {} as IPackResponse,
       })
     );
 
   const updatePack = () => {
-    dispatch(updatePackTC({ id: pack._id, ...updatePackData }));
+    dispatch(updatePackTC({ id: pack._id, ...pack }));
     handleClose();
   };
 
   const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.currentTarget.value;
-    setUpdatePackData((state) => ({ ...state, name }));
+    dispatch(packsModalsAC.editPackFields({ ...pack, name }));
   };
 
   const handleChangeIsPrivate = () => {
-    setUpdatePackData((state) => ({ ...state, isPrivate: !state.isPrivate }));
+    dispatch(packsModalsAC.editPackFields({ ...pack, private: !pack.private }));
   };
 
   return (
@@ -58,13 +54,13 @@ export const EditPack = memo(() => {
             label="Name pack"
             variant="standard"
             color="primary"
-            value={updatePackData.name}
+            value={pack.name}
             onChange={handleChangeName}
           />
           <Box>
             Private pack{" "}
             <Checkbox
-              checked={updatePackData.isPrivate}
+              checked={pack.private}
               onChange={handleChangeIsPrivate}
               color="primary"
             />
