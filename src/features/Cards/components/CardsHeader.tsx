@@ -11,6 +11,7 @@ import React, { FC, useState } from "react";
 
 import { CardsModalsAC } from "features/Cards/cardsModalsSlice";
 import { IPackResponse } from "./../../Packs/packsAPI";
+import { NavLink } from "react-router-dom";
 import { Search } from "../../../common/components/Search/Search";
 import { packsModalsAC } from "./../../Packs/packsModalsSlice";
 import { useAppDispatch } from "common/hooks";
@@ -21,15 +22,19 @@ interface ICardsHeaderProps {
   setSearchRequest: (value: string) => void;
   pack: IPackResponse;
   searchValue: string;
+  previousURL: string;
 }
 
 const CardsHeader: FC<ICardsHeaderProps> = React.memo(
-  ({ pack, isPackMine, setSearchRequest, searchValue }) => {
+  ({ pack, isPackMine, setSearchRequest, searchValue, previousURL }) => {
+    // Dispatch & selectors
     const dispatch = useAppDispatch();
 
+    // Local States & Vars
     const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
     const isMenuOpen = !!menuAnchor;
 
+    // Utils
     const openMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
       setMenuAnchor(e.currentTarget);
     };
@@ -48,6 +53,8 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
     const openDeletePackModal = () => {
       dispatch(packsModalsAC.setDeletePackState({ status: true, pack }));
     };
+
+    console.log("PREVIOUS URL IN HEADER", previousURL);
 
     return (
       <>
@@ -103,8 +110,13 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
                   </MenuItem>
                   <MenuItem>
                     <Typography className={"menu-text-icon"}>
-                      <School />
-                      Learn
+                      <NavLink
+                        to={`/learn/${pack._id}`}
+                        state={{ previousURL: previousURL, pack }}
+                      >
+                        <School />
+                        Learn
+                      </NavLink>
                     </Typography>
                   </MenuItem>
                 </Menu>
