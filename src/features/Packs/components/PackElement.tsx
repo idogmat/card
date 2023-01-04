@@ -19,7 +19,7 @@ interface IRowProps {
 
 const PackElement: React.FC<IRowProps> = React.memo(({ id, pack }) => {
   const [params, setSearchParams] = useSearchParams();
-  const backToState = { previousURL: params.toString(), packName: pack.name };
+  const backToState = { previousURL: params.toString(), pack: pack };
   const dispatch = useAppDispatch();
   const modalDelete = () =>
     dispatch(packsModalsAC.setDeletePackState({ status: true, pack }));
