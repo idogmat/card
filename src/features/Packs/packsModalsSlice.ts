@@ -1,5 +1,4 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IPackResponse } from "./packsAPI";
 
 const initialState = {
@@ -27,22 +26,18 @@ const packsModalsSlice = createSlice({
     setAddPackState: (draft, action: PayloadAction<{ status: boolean }>) => {
       draft.addPack.isOpen = action.payload.status;
     },
-    setUpdatePackState: (draft, action: PayloadAction<{ status: boolean }>) => {
-      draft.updatePack.isOpen = action.payload.status;
-    },
-    setDeletePackState: (draft, action: PayloadAction<{ status: boolean }>) => {
-      draft.deletePack.isOpen = action.payload.status;
-    },
-    setUpdatePackData: (
+    setUpdatePackState: (
       draft,
-      action: PayloadAction<{ pack: IPackResponse }>
+      action: PayloadAction<{ status: boolean; pack: IPackResponse }>
     ) => {
+      draft.updatePack.isOpen = action.payload.status;
       draft.updatePack.pack = action.payload.pack;
     },
-    setDeletePackData: (
+    setDeletePackState: (
       draft,
-      action: PayloadAction<{ pack: IPackResponse }>
+      action: PayloadAction<{ status: boolean; pack: IPackResponse }>
     ) => {
+      draft.deletePack.isOpen = action.payload.status;
       draft.deletePack.pack = action.payload.pack;
     },
     addPack: (
