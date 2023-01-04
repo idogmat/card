@@ -1,7 +1,7 @@
 import { RootState } from "../../../../app/store";
 
 export const addNewModalSelector = (state: RootState) =>
-  state.packsModals.addCard;
+  state.packsModals.addPack;
 export const updateModalSelector = (state: RootState) =>
   state.packsModals.updatePack;
 export const deleteModalSelector = (state: RootState) =>

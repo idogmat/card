@@ -1,7 +1,9 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+
 import { IPackResponse } from "./packsAPI";
+
 const initialState = {
-  addCard: {
+  addPack: {
     isOpen: false,
     pack: {
       name: "",
@@ -23,20 +25,24 @@ const packsModalsSlice = createSlice({
   initialState,
   reducers: {
     setAddPackState: (draft, action: PayloadAction<{ status: boolean }>) => {
-      draft.addCard.isOpen = action.payload.status;
+      draft.addPack.isOpen = action.payload.status;
     },
-    setUpdatePackState: (
-      draft,
-      action: PayloadAction<{ status: boolean; pack: IPackResponse }>
-    ) => {
+    setUpdatePackState: (draft, action: PayloadAction<{ status: boolean }>) => {
       draft.updatePack.isOpen = action.payload.status;
+    },
+    setDeletePackState: (draft, action: PayloadAction<{ status: boolean }>) => {
+      draft.deletePack.isOpen = action.payload.status;
+    },
+    setUpdatePackData: (
+      draft,
+      action: PayloadAction<{ pack: IPackResponse }>
+    ) => {
       draft.updatePack.pack = action.payload.pack;
     },
-    setDeletePackState: (
+    setDeletePackData: (
       draft,
-      action: PayloadAction<{ status: boolean; pack: IPackResponse }>
+      action: PayloadAction<{ pack: IPackResponse }>
     ) => {
-      draft.deletePack.isOpen = action.payload.status;
       draft.deletePack.pack = action.payload.pack;
     },
     addPack: (
@@ -47,9 +53,9 @@ const packsModalsSlice = createSlice({
         private: boolean;
       }>
     ) => {
-      draft.addCard.pack.name = action.payload.name;
-      draft.addCard.pack.deckCover = action.payload.deckCover;
-      draft.addCard.pack.isPrivate = action.payload.private;
+      draft.addPack.pack.name = action.payload.name;
+      draft.addPack.pack.deckCover = action.payload.deckCover;
+      draft.addPack.pack.isPrivate = action.payload.private;
     },
     updatePack: (
       draft,

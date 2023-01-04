@@ -23,9 +23,9 @@ export const EditPack = memo(() => {
 
   // Local state
   const [updatePackData, setUpdatePackData] = useState<IUpdatePack>({
-    name: "",
-    deckCover: "",
-    isPrivate: false,
+    name: pack.name,
+    deckCover: pack.deckCover,
+    isPrivate: pack.private,
   });
 
   // Utils
@@ -33,7 +33,6 @@ export const EditPack = memo(() => {
     dispatch(
       packsModalsAC.setUpdatePackState({
         status: false,
-        pack: {} as IPackResponse,
       })
     );
 

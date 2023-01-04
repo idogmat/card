@@ -1,10 +1,13 @@
 import { CardsAddModal } from "./CardsAddModal";
 import { CardsDeleteModal } from "./CardDeleteModal";
 import { CardsUpdateModal } from "./CardsUpdateModal";
+import { DeletePack } from "features/Packs/components/modals/DeletePack";
+import EditPack from "features/Packs/components/modals/EditPack";
 import { FC } from "react";
+import { IPackResponse } from "./../../../Packs/packsAPI";
 
 interface ICardsModalProps {
-  packID: string;
+  pack: IPackResponse;
 }
 
 export interface ICardData {
@@ -12,12 +15,14 @@ export interface ICardData {
   answer: string;
 }
 
-export const CardsModals: FC<ICardsModalProps> = ({ packID }) => {
+export const CardsModals: FC<ICardsModalProps> = ({ pack }) => {
   return (
     <>
-      <CardsAddModal packID={packID} />
-      <CardsUpdateModal packID={packID} />
-      <CardsDeleteModal packID={packID} />
+      <CardsAddModal packID={pack._id} />
+      <CardsUpdateModal packID={pack._id} />
+      <CardsDeleteModal packID={pack._id} />
+      <EditPack />
+      <DeletePack />
     </>
   );
 };

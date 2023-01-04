@@ -19,7 +19,6 @@ export const DeletePack = memo(() => {
     dispatch(
       packsModalsAC.setDeletePackState({
         status: false,
-        pack: {} as IPackResponse,
       })
     );
 
