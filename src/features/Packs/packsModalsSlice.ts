@@ -73,6 +73,18 @@ const packsModalsSlice = createSlice({
       draft.deletePack.pack._id = action.payload.packId;
       draft.deletePack.pack.name = action.payload.cardName;
     },
+    editPackFields: (
+      draft,
+      action: PayloadAction<{
+        name: string;
+        deckCover: string;
+        private: boolean;
+      }>
+    ) => {
+      draft.updatePack.pack.name = action.payload.name;
+      draft.updatePack.pack.deckCover = action.payload.deckCover;
+      draft.updatePack.pack.private = action.payload.private;
+    },
   },
 });
 export const packsModalsAC = packsModalsSlice.actions;
