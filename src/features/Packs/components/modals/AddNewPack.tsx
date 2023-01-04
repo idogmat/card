@@ -1,35 +1,49 @@
-import React, { FC, useState } from "react";
 import { Box, Checkbox, FormGroup, IconButton, TextField } from "@mui/material";
-import Button from "@mui/material/Button/Button";
-import { PhotoCamera } from "@mui/icons-material";
-import { ModalBase } from "../../../../common/components/Modal";
+import React, { useState } from "react";
 import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
+
+import Button from "@mui/material/Button/Button";
+import { ModalBase } from "../../../../common/components/Modal";
+import { PhotoCamera } from "@mui/icons-material";
 import { addNewModalSelector } from "./modalsSelectors";
-import packs from "../../Packs";
-import { packsModalsAC } from "../../packsModalsSlice";
 import { addPackTC } from "../../packsThunks";
-import { IPackResponse } from "../../packsAPI";
+import { packsModalsAC } from "../../packsModalsSlice";
 
 interface INewPack {
   name: string;
   deckCover: string;
-  private: boolean;
+  isPrivate: boolean;
 }
 
-const AddNewPack = React.memo(() => {
+export const AddNewPack = React.memo(() => {
+  // Selector & dispatch
   const { isOpen } = useAllSelector(addNewModalSelector);
   const dispatch = useAppDispatch();
+
+  // Local states
   const [newPackData, setNewPackData] = useState<INewPack>({
     name: "",
     deckCover: "",
-    private: false,
+    isPrivate: false,
   });
-  const addNewPack = () => {
-    dispatch(addPackTC(newPackData));
-    dispatch(packsModalsAC.setAddPackState({ status: false }));
-  };
+
+  // Utils
   const handleClose = () =>
     dispatch(packsModalsAC.setAddPackState({ status: false }));
+
+  const addNewPack = () => {
+    dispatch(addPackTC(newPackData));
+    handleClose();
+  };
+
+  const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const name = e.currentTarget.value;
+    setNewPackData((state) => ({ ...state, name }));
+  };
+
+  const handleChangeIsPrivate = () => {
+    setNewPackData((state) => ({ ...state, isPrivate: !state.isPrivate }));
+  };
 
   return (
     <ModalBase
@@ -44,23 +58,13 @@ const AddNewPack = React.memo(() => {
             variant="standard"
             color="primary"
             value={newPackData.name}
-            onChange={(e) =>
-              setNewPackData((state) => ({
-                ...state,
-                name: e.target.value,
-              }))
-            }
+            onChange={handleChangeName}
           />
           <Box>
             Private pack{" "}
             <Checkbox
-              checked={newPackData.private}
-              onChange={(e) =>
-                setNewPackData((state) => ({
-                  ...state,
-                  isPrivate: e.target.checked,
-                }))
-              }
+              checked={newPackData.isPrivate}
+              onChange={handleChangeIsPrivate}
               color="primary"
             />
           </Box>
@@ -90,5 +94,3 @@ const AddNewPack = React.memo(() => {
     </ModalBase>
   );
 });
-
-export default AddNewPack;

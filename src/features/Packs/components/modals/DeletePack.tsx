@@ -1,28 +1,20 @@
-import React, { FC } from "react";
 import { Box, FormGroup, Typography } from "@mui/material";
+import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
+
 import Button from "@mui/material/Button/Button";
 import { IPackResponse } from "../../packsAPI";
-import { EditModeType } from "../../Packs";
 import { ModalBase } from "../../../../common/components/Modal";
-import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
-import { addNewModalSelector, deleteModalSelector } from "./modalsSelectors";
-import { removePackTC } from "../../packsThunks";
+import { deleteModalSelector } from "./modalsSelectors";
+import { memo } from "react";
 import { packsModalsAC } from "../../packsModalsSlice";
+import { removePackTC } from "../../packsThunks";
 
-interface IRemovePack {}
-
-const DeletePack = React.memo(({}) => {
+export const DeletePack = memo(() => {
+  // Dispatch & selectors
   const { isOpen, pack } = useAllSelector(deleteModalSelector);
   const dispatch = useAppDispatch();
-  const remove = () => {
-    dispatch(removePackTC(pack._id));
-    dispatch(
-      packsModalsAC.setDeletePackState({
-        status: false,
-        pack: {} as IPackResponse,
-      })
-    );
-  };
+
+  // Utils
   const handleClose = () =>
     dispatch(
       packsModalsAC.setDeletePackState({
@@ -30,6 +22,11 @@ const DeletePack = React.memo(({}) => {
         pack: {} as IPackResponse,
       })
     );
+
+  const deletePack = () => {
+    dispatch(removePackTC(pack._id));
+    handleClose();
+  };
 
   return (
     <ModalBase
@@ -50,7 +47,7 @@ const DeletePack = React.memo(({}) => {
           <Button onClick={handleClose} color="primary" variant="contained">
             Cancel
           </Button>
-          <Button onClick={remove} color="primary" variant="contained">
+          <Button onClick={deletePack} color="primary" variant="contained">
             Delete
           </Button>
         </Box>
@@ -58,5 +55,3 @@ const DeletePack = React.memo(({}) => {
     </ModalBase>
   );
 });
-
-export default DeletePack;

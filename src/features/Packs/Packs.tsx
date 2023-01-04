@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
 import { Box, debounce } from "@mui/material";
-import { useAllSelector, useAppDispatch } from "../../common/hooks";
+import React, { useCallback, useEffect, useState } from "react";
 import { addPackTC, removePackTC, setPacks, updatePackTC } from "./packsThunks";
 import {
   appStateSelect,
@@ -17,23 +16,22 @@ import {
   packsTotalCardsSelector,
   userStateSelect,
 } from "../../app/selectors";
-import { packsAC } from "./packsReducer";
-import { useSearchParams } from "react-router-dom";
+import { useAllSelector, useAppDispatch } from "../../common/hooks";
+
 import { HorizontalRule } from "@mui/icons-material";
-import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
-import PacksTable from "./components/PacksTable";
-import { getSortIcon } from "../../common/utils/assets";
 import PacksHeader from "./components/PacksHeader";
-import styles from "../../common/styles/common.module.css";
-import { Preloader } from "../../common/components/Preloader/Preloader";
-import AddNewPack from "./components/modals/AddNewPack";
 import PacksModals from "./components/modals/PacksModals";
-import DeletePack from "./components/modals/DeletePack";
-import EditPack from "./components/modals/EditPack";
-import { IPackResponse } from "./packsAPI";
-import { ModalBase } from "../../common/components/Modal";
+import PacksTable from "./components/PacksTable";
+import { Preloader } from "../../common/components/Preloader/Preloader";
+import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
+import { getSortIcon } from "../../common/utils/assets";
+import { packsAC } from "./packsReducer";
+import styles from "../../common/styles/common.module.css";
+import { useSearchParams } from "react-router-dom";
+
 export type EditModeType = "edit" | "delete" | "idle";
 const Packs = () => {
+  // Selectors
   const user = useAllSelector(userStateSelect);
   const { isLoading } = useAllSelector(appStateSelect);
   const packName = useAllSelector(packsNameSelector);
@@ -48,6 +46,7 @@ const Packs = () => {
   const maxCardsCount = useAllSelector(packsMaxCardsPacksSelector);
   const minCardsCount = useAllSelector(packsMinCardsPacksSelector);
 
+  // Query
   const [searchParams, setSearchParams] = useSearchParams();
   const params = Object.fromEntries(searchParams);
 
@@ -121,13 +120,6 @@ const Packs = () => {
     setSearchQueryParams(value);
     dispatch(packsAC.setPackName({ packName: value }));
   }, []);
-  const addPack = useCallback(
-    (name: string, deckCover: string, isPrivate: boolean) => {
-      dispatch(addPackTC({ name, deckCover, isPrivate }));
-      setSearchParams({ ...params, isMyPack: isMyPack ? "true" : "false" });
-    },
-    []
-  );
   const setSortForPacks = useCallback((type: string) => {
     dispatch(packsAC.setPacksSort({ type }));
   }, []);
@@ -136,8 +128,8 @@ const Packs = () => {
     setSearchParams({ ...params, isMyPack: `${param}` });
   }, []);
   const changeSort = useCallback(
-    async (field: string) => {
-      await setSort({ direction: sort.direction === 0 ? 1 : 0, field });
+    (field: string) => {
+      setSort({ direction: sort.direction === 0 ? 1 : 0, field });
       setSortForPacks((sort.direction + sort.field).toString());
       setSearchParams((sort.direction + sort.field).toString());
     },
@@ -149,13 +141,6 @@ const Packs = () => {
   const removeSort = useCallback(() => {
     setSearchParams({});
   }, []);
-  const updatePack = useCallback(
-    (id: string, name: string, deckCover: string, isPrivate?: boolean) => {
-      dispatch(updatePackTC({ id, name, deckCover, isPrivate }));
-      setSearchParams({ ...params });
-    },
-    []
-  );
 
   return (
     <Box

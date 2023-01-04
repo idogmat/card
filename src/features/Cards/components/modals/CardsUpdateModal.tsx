@@ -16,6 +16,7 @@ interface IUpdateCardModalProps {
 }
 
 export const CardsUpdateModal: FC<IUpdateCardModalProps> = ({ packID }) => {
+  
   // dispatch & selectors
   const dispatch = useAppDispatch();
   const { cardID, question, answer, isOpen } = useAllSelector(

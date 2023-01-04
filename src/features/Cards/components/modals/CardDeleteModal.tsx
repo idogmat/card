@@ -8,6 +8,7 @@ import { ModalBase } from "common/components/Modal";
 import { Typography } from "@mui/material";
 import { deleteCardModalSelector } from "features/Cards/components/modals/modalsSelectors";
 import { deleteCardTC } from "features/Cards/cardsThunks";
+import { getDefaultMiddleware } from "@reduxjs/toolkit";
 
 interface IUpdateCardModalProps {
   packID: string;

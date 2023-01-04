@@ -1,27 +1,34 @@
-import React, { FC, useState } from "react";
 import { Box, Checkbox, FormGroup, IconButton, TextField } from "@mui/material";
-import { PhotoCamera } from "@mui/icons-material";
+import { memo, useState } from "react";
+import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
+
 import Button from "@mui/material/Button/Button";
 import { IPackResponse } from "../../packsAPI";
-import { EditModeType } from "../../Packs";
 import { ModalBase } from "../../../../common/components/Modal";
-import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
-import { deleteModalSelector, updateModalSelector } from "./modalsSelectors";
+import { PhotoCamera } from "@mui/icons-material";
 import { packsModalsAC } from "../../packsModalsSlice";
+import { updateModalSelector } from "./modalsSelectors";
 import { updatePackTC } from "../../packsThunks";
+
 interface IUpdatePack {
   name: string;
   deckCover: string;
-  private: boolean;
+  isPrivate: boolean;
 }
-const EditPack = () => {
+
+export const EditPack = memo(() => {
+  // Dispatch & selectors
   const { isOpen, pack } = useAllSelector(updateModalSelector);
   const dispatch = useAppDispatch();
+
+  // Local state
   const [updatePackData, setUpdatePackData] = useState<IUpdatePack>({
     name: "",
     deckCover: "",
-    private: false,
+    isPrivate: false,
   });
+
+  // Utils
   const handleClose = () =>
     dispatch(
       packsModalsAC.setUpdatePackState({
@@ -32,13 +39,18 @@ const EditPack = () => {
 
   const updatePack = () => {
     dispatch(updatePackTC({ id: pack._id, ...updatePackData }));
-    dispatch(
-      packsModalsAC.setUpdatePackState({
-        status: false,
-        pack: {} as IPackResponse,
-      })
-    );
+    handleClose();
   };
+
+  const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const name = e.currentTarget.value;
+    setUpdatePackData((state) => ({ ...state, name }));
+  };
+
+  const handleChangeIsPrivate = () => {
+    setUpdatePackData((state) => ({ ...state, isPrivate: !state.isPrivate }));
+  };
+
   return (
     <ModalBase open={isOpen} handleClose={handleClose} modalTitle={"Edit Pack"}>
       <Box>
@@ -48,23 +60,13 @@ const EditPack = () => {
             variant="standard"
             color="primary"
             value={updatePackData.name}
-            onChange={(e) =>
-              setUpdatePackData((state) => ({
-                ...state,
-                name: e.target.value,
-              }))
-            }
+            onChange={handleChangeName}
           />
           <Box>
             Private pack{" "}
             <Checkbox
-              checked={updatePackData.private}
-              onChange={(e) =>
-                setUpdatePackData((state) => ({
-                  ...state,
-                  private: e.target.checked,
-                }))
-              }
+              checked={updatePackData.isPrivate}
+              onChange={handleChangeIsPrivate}
               color="primary"
             />
           </Box>
@@ -93,6 +95,6 @@ const EditPack = () => {
       </Box>
     </ModalBase>
   );
-};
+});
 
 export default EditPack;
