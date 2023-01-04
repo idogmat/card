@@ -14,6 +14,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { BackTo } from "common/components/BackTo/BackTo";
 import { Box } from "@mui/system";
 import { ICard } from "common/models";
+import { IPackResponse } from "./../Packs/packsAPI";
 import { LearnRate } from "./LearnRate";
 import { Preloader } from "common/components/Preloader/Preloader";
 import { appStateSelect } from "app/selectors";
@@ -40,12 +41,13 @@ export const Learn = () => {
   // Vars
   const { state } = useLocation();
   const previousURL = state ? state.previousURL : "";
-  const packName = state ? state.packName : "";
+  const pack: IPackResponse = state ? state.pack : {};
   const cardsCount = state ? state.cardsCount : 0;
   const getCardsConfig = {
     cardsPack_id: packID ? packID : "",
     pageCount: cardsCount,
   };
+  console.log("PREVIOUS URL IN LEARN", previousURL);
 
   // Utils
 
@@ -81,13 +83,13 @@ export const Learn = () => {
       }}
     >
       <Box sx={{ marginBottom: 2 }}>
-        <BackTo route={`/packs${previousURL}`} title={"Back to packs"} />
+        <BackTo route={`/packs?${previousURL}`} title={"Back to packs"} />
       </Box>
       <Box
         sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}
       >
         <Typography component="h1" variant="h3" sx={{ marginBottom: 2 }}>
-          <b>Learn "{packName}"</b>
+          <b>Learn "{pack.name}"</b>
         </Typography>
         <Paper sx={{ padding: 5, minWidth: "320px" }}>
           <Typography>

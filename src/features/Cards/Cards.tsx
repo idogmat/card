@@ -160,6 +160,7 @@ export const Cards = React.memo(() => {
           pack={pack}
           setSearchRequest={changeSearchRequestHandler}
           searchValue={cardQuestion || ""}
+          previousURL={previousURL}
         />
         {cards.length > 0 ? (
           <>
