@@ -14,6 +14,7 @@ import { IPackResponse } from "./../../Packs/packsAPI";
 import { Search } from "../../../common/components/Search/Search";
 import { packsModalsAC } from "./../../Packs/packsModalsSlice";
 import { useAppDispatch } from "common/hooks";
+import PacksModals from "../../Packs/components/modals/PacksModals";
 
 interface ICardsHeaderProps {
   isPackMine: boolean;
@@ -41,13 +42,11 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
       dispatch(CardsModalsAC.setAddCardState({ state: true }));
 
     const openEditPackModal = () => {
-      dispatch(packsModalsAC.setUpdatePackState({ status: true }));
-      dispatch(packsModalsAC.setUpdatePackData({ pack }));
+      dispatch(packsModalsAC.setUpdatePackState({ status: true, pack }));
     };
 
     const openDeletePackModal = () => {
-      dispatch(packsModalsAC.setDeletePackState({ status: true }));
-      dispatch(packsModalsAC.setDeletePackData({ pack }));
+      dispatch(packsModalsAC.setDeletePackState({ status: true, pack }));
     };
 
     return (

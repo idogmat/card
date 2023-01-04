@@ -1,6 +1,5 @@
-import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { Box, Grid, Input, Slider } from "@mui/material";
-import s from "../Packs.module.css";
+import React, { useCallback, useEffect, useState } from "react";
+import { Box, Grid, Slider } from "@mui/material";
 
 interface ISuperRangeProps {
   onChangeSlider: (valueRange: number[]) => void;
