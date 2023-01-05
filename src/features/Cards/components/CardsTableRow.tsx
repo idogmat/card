@@ -1,4 +1,11 @@
-import { Box, IconButton, Rating, TableCell, TableRow } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Rating,
+  Skeleton,
+  TableCell,
+  TableRow,
+} from "@mui/material";
 import { DeleteOutline, Edit } from "@mui/icons-material";
 import React, { FC } from "react";
 
@@ -10,10 +17,11 @@ import { useAppDispatch } from "common/hooks";
 interface ICardsTableRowProps {
   card: ICard;
   isPackMine: boolean;
+  isLoading: boolean;
 }
 
 export const CardsTableRow: FC<ICardsTableRowProps> = React.memo(
-  ({ card, isPackMine }) => {
+  ({ card, isPackMine, isLoading }) => {
     // dispatch & selectors
     const dispatch = useAppDispatch();
     const updateCardData = {
@@ -38,24 +46,34 @@ export const CardsTableRow: FC<ICardsTableRowProps> = React.memo(
 
     return (
       <TableRow key={card._id}>
-        <TableCell>{card.question}</TableCell>
-        <TableCell>{card.answer}</TableCell>
-        <TableCell>{formDate(`${card.updated}`)}</TableCell>
+        <TableCell>{isLoading ? <Skeleton /> : card.question}</TableCell>
+        <TableCell>{isLoading ? <Skeleton /> : card.answer}</TableCell>
+        <TableCell>
+          {isLoading ? <Skeleton /> : formDate(`${card.updated}`)}
+        </TableCell>
         <TableCell>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Rating
-              name={"read-only"}
-              value={Math.floor(card.grade)}
-              readOnly
-              precision={0.5}
-            />
+            {isLoading ? (
+              <Skeleton />
+            ) : (
+              <Rating
+                name={"read-only"}
+                value={Math.floor(card.grade)}
+                readOnly
+                precision={0.5}
+              />
+            )}
             {isPackMine && (
               <>
                 <IconButton>
-                  <Edit onClick={openUpdateModal} />
+                  {isLoading ? (
+                    <Skeleton />
+                  ) : (
+                    <Edit onClick={openUpdateModal} />
+                  )}
                 </IconButton>
                 <IconButton onClick={openDeleteModal}>
-                  <DeleteOutline />
+                  {isLoading ? <Skeleton /> : <DeleteOutline />}
                 </IconButton>
               </>
             )}

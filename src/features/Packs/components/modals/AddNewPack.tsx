@@ -1,5 +1,5 @@
 import { Box, Checkbox, FormGroup, IconButton, TextField } from "@mui/material";
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
 
 import Button from "@mui/material/Button/Button";
@@ -8,6 +8,7 @@ import { PhotoCamera } from "@mui/icons-material";
 import { addNewModalSelector } from "./modalsSelectors";
 import { addPackTC } from "../../packsThunks";
 import { packsModalsAC } from "../../packsModalsSlice";
+import { uploadHandler } from "../../../../common/utils/loadPhoto";
 
 interface INewPack {
   name: string;
@@ -28,6 +29,7 @@ export const AddNewPack = React.memo(() => {
   });
 
   // Utils
+
   const handleClose = () =>
     dispatch(packsModalsAC.setAddPackState({ status: false }));
 
@@ -43,6 +45,9 @@ export const AddNewPack = React.memo(() => {
 
   const handleChangeIsPrivate = () => {
     setNewPackData((state) => ({ ...state, isPrivate: !state.isPrivate }));
+  };
+  const handleChangeCover = (fileAsString: string) => {
+    setNewPackData((state) => ({ ...state, deckCover: fileAsString }));
   };
 
   return (
@@ -74,6 +79,7 @@ export const AddNewPack = React.memo(() => {
                 style={{ display: "none" }}
                 type="file"
                 accept={"image/*"}
+                onChange={(e) => uploadHandler(e, handleChangeCover)}
               />
               <IconButton component="span" color={"primary"}>
                 <PhotoCamera />

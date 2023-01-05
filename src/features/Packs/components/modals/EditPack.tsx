@@ -1,5 +1,5 @@
 import { Box, Checkbox, FormGroup, IconButton, TextField } from "@mui/material";
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
 
 import Button from "@mui/material/Button/Button";
@@ -19,6 +19,9 @@ interface IUpdatePack {
 export const EditPack = memo(() => {
   // Dispatch & selectors
   const { isOpen, pack } = useAllSelector(updateModalSelector);
+  const truePack = useAllSelector((state) =>
+    state.packs.cardPacks.find((p) => p._id === pack._id)
+  );
   const dispatch = useAppDispatch();
 
   // Local state
@@ -33,7 +36,9 @@ export const EditPack = memo(() => {
     );
 
   const updatePack = () => {
-    dispatch(updatePackTC({ id: pack._id, ...pack }));
+    if (truePack?.name !== pack.name) {
+      dispatch(updatePackTC({ id: pack._id, ...pack }));
+    }
     handleClose();
   };
 

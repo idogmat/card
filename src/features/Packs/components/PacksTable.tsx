@@ -1,4 +1,4 @@
-import { Box, TableBody, TableCell } from "@mui/material";
+import { Box, Skeleton, TableBody, TableCell } from "@mui/material";
 import React, { ReactNode } from "react";
 
 import { IPackResponse } from "../packsAPI";
@@ -25,6 +25,7 @@ interface ITableProps {
   removePack: (id: string) => void;
   handleChangeRowsPerPage: (event: SelectChangeEvent) => void;
   changePage: (event: React.ChangeEvent<unknown>, newPage: number) => void;
+  isLoading: boolean;
 }
 
 const PacksTable: React.FC<ITableProps> = React.memo(
@@ -38,7 +39,7 @@ const PacksTable: React.FC<ITableProps> = React.memo(
     totalPageCount,
     page,
     pageCount,
-    isMyPack,
+    isLoading,
   }) => {
     return (
       <Paper sx={{ position: "relative" }}>
@@ -47,6 +48,7 @@ const PacksTable: React.FC<ITableProps> = React.memo(
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
+                  <TableCell>Cover</TableCell>
                   <TableCell>Name</TableCell>
                   <TableCell align={"center"}>CardsCount</TableCell>
                   <TableCell
@@ -66,7 +68,7 @@ const PacksTable: React.FC<ITableProps> = React.memo(
                       key={pack._id}
                       id={id}
                       pack={pack}
-                      isMyPack={isMyPack}
+                      isLoading={isLoading}
                     />
                   ))
                 ) : (
