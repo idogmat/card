@@ -20,10 +20,11 @@ interface ICardsTableProps {
   isPackMine: boolean;
   sort: { direction: number; field: string };
   setSort: (value: IFieldSort) => void;
+  isLoading: boolean;
 }
 
 export const CardsTable: FC<ICardsTableProps> = React.memo(
-  ({ cards, isPackMine, sort, setSort }) => {
+  ({ cards, isPackMine, sort, setSort, isLoading }) => {
     const isAsc = sort.direction === 1;
     const sortIcon = getSortIcon(isAsc);
 
@@ -69,6 +70,7 @@ export const CardsTable: FC<ICardsTableProps> = React.memo(
                   key={card._id}
                   card={card}
                   isPackMine={isPackMine}
+                  isLoading={isLoading}
                 />
               );
             })}

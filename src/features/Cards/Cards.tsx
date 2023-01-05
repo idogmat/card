@@ -170,6 +170,7 @@ export const Cards = React.memo(() => {
                 isPackMine={isPackMine}
                 sort={sort}
                 setSort={handleChangeSort}
+                isLoading={isLoading}
               />
             </Box>
             <TablePagination
