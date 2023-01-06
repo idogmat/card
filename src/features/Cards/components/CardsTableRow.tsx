@@ -29,6 +29,11 @@ export const CardsTableRow: FC<ICardsTableRowProps> = React.memo(
       cardName: card.question,
     };
 
+    // Vars
+    const isCardQuestionImg =
+      card.questionImg && card.questionImg !== "undefined";
+    const isCardAnswerImg = card.questionImg && card.answerImg !== "undefined";
+
     // Utils
     const openDeleteModal = () => {
       dispatch(CardsModalsAC.setDeleteCardState({ state: true }));
@@ -36,13 +41,13 @@ export const CardsTableRow: FC<ICardsTableRowProps> = React.memo(
     };
     const openUpdateModal = () => {
       dispatch(CardsModalsAC.setUpdateCardState({ state: true }));
-      dispatch(CardsModalsAC.setUpdateCardData({ card }));
+      dispatch(CardsModalsAC.setInitialUpdateCardData({ card }));
     };
 
     return (
       <TableRow key={card._id}>
         <TableCell>
-          {card.questionImg ? (
+          {isCardQuestionImg ? (
             <img
               src={card.questionImg}
               alt=""
@@ -53,7 +58,7 @@ export const CardsTableRow: FC<ICardsTableRowProps> = React.memo(
           )}
         </TableCell>
         <TableCell>
-          {card.answerImg ? (
+          {isCardAnswerImg ? (
             <img
               src={card.answerImg}
               alt=""

@@ -21,7 +21,7 @@ export interface IAddCardFieldProps {
   changeTextFieldValue: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const AddCardField: FC<IAddCardFieldProps> = ({
+export const SelectTypeField: FC<IAddCardFieldProps> = ({
   selectTitle,
   options,
   changeOption,

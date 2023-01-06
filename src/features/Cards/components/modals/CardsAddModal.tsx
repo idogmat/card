@@ -5,28 +5,25 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { ChangeEvent, FC, useRef, useState } from "react";
+import { ICardData, IFieldFormats } from "./CardsModals";
+import { defaultFieldsFormats, formatSelectOptions } from "./CardsModals.data";
 import { useAllSelector, useAppDispatch } from "common/hooks";
 
-import { AddCardField } from "./AddCardField";
 import { BACKEND_MAX_IMG_WEIGHT } from "./../../../../common/utils/base64Converter";
 import { Box } from "@mui/system";
 import { CardsModalsAC } from "features/Cards/cardsModalsSlice";
 import { FieldFormatsEnum } from "./FormatSelect";
 import { IAddCardRequest } from "../../cardsAPI";
-import { ICardData } from "./CardsModals";
 import { ModalBase } from "common/components/Modal";
+import { SelectTypeField } from "./SelectTypeField";
 import { _uploadHandler } from "common/utils/base64Converter";
 import { acceptableImgFormats } from "common/utils/regExp";
 import { addCardModalSelector } from "./modalsSelectors";
 import { addCardTC } from "../../cardsThunks";
-import { formatSelectOptions } from "./CardsModals.data";
+import { openFileSelector } from "./utils";
 
 interface ICardsAddModalProps {
   packID: string;
-}
-export interface IFieldFormats {
-  question: FieldFormatsEnum;
-  answer: FieldFormatsEnum;
 }
 
 export const CardsAddModal: FC<ICardsAddModalProps> = ({ packID }) => {
@@ -37,10 +34,6 @@ export const CardsAddModal: FC<ICardsAddModalProps> = ({ packID }) => {
   // Vars
   const answerFileInput = useRef<HTMLInputElement>(null);
   const questionFileInput = useRef<HTMLInputElement>(null);
-  const defaultFieldsFormats = {
-    question: FieldFormatsEnum.textFormat,
-    answer: FieldFormatsEnum.textFormat,
-  };
 
   // Local States
   const [textCardData, setTextCardData] = useState<ICardData>({} as ICardData);
@@ -50,6 +43,9 @@ export const CardsAddModal: FC<ICardsAddModalProps> = ({ packID }) => {
 
   // Utils
 
+  const isFieldPicture = (field: "question" | "answer") =>
+    fieldsFormats[field] === FieldFormatsEnum.pictureFormat;
+
   const getBase64File = async (e: ChangeEvent<HTMLInputElement>) => {
     return await _uploadHandler(
       dispatch,
@@ -58,10 +54,6 @@ export const CardsAddModal: FC<ICardsAddModalProps> = ({ packID }) => {
       BACKEND_MAX_IMG_WEIGHT,
       "Unaccaptable file"
     );
-  };
-
-  const isFieldPicture = (field: "question" | "answer") => {
-    return fieldsFormats[field] === FieldFormatsEnum.pictureFormat;
   };
 
   const changeQuestionCover = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -74,18 +66,14 @@ export const CardsAddModal: FC<ICardsAddModalProps> = ({ packID }) => {
     if (answer) setImgCardData({ ...imgCardData, answer });
   };
 
-  const openFileSelector = (ref: React.RefObject<HTMLInputElement>) => {
-    ref.current?.click();
-  };
-
   const changeQuestionFormat = (e: SelectChangeEvent) => {
-    const question = e.target.value as FieldFormatsEnum;
-    setFieldFormats({ ...fieldsFormats, question });
+    const questionFormat = e.target.value as FieldFormatsEnum;
+    setFieldFormats({ ...fieldsFormats, question: questionFormat });
   };
 
   const changeAnswerFormat = (e: SelectChangeEvent) => {
-    const answer = e.target.value as FieldFormatsEnum;
-    setFieldFormats({ ...fieldsFormats, answer });
+    const answerFormat = e.target.value as FieldFormatsEnum;
+    setFieldFormats({ ...fieldsFormats, answer: answerFormat });
   };
 
   const setTextCardDataQuestion = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -137,7 +125,7 @@ export const CardsAddModal: FC<ICardsAddModalProps> = ({ packID }) => {
       >
         <Box sx={{ padding: 2 }}>
           <FormGroup sx={{ display: "grid", gap: 1 }}>
-            <AddCardField
+            <SelectTypeField
               selectTitle={"Choose question format"}
               options={formatSelectOptions}
               changeOption={changeQuestionFormat}
@@ -149,7 +137,7 @@ export const CardsAddModal: FC<ICardsAddModalProps> = ({ packID }) => {
               textFieldValue={textCardData.question}
               changeTextFieldValue={setTextCardDataQuestion}
             />
-            <AddCardField
+            <SelectTypeField
               selectTitle={"Choose answer format"}
               options={formatSelectOptions}
               changeOption={changeAnswerFormat}

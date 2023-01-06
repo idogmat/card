@@ -12,6 +12,7 @@ const fileToBase = (file: File, callBack: (value: string) => void) => {
   };
   reader.readAsDataURL(file);
 };
+
 export const uploadHandler = (
   e: ChangeEvent<HTMLInputElement>,
   callBack: (str: string) => void

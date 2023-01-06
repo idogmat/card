@@ -1,6 +1,17 @@
+import { Drafts } from "@mui/icons-material";
+import { FieldFormatsEnum } from "./components/modals/FormatSelect";
 import { ICard } from "common/models";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
+
+export interface IUpdateCardData {
+  answer: string;
+  question: string;
+  answerImg: string;
+  questionImg: string;
+  questionFieldType: FieldFormatsEnum;
+  answerFieldType: FieldFormatsEnum;
+}
 
 const initialState = {
   addCard: {
@@ -11,6 +22,10 @@ const initialState = {
     isOpen: false,
     question: "",
     answer: "",
+    questionImg: "",
+    answerImg: "",
+    questionFieldType: FieldFormatsEnum.textFormat,
+    answerFieldType: FieldFormatsEnum.textFormat,
   },
   deleteCard: {
     isOpen: false,
@@ -32,24 +47,40 @@ const cardsModalsSlice = createSlice({
     setDeleteCardState: (draft, action: PayloadAction<{ state: boolean }>) => {
       draft.deleteCard.isOpen = action.payload.state;
     },
-    setUpdateCardData: (
+    setInitialUpdateCardData: (
       draft,
       action: PayloadAction<{
         card: ICard;
       }>
     ) => {
+      const isQuestionImg = action.payload.card.questionImg !== "undefined";
+      const isAnswerImg = action.payload.card.answerImg !== "undefined";
+
       draft.updateCard.answer = action.payload.card.answer;
       draft.updateCard.question = action.payload.card.question;
+
+      draft.updateCard.questionImg = isQuestionImg
+        ? action.payload.card.questionImg
+        : "";
+      draft.updateCard.answerImg = isAnswerImg
+        ? action.payload.card.answerImg
+        : "";
+
+      draft.updateCard.answerFieldType = isAnswerImg
+        ? FieldFormatsEnum.pictureFormat
+        : FieldFormatsEnum.textFormat;
+
+      draft.updateCard.questionFieldType = isQuestionImg
+        ? FieldFormatsEnum.pictureFormat
+        : FieldFormatsEnum.textFormat;
+
       draft.updateCard.card = action.payload.card;
     },
-    setUpdateCardQuestion: (
-      draft,
-      action: PayloadAction<{ question: string }>
+    setUpdateCardData: (
+      state,
+      action: PayloadAction<{ model: IUpdateCardData }>
     ) => {
-      draft.updateCard.question = action.payload.question;
-    },
-    setUpdateCardAnswer: (draft, action: PayloadAction<{ answer: string }>) => {
-      draft.updateCard.answer = action.payload.answer;
+      state.updateCard = { ...state.updateCard, ...action.payload.model };
     },
     setDeleteCardData: (
       draft,
