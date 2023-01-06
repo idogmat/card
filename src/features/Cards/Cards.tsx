@@ -13,7 +13,7 @@ import {
   cardsTotalCountSelector,
 } from "./selectors";
 import { useAllSelector, useAppDispatch } from "common/hooks";
-import { useLocation, useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 import { BackTo } from "common/components/BackTo/BackTo";
 import { CardsAC } from "./cardsSlice";
@@ -64,6 +64,7 @@ export const Cards = React.memo(() => {
 
   const packs = useAllSelector(packsCardsPacksSelector);
   const pack = packs.find((p) => p._id === packID);
+  console.log(cards);
 
   // Vars
   const backToState = getItemFromLC("backToState");
