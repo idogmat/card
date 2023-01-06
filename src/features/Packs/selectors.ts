@@ -1,7 +1,8 @@
-import { RootState } from "./store";
+import { RootState } from "../../app/store";
 
 export const appStateSelect = (state: RootState) => state.app;
 export const userStateSelect = (state: RootState) => state.user;
+
 export const packsNameSelector = (state: RootState) => state.packs.packName;
 export const packsIsMyPackSelector = (state: RootState) => state.packs.isMyPack;
 export const packsMaxSelector = (state: RootState) => state.packs.max;

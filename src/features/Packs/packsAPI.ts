@@ -1,4 +1,4 @@
-import { instance } from "../../common/api/baseAPI";
+import { configuredAxios } from "../../common/api/baseAPI";
 
 export interface IPackResponse {
   _id: string;
@@ -39,16 +39,16 @@ interface IPacksParams {
 }
 
 const getPacks = (params: Partial<IPacksParams>) => {
-  return instance.get<ResponseGetPacks>("/cards/pack", {
+  return configuredAxios.get<ResponseGetPacks>("/cards/pack", {
     params,
   });
 };
 const addPack = (name: string, deckCover: string, isPrivate?: boolean) => {
   const cardsPack = { name, deckCover, private: isPrivate };
-  return instance.post("/cards/pack", { cardsPack });
+  return configuredAxios.post("/cards/pack", { cardsPack });
 };
 const deletePack = (id: string) => {
-  return instance.delete(`/cards/pack?id=${id}`);
+  return configuredAxios.delete(`/cards/pack?id=${id}`);
 };
 const updatePack = (
   id: string,
@@ -56,7 +56,7 @@ const updatePack = (
   deckCover: string,
   isPrivate?: boolean
 ) => {
-  return instance.put(`/cards/pack`, {
+  return configuredAxios.put(`/cards/pack`, {
     cardsPack: { _id: id, name, deckCover, private: isPrivate },
   });
 };

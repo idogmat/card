@@ -14,8 +14,8 @@ import {
   packsSortPacksSelector,
   packsTotalCardsSelector,
   userStateSelect,
-} from "../../app/selectors";
-import { removePackTC, setPacks } from "./packsThunks";
+} from "./selectors";
+import { removePackTC, setPacksTC } from "./packsThunks";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
 
 import { HorizontalRule } from "@mui/icons-material";
@@ -78,7 +78,7 @@ const Packs = () => {
 
   useEffect(() => {
     if (!isParamsSet) {
-      dispatch(setPacks({}));
+      dispatch(setPacksTC({}));
       return;
     }
 
@@ -92,7 +92,7 @@ const Packs = () => {
       sortPacks: sort.field ? `${sort.direction}${sort.field}` : "0updated",
     };
 
-    dispatch(setPacks(model));
+    dispatch(setPacksTC(model));
   }, [searchParams]);
 
   const changePage = useCallback(

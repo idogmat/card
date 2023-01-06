@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Avatar,
   Badge,
@@ -10,17 +9,18 @@ import {
   Typography,
   TypographyProps,
 } from "@mui/material";
-import { useAllSelector, useAppDispatch } from "../../common/hooks";
 import { Logout, PhotoCameraBackOutlined } from "@mui/icons-material";
+import { useAllSelector, useAppDispatch } from "../../common/hooks";
 
 import { EditableText } from "../../common/components/EditableText/EditableText";
-import { userStateSelector } from "../User/selectors";
-import { updateUserInfoTC } from "./profileThunks";
-import { appStateSelect } from "../../app/selectors";
-import styles from "../../common/styles/common.module.css";
 import { Preloader } from "../../common/components/Preloader/Preloader";
+import React from "react";
+import { appStateSelect } from "../Packs/selectors";
 import { lime } from "@mui/material/colors";
 import { logOutTC } from "../Login/loginThunks";
+import styles from "../../common/styles/common.module.css";
+import { updateUserInfoTC } from "./profileThunks";
+import { userStateSelector } from "../User/selectors";
 
 export const Profile = () => {
   const dispatch = useAppDispatch();

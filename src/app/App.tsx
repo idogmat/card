@@ -1,13 +1,14 @@
-import { AppRouter } from "../common/components/AppRouter/AppRouter";
-import { Header } from "../common/components/Header/Header";
 import React, { useEffect } from "react";
-import styles from "./App.module.css";
-import { InitAppTC } from "./appThunks";
 import { useAllSelector, useAppDispatch } from "../common/hooks";
-import { appStateSelect } from "./selectors";
-import { Preloader } from "../common/components/Preloader/Preloader";
+
+import { AppRouter } from "../common/components/AppRouter/AppRouter";
+import { Container } from "@mui/material";
+import { Header } from "../common/components/Header/Header";
+import { InitAppTC } from "./appThunks";
 import { Notifications } from "../common/components/Notifications/Notifications";
-import {Container} from "@mui/material";
+import { Preloader } from "../common/components/Preloader/Preloader";
+import { appStateSelect } from "../features/Packs/selectors";
+import styles from "./App.module.css";
 
 function App() {
   const { isInit } = useAllSelector(appStateSelect);
@@ -21,9 +22,9 @@ function App() {
     <div className={styles.wrapper}>
       <Header />
       <main className={styles.page}>
-         <Container maxWidth='lg'>
-            <AppRouter />
-         </Container>
+        <Container maxWidth="lg">
+          <AppRouter />
+        </Container>
         <Notifications />
       </main>
     </div>

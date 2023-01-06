@@ -1,5 +1,5 @@
-import { instance } from "../../common/api/baseAPI";
 import { IUser } from "../../common/models";
+import { configuredAxios } from "../../common/api/baseAPI";
 
 export interface IUpdatedUserInfo {
   name: string;
@@ -12,7 +12,7 @@ export interface IUpdateUserResponse {
 }
 
 const sendUpdateUserRequest = (model: IUpdatedUserInfo) => {
-  return instance.put<IUpdateUserResponse>("/auth/me", model);
+  return configuredAxios.put<IUpdateUserResponse>("/auth/me", model);
 };
 
 export const profileAPI = {
