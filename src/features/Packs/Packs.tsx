@@ -116,13 +116,10 @@ const Packs = () => {
     [packName]
   );
 
-  const changeSearchHandler = useCallback(
-    (value: string) => {
-      setSearchQueryParams(value);
-      dispatch(packsAC.setPackName({ packName: value }));
-    },
-    [packName]
-  );
+  const changeSearchHandler = useCallback((value: string) => {
+    setSearchQueryParams(value);
+    dispatch(packsAC.setPackName({ packName: value }));
+  }, []);
   const setSortForPacks = useCallback(
     (type: string) => {
       dispatch(packsAC.setPacksSort({ type }));
