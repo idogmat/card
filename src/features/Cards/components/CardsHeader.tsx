@@ -107,7 +107,7 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
                     </Typography>
                   </MenuItem>
                   <MenuItem>
-                    <Typography classe={"menu-text-icon"}>
+                    <Typography className={"menu-text-icon"}>
                       <NavLink
                         to={`/learn/${pack._id}`}
                         state={{ previousURL: previousURL, pack }}

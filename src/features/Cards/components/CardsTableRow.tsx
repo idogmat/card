@@ -24,11 +24,6 @@ export const CardsTableRow: FC<ICardsTableRowProps> = React.memo(
   ({ card, isPackMine, isLoading }) => {
     // dispatch & selectors
     const dispatch = useAppDispatch();
-    const updateCardData = {
-      question: card.question,
-      answer: card.answer,
-      cardID: card._id,
-    };
     const deleteCardData = {
       cardID: card._id,
       cardName: card.question,
@@ -41,7 +36,7 @@ export const CardsTableRow: FC<ICardsTableRowProps> = React.memo(
     };
     const openUpdateModal = () => {
       dispatch(CardsModalsAC.setUpdateCardState({ state: true }));
-      dispatch(CardsModalsAC.setUpdateCardData(updateCardData));
+      dispatch(CardsModalsAC.setUpdateCardData({card}));
     };
 
     return (

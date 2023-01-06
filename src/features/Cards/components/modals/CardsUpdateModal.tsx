@@ -18,12 +18,12 @@ interface IUpdateCardModalProps {
 export const CardsUpdateModal: FC<IUpdateCardModalProps> = ({ packID }) => {
   // dispatch & selectors
   const dispatch = useAppDispatch();
-  const { cardID, question, answer, isOpen } = useAllSelector(
+  const { card, question, answer, isOpen } = useAllSelector(
     updateCardModalSelector
   );
-  const trueCard = useAllSelector((state) =>
-    state.cards.cards.find((c) => c._id === cardID)
-  );
+
+  // Vars
+  const isSameCard = card.question === question && card.answer === answer;
 
   // Utils
 
@@ -40,19 +40,19 @@ export const CardsUpdateModal: FC<IUpdateCardModalProps> = ({ packID }) => {
     );
 
   const updateCardHandler = () => {
-    if (answer === trueCard?.answer && question === trueCard?.question) {
+    if (isSameCard) {
       handleClose();
-    } else {
-      const model = {
-        card: {
-          _id: cardID,
-          question,
-          answer,
-        },
-      };
-      dispatch(updateCardTC({ packID, model }));
-      handleClose();
+      return;
     }
+    const model = {
+      card: {
+        _id: card._id,
+        question,
+        answer,
+      },
+    };
+    dispatch(updateCardTC({ packID, model }));
+    handleClose();
   };
 
   return (

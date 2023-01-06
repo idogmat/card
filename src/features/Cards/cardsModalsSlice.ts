@@ -1,3 +1,4 @@
+import { ICard } from "common/models";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 
@@ -6,10 +7,10 @@ const initialState = {
     isOpen: false,
   },
   updateCard: {
+    card: {} as ICard,
     isOpen: false,
     question: "",
     answer: "",
-    cardID: "",
   },
   deleteCard: {
     isOpen: false,
@@ -34,14 +35,12 @@ const cardsModalsSlice = createSlice({
     setUpdateCardData: (
       draft,
       action: PayloadAction<{
-        question: string;
-        answer: string;
-        cardID: string;
+        card: ICard;
       }>
     ) => {
-      draft.updateCard.answer = action.payload.answer;
-      draft.updateCard.question = action.payload.question;
-      draft.updateCard.cardID = action.payload.cardID;
+      draft.updateCard.answer = action.payload.card.answer;
+      draft.updateCard.question = action.payload.card.question;
+      draft.updateCard.card = action.payload.card;
     },
     setUpdateCardQuestion: (
       draft,

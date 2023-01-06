@@ -23,6 +23,7 @@ import { Preloader } from "common/components/Preloader/Preloader";
 import { TablePagination } from "common/components/TablePagination/TablePagination";
 import { appStateSelect } from "app/selectors";
 import { getCardsTC } from "./cardsThunks";
+import { getItemFromLC } from "common/utils/localStorage";
 import { selectOptions } from "./Cards.data";
 import styles from "common/styles/common.module.css";
 import { userStateSelector } from "../User/selectors";
@@ -33,9 +34,15 @@ export interface IFieldSort {
   field: string;
 }
 
+export interface ILocationState {
+  pack: IPackResponse;
+  previousURL: string;
+}
+
 export const Cards = React.memo(() => {
   // Selectors
   const dispatch = useAppDispatch();
+
   const user = useAllSelector(userStateSelector);
   const { isLoading } = useAllSelector(appStateSelect);
 
@@ -47,12 +54,13 @@ export const Cards = React.memo(() => {
   const cardQuestion = useAllSelector(cardsCardQuestionSelector);
 
   // Url & Query
-  // const { packID } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { state } = useLocation();
-  const previousURL = state ? state.previousURL : "";
-  const pack: IPackResponse = state ? state.pack : {};
   const params = Object.fromEntries(searchParams);
+
+  // Vars
+  const backToState = getItemFromLC("backToState");
+  const pack = backToState.pack || ({} as IPackResponse);
+  const previousURL = backToState.previousURL || "packs";
 
   // Local states
   const defaultSort = { direction: 0, field: "updated" };
@@ -80,6 +88,7 @@ export const Cards = React.memo(() => {
       cardQuestion: params.search || cardQuestion,
       sortCards: params.sortCards || cardsSort,
     } as IGetCardsRequest;
+    console.log("gettings cards with packID: ", model.cardsPack_id);
 
     dispatch(getCardsTC(model));
   }, [searchParams]);
