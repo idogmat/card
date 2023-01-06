@@ -16,11 +16,13 @@ interface IUpdateCardModalProps {
 }
 
 export const CardsUpdateModal: FC<IUpdateCardModalProps> = ({ packID }) => {
-  
   // dispatch & selectors
   const dispatch = useAppDispatch();
   const { cardID, question, answer, isOpen } = useAllSelector(
     updateCardModalSelector
+  );
+  const trueCard = useAllSelector((state) =>
+    state.cards.cards.find((c) => c._id === cardID)
   );
 
   // Utils
@@ -38,15 +40,19 @@ export const CardsUpdateModal: FC<IUpdateCardModalProps> = ({ packID }) => {
     );
 
   const updateCardHandler = () => {
-    const model = {
-      card: {
-        _id: cardID,
-        question,
-        answer,
-      },
-    };
-    dispatch(updateCardTC({ packID, model }));
-    handleClose();
+    if (answer === trueCard?.answer && question === trueCard?.question) {
+      handleClose();
+    } else {
+      const model = {
+        card: {
+          _id: cardID,
+          question,
+          answer,
+        },
+      };
+      dispatch(updateCardTC({ packID, model }));
+      handleClose();
+    }
   };
 
   return (

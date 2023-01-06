@@ -116,17 +116,26 @@ const Packs = () => {
     [packName]
   );
 
-  const changeSearchHandler = useCallback((value: string) => {
-    setSearchQueryParams(value);
-    dispatch(packsAC.setPackName({ packName: value }));
-  }, []);
-  const setSortForPacks = useCallback((type: string) => {
-    dispatch(packsAC.setPacksSort({ type }));
-  }, []);
-  const handlerIsMyPack = useCallback((param: boolean) => {
-    dispatch(packsAC.setPreferencePacks({ isMine: param }));
-    setSearchParams({ ...params, isMyPack: `${param}` });
-  }, []);
+  const changeSearchHandler = useCallback(
+    (value: string) => {
+      setSearchQueryParams(value);
+      dispatch(packsAC.setPackName({ packName: value }));
+    },
+    [packName]
+  );
+  const setSortForPacks = useCallback(
+    (type: string) => {
+      dispatch(packsAC.setPacksSort({ type }));
+    },
+    [sortPacks]
+  );
+  const handlerIsMyPack = useCallback(
+    (param: boolean) => {
+      dispatch(packsAC.setPreferencePacks({ isMine: param }));
+      setSearchParams({ ...params, isMyPack: `${param}` });
+    },
+    [isMyPack]
+  );
   const changeSort = useCallback(
     (field: string) => {
       setSort({ direction: sort.direction === 0 ? 1 : 0, field });
@@ -151,11 +160,11 @@ const Packs = () => {
         flexDirection: "column",
       }}
     >
-      {isLoading && (
-        <div className={styles.preventSending}>
-          <Preloader />
-        </div>
-      )}
+      {/*{isLoading && (*/}
+      {/*  <div className={styles.preventSending}>*/}
+      {/*    <Preloader />*/}
+      {/*  </div>*/}
+      {/*)}*/}
       <PacksHeader
         removeSort={removeSort}
         changeRangeHandler={changeRangeHandler}
@@ -181,6 +190,7 @@ const Packs = () => {
         showSortIcon={showSortIcon}
         removePack={removePack}
         isMyPack={isMyPack}
+        isLoading={isLoading}
       />
 
       <PacksModals />
