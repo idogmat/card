@@ -53,7 +53,6 @@ export const Cards = React.memo(() => {
   const previousURL = state ? state.previousURL : "";
   const pack: IPackResponse = state ? state.pack : {};
   const params = Object.fromEntries(searchParams);
-  console.log(pack);
 
   // Local states
   const defaultSort = { direction: 0, field: "updated" };

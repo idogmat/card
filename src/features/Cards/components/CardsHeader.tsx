@@ -15,7 +15,6 @@ import { NavLink } from "react-router-dom";
 import { Search } from "../../../common/components/Search/Search";
 import { packsModalsAC } from "./../../Packs/packsModalsSlice";
 import { useAppDispatch } from "common/hooks";
-import PacksModals from "../../Packs/components/modals/PacksModals";
 
 interface ICardsHeaderProps {
   isPackMine: boolean;
@@ -43,8 +42,9 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
       setMenuAnchor(null);
     };
 
-    const openAddNewCardModal = () =>
+    const openAddNewCardModal = () => {
       dispatch(CardsModalsAC.setAddCardState({ state: true }));
+    };
 
     const openEditPackModal = () => {
       dispatch(packsModalsAC.setUpdatePackState({ status: true, pack }));
@@ -53,8 +53,6 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
     const openDeletePackModal = () => {
       dispatch(packsModalsAC.setDeletePackState({ status: true, pack }));
     };
-
-    console.log("PREVIOUS URL IN HEADER", previousURL);
 
     return (
       <>
@@ -109,7 +107,7 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
                     </Typography>
                   </MenuItem>
                   <MenuItem>
-                    <Typography className={"menu-text-icon"}>
+                    <Typography classe={"menu-text-icon"}>
                       <NavLink
                         to={`/learn/${pack._id}`}
                         state={{ previousURL: previousURL, pack }}

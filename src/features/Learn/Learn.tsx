@@ -47,7 +47,6 @@ export const Learn = () => {
     cardsPack_id: packID ? packID : "",
     pageCount: cardsCount,
   };
-  console.log("PREVIOUS URL IN LEARN", previousURL);
 
   // Utils
 
