@@ -1,8 +1,9 @@
-import React from "react";
-import { AppAC } from "../../../app/appReducer";
-import { useAllSelector, useAppDispatch } from "../../hooks";
-import { appStateSelect } from "../../../app/selectors";
 import { Alert, Snackbar } from "@mui/material";
+import { useAllSelector, useAppDispatch } from "../../hooks";
+
+import { AppAC } from "../../../app/appReducer";
+import React from "react";
+import { appStateSelect } from "../../../features/Packs/selectors";
 
 export const SuccessNotification = () => {
   const dispatch = useAppDispatch();

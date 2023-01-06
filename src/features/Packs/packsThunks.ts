@@ -1,14 +1,15 @@
-import { AppAC } from "../../app/appReducer";
-import { AppThunkActionType } from "../../common/hooks/useAllSelector";
-import { PacksAPI } from "./packsAPI";
 import {
   defaultErrorMessage,
   errorHandlingThunk,
 } from "../../common/utils/errorHandlers";
-import { packsAC } from "./packsReducer";
-import { createAsyncThunk } from "@reduxjs/toolkit";
+
+import { AppAC } from "../../app/appReducer";
+import { AppThunkActionType } from "../../common/hooks/useAllSelector";
+import { PacksAPI } from "./packsAPI";
 import { RootState } from "../../app/store";
 import { createAppAsyncThunk } from "../../common/utils/AsyncThunk";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { packsAC } from "./packsReducer";
 
 interface IGetModel {
   page: string | number;
@@ -20,7 +21,7 @@ interface IGetModel {
   sortPacks: string;
   user_id: string;
 }
-export const setPacks = createAppAsyncThunk(
+export const setPacksTC = createAppAsyncThunk(
   "packs/setPacks",
   async (model: Partial<IGetModel>, thunkAPI) => {
     return errorHandlingThunk(thunkAPI, async () => {
@@ -70,7 +71,7 @@ export const addPackTC = createAppAsyncThunk(
       PacksAPI.addPack(fields.name, fields.deckCover, fields.isPrivate).then(
         (res) => {
           thunkAPI.dispatch(
-            setPacks({ isMyPack: isMyPack ? "true" : "false" })
+            setPacksTC({ isMyPack: isMyPack ? "true" : "false" })
           );
           thunkAPI.dispatch(
             AppAC.setSuccessMessage({ message: "Successfully updated" })
@@ -86,7 +87,7 @@ export const removePackTC = createAppAsyncThunk(
     return errorHandlingThunk(thunkAPI, async () => {
       const { data } = await PacksAPI.deletePack(id);
       const { isMyPack } = thunkAPI.getState().packs;
-      thunkAPI.dispatch(setPacks({ isMyPack: isMyPack ? "true" : "false" }));
+      thunkAPI.dispatch(setPacksTC({ isMyPack: isMyPack ? "true" : "false" }));
       thunkAPI.dispatch(
         AppAC.setSuccessMessage({ message: "Successfully updated" })
       );
@@ -111,7 +112,7 @@ export const updatePackTC = createAppAsyncThunk(
         fields.deckCover
       );
       const { isMyPack } = thunkAPI.getState().packs;
-      thunkAPI.dispatch(setPacks({ isMyPack: isMyPack ? "true" : "false" }));
+      thunkAPI.dispatch(setPacksTC({ isMyPack: isMyPack ? "true" : "false" }));
       thunkAPI.dispatch(
         AppAC.setSuccessMessage({ message: "Successfully updated" })
       );

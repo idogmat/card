@@ -1,6 +1,5 @@
 import { Box, debounce } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
-import { addPackTC, removePackTC, setPacks, updatePackTC } from "./packsThunks";
 import {
   appStateSelect,
   packsCardsPacksSelector,
@@ -15,7 +14,8 @@ import {
   packsSortPacksSelector,
   packsTotalCardsSelector,
   userStateSelect,
-} from "../../app/selectors";
+} from "./selectors";
+import { removePackTC, setPacksTC } from "./packsThunks";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
 
 import { HorizontalRule } from "@mui/icons-material";
@@ -67,9 +67,10 @@ const Packs = () => {
         min: valueRange[0].toString(),
         max: valueRange[1].toString(),
       });
-    }, 500),
+    }, 700),
     []
   );
+
   const changeRangeHandler = useCallback((valueRange: number[]) => {
     changeRangeQueryParams(valueRange);
     dispatch(packsAC.setRangeValue({ range: valueRange }));
@@ -77,9 +78,10 @@ const Packs = () => {
 
   useEffect(() => {
     if (!isParamsSet) {
-      dispatch(setPacks({}));
+      dispatch(setPacksTC({}));
       return;
     }
+
     const model = {
       isMyPack: params.isMyPack,
       pageCount: params.showPerPage,
@@ -89,7 +91,8 @@ const Packs = () => {
       packName: params.packName,
       sortPacks: sort.field ? `${sort.direction}${sort.field}` : "0updated",
     };
-    dispatch(setPacks(model));
+
+    dispatch(setPacksTC(model));
   }, [searchParams]);
 
   const changePage = useCallback(
@@ -99,6 +102,7 @@ const Packs = () => {
     },
     [page]
   );
+
   const handleChangeRowsPerPage = useCallback(
     (event: SelectChangeEvent) => {
       dispatch(packsAC.setPageCount({ pageCount: +event.target.value }));
@@ -106,13 +110,15 @@ const Packs = () => {
     },
     [pageCount]
   );
+
   const removePack = useCallback((id: string) => {
     dispatch(removePackTC(id));
   }, []);
+
   const setSearchQueryParams = useCallback(
     debounce((value: string) => {
       setSearchParams({ ...params, packName: value });
-    }, 500),
+    }, 700),
     [packName]
   );
 
@@ -120,12 +126,14 @@ const Packs = () => {
     setSearchQueryParams(value);
     dispatch(packsAC.setPackName({ packName: value }));
   }, []);
+
   const setSortForPacks = useCallback(
     (type: string) => {
       dispatch(packsAC.setPacksSort({ type }));
     },
     [sortPacks]
   );
+
   const handlerIsMyPack = useCallback(
     (param: boolean) => {
       dispatch(packsAC.setPreferencePacks({ isMine: param }));
@@ -133,6 +141,7 @@ const Packs = () => {
     },
     [isMyPack]
   );
+
   const changeSort = useCallback(
     (field: string) => {
       setSort({ direction: sort.direction === 0 ? 1 : 0, field });
@@ -141,9 +150,11 @@ const Packs = () => {
     },
     [sortPacks]
   );
+
   const showSortIcon = useCallback((field: string) => {
     return sort.field === field ? sortIcon : <HorizontalRule />;
   }, []);
+
   const removeSort = useCallback(() => {
     setSearchParams({});
   }, []);
@@ -157,11 +168,11 @@ const Packs = () => {
         flexDirection: "column",
       }}
     >
-      {/*{isLoading && (*/}
-      {/*  <div className={styles.preventSending}>*/}
-      {/*    <Preloader />*/}
-      {/*  </div>*/}
-      {/*)}*/}
+      {isLoading && (
+        <div className={styles.preventSending}>
+          <Preloader />
+        </div>
+      )}
       <PacksHeader
         removeSort={removeSort}
         changeRangeHandler={changeRangeHandler}

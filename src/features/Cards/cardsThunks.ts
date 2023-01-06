@@ -23,6 +23,7 @@ interface IUpdateCardData {
 export const getCardsTC = createAppAsyncThunk(
   "cards/getCards",
   async (model: IGetCardsRequest, { dispatch, getState }) => {
+    console.log("in get cards", model);
     return errorHandlingThunk({ dispatch, getState }, async () => {
       const { data } = await cardsAPI.getCardsRequest(model);
       return { ...data, cardQuestion: model.cardQuestion };
@@ -40,7 +41,7 @@ export const addCardTC = createAppAsyncThunk(
         pageCount,
         cardsPack_id: card.card.cardsPack_id,
       };
-      const res = await cardsAPI.addCardRequest(card);
+      await cardsAPI.addCardRequest(card);
       dispatch(getCardsTC(cardsRequestConfig));
       dispatch(AppAC.setSuccessMessage({ message: "Successfully added" }));
     });
@@ -57,7 +58,7 @@ export const deleteCardTC = createAppAsyncThunk(
         pageCount,
         cardsPack_id: cardData.packID,
       };
-      const res = await cardsAPI.deleteCardRequest(cardData.cardID);
+      await cardsAPI.deleteCardRequest(cardData.cardID);
       dispatch(getCardsTC(cardsRequestConfig));
       dispatch(AppAC.setSuccessMessage({ message: "Successfully deleted" }));
     });

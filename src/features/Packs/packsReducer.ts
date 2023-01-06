@@ -1,6 +1,8 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IPackResponse, ResponseGetPacks } from "./packsAPI";
-import { setPacks } from "./packsThunks";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+
+import { setPacksTC } from "./packsThunks";
+
 export const initialState = {
   cardPacks: [] as IPackResponse[],
   maxCardsCount: 10,
@@ -41,7 +43,7 @@ const packsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(
-      setPacks.fulfilled,
+      setPacksTC.fulfilled,
       (
         state,
         action: PayloadAction<{

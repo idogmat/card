@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   Button,
   FormControl,
@@ -11,16 +10,18 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { registerTC } from "./registerThunks";
-import { Link } from "react-router-dom";
-import { useFormik } from "formik";
+import React, { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { hasError } from "../../common/utils/errorHandlers";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
-import { validMail } from "../../common/utils/regExp";
-import { appStateSelect } from "../../app/selectors";
-import styles from "../../common/styles/common.module.css";
+
+import { Link } from "react-router-dom";
 import { Preloader } from "../../common/components/Preloader/Preloader";
+import { appStateSelect } from "../Packs/selectors";
+import { hasError } from "../../common/utils/errorHandlers";
+import { registerTC } from "./registerThunks";
+import styles from "../../common/styles/common.module.css";
+import { useFormik } from "formik";
+import { validMail } from "../../common/utils/regExp";
 
 export interface IRegisterFormErrors {
   email: string;

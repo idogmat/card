@@ -17,7 +17,7 @@ import { ICard } from "common/models";
 import { IPackResponse } from "./../Packs/packsAPI";
 import { LearnRate } from "./LearnRate";
 import { Preloader } from "common/components/Preloader/Preloader";
-import { appStateSelect } from "app/selectors";
+import { appStateSelect } from "features/Packs/selectors";
 import { cardsCardsSelector } from "features/Cards/selectors";
 import { grades } from "./Learn.data";
 
@@ -47,7 +47,6 @@ export const Learn = () => {
     cardsPack_id: packID ? packID : "",
     pageCount: cardsCount,
   };
-  console.log("PREVIOUS URL IN LEARN", previousURL);
 
   // Utils
 

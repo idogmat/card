@@ -1,6 +1,6 @@
-import { instance } from "../../common/api/baseAPI";
 import { IUserFields } from "./loginThunks";
 import { LoginUserType } from "../../common/api/types";
+import { configuredAxios } from "../../common/api/baseAPI";
 
 export interface ISetPWD {
   password: string;
@@ -18,25 +18,25 @@ export interface ISetPWD {
 }
 
 const login = (user: IUserFields) => {
-  return instance.post<LoginUserType>("auth/login", user);
+  return configuredAxios.post<LoginUserType>("auth/login", user);
 };
 
 const recoveryPassword = (requestData: IRecoveryRequest) => {
-  return instance.post<{ success: boolean }>(
-      "https://neko-back.herokuapp.com/2.0/auth/forgot",
-      requestData
+  return configuredAxios.post<{ success: boolean }>(
+    "https://neko-back.herokuapp.com/2.0/auth/forgot",
+    requestData
   );
 };
 
 const setNewPassword = (form: ISetPWD) => {
-  return instance.post<{ info: string }>(
-      "https://neko-back.herokuapp.com/2.0/auth/set-new-password",
-      form
+  return configuredAxios.post<{ info: string }>(
+    "https://neko-back.herokuapp.com/2.0/auth/set-new-password",
+    form
   );
 };
 
 const logout = () => {
-  return instance.delete("/auth/me", {});
+  return configuredAxios.delete("/auth/me", {});
 };
 
 export const loginAPI = {
