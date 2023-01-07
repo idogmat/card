@@ -7,6 +7,7 @@ import {
 import { ChangeEvent, FC, useRef, useState } from "react";
 import { ICardData, IFieldFormats } from "./CardsModals";
 import { defaultFieldsFormats, formatSelectOptions } from "./CardsModals.data";
+import { getImgBase64File, openFileSelector } from "./utils";
 import { useAllSelector, useAppDispatch } from "common/hooks";
 
 import { BACKEND_MAX_IMG_WEIGHT } from "./../../../../common/utils/base64Converter";
@@ -20,7 +21,6 @@ import { _uploadHandler } from "common/utils/base64Converter";
 import { acceptableImgFormats } from "common/utils/regExp";
 import { addCardModalSelector } from "./modalsSelectors";
 import { addCardTC } from "../../cardsThunks";
-import { openFileSelector } from "./utils";
 
 interface ICardsAddModalProps {
   packID: string;
@@ -46,23 +46,13 @@ export const CardsAddModal: FC<ICardsAddModalProps> = ({ packID }) => {
   const isFieldPicture = (field: "question" | "answer") =>
     fieldsFormats[field] === FieldFormatsEnum.pictureFormat;
 
-  const getBase64File = async (e: ChangeEvent<HTMLInputElement>) => {
-    return await _uploadHandler(
-      dispatch,
-      e,
-      acceptableImgFormats,
-      BACKEND_MAX_IMG_WEIGHT,
-      "Unaccaptable file"
-    );
-  };
-
   const changeQuestionCover = async (e: ChangeEvent<HTMLInputElement>) => {
-    const question = await getBase64File(e);
+    const question = await getImgBase64File(e, dispatch);
     if (question) setImgCardData({ ...imgCardData, question });
   };
 
   const changeAnswerCover = async (e: ChangeEvent<HTMLInputElement>) => {
-    const answer = await getBase64File(e);
+    const answer = await getImgBase64File(e, dispatch);
     if (answer) setImgCardData({ ...imgCardData, answer });
   };
 
