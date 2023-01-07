@@ -9,7 +9,7 @@ interface ISuperRangeProps {
   maxCardsCount: number;
 }
 
-const SuperRange: React.FC<ISuperRangeProps> = React.memo(
+const RangeSlider: React.FC<ISuperRangeProps> = React.memo(
   ({ onChangeSlider, min, max, maxCardsCount, minCardsCount }) => {
     const [range, setRange] = useState([Number(min), Number(max)]);
     const onChangeHandler = useCallback((e: any, value: number | number[]) => {
@@ -56,4 +56,4 @@ const SuperRange: React.FC<ISuperRangeProps> = React.memo(
   }
 );
 
-export default SuperRange;
+export default RangeSlider;

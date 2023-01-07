@@ -3,10 +3,10 @@ import { Box, Container, Toolbar } from "@mui/material";
 import { Search } from "../../../common/components/Search/Search";
 import FormControl from "@mui/material/FormControl/FormControl";
 import Button from "@mui/material/Button/Button";
-import SuperRange from "./SuperRange";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useAppDispatch } from "../../../common/hooks";
 import { packsModalsAC } from "../packsModalsSlice";
+import RangeSlider from "../../../common/components/RangeSlider/RangeSlider";
 
 interface IHeaderProps {
   packName: string;
@@ -79,7 +79,7 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
               </Button>
             </FormControl>
 
-            <SuperRange
+            <RangeSlider
               max={max}
               min={min}
               minCardsCount={minCardsCount}

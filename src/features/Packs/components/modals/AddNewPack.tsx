@@ -11,7 +11,6 @@ import { packsModalsAC } from "../../packsModalsSlice";
 import {
   _uploadHandler,
   BACKEND_MAX_IMG_WEIGHT,
-  uploadHandler,
 } from "../../../../common/utils/base64Converter";
 import { acceptableImgFormats } from "../../../../common/utils/regExp";
 
