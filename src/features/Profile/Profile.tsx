@@ -10,22 +10,39 @@ import {
   TypographyProps,
 } from "@mui/material";
 import { Logout, PhotoCameraBackOutlined } from "@mui/icons-material";
+import React, { ChangeEvent, useRef } from "react";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
 
 import { EditableText } from "../../common/components/EditableText/EditableText";
 import { Preloader } from "../../common/components/Preloader/Preloader";
-import React from "react";
 import { appStateSelect } from "../Packs/selectors";
+import { getImgBase64File } from "common/utils/base64Converter";
 import { lime } from "@mui/material/colors";
 import { logOutTC } from "../Login/loginThunks";
+import { openFileSelector } from "features/Cards/components/modals/utils";
 import styles from "../../common/styles/common.module.css";
 import { updateUserInfoTC } from "./profileThunks";
 import { userStateSelector } from "../User/selectors";
 
 export const Profile = () => {
+  // Dispatch & selectors
   const dispatch = useAppDispatch();
   const user = useAllSelector(userStateSelector);
   const { isLoading } = useAllSelector(appStateSelect);
+
+  // Vars
+  const avatarFileRef = useRef<HTMLInputElement>(null);
+
+  // Utils
+
+  const handleAvatarUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    const avatar = await getImgBase64File(e, dispatch);
+    console.log(avatar);
+
+    if (user.avatar !== avatar && avatar) {
+      dispatch(updateUserInfoTC({ ...user, avatar }));
+    }
+  };
 
   const handleLogout = () => {
     dispatch(logOutTC());
@@ -33,7 +50,7 @@ export const Profile = () => {
 
   const changeNameHandler = (name: string) => {
     if (user.name !== name) {
-      dispatch(updateUserInfoTC({ name, avatar: user.avatar }));
+      dispatch(updateUserInfoTC({ ...user, name }));
     }
   };
 
@@ -69,11 +86,18 @@ export const Profile = () => {
                 marginBottom: "30px",
               }}
             >
+              <input
+                type="file"
+                accept="image/*"
+                ref={avatarFileRef}
+                onChange={handleAvatarUpload}
+                style={{ display: "none" }}
+              />
               <Badge
                 overlap={"circular"}
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                 badgeContent={
-                  <IconButton>
+                  <IconButton onClick={() => openFileSelector(avatarFileRef)}>
                     <PhotoCameraBackOutlined
                       sx={{
                         background: "grey",
@@ -95,8 +119,7 @@ export const Profile = () => {
                     bgcolor: lime[400],
                   }}
                   alt={"ProfilePicture"}
-
-                  // src={user.avatar ? user.avatar : avatarPlaceholder}
+                  src={user.avatar ? user.avatar : ""}
                 >
                   {user.name[0]}
                 </Avatar>

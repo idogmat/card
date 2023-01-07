@@ -9,6 +9,7 @@ export const updateUserInfoTC = createAppAsyncThunk(
   async (model: IUpdatedUserInfo, { dispatch }) => {
     return errorHandlingThunk({ dispatch }, async () => {
       const { data } = await profileAPI.sendUpdateUserRequest(model);
+      console.log(data.updatedUser);
       dispatch(
         AppAC.setSuccessMessage({ message: "Profile was successfully updated" })
       );
