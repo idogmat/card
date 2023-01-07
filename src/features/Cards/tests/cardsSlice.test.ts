@@ -60,7 +60,6 @@ describe("cards slice", () => {
     };
 
     const result = cardsReducer(cardsInitialState, action);
-    console.log(result);
 
     expect(result.cardQuestion).toEqual(cardQuestion);
   });

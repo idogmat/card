@@ -51,7 +51,6 @@ export const setPacksTC = createAppAsyncThunk(
             ? model.sortPacks.direction + model.sortPacks.field
             : sortPacks.direction + sortPacks.field,
         });
-        debugger;
         return {
           packs: res.data,
           min: model.min || min,

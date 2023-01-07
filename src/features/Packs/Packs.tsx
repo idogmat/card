@@ -46,9 +46,7 @@ const Packs = () => {
   const minCardsCount = useAllSelector(packsMinCardsPacksSelector);
 
   // Query
-  const [searchParams, setSearchParams] = useSearchParams({
-    isMyPack: isMyPack.toString(),
-  });
+  const [searchParams, setSearchParams] = useSearchParams({});
   const params = Object.fromEntries(searchParams);
 
   // Local states
@@ -73,7 +71,6 @@ const Packs = () => {
       packName: params.packName || packName,
       sortPacks: sortPacks,
     };
-    console.log(model);
     dispatch(setPacksTC(model));
   }, [searchParams]);
 
@@ -148,7 +145,6 @@ const Packs = () => {
 
   const changeRangeHandler = useCallback(
     (valueRange: number[]) => {
-      console.log(params);
       changeRangeQueryParams(valueRange);
       dispatch(packsAC.setRangeValue({ range: valueRange }));
     },
