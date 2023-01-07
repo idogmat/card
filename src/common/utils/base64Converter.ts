@@ -1,6 +1,7 @@
 import { AppAC } from "./../../app/appReducer";
 import { AppDispatchType } from "common/hooks/useAppDispatch";
 import { ChangeEvent } from "react";
+import { acceptableImgFormats } from "./regExp";
 
 export const BACKEND_MAX_IMG_WEIGHT = 100000000;
 
@@ -27,4 +28,17 @@ export const _uploadHandler = async (
     }
   }
   dispatch(AppAC.setError);
+};
+
+export const getImgBase64File = async (
+  e: ChangeEvent<HTMLInputElement>,
+  dispatch: AppDispatchType
+) => {
+  return await _uploadHandler(
+    dispatch,
+    e,
+    acceptableImgFormats,
+    BACKEND_MAX_IMG_WEIGHT,
+    "Unacceptable file"
+  );
 };

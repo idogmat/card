@@ -6,21 +6,19 @@ import {
 } from "@mui/material";
 import { ChangeEvent, FC, useRef, useState } from "react";
 import { ICardData, IFieldFormats } from "./CardsModals";
+import { _uploadHandler, getImgBase64File } from "common/utils/base64Converter";
 import { defaultFieldsFormats, formatSelectOptions } from "./CardsModals.data";
-import { getImgBase64File, openFileSelector } from "./utils";
 import { useAllSelector, useAppDispatch } from "common/hooks";
 
-import { BACKEND_MAX_IMG_WEIGHT } from "./../../../../common/utils/base64Converter";
 import { Box } from "@mui/system";
 import { CardsModalsAC } from "features/Cards/cardsModalsSlice";
 import { FieldFormatsEnum } from "./FormatSelect";
 import { IAddCardRequest } from "../../cardsAPI";
 import { ModalBase } from "common/components/Modal";
 import { SelectTypeField } from "./SelectTypeField";
-import { _uploadHandler } from "common/utils/base64Converter";
-import { acceptableImgFormats } from "common/utils/regExp";
 import { addCardModalSelector } from "./modalsSelectors";
 import { addCardTC } from "../../cardsThunks";
+import { openFileSelector } from "./utils";
 
 interface ICardsAddModalProps {
   packID: string;

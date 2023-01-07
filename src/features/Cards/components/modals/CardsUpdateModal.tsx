@@ -1,9 +1,5 @@
-import {
-  BACKEND_MAX_IMG_WEIGHT,
-  _uploadHandler,
-} from "common/utils/base64Converter";
 import { ChangeEvent, FC, useRef } from "react";
-import { getImgBase64File, openFileSelector } from "./utils";
+import { _uploadHandler, getImgBase64File } from "common/utils/base64Converter";
 import { useAllSelector, useAppDispatch } from "common/hooks";
 
 import Box from "@mui/material/Box/Box";
@@ -15,8 +11,8 @@ import FormGroup from "@mui/material/FormGroup/FormGroup";
 import { ModalBase } from "common/components/Modal";
 import { SelectChangeEvent } from "@mui/material";
 import { SelectTypeField } from "./SelectTypeField";
-import { acceptableImgFormats } from "common/utils/regExp";
 import { formatSelectOptions } from "./CardsModals.data";
+import { openFileSelector } from "./utils";
 import { updateCardModalSelector } from "features/Cards/components/modals/modalsSelectors";
 import { updateCardTC } from "features/Cards/cardsThunks";
 
