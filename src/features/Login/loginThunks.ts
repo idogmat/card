@@ -1,15 +1,15 @@
-import { AppAC } from "../../app/appReducer";
-import { IUser } from "../../common/models";
-
 import {
   defaultErrorMessage,
   errorHandlingThunk,
 } from "../../common/utils/errorHandlers";
-import { loginAPI } from "./loginAPI";
-import { createAppAsyncThunk } from "../../common/utils/AsyncThunk";
-import { AuthAC } from "../Auth/authReducer";
+
+import { AppAC } from "../../app/appReducer";
 import { AppThunkActionType } from "../../common/hooks/useAllSelector";
+import { AuthAC } from "../Auth/authReducer";
+import { IUser } from "../../common/models";
 import { UserAC } from "../User/userReducer";
+import { createAppAsyncThunk } from "../../common/utils/AsyncThunk";
+import { loginAPI } from "./loginAPI";
 
 export interface IUserFields {
   email: string;

@@ -1,10 +1,13 @@
-import {AuthAC, authReducer, IAuthState} from "./authReducer";
+import { AuthAC, IAuthState, authReducer } from "./authReducer";
 
 const initialState: IAuthState = {
-   isAuth: false
-}
+  isAuth: false,
+};
 
-test('isAuth should switch to true', () => {
-   const finalState = authReducer(initialState, AuthAC.setIsAuth({isAuth: true}))
-   expect(finalState.isAuth).toBe(true)
-})
+test("isAuth should switch to true", () => {
+  const finalState = authReducer(
+    initialState,
+    AuthAC.setIsAuth({ isAuth: true })
+  );
+  expect(finalState.isAuth).toBe(true);
+});

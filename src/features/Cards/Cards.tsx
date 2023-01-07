@@ -95,6 +95,7 @@ export const Cards = React.memo(() => {
       cardQuestion: params.search || cardQuestion,
       sortCards: params.sortCards || cardsSort,
     } as IGetCardsRequest;
+
     dispatch(getCardsTC(model));
     dispatch(setPacksTC({ pageCount: Infinity }));
   }, [searchParams]);
