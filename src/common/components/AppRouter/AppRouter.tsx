@@ -1,11 +1,8 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import React, { useEffect } from "react";
-import { useAllSelector, useAppDispatch } from "../../hooks";
+import { RoutesEnum, authRoutes, unAuthRoutes } from "../../routes";
+
 import { authStateSelector } from "../../../features/Auth/selectors";
-import { authRoutes, RoutesEnum, unAuthRoutes } from "../../routes";
-import { appStateSelect } from "../../../app/selectors";
-import { Preloader } from "../Preloader/Preloader";
-import { InitAppTC } from "../../../app/appThunks";
+import { useAllSelector } from "../../hooks";
 
 export const AppRouter = () => {
   const { isAuth } = useAllSelector(authStateSelector);
@@ -23,7 +20,7 @@ export const AppRouter = () => {
               />
             );
           })}
-          <Route path={"/*"} element={<Navigate to={RoutesEnum.PROFILE} />} />
+          <Route path={"/*"} element={<Navigate to={RoutesEnum.PACKS} />} />
         </>
       ) : (
         <>

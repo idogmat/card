@@ -1,10 +1,9 @@
-import { instance } from "../../common/api/baseAPI";
-
-import { RegisterNewUserType } from "../../common/api/types";
 import { IRegisterData } from "./registerThunks";
+import { RegisterNewUserType } from "../../common/api/types";
+import { configuredAxios } from "../../common/api/baseAPI";
 
 const sendRegisterRequest = ({ email, password }: IRegisterData) => {
-  return instance.post<RegisterNewUserType>("/auth/register", {
+  return configuredAxios.post<RegisterNewUserType>("/auth/register", {
     email,
     password,
   });

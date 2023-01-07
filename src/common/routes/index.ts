@@ -1,12 +1,13 @@
-import { FC } from "react";
-import { ErrorPage } from "../../features/404/404";
-import { Login } from "../../features/Login/Login";
-import { Profile } from "../../features/Profile/Profile";
-import { Register } from "../../features/Register/Register";
-import RecoveryPassword from "../../features/Recovery/RecoveryPassword";
-import SetNewPassword from "../../features/Recovery/SetNewPassword";
-import Packs from "../../features/Packs/Packs";
 import { Cards } from "../../features/Cards/Cards";
+import { ErrorPage } from "../../features/404/404";
+import { FC } from "react";
+import { Learn } from "./../../features/Learn/Learn";
+import { Login } from "../../features/Login/Login";
+import Packs from "../../features/Packs/Packs";
+import { Profile } from "../../features/Profile/Profile";
+import RecoveryPassword from "../../features/Recovery/RecoveryPassword";
+import { Register } from "../../features/Register/Register";
+import SetNewPassword from "../../features/Recovery/SetNewPassword";
 
 export interface IRoute {
   path: string;
@@ -23,6 +24,7 @@ export enum RoutesEnum {
   REGISTER = "/register",
   PACKS = "/packs",
   CARDS = "/packs/:packID",
+  LEARN = "/learn/:packID",
 }
 
 export const authRoutes: IRoute[] = [
@@ -44,6 +46,11 @@ export const authRoutes: IRoute[] = [
   {
     path: RoutesEnum.CARDS,
     component: Cards,
+    isPage: false,
+  },
+  {
+    path: RoutesEnum.LEARN,
+    component: Learn,
     isPage: false,
   },
 ];

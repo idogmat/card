@@ -1,20 +1,10 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IPackResponse, ResponseGetPacks } from "./packsAPI";
-interface IInitialState {
-  cardPacks: IPackResponse[];
-  maxCardsCount: number;
-  minCardsCount: number;
-  page: number;
-  pageCount: number;
-  sortPacks: string;
-  cardPacksTotalCount: number;
-  isMyPack: boolean;
-  packName: string;
-  max: string | number;
-  min: string | number;
-}
-export const initialState: IInitialState = {
-  cardPacks: [],
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+
+import { setPacksTC } from "./packsThunks";
+
+export const initialState = {
+  cardPacks: [] as IPackResponse[],
   maxCardsCount: 10,
   minCardsCount: 0,
   max: 15,
@@ -26,28 +16,11 @@ export const initialState: IInitialState = {
   isMyPack: false,
   packName: "",
 };
+type StateType = typeof initialState;
 const packsSlice = createSlice({
   name: "packs",
   initialState,
   reducers: {
-    setPacks: (
-      draft,
-      action: PayloadAction<{
-        packs: ResponseGetPacks;
-        max: number | string;
-        min: number | string;
-        packName: string;
-        isMyPack: boolean;
-      }>
-    ): IInitialState => {
-      return {
-        ...action.payload.packs,
-        min: +action.payload.min,
-        max: +action.payload.max,
-        isMyPack: action.payload.isMyPack,
-        packName: action.payload.packName,
-      };
-    },
     setCurrentPage: (draft, action: PayloadAction<{ page: number }>) => {
       draft.page = action.payload.page;
     },
@@ -67,6 +40,27 @@ const packsSlice = createSlice({
     setPreferencePacks: (draft, action: PayloadAction<{ isMine: boolean }>) => {
       draft.isMyPack = action.payload.isMine;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(
+      setPacksTC.fulfilled,
+      (
+        state,
+        action: PayloadAction<{
+          packs: ResponseGetPacks;
+          max: number | string;
+          min: number | string;
+          packName: string;
+          isMyPack: boolean;
+        }>
+      ) => ({
+        ...action.payload.packs,
+        min: +action.payload.min,
+        max: +action.payload.max,
+        isMyPack: action.payload.isMyPack,
+        packName: action.payload.packName,
+      })
+    );
   },
 });
 

@@ -10,13 +10,15 @@ export interface IUser {
   updated: Date;
 }
 export interface ICard {
-  answer: string,
-  question: string,
-  cardsPack_id: string,
-  grade: number,
-  shots: number,
-  user_id: string,
-  created: Date,
-  updated: Date,
-  _id: string,
+  answer: string;
+  question: string;
+  cardsPack_id: string;
+  grade: number;
+  shots: number;
+  user_id: string;
+  created: Date;
+  updated: Date;
+  _id: string;
+  answerImg: string;
+  questionImg: string;
 }

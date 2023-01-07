@@ -1,5 +1,5 @@
-import React from "react";
 import { ErrorNotification } from "./ErrorNotification";
+import React from "react";
 import { SuccessNotification } from "./SuccessNotification";
 
 export const Notifications = () => {

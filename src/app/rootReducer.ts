@@ -1,9 +1,14 @@
-import { combineReducers } from "redux";
 import { appReducer } from "./appReducer";
 import { authReducer } from "../features/Auth/authReducer";
-import { userReducer } from "../features/User/userReducer";
+import { cardsModalsReducer } from "./../features/Cards/cardsModalsSlice";
+import { cardsReducer } from "../features/Cards/cardsSlice";
+import { combineReducers } from "redux";
 import { packsReducer } from "../features/Packs/packsReducer";
-import {cardsReducer} from "../features/Cards/cardsSlice";
+import { userReducer } from "../features/User/userReducer";
+import {
+  packsModalsAC,
+  packsModalsReducer,
+} from "../features/Packs/packsModalsSlice";
 
 export const reducers = {
   auth: authReducer,
@@ -11,7 +16,8 @@ export const reducers = {
   user: userReducer,
   packs: packsReducer,
   cards: cardsReducer,
+  cardsModals: cardsModalsReducer,
+  packsModals: packsModalsReducer,
 };
-
 
 export const rootReducer = combineReducers(reducers);

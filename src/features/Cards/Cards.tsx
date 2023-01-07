@@ -1,60 +1,93 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useLocation, useParams, useSearchParams } from "react-router-dom";
-import { BackTo } from "../../common/components/BackTo/BackTo";
-import { Box, debounce, SelectChangeEvent } from "@mui/material";
-import { deleteCardTC, getCardsTC, updateCardTC } from "./cardsThunks";
-import { IGetCardsRequest } from "./cardsAPI";
-import { useAllSelector, useAppDispatch } from "../../common/hooks";
-import { cardsStateSelector } from "./selectors";
-import { userStateSelector } from "../User/selectors";
-import { CardsTable } from "./CardsTable";
-import { CardsAC } from "./cardsSlice";
-import { appStateSelect } from "../../app/selectors";
-import { Preloader } from "../../common/components/Preloader/Preloader";
-import styles from "../../common/styles/common.module.css";
-import CardsHeader from "./CardsHeader";
-import { TablePagination } from "../../common/TablePagination/TablePagination";
-import { NotFoundElements } from "../../common/components/NotFoundElements/NotFoundElements";
-import { selectOptions } from "./Cards.data";
+import { Box, SelectChangeEvent, debounce } from "@mui/material";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  appStateSelect,
+  packsCardsPacksSelector,
+} from "features/Packs/selectors";
+import {
+  cardsCardQuestionSelector,
+  cardsCardsSelector,
+  cardsCurrentPageSelector,
+  cardsPackOwnerSelector,
+  cardsShowPerPageSelector,
+  cardsTotalCountSelector,
+} from "./selectors";
+import { useAllSelector, useAppDispatch } from "common/hooks";
+import { useParams, useSearchParams } from "react-router-dom";
 
+import { BackTo } from "common/components/BackTo/BackTo";
+import { CardsAC } from "./cardsSlice";
+import CardsHeader from "./components/CardsHeader";
+import { CardsModals } from "./components/modals/CardsModals";
+import { CardsTable } from "./components/CardsTable";
+import { IGetCardsRequest } from "./cardsAPI";
+import { IPackResponse } from "./../Packs/packsAPI";
+import { NotFoundElements } from "common/components/NotFoundElements/NotFoundElements";
+import { Preloader } from "common/components/Preloader/Preloader";
+import { TablePagination } from "common/components/TablePagination/TablePagination";
+import { getCardsTC } from "./cardsThunks";
+import { getItemFromLC } from "common/utils/localStorage";
+import { selectOptions } from "./Cards.data";
+import { setPacksTC } from "./../Packs/packsThunks";
+import styles from "common/styles/common.module.css";
+import { userStateSelector } from "../User/selectors";
+
+// Types
 export interface IFieldSort {
   direction: number;
   field: string;
 }
 
-export const Cards = () => {
+export interface ILocationState {
+  pack: IPackResponse;
+  previousURL: string;
+}
+
+export const Cards = React.memo(() => {
+  // Url & Query
+  const [searchParams, setSearchParams] = useSearchParams();
+  const params = Object.fromEntries(searchParams);
+  const { packID } = useParams();
+
   // Selectors
   const dispatch = useAppDispatch();
+
   const user = useAllSelector(userStateSelector);
   const { isLoading } = useAllSelector(appStateSelect);
-  const { cards, packUserId, cardsTotalCount, page, pageCount, cardQuestion } =
-    useAllSelector(cardsStateSelector);
 
-  // Url & Query
-  const { packID } = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { state } = useLocation();
-  const previousURL = state ? state.previousURL : null;
-  const packName = state ? state.packName : null;
-  const params = Object.fromEntries(searchParams);
-  console.log(previousURL);
+  const cards = useAllSelector(cardsCardsSelector);
+  const packUserId = useAllSelector(cardsPackOwnerSelector);
+  const cardsTotalCount = useAllSelector(cardsTotalCountSelector);
+  const page = useAllSelector(cardsCurrentPageSelector);
+  const pageCount = useAllSelector(cardsShowPerPageSelector);
+  const cardQuestion = useAllSelector(cardsCardQuestionSelector);
+
+  const packs = useAllSelector(packsCardsPacksSelector);
+  const pack = packs.find((p) => p._id === packID);
+
+  // Vars
+  const backToState = getItemFromLC("backToState");
+  const previousURL = backToState?.previousURL || "packs";
 
   // Local states
   const defaultSort = { direction: 0, field: "updated" };
   const [sort, setSort] = useState<IFieldSort>(defaultSort);
 
   // Utils
-  const isPackMine = user._id === packUserId;
-  const totalPages = Math.ceil(cardsTotalCount / +pageCount);
+  const isPackMine = useMemo(
+    () => user._id === packUserId,
+    [user._id, packUserId]
+  );
+  const cardsSort = sort.field ? `${sort.direction}${sort.field}` : "0updated";
+  const totalPages = useMemo(
+    () => Math.ceil(cardsTotalCount / +pageCount),
+    [pageCount, cardsTotalCount]
+  );
   const isPageCountValid = selectOptions.some(
     (option) => option.value === +params.showPerPage
   );
 
   useEffect(() => {
-    const cardsSort = sort.field
-      ? `${sort.direction}${sort.field}`
-      : "0updated";
-
     const model = {
       cardsPack_id: packID,
       pageCount: isPageCountValid ? params.showPerPage : pageCount,
@@ -62,64 +95,63 @@ export const Cards = () => {
       cardQuestion: params.search || cardQuestion,
       sortCards: params.sortCards || cardsSort,
     } as IGetCardsRequest;
-
     dispatch(getCardsTC(model));
+    dispatch(setPacksTC({ pageCount: Infinity }));
   }, [searchParams]);
 
-  const changeShowPerPage = (event: SelectChangeEvent) => {
-    const rowsPerPage = +event.target.value;
-    const existingPages = cardsTotalCount / rowsPerPage;
-    const lastPage = Math.ceil(existingPages);
-    if (lastPage < totalPages && page >= lastPage) {
-      dispatch(CardsAC.setPage({ page: lastPage }));
-      setSearchParams({
-        ...params,
-        currentPage: lastPage.toString(),
-        showPerPage: rowsPerPage.toString(),
-      });
-    } else {
-      setSearchParams({ ...params, showPerPage: rowsPerPage.toString() });
-    }
-    dispatch(CardsAC.setPageCount({ showPerPage: rowsPerPage }));
-  };
+  const changeShowPerPage = useCallback(
+    (event: SelectChangeEvent) => {
+      const rowsPerPage = +event.target.value;
+      const existingPages = cardsTotalCount / rowsPerPage;
+      const lastPage = Math.ceil(existingPages);
+      if (lastPage < totalPages && page >= lastPage) {
+        dispatch(CardsAC.setPage({ page: lastPage }));
+        setSearchParams({
+          ...params,
+          currentPage: lastPage.toString(),
+          showPerPage: rowsPerPage.toString(),
+        });
+      } else {
+        setSearchParams({ ...params, showPerPage: rowsPerPage.toString() });
+      }
+      dispatch(CardsAC.setPageCount({ showPerPage: rowsPerPage }));
+    },
+    [cardsTotalCount, totalPages, page, params.showPerPage]
+  );
 
-  const changePageHandler = (
-    event: React.ChangeEvent<unknown>,
-    value: number
-  ) => {
-    dispatch(CardsAC.setPage({ page: value }));
-    setSearchParams({ ...params, currentPage: value.toString() });
-  };
-
-  const deleteCardHandler = (cardID: string) => {
-    dispatch(deleteCardTC(cardID, packID ? packID : ""));
-  };
-
-  const updateCardHandler = (cardID: string) => {
-    const mockQuestion = "new question";
-    const model = { card: { _id: cardID, question: mockQuestion } };
-    dispatch(updateCardTC(packID ? packID : "", model));
-  };
+  const changePageHandler = useCallback(
+    (event: React.ChangeEvent<unknown>, value: number) => {
+      dispatch(CardsAC.setPage({ page: value }));
+      setSearchParams({ ...params, currentPage: value.toString() });
+    },
+    [dispatch, setSearchParams]
+  );
 
   const setSearchRequestToQuery = useCallback(
     debounce((value: string) => {
       setSearchParams({ ...params, search: value });
-    }, 200),
+    }, 700),
     []
   );
 
-  const changeSearchRequestHandler = (value: string) => {
-    dispatch(CardsAC.setCardQuestion({ value }));
-    setSearchRequestToQuery(value);
-  };
+  const changeSearchRequestHandler = useCallback(
+    (value: string) => {
+      dispatch(CardsAC.setCardQuestion({ value }));
+      setSearchRequestToQuery(value);
+    },
+    [dispatch, setSearchRequestToQuery]
+  );
 
-  const handleChangeSort = (value: IFieldSort) => {
-    setSort(value);
-    setSearchParams({
-      ...params,
-      sortCards: `${value.direction}${value.field}`,
-    });
-  };
+  const handleChangeSort = useCallback(
+    (value: IFieldSort) => {
+      setSort(value);
+      setSearchParams({
+        ...params,
+        sortCards: `${value.direction}${value.field}`,
+      });
+    },
+    [params, setSearchParams]
+  );
 
   return (
     <Box
@@ -131,47 +163,51 @@ export const Cards = () => {
       }}
     >
       <Box sx={{ position: "relative" }}>
-        {isLoading && (
+        {(isLoading || !pack) && (
           <div className={styles.preventSending}>
             <Preloader />
           </div>
         )}
-        <Box sx={{ marginBottom: 5 }}>
-          <BackTo title={"Back to packs"} route={`/packs?${previousURL}`} />
-        </Box>
-        <CardsHeader
-          isPackMine={isPackMine}
-          packID={packID ? packID : ""}
-          setSearchRequest={changeSearchRequestHandler}
-          packName={packName}
-          searchValue={cardQuestion || ""}
-        />
-        {cards.length > 0 ? (
+        {pack ? (
           <>
-            <Box sx={{ marginBottom: 3 }}>
-              <CardsTable
-                cards={cards}
-                isPackMine={isPackMine}
-                deleteCardHandler={deleteCardHandler}
-                updateCardHandler={updateCardHandler}
-                sort={sort}
-                setSort={handleChangeSort}
-              />
-            </Box>
-            <TablePagination
-              title={"Cards"}
-              totalPages={totalPages}
-              elementsPerPage={pageCount}
-              changePageHandler={changePageHandler}
-              changeElementsPerPage={changeShowPerPage}
-              currentPage={page}
-              selectOptions={selectOptions}
+            <BackTo title={"Back to packs"} route={`/packs?${previousURL}`} />
+            <CardsHeader
+              isPackMine={isPackMine}
+              pack={pack}
+              setSearchRequest={changeSearchRequestHandler}
+              searchValue={cardQuestion || ""}
+              previousURL={previousURL}
             />
+            {cards.length > 0 ? (
+              <>
+                <Box sx={{ marginBottom: 3 }}>
+                  <CardsTable
+                    cards={cards}
+                    isPackMine={isPackMine}
+                    sort={sort}
+                    setSort={handleChangeSort}
+                    isLoading={isLoading}
+                  />
+                </Box>
+                <TablePagination
+                  title={"Cards"}
+                  totalPages={totalPages}
+                  elementsPerPage={pageCount}
+                  changePageHandler={changePageHandler}
+                  changeElementsPerPage={changeShowPerPage}
+                  currentPage={page}
+                  selectOptions={selectOptions}
+                />
+              </>
+            ) : (
+              <NotFoundElements title={"Empty"} />
+            )}
+            <CardsModals pack={pack} />
           </>
         ) : (
-          <NotFoundElements title={"Empty"} />
+          <NotFoundElements title="This pack is not available" />
         )}
       </Box>
     </Box>
   );
-};
+});

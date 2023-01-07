@@ -1,19 +1,7 @@
 export type ResponseType<D> = {
   data: D;
 };
-export type RegisterNewUserType = {
-  addedUser: {
-    _id: string;
-    email: string;
-    rememberMe: boolean;
-    name: string;
-    verified: boolean;
-    isAdmin: boolean;
-    publicCardPacksCount: number;
-    created: Date;
-    updated: Date;
-  };
-};
+
 export type LoginUserType = {
   _id: string;
   email: string;
@@ -27,4 +15,8 @@ export type LoginUserType = {
   token: string;
   rememberMe: boolean;
   error: string | null;
+};
+type AddedUser = Omit<LoginUserType, "token" | "error" | "avatar">;
+export type RegisterNewUserType = {
+  addedUser: AddedUser;
 };

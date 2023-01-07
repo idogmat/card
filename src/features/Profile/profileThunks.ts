@@ -1,25 +1,18 @@
 import { IUpdatedUserInfo, profileAPI } from "./profileAPI";
-import { AppAC } from "../../app/appReducer";
-import { UserAC } from "../User/userReducer";
-import { defaultErrorMessage } from "../../common/utils/errorHandlers";
-import { AppThunkActionType } from "../../common/hooks/useAllSelector";
 
-export const updateUserInfoTC = (
-  model: IUpdatedUserInfo
-): AppThunkActionType => {
-  return async (dispatch) => {
-    try {
-      dispatch(AppAC.setIsLoading({ isLoading: true }));
+import { AppAC } from "../../app/appReducer";
+import { createAppAsyncThunk } from "./../../common/utils/AsyncThunk";
+import { errorHandlingThunk } from "./../../common/utils/errorHandlers";
+
+export const updateUserInfoTC = createAppAsyncThunk(
+  "profile/updateProfile",
+  async (model: IUpdatedUserInfo, { dispatch }) => {
+    return errorHandlingThunk({ dispatch }, async () => {
       const { data } = await profileAPI.sendUpdateUserRequest(model);
-      dispatch(UserAC.setUser({ user: data.updatedUser }));
       dispatch(
         AppAC.setSuccessMessage({ message: "Profile was successfully updated" })
       );
-    } catch (e) {
-      AppAC.setError({ error: defaultErrorMessage });
-      dispatch(AppAC.setError({ error: defaultErrorMessage }));
-    } finally {
-      dispatch(AppAC.setIsLoading({ isLoading: false }));
-    }
-  };
-};
+      return data.updatedUser;
+    });
+  }
+);

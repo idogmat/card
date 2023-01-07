@@ -1,5 +1,5 @@
-import { instance } from "../../common/api/baseAPI";
 import { ICard } from "../../common/models";
+import { configuredAxios } from "../../common/api/baseAPI";
 
 export interface IGetCardsRequest {
   cardAnswer?: string;
@@ -8,8 +8,8 @@ export interface IGetCardsRequest {
   min?: string;
   max?: string;
   sortCards?: string;
-  page: string | number;
-  pageCount: string | number;
+  page?: string | number;
+  pageCount?: string | number;
 }
 
 interface IGetCardsResponse {
@@ -25,8 +25,8 @@ interface IGetCardsResponse {
 export interface IAddCardRequest {
   card: {
     cardsPack_id: string;
-    question: string;
-    answer: string;
+    question?: string;
+    answer?: string;
     grade?: number;
     shots?: number;
     answerImg?: string;
@@ -38,17 +38,37 @@ export interface IAddCardRequest {
 export interface IUpdateCardRequest {
   card: {
     _id: string;
-    question: string;
+    question?: string;
+    answer?: string;
+    answerImg?: string;
+    questionImg?: string;
+    questionVideo?: string;
   };
+}
+
+export interface IUpdateGradeResponse {
+  updatedGrade: {
+    _id: string;
+    cardsPack_id: number;
+    card_id: string;
+    user_id: string;
+    grade: number;
+    shots: number;
+  };
+}
+
+export interface IUpdateCardGradeRequest {
+  grade: number;
+  card_id: string;
 }
 
 const getCardsRequest = (data: IGetCardsRequest) => {
   const requestConfig = { params: data };
-  return instance.get<IGetCardsResponse>("/cards/card", requestConfig);
+  return configuredAxios.get<IGetCardsResponse>("/cards/card", requestConfig);
 };
 
 const addCardRequest = (data: IAddCardRequest) => {
-  return instance.post("cards/card", data);
+  return configuredAxios.post("cards/card", data);
 };
 
 const deleteCardRequest = (cardID: string) => {
@@ -57,11 +77,15 @@ const deleteCardRequest = (cardID: string) => {
       id: cardID,
     },
   };
-  return instance.delete(`/cards/card/`, requestConfig);
+  return configuredAxios.delete(`/cards/card/`, requestConfig);
 };
 
 const updateCardRequest = (model: IUpdateCardRequest) => {
-  return instance.put("/cards/card", model);
+  return configuredAxios.put("/cards/card", model);
+};
+
+const updateCardGradeRequest = (model: IUpdateCardGradeRequest) => {
+  return configuredAxios.put<IUpdateGradeResponse>("/cards/grade", model);
 };
 
 export const cardsAPI = {
@@ -69,4 +93,5 @@ export const cardsAPI = {
   addCardRequest,
   deleteCardRequest,
   updateCardRequest,
+  updateCardGradeRequest,
 };

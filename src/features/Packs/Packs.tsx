@@ -1,39 +1,59 @@
-import React, { useCallback, useEffect, useState } from "react";
 import { Box, debounce } from "@mui/material";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  appStateSelect,
+  packsCardsPacksSelector,
+  packsIsMyPackSelector,
+  packsMaxCardsPacksSelector,
+  packsMaxSelector,
+  packsMinCardsPacksSelector,
+  packsMinSelector,
+  packsNameSelector,
+  packsPageCountSelector,
+  packsPageSelector,
+  packsSortPacksSelector,
+  packsTotalCardsSelector,
+  userStateSelect,
+} from "./selectors";
+import { removePackTC, setPacksTC } from "./packsThunks";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
-import { addPackTC, removePackTC, setPacksTC } from "./packsThunks";
-import { packsStateSelect, userStateSelect } from "../../app/selectors";
-import { packsAC } from "./packsReducer";
-import { useSearchParams } from "react-router-dom";
+
 import { HorizontalRule } from "@mui/icons-material";
+import PacksHeader from "./components/PacksHeader";
+import PacksModals from "./components/modals/PacksModals";
+import PacksTable from "./components/PacksTable";
+import { Preloader } from "../../common/components/Preloader/Preloader";
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
-import PacksTable from "./PacksTable";
 import { getSortIcon } from "../../common/utils/assets";
-import PacksHeader from "./PacksHeader";
+import { packsAC } from "./packsReducer";
+import styles from "../../common/styles/common.module.css";
+import { useSearchParams } from "react-router-dom";
 
+export type EditModeType = "edit" | "delete" | "idle";
 const Packs = () => {
+  // Selectors
   const user = useAllSelector(userStateSelect);
-  const {
-    packName,
-    cardPacks,
-    page,
-    pageCount,
-    cardPacksTotalCount,
-    max,
-    min,
-    isMyPack,
-    sortPacks,
-  } = useAllSelector(packsStateSelect);
+  const { isLoading } = useAllSelector(appStateSelect);
+  const packName = useAllSelector(packsNameSelector);
+  const cardPacks = useAllSelector(packsCardsPacksSelector);
+  const page = useAllSelector(packsPageSelector);
+  const pageCount = useAllSelector(packsPageCountSelector);
+  const cardPacksTotalCount = useAllSelector(packsTotalCardsSelector);
+  const max = useAllSelector(packsMaxSelector);
+  const min = useAllSelector(packsMinSelector);
+  const isMyPack = useAllSelector(packsIsMyPackSelector);
+  const sortPacks = useAllSelector(packsSortPacksSelector);
+  const maxCardsCount = useAllSelector(packsMaxCardsPacksSelector);
+  const minCardsCount = useAllSelector(packsMinCardsPacksSelector);
 
+  // Query
   const [searchParams, setSearchParams] = useSearchParams();
   const params = Object.fromEntries(searchParams);
 
   // Local states
   const [sort, setSort] = useState({ direction: 0, field: "updated" });
-  const [searchField, setSearchField] = useState(params.packName || "");
 
   // Utils
-  const [addPackMode, setAddPackMode] = useState<boolean>(false);
   const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
   const isAsc = sort.direction === 1;
   const sortIcon = getSortIcon(isAsc);
@@ -47,24 +67,21 @@ const Packs = () => {
         min: valueRange[0].toString(),
         max: valueRange[1].toString(),
       });
-    }, 500),
+    }, 700),
     []
   );
-  const changeRangeHandler = (valueRange: number[]) => {
+
+  const changeRangeHandler = useCallback((valueRange: number[]) => {
     changeRangeQueryParams(valueRange);
     dispatch(packsAC.setRangeValue({ range: valueRange }));
-  };
-
-  useEffect(() => {
-    setSearchField(params.packName || "");
-  }, [params.packName]);
+  }, []);
 
   useEffect(() => {
     if (!isParamsSet) {
-      console.log("dispatch clear model");
       dispatch(setPacksTC({}));
       return;
     }
+
     const model = {
       isMyPack: params.isMyPack,
       pageCount: params.showPerPage,
@@ -74,73 +91,98 @@ const Packs = () => {
       packName: params.packName,
       sortPacks: sort.field ? `${sort.direction}${sort.field}` : "0updated",
     };
+
     dispatch(setPacksTC(model));
   }, [searchParams]);
 
-  const changePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
-    dispatch(packsAC.setCurrentPage({ page: newPage }));
-    setSearchParams({ ...params, page: `${newPage}` });
-  };
-  const handleChangeRowsPerPage = (event: SelectChangeEvent) => {
-    dispatch(packsAC.setPageCount({ pageCount: +event.target.value }));
-    setSearchParams({ ...params, pageCount: event.target.value });
-  };
-  const removePack = (id: string) => {
+  const changePage = useCallback(
+    (event: React.ChangeEvent<unknown>, newPage: number) => {
+      dispatch(packsAC.setCurrentPage({ page: newPage }));
+      setSearchParams({ ...params, page: `${newPage}` });
+    },
+    [page]
+  );
+
+  const handleChangeRowsPerPage = useCallback(
+    (event: SelectChangeEvent) => {
+      dispatch(packsAC.setPageCount({ pageCount: +event.target.value }));
+      setSearchParams({ ...params, pageCount: event.target.value });
+    },
+    [pageCount]
+  );
+
+  const removePack = useCallback((id: string) => {
     dispatch(removePackTC(id));
-    setSearchParams({ ...params });
-  };
+  }, []);
+
   const setSearchQueryParams = useCallback(
     debounce((value: string) => {
       setSearchParams({ ...params, packName: value });
-    }, 500),
-    []
+    }, 700),
+    [packName]
   );
 
-  const changeSearchHandler = (value: string) => {
+  const changeSearchHandler = useCallback((value: string) => {
     setSearchQueryParams(value);
-    setSearchField(value);
     dispatch(packsAC.setPackName({ packName: value }));
-  };
-  const addPack = (
-    newPackName: string,
-    newDeckCover: string,
-    isPrivate: boolean
-  ) => {
-    dispatch(addPackTC(newPackName, newDeckCover, isPrivate));
-  };
-  const setSortForPacks = (type: string) => {
-    dispatch(packsAC.setPacksSort({ type }));
-  };
-  const handlerIsMyPack = (param: boolean) => {
-    dispatch(packsAC.setPreferencePacks({ isMine: param }));
-    setSearchParams({ ...params, isMyPack: `${param}` });
-  };
-  const changeSort = async (field: string) => {
-    await setSort({ direction: sort.direction === 0 ? 1 : 0, field });
-    setSortForPacks((sort.direction + sort.field).toString());
-    setSearchParams((sort.direction + sort.field).toString());
-  };
-  const showSortIcon = (field: string) => {
+  }, []);
+
+  const setSortForPacks = useCallback(
+    (type: string) => {
+      dispatch(packsAC.setPacksSort({ type }));
+    },
+    [sortPacks]
+  );
+
+  const handlerIsMyPack = useCallback(
+    (param: boolean) => {
+      dispatch(packsAC.setPreferencePacks({ isMine: param }));
+      setSearchParams({ ...params, isMyPack: `${param}` });
+    },
+    [isMyPack]
+  );
+
+  const changeSort = useCallback(
+    (field: string) => {
+      setSort({ direction: sort.direction === 0 ? 1 : 0, field });
+      setSortForPacks((sort.direction + sort.field).toString());
+      setSearchParams((sort.direction + sort.field).toString());
+    },
+    [sortPacks]
+  );
+
+  const showSortIcon = useCallback((field: string) => {
     return sort.field === field ? sortIcon : <HorizontalRule />;
-  };
-  const removeSort = () => {
+  }, []);
+
+  const removeSort = useCallback(() => {
     setSearchParams({});
-  };
+  }, []);
+
   return (
     <Box
-      style={{ padding: "6rem 2rem", display: "flex", flexDirection: "column" }}
+      sx={{
+        position: "relative",
+        padding: "6rem 2rem",
+        display: "flex",
+        flexDirection: "column",
+      }}
     >
+      {isLoading && (
+        <div className={styles.preventSending}>
+          <Preloader />
+        </div>
+      )}
       <PacksHeader
         removeSort={removeSort}
-        setAddPackMode={setAddPackMode}
         changeRangeHandler={changeRangeHandler}
-        packName={searchField}
+        packName={packName}
         changeSearchHandler={changeSearchHandler}
         isMyPack={isMyPack}
         max={max}
         min={min}
-        addPackMode={addPackMode}
-        cardPacksTotalCount={cardPacksTotalCount}
+        maxCardsCount={maxCardsCount}
+        minCardsCount={minCardsCount}
         handlerIsMyPack={handlerIsMyPack}
       />
       {/*TABLE*/}
@@ -150,16 +192,16 @@ const Packs = () => {
         totalPageCount={totalPageCount}
         pageCount={pageCount}
         page={page}
-        addPack={addPack}
-        addPackMode={addPackMode}
-        setAddPackMode={setAddPackMode}
         changePage={changePage}
         handleChangeRowsPerPage={handleChangeRowsPerPage}
         changeSort={changeSort}
         showSortIcon={showSortIcon}
         removePack={removePack}
         isMyPack={isMyPack}
+        isLoading={isLoading}
       />
+
+      <PacksModals />
     </Box>
   );
 };
