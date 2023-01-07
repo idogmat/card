@@ -51,12 +51,9 @@ const Packs = () => {
   const params = Object.fromEntries(searchParams);
 
   // Local states
-  const [sort, setSort] = useState({ direction: 0, field: "updated" });
 
   // Utils
   const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
-  const isAsc = sort.direction === 1;
-  const sortIcon = getSortIcon(isAsc);
   const isParamsSet = Object.keys(params).length > 0;
   const dispatch = useAppDispatch();
 
@@ -89,7 +86,7 @@ const Packs = () => {
       max: params.max,
       min: params.min,
       packName: params.packName,
-      sortPacks: sort.field ? `${sort.direction}${sort.field}` : "0updated",
+      sortPacks: sortPacks,
     };
 
     dispatch(setPacksTC(model));
@@ -127,13 +124,6 @@ const Packs = () => {
     dispatch(packsAC.setPackName({ packName: value }));
   }, []);
 
-  const setSortForPacks = useCallback(
-    (type: string) => {
-      dispatch(packsAC.setPacksSort({ type }));
-    },
-    [sortPacks]
-  );
-
   const handlerIsMyPack = useCallback(
     (param: boolean) => {
       dispatch(packsAC.setPreferencePacks({ isMine: param }));
@@ -144,15 +134,26 @@ const Packs = () => {
 
   const changeSort = useCallback(
     (field: string) => {
-      setSort({ direction: sort.direction === 0 ? 1 : 0, field });
-      setSortForPacks((sort.direction + sort.field).toString());
-      setSearchParams((sort.direction + sort.field).toString());
+      dispatch(
+        packsAC.setPacksSort({
+          type: { direction: sortPacks.direction === 1 ? 0 : 1, field },
+        })
+      );
+
+      setSearchParams({
+        ...params,
+        sortPacks: (sortPacks.direction + sortPacks.field).toString(),
+      });
     },
     [sortPacks]
   );
 
   const showSortIcon = useCallback((field: string) => {
-    return sort.field === field ? sortIcon : <HorizontalRule />;
+    return sortPacks.field === field ? (
+      getSortIcon(sortPacks.direction === 1)
+    ) : (
+      <HorizontalRule />
+    );
   }, []);
 
   const removeSort = useCallback(() => {

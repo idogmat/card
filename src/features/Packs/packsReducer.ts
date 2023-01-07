@@ -11,7 +11,7 @@ export const initialState = {
   min: 0,
   page: 1,
   pageCount: 4,
-  sortPacks: "0updated",
+  sortPacks: { direction: 0, field: "updated" },
   cardPacksTotalCount: 10,
   isMyPack: false,
   packName: "",
@@ -34,7 +34,10 @@ const packsSlice = createSlice({
     setPackName: (draft, action: PayloadAction<{ packName: string }>) => {
       draft.packName = action.payload.packName;
     },
-    setPacksSort: (draft, action: PayloadAction<{ type: string }>) => {
+    setPacksSort: (
+      draft,
+      action: PayloadAction<{ type: { direction: number; field: string } }>
+    ) => {
       draft.sortPacks = action.payload.type;
     },
     setPreferencePacks: (draft, action: PayloadAction<{ isMine: boolean }>) => {
@@ -52,6 +55,7 @@ const packsSlice = createSlice({
           min: number | string;
           packName: string;
           isMyPack: boolean;
+          sortPacks: { direction: number; field: string };
         }>
       ) => ({
         ...action.payload.packs,
@@ -59,6 +63,7 @@ const packsSlice = createSlice({
         max: +action.payload.max,
         isMyPack: action.payload.isMyPack,
         packName: action.payload.packName,
+        sortPacks: action.payload.sortPacks,
       })
     );
   },

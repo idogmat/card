@@ -18,7 +18,7 @@ interface IGetModel {
   max: string | number;
   min: string | number;
   isMyPack: string;
-  sortPacks: string;
+  sortPacks: { direction: number; field: string };
   user_id: string;
 }
 export const setPacksTC = createAppAsyncThunk(
@@ -30,15 +30,18 @@ export const setPacksTC = createAppAsyncThunk(
         thunkAPI.getState().packs;
       if (Object.keys(model).length === 0) {
         const res = await PacksAPI.getPacks({});
+
         return {
           packs: res.data,
           min: 0,
           max: 15,
           packName: "",
           isMyPack: "",
+          sortPacks: { direction: 0, field: "update" },
         };
       } else {
         const { _id } = thunkAPI.getState().user;
+        debugger;
         const res = await PacksAPI.getPacks({
           user_id: model.isMyPack === "true" || isMyPack ? _id : "",
           packName: model.packName || packName,
@@ -46,7 +49,9 @@ export const setPacksTC = createAppAsyncThunk(
           page: model.page || page,
           min: model.min || min,
           max: model.max || max,
-          sortPacks: !!model?.sortPacks ? model.sortPacks : sortPacks,
+          sortPacks: !!model?.sortPacks
+            ? model.sortPacks.direction + model.sortPacks.field
+            : sortPacks.direction + sortPacks.field,
         });
         return {
           packs: res.data,
@@ -54,6 +59,7 @@ export const setPacksTC = createAppAsyncThunk(
           max: model.max || max,
           packName: model.packName || packName,
           isMyPack: model.isMyPack === "true" || isMyPack,
+          sortPacks: model.sortPacks || sortPacks,
         };
       }
     });
