@@ -1,12 +1,5 @@
-import {
-  Button,
-  FormControlLabel,
-  Paper,
-  Radio,
-  RadioGroup,
-  Typography,
-} from "@mui/material";
-import React, { useEffect, useMemo, useState } from "react";
+import { Button, Paper, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { getCardsTC, updateCardGradeTC } from "./../Cards/cardsThunks";
 import { useAllSelector, useAppDispatch } from "common/hooks";
 import { useLocation, useParams } from "react-router-dom";
@@ -17,7 +10,7 @@ import { ICard } from "common/models";
 import { IPackResponse } from "./../Packs/packsAPI";
 import { LearnRate } from "./LearnRate";
 import { Preloader } from "common/components/Preloader/Preloader";
-import { appStateSelect } from "features/Packs/selectors";
+import { appStateSelector } from "app/selectors";
 import { cardsCardsSelector } from "features/Cards/selectors";
 import { grades } from "./Learn.data";
 
@@ -25,7 +18,7 @@ export const Learn = () => {
   // dispatch & selectors
   const dispatch = useAppDispatch();
   const cards = useAllSelector(cardsCardsSelector);
-  const { isLoading } = useAllSelector(appStateSelect);
+  const { isLoading } = useAllSelector(appStateSelector);
   const card = cards.reduce<ICard>((finalCard, currentCard) => {
     finalCard = currentCard.grade < finalCard.grade ? currentCard : finalCard;
     return finalCard;

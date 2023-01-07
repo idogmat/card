@@ -15,7 +15,7 @@ import { useAllSelector, useAppDispatch } from "../../common/hooks";
 
 import { EditableText } from "../../common/components/EditableText/EditableText";
 import { Preloader } from "../../common/components/Preloader/Preloader";
-import { appStateSelect } from "../Packs/selectors";
+import { appStateSelector } from "app/selectors";
 import { getImgBase64File } from "common/utils/base64Converter";
 import { lime } from "@mui/material/colors";
 import { logOutTC } from "../Login/loginThunks";
@@ -28,7 +28,7 @@ export const Profile = () => {
   // Dispatch & selectors
   const dispatch = useAppDispatch();
   const user = useAllSelector(userStateSelector);
-  const { isLoading } = useAllSelector(appStateSelect);
+  const { isLoading } = useAllSelector(appStateSelector);
 
   // Vars
   const avatarFileRef = useRef<HTMLInputElement>(null);
@@ -37,7 +37,6 @@ export const Profile = () => {
 
   const handleAvatarUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     const avatar = await getImgBase64File(e, dispatch);
-    console.log(avatar);
 
     if (user.avatar !== avatar && avatar) {
       dispatch(updateUserInfoTC({ ...user, avatar }));

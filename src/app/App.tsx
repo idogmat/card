@@ -7,11 +7,11 @@ import { Header } from "../common/components/Header/Header";
 import { InitAppTC } from "./appThunks";
 import { Notifications } from "../common/components/Notifications/Notifications";
 import { Preloader } from "../common/components/Preloader/Preloader";
-import { appStateSelect } from "../features/Packs/selectors";
+import { appStateSelector } from "./selectors";
 import styles from "./App.module.css";
 
 function App() {
-  const { isInit } = useAllSelector(appStateSelect);
+  const { isInit } = useAllSelector(appStateSelector);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

@@ -3,11 +3,11 @@ import { useAllSelector, useAppDispatch } from "../../hooks";
 
 import { AppAC } from "../../../app/appReducer";
 import React from "react";
-import { appStateSelect } from "../../../features/Packs/selectors";
+import { appStateSelector } from "app/selectors";
 
 export const SuccessNotification = () => {
   const dispatch = useAppDispatch();
-  const { successMessage } = useAllSelector(appStateSelect);
+  const { successMessage } = useAllSelector(appStateSelector);
   const shouldDisplaySuccess = !!successMessage;
   const closeSuccessNotification = (
     event?: React.SyntheticEvent | Event,
