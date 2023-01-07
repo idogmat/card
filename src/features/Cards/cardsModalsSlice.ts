@@ -94,3 +94,4 @@ const cardsModalsSlice = createSlice({
 
 export const cardsModalsReducer = cardsModalsSlice.reducer;
 export const CardsModalsAC = cardsModalsSlice.actions;
+export const cardsModalsInitialState = cardsModalsSlice.getInitialState();

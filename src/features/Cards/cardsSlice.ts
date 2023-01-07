@@ -61,3 +61,4 @@ const cardsSlice = createSlice({
 
 export const cardsReducer = cardsSlice.reducer;
 export const CardsAC = cardsSlice.actions;
+export const cardsInitialState = cardsSlice.getInitialState();

@@ -28,3 +28,4 @@ const authSlice = createSlice({
 
 export const authReducer = authSlice.reducer;
 export const AuthAC = authSlice.actions;
+export const authInitialState = authSlice.getInitialState();
