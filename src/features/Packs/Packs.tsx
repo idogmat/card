@@ -29,7 +29,6 @@ import styles from "../../common/styles/common.module.css";
 import { useSearchParams } from "react-router-dom";
 import { userStateSelector } from "features/User/selectors";
 
-export type EditModeType = "edit" | "delete" | "idle";
 const Packs = () => {
   // Selectors
   const user = useAllSelector(userStateSelector);
@@ -47,41 +46,21 @@ const Packs = () => {
   const minCardsCount = useAllSelector(packsMinCardsPacksSelector);
 
   // Query
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams({});
   const params = Object.fromEntries(searchParams);
 
   // Local states
-  const [sort, setSort] = useState({ direction: 0, field: "updated" });
 
   // Utils
   const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
-  const isAsc = sort.direction === 1;
-  const sortIcon = getSortIcon(isAsc);
   const isParamsSet = Object.keys(params).length > 0;
   const dispatch = useAppDispatch();
-
-  const changeRangeQueryParams = useCallback(
-    debounce((valueRange: number[]) => {
-      setSearchParams({
-        ...params,
-        min: valueRange[0].toString(),
-        max: valueRange[1].toString(),
-      });
-    }, 700),
-    []
-  );
-
-  const changeRangeHandler = useCallback((valueRange: number[]) => {
-    changeRangeQueryParams(valueRange);
-    dispatch(packsAC.setRangeValue({ range: valueRange }));
-  }, []);
 
   useEffect(() => {
     if (!isParamsSet) {
       dispatch(setPacksTC({}));
       return;
     }
-
     const model = {
       isMyPack: params.isMyPack,
       pageCount: params.showPerPage,
@@ -89,9 +68,16 @@ const Packs = () => {
       max: params.max,
       min: params.min,
       packName: params.packName,
-      sortPacks: sort.field ? `${sort.direction}${sort.field}` : "0updated",
+      sortPacks: params.sortPacks
+        ? {
+            direction: +params.sortPacks[0],
+            field: params.sortPacks
+              .split("")
+              .splice(1, params.sortPacks.length - 1)
+              .join(""),
+          }
+        : sortPacks,
     };
-
     dispatch(setPacksTC(model));
   }, [searchParams]);
 
@@ -100,7 +86,7 @@ const Packs = () => {
       dispatch(packsAC.setCurrentPage({ page: newPage }));
       setSearchParams({ ...params, page: `${newPage}` });
     },
-    [page]
+    [params]
   );
 
   const handleChangeRowsPerPage = useCallback(
@@ -108,7 +94,7 @@ const Packs = () => {
       dispatch(packsAC.setPageCount({ pageCount: +event.target.value }));
       setSearchParams({ ...params, pageCount: event.target.value });
     },
-    [pageCount]
+    [params]
   );
 
   const removePack = useCallback((id: string) => {
@@ -118,44 +104,70 @@ const Packs = () => {
   const setSearchQueryParams = useCallback(
     debounce((value: string) => {
       setSearchParams({ ...params, packName: value });
-    }, 700),
-    [packName]
+    }, 1000),
+    [params]
   );
 
   const changeSearchHandler = useCallback((value: string) => {
-    setSearchQueryParams(value);
     dispatch(packsAC.setPackName({ packName: value }));
+    setSearchQueryParams(value);
   }, []);
-
-  const setSortForPacks = useCallback(
-    (type: string) => {
-      dispatch(packsAC.setPacksSort({ type }));
-    },
-    [sortPacks]
-  );
 
   const handlerIsMyPack = useCallback(
     (param: boolean) => {
       dispatch(packsAC.setPreferencePacks({ isMine: param }));
       setSearchParams({ ...params, isMyPack: `${param}` });
     },
-    [isMyPack]
+    [params]
   );
 
   const changeSort = useCallback(
     (field: string) => {
-      setSort({ direction: sort.direction === 0 ? 1 : 0, field });
-      setSortForPacks((sort.direction + sort.field).toString());
-      setSearchParams((sort.direction + sort.field).toString());
+      dispatch(
+        packsAC.setPacksSort({
+          type: { direction: sortPacks.direction === 1 ? 0 : 1, field },
+        })
+      );
+
+      setSearchParams({
+        ...params,
+        sortPacks: (sortPacks.direction + sortPacks.field).toString(),
+      });
     },
-    [sortPacks]
+    [params]
+  );
+  const changeRangeQueryParams = useCallback(
+    debounce((valueRange: number[]) => {
+      setSearchParams({
+        ...params,
+        min: valueRange[0].toString(),
+        max: valueRange[1].toString(),
+      });
+    }, 700),
+    [params]
   );
 
-  const showSortIcon = useCallback((field: string) => {
-    return sort.field === field ? sortIcon : <HorizontalRule />;
-  }, []);
+  const changeRangeHandler = useCallback(
+    (valueRange: number[]) => {
+      changeRangeQueryParams(valueRange);
+      dispatch(packsAC.setRangeValue({ range: valueRange }));
+    },
+    [params]
+  );
+
+  const showSortIcon = useCallback(
+    (field: string) => {
+      return sortPacks.field === field ? (
+        getSortIcon(sortPacks.direction === 1)
+      ) : (
+        <HorizontalRule />
+      );
+    },
+    [params]
+  );
 
   const removeSort = useCallback(() => {
+    dispatch(packsAC.clearSettings({}));
     setSearchParams({});
   }, []);
 
