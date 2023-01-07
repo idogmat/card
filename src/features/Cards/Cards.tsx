@@ -64,7 +64,6 @@ export const Cards = React.memo(() => {
 
   const packs = useAllSelector(packsCardsPacksSelector);
   const pack = packs.find((p) => p._id === packID);
-  console.log(cards);
 
   // Vars
   const backToState = getItemFromLC("backToState");

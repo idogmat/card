@@ -131,8 +131,6 @@ export const CardsUpdateModal: FC<IUpdateCardModalProps> = ({ packID }) => {
     const questionResult = isQuestionPicture ? questionImg : textQuestion;
     const answerResult = isAnswerPicture ? answerImg : textAnswer;
 
-    console.log(answerField, answerResult, questionNull, answerNull);
-
     const model = {
       card: {
         _id: card._id,

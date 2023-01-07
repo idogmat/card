@@ -11,6 +11,7 @@ import { packsModalsAC } from "../../packsModalsSlice";
 import {
   _uploadHandler,
   BACKEND_MAX_IMG_WEIGHT,
+  getImgBase64File,
 } from "../../../../common/utils/base64Converter";
 import { acceptableImgFormats } from "../../../../common/utils/regExp";
 
@@ -54,17 +55,9 @@ export const AddNewPack = React.memo(() => {
     setNewPackData((state) => ({ ...state, isPrivate: !state.isPrivate }));
   };
   //double
-  const getBase64File = async (e: ChangeEvent<HTMLInputElement>) => {
-    return await _uploadHandler(
-      dispatch,
-      e,
-      acceptableImgFormats,
-      BACKEND_MAX_IMG_WEIGHT,
-      "Unacceptable file"
-    );
-  };
+
   const handleChangeCover = async (e: ChangeEvent<HTMLInputElement>) => {
-    const fileAsString = await getBase64File(e);
+    const fileAsString = await getImgBase64File(e, dispatch);
     fileAsString &&
       setNewPackData((state) => ({ ...state, deckCover: fileAsString }));
   };

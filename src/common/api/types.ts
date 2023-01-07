@@ -20,16 +20,3 @@ type AddedUser = Omit<LoginUserType, "token" | "error" | "avatar">;
 export type RegisterNewUserType = {
   addedUser: AddedUser;
 };
-// export type RegisterNewUserType = {
-//   addedUser: {
-//     _id: string;
-//     email: string;
-//     rememberMe: boolean;
-//     name: string;
-//     verified: boolean;
-//     isAdmin: boolean;
-//     publicCardPacksCount: number;
-//     created: Date;
-//     updated: Date;
-//   };
-// };
