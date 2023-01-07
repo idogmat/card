@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+
 import app from "./App";
 
 export interface IAppState {
@@ -39,3 +40,4 @@ const appSlice = createSlice({
 
 export const appReducer = appSlice.reducer;
 export const AppAC = appSlice.actions;
+export const appInitialState = appSlice.getInitialState();

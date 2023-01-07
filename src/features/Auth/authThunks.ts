@@ -1,14 +1,14 @@
-import { baseAPI } from "../../common/api/baseAPI";
 import { AuthAC } from "./authReducer";
-import { UserAC } from "../User/userReducer";
 import { Dispatch } from "redux";
+import { UserAC } from "../User/userReducer";
+import { baseAPI } from "../../common/api/baseAPI";
 
 export const AuthMeTC = () => {
   return (dispatch: Dispatch) => {
     return baseAPI
       .authMeRequest()
       .then(({ data }) => {
-        const user = { ...data, avatar: null };
+        const user = { ...data };
         dispatch(UserAC.setUser({ user }));
         dispatch(AuthAC.setIsAuth({ isAuth: true }));
       })

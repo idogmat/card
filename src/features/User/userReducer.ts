@@ -41,3 +41,4 @@ const userSlice = createSlice({
 
 export const userReducer = userSlice.reducer;
 export const UserAC = userSlice.actions;
+export const userInitialState = userSlice.getInitialState();

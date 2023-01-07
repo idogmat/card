@@ -1,7 +1,6 @@
 import { Box, debounce } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 import {
-  appStateSelect,
   packsCardsPacksSelector,
   packsIsMyPackSelector,
   packsMaxCardsPacksSelector,
@@ -13,7 +12,6 @@ import {
   packsPageSelector,
   packsSortPacksSelector,
   packsTotalCardsSelector,
-  userStateSelect,
 } from "./selectors";
 import { removePackTC, setPacksTC } from "./packsThunks";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
@@ -24,15 +22,17 @@ import PacksModals from "./components/modals/PacksModals";
 import PacksTable from "./components/PacksTable";
 import { Preloader } from "../../common/components/Preloader/Preloader";
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
+import { appStateSelector } from "app/selectors";
 import { getSortIcon } from "../../common/utils/assets";
 import { packsAC } from "./packsReducer";
 import styles from "../../common/styles/common.module.css";
 import { useSearchParams } from "react-router-dom";
+import { userStateSelector } from "features/User/selectors";
 
 const Packs = () => {
   // Selectors
-  const user = useAllSelector(userStateSelect);
-  const { isLoading } = useAllSelector(appStateSelect);
+  const user = useAllSelector(userStateSelector);
+  const { isLoading } = useAllSelector(appStateSelector);
   const packName = useAllSelector(packsNameSelector);
   const cardPacks = useAllSelector(packsCardsPacksSelector);
   const page = useAllSelector(packsPageSelector);

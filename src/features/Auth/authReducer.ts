@@ -1,6 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { loginTC, logOutTC } from "../Login/loginThunks";
-import { registerTC } from "../Register/registerThunks";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { logOutTC, loginTC } from "../Login/loginThunks";
 
 export interface IAuthState {
   isAuth: boolean;
@@ -29,3 +28,4 @@ const authSlice = createSlice({
 
 export const authReducer = authSlice.reducer;
 export const AuthAC = authSlice.actions;
+export const authInitialState = authSlice.getInitialState();

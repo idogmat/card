@@ -1,6 +1,5 @@
 import {
   Checkbox,
-  CircularProgress,
   FormControlLabel,
   FormLabel,
   Grid,
@@ -19,7 +18,7 @@ import FormControl from "@mui/material/FormControl/FormControl";
 import FormGroup from "@mui/material/FormGroup/FormGroup";
 import { Link } from "react-router-dom";
 import { Preloader } from "../../common/components/Preloader/Preloader";
-import { appStateSelect } from "../Packs/selectors";
+import { appStateSelector } from "app/selectors";
 import { hasError } from "../../common/utils/errorHandlers";
 import { loginTC } from "./loginThunks";
 import styles from "../../common/styles/common.module.css";
@@ -33,10 +32,14 @@ interface ILoginErrorType {
 }
 
 export const Login = () => {
+  // Dispatch & selectors
   const dispatch = useAppDispatch();
-  const { isLoading } = useAllSelector(appStateSelect);
+  const { isLoading } = useAllSelector(appStateSelector);
+
+  // Local Stataes
   const [showPassword, setShowPassword] = useState(false);
 
+  // Formik
   const loginForm = useFormik({
     initialValues: {
       email: "",
@@ -59,9 +62,14 @@ export const Login = () => {
       dispatch(loginTC(values));
     },
   });
-  const changePasswordFieldType = () => setShowPassword((prev) => !prev);
+
+  // Vars
   const passwordFieldType = showPassword ? "text" : "password";
   const loginHasError = hasError.bind(null, loginForm);
+
+  // Utils
+  const changePasswordFieldType = () => setShowPassword((prev) => !prev);
+
   return (
     <Grid
       container

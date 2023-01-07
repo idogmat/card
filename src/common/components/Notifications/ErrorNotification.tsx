@@ -3,10 +3,10 @@ import { useAllSelector, useAppDispatch } from "../../hooks";
 
 import { AppAC } from "../../../app/appReducer";
 import React from "react";
-import { appStateSelect } from "../../../features/Packs/selectors";
+import { appStateSelector } from "app/selectors";
 
 export const ErrorNotification = () => {
-  const { error } = useAllSelector(appStateSelect);
+  const { error } = useAllSelector(appStateSelector);
   const shouldDisplayError = !!error;
   const dispatch = useAppDispatch();
 

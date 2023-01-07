@@ -1,10 +1,6 @@
 import { Box, SelectChangeEvent, debounce } from "@mui/material";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  appStateSelect,
-  packsCardsPacksSelector,
-} from "features/Packs/selectors";
-import {
   cardsCardQuestionSelector,
   cardsCardsSelector,
   cardsCurrentPageSelector,
@@ -25,8 +21,10 @@ import { IPackResponse } from "./../Packs/packsAPI";
 import { NotFoundElements } from "common/components/NotFoundElements/NotFoundElements";
 import { Preloader } from "common/components/Preloader/Preloader";
 import { TablePagination } from "common/components/TablePagination/TablePagination";
+import { appStateSelector } from "app/selectors";
 import { getCardsTC } from "./cardsThunks";
 import { getItemFromLC } from "common/utils/localStorage";
+import { packsCardsPacksSelector } from "features/Packs/selectors";
 import { selectOptions } from "./Cards.data";
 import { setPacksTC } from "./../Packs/packsThunks";
 import styles from "common/styles/common.module.css";
@@ -53,7 +51,7 @@ export const Cards = React.memo(() => {
   const dispatch = useAppDispatch();
 
   const user = useAllSelector(userStateSelector);
-  const { isLoading } = useAllSelector(appStateSelect);
+  const { isLoading } = useAllSelector(appStateSelector);
 
   const cards = useAllSelector(cardsCardsSelector);
   const packUserId = useAllSelector(cardsPackOwnerSelector);
@@ -95,6 +93,7 @@ export const Cards = React.memo(() => {
       cardQuestion: params.search || cardQuestion,
       sortCards: params.sortCards || cardsSort,
     } as IGetCardsRequest;
+
     dispatch(getCardsTC(model));
     dispatch(setPacksTC({ pageCount: Infinity }));
   }, [searchParams]);

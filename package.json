@@ -25,6 +25,11 @@
     "usehooks-ts": "^2.9.1",
     "web-vitals": "^2.1.4"
   },
+  "jest": {
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(axios)/)"
+    ]
+  },
   "scripts": {
     "start": "react-scripts start NODE_ENV=development",
     "build": "react-scripts build NODE_ENV=build",

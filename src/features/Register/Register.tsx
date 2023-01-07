@@ -16,7 +16,7 @@ import { useAllSelector, useAppDispatch } from "../../common/hooks";
 
 import { Link } from "react-router-dom";
 import { Preloader } from "../../common/components/Preloader/Preloader";
-import { appStateSelect } from "../Packs/selectors";
+import { appStateSelector } from "app/selectors";
 import { hasError } from "../../common/utils/errorHandlers";
 import { registerTC } from "./registerThunks";
 import styles from "../../common/styles/common.module.css";
@@ -31,7 +31,7 @@ export interface IRegisterFormErrors {
 
 export const Register = () => {
   const dispatch = useAppDispatch();
-  const { isLoading } = useAllSelector(appStateSelect);
+  const { isLoading } = useAllSelector(appStateSelector);
   const [showPassword, setShowPassword] = useState(false);
 
   const registerForm = useFormik({
