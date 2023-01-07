@@ -29,7 +29,6 @@ import { packsAC } from "./packsReducer";
 import styles from "../../common/styles/common.module.css";
 import { useSearchParams } from "react-router-dom";
 
-export type EditModeType = "edit" | "delete" | "idle";
 const Packs = () => {
   // Selectors
   const user = useAllSelector(userStateSelect);

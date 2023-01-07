@@ -30,7 +30,6 @@ export const setPacksTC = createAppAsyncThunk(
         thunkAPI.getState().packs;
       if (Object.keys(model).length === 0) {
         const res = await PacksAPI.getPacks({});
-
         return {
           packs: res.data,
           min: 0,
@@ -41,7 +40,6 @@ export const setPacksTC = createAppAsyncThunk(
         };
       } else {
         const { _id } = thunkAPI.getState().user;
-        debugger;
         const res = await PacksAPI.getPacks({
           user_id: model.isMyPack === "true" || isMyPack ? _id : "",
           packName: model.packName || packName,
