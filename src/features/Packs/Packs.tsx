@@ -61,15 +61,22 @@ const Packs = () => {
       dispatch(setPacksTC({}));
       return;
     }
-
     const model = {
       isMyPack: params.isMyPack,
       pageCount: params.showPerPage,
       page: params.page,
       max: params.max,
       min: params.min,
-      packName: params.packName || packName,
-      sortPacks: sortPacks,
+      packName: params.packName,
+      sortPacks: params.sortPacks
+        ? {
+            direction: +params.sortPacks[0],
+            field: params.sortPacks
+              .split("")
+              .splice(1, params.sortPacks.length - 1)
+              .join(""),
+          }
+        : sortPacks,
     };
     dispatch(setPacksTC(model));
   }, [searchParams]);
@@ -79,16 +86,13 @@ const Packs = () => {
       dispatch(packsAC.setCurrentPage({ page: newPage }));
       setSearchParams({ ...params, page: `${newPage}` });
     },
-    [params]
+    []
   );
 
-  const handleChangeRowsPerPage = useCallback(
-    (event: SelectChangeEvent) => {
-      dispatch(packsAC.setPageCount({ pageCount: +event.target.value }));
-      setSearchParams({ ...params, pageCount: event.target.value });
-    },
-    [params]
-  );
+  const handleChangeRowsPerPage = useCallback((event: SelectChangeEvent) => {
+    dispatch(packsAC.setPageCount({ pageCount: +event.target.value }));
+    setSearchParams({ ...params, pageCount: event.target.value });
+  }, []);
 
   const removePack = useCallback((id: string) => {
     dispatch(removePackTC(id));
@@ -98,40 +102,31 @@ const Packs = () => {
     debounce((value: string) => {
       setSearchParams({ ...params, packName: value });
     }, 700),
-    [params]
+    []
   );
 
-  const changeSearchHandler = useCallback(
-    (value: string) => {
-      setSearchQueryParams(value);
-      dispatch(packsAC.setPackName({ packName: value }));
-    },
-    [isMyPack]
-  );
+  const changeSearchHandler = useCallback((value: string) => {
+    setSearchQueryParams(value);
+    dispatch(packsAC.setPackName({ packName: value }));
+  }, []);
 
-  const handlerIsMyPack = useCallback(
-    (param: boolean) => {
-      dispatch(packsAC.setPreferencePacks({ isMine: param }));
-      setSearchParams({ ...params, isMyPack: `${param}` });
-    },
-    [params]
-  );
+  const handlerIsMyPack = useCallback((param: boolean) => {
+    dispatch(packsAC.setPreferencePacks({ isMine: param }));
+    setSearchParams({ ...params, isMyPack: `${param}` });
+  }, []);
 
-  const changeSort = useCallback(
-    (field: string) => {
-      dispatch(
-        packsAC.setPacksSort({
-          type: { direction: sortPacks.direction === 1 ? 0 : 1, field },
-        })
-      );
+  const changeSort = useCallback((field: string) => {
+    dispatch(
+      packsAC.setPacksSort({
+        type: { direction: sortPacks.direction === 1 ? 0 : 1, field },
+      })
+    );
 
-      setSearchParams({
-        ...params,
-        sortPacks: (sortPacks.direction + sortPacks.field).toString(),
-      });
-    },
-    [params]
-  );
+    setSearchParams({
+      ...params,
+      sortPacks: (sortPacks.direction + sortPacks.field).toString(),
+    });
+  }, []);
   const changeRangeQueryParams = useCallback(
     debounce((valueRange: number[]) => {
       setSearchParams({
@@ -140,24 +135,24 @@ const Packs = () => {
         max: valueRange[1].toString(),
       });
     }, 700),
-    [params]
+    []
   );
 
-  const changeRangeHandler = useCallback(
-    (valueRange: number[]) => {
-      changeRangeQueryParams(valueRange);
-      dispatch(packsAC.setRangeValue({ range: valueRange }));
-    },
-    [isMyPack]
-  );
-
-  const showSortIcon = useCallback((field: string) => {
-    return sortPacks.field === field ? (
-      getSortIcon(sortPacks.direction === 1)
-    ) : (
-      <HorizontalRule />
-    );
+  const changeRangeHandler = useCallback((valueRange: number[]) => {
+    changeRangeQueryParams(valueRange);
+    dispatch(packsAC.setRangeValue({ range: valueRange }));
   }, []);
+
+  const showSortIcon = useCallback(
+    (field: string) => {
+      return sortPacks.field === field ? (
+        getSortIcon(sortPacks.direction === 1)
+      ) : (
+        <HorizontalRule />
+      );
+    },
+    [sortPacks]
+  );
 
   const removeSort = useCallback(() => {
     setSearchParams({});
