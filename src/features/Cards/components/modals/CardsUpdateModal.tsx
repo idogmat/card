@@ -3,6 +3,7 @@ import {
   _uploadHandler,
 } from "common/utils/base64Converter";
 import { ChangeEvent, FC, useRef } from "react";
+import { getImgBase64File, openFileSelector } from "./utils";
 import { useAllSelector, useAppDispatch } from "common/hooks";
 
 import Box from "@mui/material/Box/Box";
@@ -16,7 +17,6 @@ import { SelectChangeEvent } from "@mui/material";
 import { SelectTypeField } from "./SelectTypeField";
 import { acceptableImgFormats } from "common/utils/regExp";
 import { formatSelectOptions } from "./CardsModals.data";
-import { openFileSelector } from "./utils";
 import { updateCardModalSelector } from "features/Cards/components/modals/modalsSelectors";
 import { updateCardTC } from "features/Cards/cardsThunks";
 
@@ -63,16 +63,6 @@ export const CardsUpdateModal: FC<IUpdateCardModalProps> = ({ packID }) => {
 
   // Utils
 
-  const getBase64File = async (e: ChangeEvent<HTMLInputElement>) => {
-    return await _uploadHandler(
-      dispatch,
-      e,
-      acceptableImgFormats,
-      BACKEND_MAX_IMG_WEIGHT,
-      "Unaccaptable file"
-    );
-  };
-
   const handleClose = () =>
     dispatch(CardsModalsAC.setUpdateCardState({ state: false }));
 
@@ -84,7 +74,6 @@ export const CardsUpdateModal: FC<IUpdateCardModalProps> = ({ packID }) => {
   };
 
   const setQuestion = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("in set question");
     const question = e.target.value;
     dispatch(
       CardsModalsAC.setUpdateCardData({ model: { ...updateModal, question } })
@@ -110,7 +99,7 @@ export const CardsUpdateModal: FC<IUpdateCardModalProps> = ({ packID }) => {
   };
 
   const changeQuestionCover = async (e: ChangeEvent<HTMLInputElement>) => {
-    const questionImg = await getBase64File(e);
+    const questionImg = await getImgBase64File(e, dispatch);
     if (questionImg) {
       dispatch(
         CardsModalsAC.setUpdateCardData({
@@ -121,7 +110,7 @@ export const CardsUpdateModal: FC<IUpdateCardModalProps> = ({ packID }) => {
   };
 
   const changeAnswerCover = async (e: ChangeEvent<HTMLInputElement>) => {
-    const answerImg = await getBase64File(e);
+    const answerImg = await getImgBase64File(e, dispatch);
     if (answerImg) {
       dispatch(
         CardsModalsAC.setUpdateCardData({
