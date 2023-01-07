@@ -42,15 +42,16 @@ export const setPacksTC = createAppAsyncThunk(
         const { _id } = thunkAPI.getState().user;
         const res = await PacksAPI.getPacks({
           user_id: model.isMyPack === "true" || isMyPack ? _id : "",
-          packName: model.packName || packName,
-          pageCount: model.pageCount || pageCount,
-          page: model.page || page,
-          min: model.min || min,
-          max: model.max || max,
-          sortPacks: !!model?.sortPacks
+          packName: model.packName,
+          pageCount: model.pageCount,
+          page: model.page,
+          min: model.min,
+          max: model.max,
+          sortPacks: !!model?.sortPacks?.field
             ? model.sortPacks.direction + model.sortPacks.field
             : sortPacks.direction + sortPacks.field,
         });
+        debugger;
         return {
           packs: res.data,
           min: model.min || min,
