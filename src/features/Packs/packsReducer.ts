@@ -43,6 +43,9 @@ const packsSlice = createSlice({
     setPreferencePacks: (draft, action: PayloadAction<{ isMine: boolean }>) => {
       draft.isMyPack = action.payload.isMine;
     },
+    clearSettings: (draft, action) => {
+      return initialState;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(
