@@ -25,8 +25,8 @@ interface IGetCardsResponse {
 export interface IAddCardRequest {
   card: {
     cardsPack_id: string;
-    question: string;
-    answer: string;
+    question?: string;
+    answer?: string;
     grade?: number;
     shots?: number;
     answerImg?: string;
@@ -38,8 +38,11 @@ export interface IAddCardRequest {
 export interface IUpdateCardRequest {
   card: {
     _id: string;
-    question: string;
-    answer: string;
+    question?: string;
+    answer?: string;
+    answerImg?: string;
+    questionImg?: string;
+    questionVideo?: string;
   };
 }
 

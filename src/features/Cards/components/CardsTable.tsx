@@ -45,7 +45,7 @@ export const CardsTable: FC<ICardsTableProps> = React.memo(
             }}
           >
             <TableCell>
-              <Box className={"table-cell-icon"}>Answer</Box>
+              <Box className={"table-cell-icon"}>Question</Box>
             </TableCell>
             <TableCell>
               <Box className={"table-cell-icon"}>Answer</Box>

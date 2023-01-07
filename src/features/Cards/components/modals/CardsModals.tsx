@@ -4,7 +4,13 @@ import { CardsUpdateModal } from "./CardsUpdateModal";
 import { DeletePack } from "features/Packs/components/modals/DeletePack";
 import EditPack from "features/Packs/components/modals/EditPack";
 import { FC } from "react";
+import { FieldFormatsEnum } from "./FormatSelect";
 import { IPackResponse } from "./../../../Packs/packsAPI";
+
+export interface IFieldFormats {
+  question: FieldFormatsEnum;
+  answer: FieldFormatsEnum;
+}
 
 interface ICardsModalProps {
   pack: IPackResponse;

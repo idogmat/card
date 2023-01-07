@@ -8,7 +8,7 @@ import { PhotoCamera } from "@mui/icons-material";
 import { addNewModalSelector } from "./modalsSelectors";
 import { addPackTC } from "../../packsThunks";
 import { packsModalsAC } from "../../packsModalsSlice";
-import { uploadHandler } from "../../../../common/utils/loadPhoto";
+import { uploadHandler } from "../../../../common/utils/base64Converter";
 
 interface INewPack {
   name: string;

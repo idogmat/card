@@ -29,6 +29,11 @@ export const CardsTableRow: FC<ICardsTableRowProps> = React.memo(
       cardName: card.question,
     };
 
+    // Vars
+    const isCardQuestionImg =
+      card.questionImg && card.questionImg !== "undefined";
+    const isCardAnswerImg = card.questionImg && card.answerImg !== "undefined";
+
     // Utils
     const openDeleteModal = () => {
       dispatch(CardsModalsAC.setDeleteCardState({ state: true }));
@@ -36,36 +41,46 @@ export const CardsTableRow: FC<ICardsTableRowProps> = React.memo(
     };
     const openUpdateModal = () => {
       dispatch(CardsModalsAC.setUpdateCardState({ state: true }));
-      dispatch(CardsModalsAC.setUpdateCardData({card}));
+      dispatch(CardsModalsAC.setInitialUpdateCardData({ card }));
     };
 
     return (
       <TableRow key={card._id}>
-        <TableCell>{isLoading ? <Skeleton /> : card.question}</TableCell>
-        <TableCell>{isLoading ? <Skeleton /> : card.answer}</TableCell>
         <TableCell>
-          {isLoading ? <Skeleton /> : formDate(`${card.updated}`)}
+          {isCardQuestionImg ? (
+            <img
+              src={card.questionImg}
+              alt=""
+              style={{ width: "100px", height: "100px", objectFit: "cover" }}
+            />
+          ) : (
+            card.question
+          )}
         </TableCell>
         <TableCell>
+          {isCardAnswerImg ? (
+            <img
+              src={card.answerImg}
+              alt=""
+              style={{ width: "100px", height: "100px", objectFit: "cover" }}
+            />
+          ) : (
+            card.answer
+          )}
+        </TableCell>
+        <TableCell>{formDate(`${card.updated}`)}</TableCell>
+        <TableCell>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            {isLoading ? (
-              <Skeleton />
-            ) : (
-              <Rating
-                name={"read-only"}
-                value={Math.floor(card.grade)}
-                readOnly
-                precision={0.5}
-              />
-            )}
+            <Rating
+              name={"read-only"}
+              value={Math.floor(card.grade)}
+              readOnly
+              precision={0.5}
+            />
             {isPackMine && (
               <>
                 <IconButton>
-                  {isLoading ? (
-                    <Skeleton />
-                  ) : (
-                    <Edit onClick={openUpdateModal} />
-                  )}
+                  <Edit onClick={openUpdateModal} />
                 </IconButton>
                 <IconButton onClick={openDeleteModal}>
                   {isLoading ? <Skeleton /> : <DeleteOutline />}

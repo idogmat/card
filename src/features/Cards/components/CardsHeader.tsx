@@ -121,6 +121,13 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
               </>
             )}
           </Typography>
+          {pack.deckCover && (
+            <img
+              src={pack.deckCover}
+              alt=""
+              style={{ width: "300px", height: "100px", objectFit: "cover" }}
+            />
+          )}
           {isPackMine && (
             <Button
               sx={{ borderRadius: "24px" }}
