@@ -52,7 +52,7 @@ export const CardsAddModal: FC<ICardsAddModalProps> = ({ packID }) => {
       e,
       acceptableImgFormats,
       BACKEND_MAX_IMG_WEIGHT,
-      "Unaccaptable file"
+      "Unacceptable file"
     );
   };
 
