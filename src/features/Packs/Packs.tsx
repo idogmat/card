@@ -86,7 +86,7 @@ const Packs = () => {
       dispatch(packsAC.setCurrentPage({ page: newPage }));
       setSearchParams({ ...params, page: `${newPage}` });
     },
-    [params]
+    [packsAC.setCurrentPage, setSearchParams]
   );
 
   const handleChangeRowsPerPage = useCallback(
@@ -94,7 +94,7 @@ const Packs = () => {
       dispatch(packsAC.setPageCount({ pageCount: +event.target.value }));
       setSearchParams({ ...params, pageCount: event.target.value });
     },
-    [params]
+    [setSearchParams, packsAC.setPageCount]
   );
 
   const removePack = useCallback((id: string) => {
@@ -102,23 +102,27 @@ const Packs = () => {
   }, []);
 
   const setSearchQueryParams = useCallback(
-    debounce((value: string) => {
-      setSearchParams({ ...params, packName: value });
-    }, 1000),
-    [params]
+    debounce(
+      (value: string) => setSearchParams({ ...params, packName: value }),
+      1000
+    ),
+    [setSearchParams]
   );
 
-  const changeSearchHandler = useCallback((value: string) => {
-    dispatch(packsAC.setPackName({ packName: value }));
-    setSearchQueryParams(value);
-  }, []);
+  const changeSearchHandler = useCallback(
+    (value: string) => {
+      dispatch(packsAC.setPackName({ packName: value }));
+      setSearchQueryParams(value);
+    },
+    [setSearchQueryParams, packsAC.setPackName]
+  );
 
   const handlerIsMyPack = useCallback(
     (param: boolean) => {
       dispatch(packsAC.setPreferencePacks({ isMine: param }));
       setSearchParams({ ...params, isMyPack: `${param}` });
     },
-    [params]
+    [setSearchParams, packsAC.setPreferencePacks]
   );
 
   const changeSort = useCallback(
@@ -134,37 +138,38 @@ const Packs = () => {
         sortPacks: (sortPacks.direction + sortPacks.field).toString(),
       });
     },
-    [params]
+    [packsAC.setPacksSort, setSearchParams]
   );
+
   const changeRangeQueryParams = useCallback(
-    debounce((valueRange: number[]) => {
-      setSearchParams({
-        ...params,
-        min: valueRange[0].toString(),
-        max: valueRange[1].toString(),
-      });
-    }, 700),
+    debounce(
+      (valueRange: number[], params) => (
+        setSearchParams({
+          ...params,
+          min: valueRange[0].toString(),
+          max: valueRange[1].toString(),
+        }),
+        700
+      )
+    ),
     [params]
   );
 
   const changeRangeHandler = useCallback(
     (valueRange: number[]) => {
-      changeRangeQueryParams(valueRange);
       dispatch(packsAC.setRangeValue({ range: valueRange }));
+      changeRangeQueryParams(valueRange, params);
     },
-    [params]
+    [changeRangeQueryParams, packsAC.setRangeValue]
   );
 
-  const showSortIcon = useCallback(
-    (field: string) => {
-      return sortPacks.field === field ? (
-        getSortIcon(sortPacks.direction === 1)
-      ) : (
-        <HorizontalRule />
-      );
-    },
-    [params]
-  );
+  const showSortIcon = (field: string) => {
+    return sortPacks.field === field ? (
+      getSortIcon(sortPacks.direction === 1)
+    ) : (
+      <HorizontalRule />
+    );
+  };
 
   const removeSort = useCallback(() => {
     dispatch(packsAC.clearSettings({}));

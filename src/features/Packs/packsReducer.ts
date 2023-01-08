@@ -44,7 +44,8 @@ const packsSlice = createSlice({
       draft.isMyPack = action.payload.isMine;
     },
     clearSettings: (draft, action) => {
-      return initialState;
+      draft = { ...initialState };
+      return draft;
     },
   },
   extraReducers: (builder) => {
