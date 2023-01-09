@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Box, Grid, Slider } from "@mui/material";
+import { IParams } from "../../../features/Packs/packsThunks";
 
 interface ISuperRangeProps {
   onChangeSlider: (valueRange: number[], params: any) => void;
-  params: any;
+  params: IParams;
   max: number | string;
   min: number | string;
   minCardsCount: number;

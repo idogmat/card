@@ -10,8 +10,10 @@ import { RootState } from "../../app/store";
 import { createAppAsyncThunk } from "../../common/utils/AsyncThunk";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { packsAC } from "./packsReducer";
-
-interface IGetModel {
+export interface IParams {
+  [p: string]: string;
+}
+export interface IGetModel {
   page: string | number;
   packName: string;
   pageCount: string | number;
@@ -25,7 +27,6 @@ export const setPacksTC = createAppAsyncThunk(
   "packs/setPacks",
   async (model: Partial<IGetModel>, thunkAPI) => {
     return errorHandlingThunk(thunkAPI, async () => {
-      thunkAPI.dispatch(AppAC.setIsLoading({ isLoading: true }));
       const { pageCount, page, min, max, sortPacks, packName, isMyPack } =
         thunkAPI.getState().packs;
       if (Object.keys(model).length === 0) {

@@ -7,6 +7,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useAppDispatch } from "../../../common/hooks";
 import { packsModalsAC } from "../packsModalsSlice";
 import RangeSlider from "../../../common/components/RangeSlider/RangeSlider";
+import { IParams } from "../packsThunks";
 
 interface IHeaderProps {
   packName: string;
@@ -18,7 +19,7 @@ interface IHeaderProps {
   max: number | string;
   min: number | string;
   changeRangeHandler: (valueRange: number[], params: any) => void;
-  params: any;
+  params: IParams;
   removeSort: () => void;
 }
 const PacksHeader: FC<IHeaderProps> = React.memo(

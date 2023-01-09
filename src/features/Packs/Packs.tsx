@@ -13,7 +13,7 @@ import {
   packsSortPacksSelector,
   packsTotalCardsSelector,
 } from "./selectors";
-import { removePackTC, setPacksTC } from "./packsThunks";
+import { IParams, removePackTC, setPacksTC } from "./packsThunks";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
 
 import { Clear, HorizontalRule } from "@mui/icons-material";
@@ -142,27 +142,24 @@ const Packs = () => {
     [packsAC.setPacksSort, setSearchParams]
   );
 
-  const optDebounce = (type: { valueRange: any; params: any }, ms: number) => {
-    return function () {
-      function callFunc() {
-        setSearchParams({
-          ...type.params,
-          min: type.valueRange[0].toString(),
-          max: type.valueRange[1].toString(),
-        });
-      }
-      clearTimeout(timeout.current);
-      timeout.current = setTimeout(callFunc, ms);
-    };
+  const optDebounce = (
+    type: { valueRange: number[]; params: any },
+    ms: number
+  ) => {
+    function callFunc() {
+      setSearchParams({
+        ...type.params,
+        min: type.valueRange[0].toString(),
+        max: type.valueRange[1].toString(),
+      });
+    }
+    clearTimeout(timeout.current);
+    timeout.current = setTimeout(callFunc, ms);
   };
 
-  const changeRangeQueryParams = async (valueRange: number[], params: any) => {
-    optDebounce({ valueRange, params }, 1000)();
-  };
-
-  const changeRangeHandler = (valueRange: number[], params: any) => {
+  const changeRangeHandler = (valueRange: number[], params: IParams) => {
     dispatch(packsAC.setRangeValue({ range: valueRange }));
-    changeRangeQueryParams(valueRange, params);
+    optDebounce({ valueRange, params }, 700);
   };
 
   const showSortIcon = (field: string) => {
