@@ -17,7 +17,8 @@ interface IHeaderProps {
   maxCardsCount: number;
   max: number | string;
   min: number | string;
-  changeRangeHandler: (valueRange: number[]) => void;
+  changeRangeHandler: (valueRange: number[], params: any) => void;
+  params: any;
   removeSort: () => void;
 }
 const PacksHeader: FC<IHeaderProps> = React.memo(
@@ -32,6 +33,7 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
     maxCardsCount,
     minCardsCount,
     handlerIsMyPack,
+    params,
   }) => {
     const dispatch = useAppDispatch();
     const modalAddPack = () =>
@@ -85,6 +87,7 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
               minCardsCount={minCardsCount}
               maxCardsCount={maxCardsCount}
               onChangeSlider={changeRangeHandler}
+              params={params}
             />
             <Button variant="contained" onClick={modalAddPack}>
               Add new Pack

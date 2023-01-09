@@ -1,5 +1,5 @@
 import { Box, debounce } from "@mui/material";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   packsCardsPacksSelector,
   packsIsMyPackSelector,
@@ -16,7 +16,7 @@ import {
 import { removePackTC, setPacksTC } from "./packsThunks";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
 
-import { HorizontalRule } from "@mui/icons-material";
+import { Clear, HorizontalRule } from "@mui/icons-material";
 import PacksHeader from "./components/PacksHeader";
 import PacksModals from "./components/modals/PacksModals";
 import PacksTable from "./components/PacksTable";
@@ -28,6 +28,7 @@ import { packsAC } from "./packsReducer";
 import styles from "../../common/styles/common.module.css";
 import { useSearchParams } from "react-router-dom";
 import { userStateSelector } from "features/User/selectors";
+import { TimeoutId } from "@reduxjs/toolkit/dist/query/core/buildMiddleware/types";
 
 const Packs = () => {
   // Selectors
@@ -46,15 +47,15 @@ const Packs = () => {
   const minCardsCount = useAllSelector(packsMinCardsPacksSelector);
 
   // Query
-  const [searchParams, setSearchParams] = useSearchParams({});
+  const [searchParams, setSearchParams] = useSearchParams();
   const params = Object.fromEntries(searchParams);
-
   // Local states
 
   // Utils
   const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
   const isParamsSet = Object.keys(params).length > 0;
   const dispatch = useAppDispatch();
+  let timeout = useRef<TimeoutId>();
 
   useEffect(() => {
     if (!isParamsSet) {
@@ -141,27 +142,28 @@ const Packs = () => {
     [packsAC.setPacksSort, setSearchParams]
   );
 
-  const changeRangeQueryParams = useCallback(
-    debounce(
-      (valueRange: number[], params) => (
+  const optDebounce = (type: { valueRange: any; params: any }, ms: number) => {
+    return function () {
+      function callFunc() {
         setSearchParams({
-          ...params,
-          min: valueRange[0].toString(),
-          max: valueRange[1].toString(),
-        }),
-        700
-      )
-    ),
-    [params]
-  );
+          ...type.params,
+          min: type.valueRange[0].toString(),
+          max: type.valueRange[1].toString(),
+        });
+      }
+      clearTimeout(timeout.current);
+      timeout.current = setTimeout(callFunc, ms);
+    };
+  };
 
-  const changeRangeHandler = useCallback(
-    (valueRange: number[]) => {
-      dispatch(packsAC.setRangeValue({ range: valueRange }));
-      changeRangeQueryParams(valueRange, params);
-    },
-    [changeRangeQueryParams, packsAC.setRangeValue]
-  );
+  const changeRangeQueryParams = async (valueRange: number[], params: any) => {
+    optDebounce({ valueRange, params }, 1000)();
+  };
+
+  const changeRangeHandler = (valueRange: number[], params: any) => {
+    dispatch(packsAC.setRangeValue({ range: valueRange }));
+    changeRangeQueryParams(valueRange, params);
+  };
 
   const showSortIcon = (field: string) => {
     return sortPacks.field === field ? (
@@ -201,6 +203,7 @@ const Packs = () => {
         maxCardsCount={maxCardsCount}
         minCardsCount={minCardsCount}
         handlerIsMyPack={handlerIsMyPack}
+        params={params}
       />
       {/*TABLE*/}
       <PacksTable

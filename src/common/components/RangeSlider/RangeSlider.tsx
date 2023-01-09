@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Box, Grid, Slider } from "@mui/material";
 
 interface ISuperRangeProps {
-  onChangeSlider: (valueRange: number[]) => void;
+  onChangeSlider: (valueRange: number[], params: any) => void;
+  params: any;
   max: number | string;
   min: number | string;
   minCardsCount: number;
@@ -10,13 +11,13 @@ interface ISuperRangeProps {
 }
 
 const RangeSlider: React.FC<ISuperRangeProps> = React.memo(
-  ({ onChangeSlider, min, max, maxCardsCount, minCardsCount }) => {
+  ({ onChangeSlider, min, max, maxCardsCount, minCardsCount, params }) => {
     const [range, setRange] = useState([Number(min), Number(max)]);
 
-    const onChangeHandler = useCallback((e: any, value: number | number[]) => {
+    const onChangeHandler = (e: any, value: number | number[]) => {
       setRange(value as number[]);
-      onChangeSlider(value as number[]);
-    }, []);
+      onChangeSlider(value as number[], params);
+    };
 
     useEffect(() => {
       setRange([Number(min), Number(max)]);
