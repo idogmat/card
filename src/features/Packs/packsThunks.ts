@@ -10,22 +10,23 @@ import { RootState } from "../../app/store";
 import { createAppAsyncThunk } from "../../common/utils/AsyncThunk";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { packsAC } from "./packsReducer";
-
-interface IGetModel {
+export interface IParams {
+  [p: string]: string;
+}
+export interface IGetModel {
   page: string | number;
   packName: string;
   pageCount: string | number;
   max: string | number;
   min: string | number;
   isMyPack: string;
-  sortPacks: { direction: number; field: string };
+  sortPacks: { direction?: number; field?: string };
   user_id: string;
 }
 export const setPacksTC = createAppAsyncThunk(
   "packs/setPacks",
   async (model: Partial<IGetModel>, thunkAPI) => {
     return errorHandlingThunk(thunkAPI, async () => {
-      thunkAPI.dispatch(AppAC.setIsLoading({ isLoading: true }));
       const { pageCount, page, min, max, sortPacks, packName, isMyPack } =
         thunkAPI.getState().packs;
       if (Object.keys(model).length === 0) {
@@ -41,23 +42,23 @@ export const setPacksTC = createAppAsyncThunk(
       } else {
         const { _id } = thunkAPI.getState().user;
         const res = await PacksAPI.getPacks({
-          user_id: model.isMyPack === "true" ? _id : "",
-          packName: model.packName,
-          pageCount: model.pageCount,
-          page: model.page,
-          min: model.min,
-          max: model.max,
+          user_id: isMyPack ? _id : "",
+          packName: model.packName || packName,
+          pageCount: model.pageCount || pageCount,
+          page: model.page || page,
+          min: model.min || min,
+          max: model.max || max,
           sortPacks: !!model?.sortPacks?.field
             ? model.sortPacks.direction + model.sortPacks.field
             : sortPacks.direction + sortPacks.field,
         });
         return {
           packs: res.data,
-          min: model.min || min,
-          max: model.max || max,
-          packName: model.packName,
-          isMyPack: model.isMyPack === "true",
-          sortPacks: model.sortPacks,
+          min: min,
+          max: max,
+          packName: packName,
+          isMyPack: isMyPack,
+          sortPacks: sortPacks,
         };
       }
     });

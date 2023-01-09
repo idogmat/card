@@ -21,30 +21,31 @@ const packsSlice = createSlice({
   name: "packs",
   initialState,
   reducers: {
-    setCurrentPage: (draft, action: PayloadAction<{ page: number }>) => {
-      draft.page = action.payload.page;
+    setCurrentPage: (state, action: PayloadAction<{ page: number }>) => {
+      state.page = action.payload.page;
     },
-    setRangeValue: (draft, action: PayloadAction<{ range: number[] }>) => {
-      draft.min = action.payload.range[0];
-      draft.max = action.payload.range[1];
+    setRangeValue: (state, action: PayloadAction<{ range: number[] }>) => {
+      state.min = action.payload.range[0];
+      state.max = action.payload.range[1];
     },
-    setPageCount: (draft, action: PayloadAction<{ pageCount: number }>) => {
-      draft.pageCount = action.payload.pageCount;
+    setPageCount: (state, action: PayloadAction<{ pageCount: number }>) => {
+      state.pageCount = action.payload.pageCount;
     },
-    setPackName: (draft, action: PayloadAction<{ packName: string }>) => {
-      draft.packName = action.payload.packName;
+    setPackName: (state, action: PayloadAction<{ packName: string }>) => {
+      state.packName = action.payload.packName;
     },
     setPacksSort: (
-      draft,
+      state,
       action: PayloadAction<{ type: { direction: number; field: string } }>
     ) => {
-      draft.sortPacks = action.payload.type;
+      state.sortPacks = action.payload.type;
     },
-    setPreferencePacks: (draft, action: PayloadAction<{ isMine: boolean }>) => {
-      draft.isMyPack = action.payload.isMine;
+    setPreferencePacks: (state, action: PayloadAction<{ isMine: boolean }>) => {
+      state.isMyPack = action.payload.isMine;
     },
-    clearSettings: (draft, action) => {
-      return initialState;
+    clearSettings: (state, action) => {
+      state = { ...initialState };
+      return state;
     },
   },
   extraReducers: (builder) => {

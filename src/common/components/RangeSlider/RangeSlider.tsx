@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Box, Grid, Slider } from "@mui/material";
+import { IParams } from "../../../features/Packs/packsThunks";
 
 interface ISuperRangeProps {
-  onChangeSlider: (valueRange: number[]) => void;
+  onChangeSlider: (valueRange: number[], params: any) => void;
+  params: IParams;
   max: number | string;
   min: number | string;
   minCardsCount: number;
@@ -10,12 +12,14 @@ interface ISuperRangeProps {
 }
 
 const RangeSlider: React.FC<ISuperRangeProps> = React.memo(
-  ({ onChangeSlider, min, max, maxCardsCount, minCardsCount }) => {
+  ({ onChangeSlider, min, max, maxCardsCount, minCardsCount, params }) => {
     const [range, setRange] = useState([Number(min), Number(max)]);
-    const onChangeHandler = useCallback((e: any, value: number | number[]) => {
+
+    const onChangeHandler = (e: any, value: number | number[]) => {
       setRange(value as number[]);
-      onChangeSlider(value as number[]);
-    }, []);
+      onChangeSlider(value as number[], params);
+    };
+
     useEffect(() => {
       setRange([Number(min), Number(max)]);
     }, [min, max]);
@@ -28,7 +32,6 @@ const RangeSlider: React.FC<ISuperRangeProps> = React.memo(
             border: "1px solid #bebebe",
             padding: "0 0.5rem",
           }}
-          item
         >
           <span>{minCardsCount}</span>
         </Grid>
@@ -47,7 +50,6 @@ const RangeSlider: React.FC<ISuperRangeProps> = React.memo(
             border: "1px solid #bebebe",
             padding: "0 0.5rem",
           }}
-          item
         >
           <span>{maxCardsCount}</span>
         </Grid>
