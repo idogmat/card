@@ -1,7 +1,9 @@
-import { IPackResponse } from "../packsAPI";
+import { AuthAC, authInitialState, authReducer } from "../../Auth/authSlice";
 import { packsAC, packsReducer } from "../packsReducer";
-import { AuthAC, authInitialState, authReducer } from "../../Auth/authReducer";
 import { packsModalsAC, packsModalsReducer } from "../packsModalsSlice";
+
+import { IPackResponse } from "../packsAPI";
+
 const initialState = {
   addPack: {
     isOpen: false,

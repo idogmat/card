@@ -1,5 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
+import { AuthAC } from "features/Auth/authSlice";
+import { AuthMeTC } from "features/Auth/authThunks";
 import { IUpdatedUserInfo } from "../Profile/profileAPI";
 import { IUser } from "../../common/models";
 import { loginTC } from "../Login/loginThunks";
@@ -30,12 +32,16 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(loginTC.fulfilled, (state, action) => {
-      return action.payload.user;
-    });
-    builder.addCase(updateUserInfoTC.fulfilled, (state, action) => {
-      return action.payload;
-    });
+    builder
+      .addCase(loginTC.fulfilled, (state, action) => {
+        return action.payload.user;
+      })
+      .addCase(updateUserInfoTC.fulfilled, (state, action) => {
+        return action.payload;
+      })
+      .addCase(AuthMeTC.fulfilled, (state, action) => {
+        return { ...action.payload };
+      });
   },
 });
 

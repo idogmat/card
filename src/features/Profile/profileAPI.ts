@@ -6,13 +6,13 @@ export interface IUpdatedUserInfo {
   avatar: string | null;
 }
 
-export interface IUpdateUserResponse {
+export interface IUpdatedUserResponse {
   updatedUser: IUser;
   error?: string;
 }
 
 const sendUpdateUserRequest = (model: IUpdatedUserInfo) => {
-  return configuredAxios.put<IUpdateUserResponse>("/auth/me", model);
+  return configuredAxios.put<IUpdatedUserResponse>("/auth/me", model);
 };
 
 export const profileAPI = {

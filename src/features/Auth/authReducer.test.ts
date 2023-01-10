@@ -1,4 +1,4 @@
-import { AuthAC, IAuthState, authReducer } from "./authReducer";
+import { AuthAC, IAuthState, authReducer } from "./authSlice";
 
 const initialState: IAuthState = {
   isAuth: false,

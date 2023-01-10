@@ -4,10 +4,10 @@ import { useAllSelector, useAppDispatch } from "../common/hooks";
 import { AppRouter } from "../common/components/AppRouter/AppRouter";
 import { Container } from "@mui/material";
 import { Header } from "../common/components/Header/Header";
-import { InitAppTC } from "./appThunks";
 import { Notifications } from "../common/components/Notifications/Notifications";
 import { Preloader } from "../common/components/Preloader/Preloader";
 import { appStateSelector } from "./selectors";
+import { initAppTC } from "./appThunks";
 import styles from "./App.module.css";
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(InitAppTC());
+    dispatch(initAppTC());
   }, []);
 
   return isInit ? (
