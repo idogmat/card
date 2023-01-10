@@ -2,7 +2,7 @@ export type ResponseType<D> = {
   data: D;
 };
 
-export type LoginUserType = {
+export interface ILoginUser {
   _id: string;
   email: string;
   name: string;
@@ -15,8 +15,10 @@ export type LoginUserType = {
   token: string;
   rememberMe: boolean;
   error: string | null;
-};
-type AddedUser = Omit<LoginUserType, "token" | "error" | "avatar">;
+}
+
+type AddedUser = Omit<ILoginUser, "token" | "error" | "avatar">;
+
 export type RegisterNewUserType = {
   addedUser: AddedUser;
 };

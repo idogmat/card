@@ -1,4 +1,4 @@
-import { LoginUserType } from "./types";
+import { ILoginUser } from "./types";
 import axios from "axios";
 
 const baseURL =
@@ -12,7 +12,7 @@ export const configuredAxios = axios.create({
 });
 
 const authMeRequest = () => {
-  return configuredAxios.post<LoginUserType>("/auth/me", {});
+  return configuredAxios.post<ILoginUser>("/auth/me", {});
 };
 
 export const baseAPI = {

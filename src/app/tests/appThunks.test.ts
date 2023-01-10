@@ -3,7 +3,6 @@ import { store } from "app/store";
 
 const dispatch = jest.fn();
 const getState = store.getState;
-const errorMessage = "error placeholder";
 
 describe("app thunks", () => {
   test("should initAppTC with resolved response", async () => {
