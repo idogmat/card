@@ -197,7 +197,6 @@ describe("cards thunks", () => {
     const thunk = updateCardGradeTC(mockUpdateCardGradeRequest);
     await thunk(dispatch, getState, "");
     const { calls } = dispatch.mock;
-    console.log(calls);
 
     expect(calls).toHaveLength(4);
 

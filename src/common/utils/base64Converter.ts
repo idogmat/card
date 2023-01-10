@@ -1,4 +1,4 @@
-import { AppAC } from "./../../app/appReducer";
+import { AppAC } from "../../app/appSlice";
 import { AppDispatchType } from "common/hooks/useAppDispatch";
 import { ChangeEvent } from "react";
 import { acceptableImgFormats } from "./regExp";

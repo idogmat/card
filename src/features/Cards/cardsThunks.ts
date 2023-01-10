@@ -6,7 +6,7 @@ import {
   cardsAPI,
 } from "./cardsAPI";
 
-import { AppAC } from "../../app/appReducer";
+import { AppAC } from "../../app/appSlice";
 import { createAppAsyncThunk } from "./../../common/utils/AsyncThunk";
 import { errorHandlingThunk } from "./../../common/utils/errorHandlers";
 import { setPacksTC } from "../Packs/packsThunks";

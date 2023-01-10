@@ -3,13 +3,14 @@ import {
   errorHandlingThunk,
 } from "../../common/utils/errorHandlers";
 
-import { AppAC } from "../../app/appReducer";
+import { AppAC } from "../../app/appSlice";
 import { AppThunkActionType } from "../../common/hooks/useAllSelector";
 import { PacksAPI } from "./packsAPI";
 import { RootState } from "../../app/store";
 import { createAppAsyncThunk } from "../../common/utils/AsyncThunk";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { packsAC } from "./packsReducer";
+
 export interface IParams {
   [p: string]: string;
 }

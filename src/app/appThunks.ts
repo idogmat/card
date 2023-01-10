@@ -1,13 +1,11 @@
 import { AuthMeTC } from "../features/Auth/authThunks";
-import { AppAC } from "./appReducer";
-import { AppThunkActionType } from "../common/hooks/useAllSelector";
+import { createAppAsyncThunk } from "common/utils/AsyncThunk";
+import { errorHandlingThunk } from "common/utils/errorHandlers";
 
-export const InitAppTC = (): AppThunkActionType => {
-  return async (dispatch) => {
-    dispatch(AppAC.setIsLoading({ isLoading: true }));
-    dispatch(AuthMeTC()).finally(() => {
-      dispatch(AppAC.setIsLoading({ isLoading: false }));
-      dispatch(AppAC.setIsInit({ isInit: true }));
-    });
-  };
-};
+export const initAppTC = createAppAsyncThunk(
+  "app/init",
+  async (_, thunkAPI) => {
+    await thunkAPI.dispatch(AuthMeTC());
+    return { isInit: true };
+  }
+);

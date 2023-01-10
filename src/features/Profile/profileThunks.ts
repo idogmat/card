@@ -1,6 +1,6 @@
 import { IUpdatedUserInfo, profileAPI } from "./profileAPI";
 
-import { AppAC } from "../../app/appReducer";
+import { AppAC } from "../../app/appSlice";
 import { createAppAsyncThunk } from "./../../common/utils/AsyncThunk";
 import { errorHandlingThunk } from "./../../common/utils/errorHandlers";
 

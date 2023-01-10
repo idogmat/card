@@ -1,4 +1,4 @@
-import { AuthAC, authInitialState, authReducer } from "../authReducer";
+import { AuthAC, authInitialState, authReducer } from "../authSlice";
 
 describe("auth slice", () => {
   test("should return default state when passed an empty action", () => {

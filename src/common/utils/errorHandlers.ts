@@ -1,4 +1,4 @@
-import { AppAC } from "./../../app/appReducer";
+import { AppAC } from "../../app/appSlice";
 import { FormikProps } from "formik";
 
 export const defaultErrorMessage = "Some errors occurred";

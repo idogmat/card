@@ -3,8 +3,8 @@ import {
   packsModalsReducer,
 } from "../features/Packs/packsModalsSlice";
 
-import { appReducer } from "./appReducer";
-import { authReducer } from "../features/Auth/authReducer";
+import { appReducer } from "./appSlice";
+import { authReducer } from "../features/Auth/authSlice";
 import { cardsModalsReducer } from "./../features/Cards/cardsModalsSlice";
 import { cardsReducer } from "../features/Cards/cardsSlice";
 import { combineReducers } from "redux";

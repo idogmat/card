@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-import app from "./App";
+import { initAppTC } from "./appThunks";
 
 export interface IAppState {
   isLoading: boolean;
@@ -26,15 +26,17 @@ const appSlice = createSlice({
     setError: (draft, action: PayloadAction<{ error: string | null }>) => {
       draft.error = action.payload.error;
     },
-    setIsInit: (draft, action: PayloadAction<{ isInit: boolean }>) => {
-      draft.isInit = action.payload.isInit;
-    },
     setSuccessMessage: (
       draft,
       action: PayloadAction<{ message: string | null }>
     ) => {
       draft.successMessage = action.payload.message;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(initAppTC.fulfilled, (state) => {
+      state.isInit = true;
+    });
   },
 });
 
