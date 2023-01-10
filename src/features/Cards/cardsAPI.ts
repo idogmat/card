@@ -12,9 +12,9 @@ export interface IGetCardsRequest {
   pageCount?: string | number;
 }
 
-interface IGetCardsResponse {
+export interface IGetCardsResponse {
   cards: ICard[];
-  cardsTotalCount: 3;
+  cardsTotalCount: number;
   maxGrade: number;
   minGrade: number;
   page: number;

@@ -64,3 +64,7 @@ describe("cards slice", () => {
     expect(result.cardQuestion).toEqual(cardQuestion);
   });
 });
+
+describe("cards extra reducers", () => {
+  test("should", () => {});
+});

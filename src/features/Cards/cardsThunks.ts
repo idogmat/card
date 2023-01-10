@@ -23,8 +23,8 @@ interface IUpdateCardData {
 
 export const getCardsTC = createAppAsyncThunk(
   "cards/getCards",
-  async (model: IGetCardsRequest, { dispatch, getState }) => {
-    return errorHandlingThunk({ dispatch, getState }, async () => {
+  async (model: IGetCardsRequest, { dispatch }) => {
+    return errorHandlingThunk({ dispatch }, async () => {
       const { data } = await cardsAPI.getCardsRequest(model);
 
       return { ...data, cardQuestion: model.cardQuestion };

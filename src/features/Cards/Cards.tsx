@@ -79,6 +79,7 @@ export const Cards = React.memo(() => {
     () => Math.ceil(cardsTotalCount / +pageCount),
     [pageCount, cardsTotalCount]
   );
+
   const isPageCountValid = selectOptions.some(
     (option) => option.value === +params.showPerPage
   );
