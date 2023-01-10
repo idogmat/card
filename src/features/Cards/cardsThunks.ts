@@ -9,6 +9,7 @@ import {
 import { AppAC } from "../../app/appReducer";
 import { createAppAsyncThunk } from "./../../common/utils/AsyncThunk";
 import { errorHandlingThunk } from "./../../common/utils/errorHandlers";
+import { setPacksTC } from "../Packs/packsThunks";
 
 interface IDeleteCardData {
   cardID: string;
@@ -25,6 +26,7 @@ export const getCardsTC = createAppAsyncThunk(
   async (model: IGetCardsRequest, { dispatch }) => {
     return errorHandlingThunk({ dispatch }, async () => {
       const { data } = await cardsAPI.getCardsRequest(model);
+
       return { ...data, cardQuestion: model.cardQuestion };
     });
   }
