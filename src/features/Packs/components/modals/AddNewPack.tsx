@@ -8,14 +8,9 @@ import { PhotoCamera } from "@mui/icons-material";
 import { addNewModalSelector } from "./modalsSelectors";
 import { addPackTC } from "../../packsThunks";
 import { packsModalsAC } from "../../packsModalsSlice";
-import {
-  _uploadHandler,
-  BACKEND_MAX_IMG_WEIGHT,
-  getImgBase64File,
-} from "../../../../common/utils/base64Converter";
-import { acceptableImgFormats } from "../../../../common/utils/regExp";
+import { getImgBase64File } from "../../../../common/utils/base64Converter";
 
-interface INewPack {
+export interface INewPack {
   name: string;
   deckCover: string;
   isPrivate: boolean;
