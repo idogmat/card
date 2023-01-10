@@ -4,7 +4,6 @@ import { AuthAC, authInitialState, authReducer } from "../../Auth/authReducer";
 import { packsModalsAC, packsModalsReducer } from "../packsModalsSlice";
 import { IGetModel, setPacksTC } from "../packsThunks";
 import { store } from "../../../app/store";
-import { call } from "axios";
 
 const APIMock = {
   cardPacks: [

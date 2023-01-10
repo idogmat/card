@@ -54,9 +54,9 @@ export const setPacksTC = createAppAsyncThunk(
         });
         return {
           packs: res.data,
-          min: min,
-          max: max,
-          packName: packName,
+          min: model.min || min,
+          max: model.max || max,
+          packName: model.packName || packName,
           isMyPack: isMyPack,
           sortPacks: sortPacks,
         };

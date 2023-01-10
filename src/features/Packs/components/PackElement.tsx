@@ -25,7 +25,7 @@ const PackElement: React.FC<IRowProps> = React.memo(
 
     // Vars
     const [params, setSearchParams] = useSearchParams();
-    const backToState = { previousURL: params.toString(), pack: pack };
+    const backToState = { previousURL: params.toString(), pack };
 
     // Utils
     const modalDelete = () =>
