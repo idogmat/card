@@ -81,6 +81,7 @@ export const Cards = React.memo(() => {
     () => Math.ceil(cardsTotalCount / +pageCount),
     [pageCount, cardsTotalCount]
   );
+
   const isPageCountValid = selectOptions.some(
     (option) => option.value === +params.showPerPage
   );
@@ -94,8 +95,8 @@ export const Cards = React.memo(() => {
       sortCards: params.sortCards || cardsSort,
     } as IGetCardsRequest;
 
-    dispatch(getCardsTC(model));
     dispatch(setPacksTC({ pageCount: Infinity }));
+    dispatch(getCardsTC(model));
   }, [searchParams]);
 
   const changeShowPerPage = useCallback(

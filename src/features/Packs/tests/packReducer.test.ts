@@ -1,6 +1,8 @@
-import { IPackResponse } from "../packsAPI";
 import { packsAC, packsReducer } from "../packsReducer";
+
+import { IPackResponse } from "../packsAPI";
 import axios from "axios";
+
 const initialState = {
   cardPacks: [] as IPackResponse[],
   maxCardsCount: 10,
@@ -14,6 +16,7 @@ const initialState = {
   isMyPack: false,
   packName: "",
 };
+
 describe("Packs slice", () => {
   test("setRangeValue", () => {
     const range = [20, 25];

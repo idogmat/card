@@ -1,10 +1,7 @@
-import { IPackResponse } from "../packsAPI";
-import { packsAC, packsReducer } from "../packsReducer";
-import { AuthAC, authInitialState, authReducer } from "../../Auth/authReducer";
-import { packsModalsAC, packsModalsReducer } from "../packsModalsSlice";
 import { IGetModel, setPacksTC } from "../packsThunks";
+
+import { IPackResponse } from "../packsAPI";
 import { store } from "../../../app/store";
-import { call } from "axios";
 
 const APIMock = {
   cardPacks: [
@@ -102,9 +99,6 @@ describe("packs Thunks", () => {
 
     const { calls } = dispatch.mock;
     const [start, ...rest] = calls;
-    // console.log(calls);
-    // console.log(calls);
-    // expect(calls).toHaveLength(2);
     expect(calls[0][0].type).toBe("packs/setPacks/pending");
   });
 
@@ -125,8 +119,6 @@ describe("packs Thunks", () => {
 
     const { calls } = dispatch.mock;
     const [start, ...rest] = calls;
-    console.log(calls);
-    console.log(calls[calls.length - 1].type);
     // expect(calls).toHaveLength(2);
     expect(calls[0][0].type).toBe("packs/setPacks/pending");
   });
