@@ -2,7 +2,7 @@ import { Box, Checkbox, FormGroup, IconButton, TextField } from "@mui/material";
 import React, { ChangeEvent, useState } from "react";
 import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
 
-import Button from "@mui/material/Button/Button";
+import Button from "@mui/material/Button";
 import { ModalBase } from "../../../../common/components/Modal";
 import { PhotoCamera } from "@mui/icons-material";
 import { addNewModalSelector } from "./modalsSelectors";
@@ -49,7 +49,6 @@ export const AddNewPack = React.memo(() => {
   const handleChangeIsPrivate = () => {
     setNewPackData((state) => ({ ...state, isPrivate: !state.isPrivate }));
   };
-  //double
 
   const handleChangeCover = async (e: ChangeEvent<HTMLInputElement>) => {
     const fileAsString = await getImgBase64File(e, dispatch);
