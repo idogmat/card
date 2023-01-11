@@ -17,24 +17,6 @@ export interface IUserFields {
   rememberMe?: boolean;
 }
 
-// export const loginTC =
-//   (fields: IUserFields): AppThunkActionType =>
-//   async (dispatch) => {
-//     dispatch(AppAC.setIsLoading({ isLoading: true }));
-//     try {
-//       const res = await loginAPI.login(fields);
-//       const { error, ...user } = res.data;
-//       dispatch(AuthAC.setIsAuth({ isAuth: true }));
-//       dispatch(UserAC.setUser({ user }));
-//       dispatch(
-//         AppAC.setSuccessMessage({ message: "You have successfully authorized" })
-//       );
-//     } catch (e: any) {
-//       dispatch(AppAC.setError({ error: e.message }));
-//     } finally {
-//       dispatch(AppAC.setIsLoading({ isLoading: false }));
-//     }
-//   };
 export const loginTC = createAppAsyncThunk(
   "auth/login",
   async (fields: IUserFields, thunkAPI) => {
@@ -49,25 +31,11 @@ export const loginTC = createAppAsyncThunk(
   }
 );
 
-// export const logOutTC = (): AppThunkActionType => {
-//   return async (dispatch) => {
-//     try {
-//       const res = await loginAPI.logout();
-//       dispatch(AuthAC.setIsAuth({ isAuth: false }));
-//       dispatch(UserAC.setUser({ user: {} as IUser }));
-//       dispatch(
-//         AppAC.setSuccessMessage({ message: "You have successfully logged out" })
-//       );
-//     } catch (e) {
-//       AppAC.setError({ error: defaultErrorMessage });
-//     }
-//   };
-// };
 export const logOutTC = createAppAsyncThunk(
   "auth/logout",
   async (_, thunkAPI) => {
     return errorHandlingThunk(thunkAPI, async () => {
-      const res = await loginAPI.logout();
+      await loginAPI.logout();
       thunkAPI.dispatch(
         AppAC.setSuccessMessage({ message: "You have successfully logged out" })
       );

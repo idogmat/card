@@ -7,7 +7,7 @@ import {
 } from "./test/mock";
 import { userInitialState, userReducer } from "./userReducer";
 
-import { AuthMeTC } from "features/Auth/authThunks";
+import { authMeTC } from "features/Auth/authThunks";
 import { loginTC } from "../Login/loginThunks";
 import { updateUserInfoTC } from "features/Profile/profileThunks";
 
@@ -52,7 +52,7 @@ describe("user slice", () => {
   test("should set new user info with 'AuthMeTC.fulfilled'", () => {
     const finalState = userReducer(
       userInitialState,
-      AuthMeTC.fulfilled(mockAuthMeUser, "")
+      authMeTC.fulfilled(mockAuthMeUser, "")
     );
 
     expect(finalState.name).toEqual(mockAuthMeUser.name);

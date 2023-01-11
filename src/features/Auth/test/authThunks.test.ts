@@ -1,5 +1,5 @@
-import { AuthMeTC } from "../authThunks";
 import { AxiosResponse } from "axios";
+import { authMeTC } from "../authThunks";
 import { baseAPI } from "common/api/baseAPI";
 import { mockAuthMeResponse } from "./mock";
 import { store } from "app/store";
@@ -15,7 +15,7 @@ describe("auth thunks", () => {
     baseAPIMock.authMeRequest.mockResolvedValue({
       data: mockAuthMeResponse,
     } as AxiosResponse);
-    const thunk = AuthMeTC();
+    const thunk = authMeTC();
 
     await thunk(dispatch, getState, "");
 

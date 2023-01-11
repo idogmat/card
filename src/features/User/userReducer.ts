@@ -1,9 +1,9 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 import { AuthAC } from "features/Auth/authSlice";
-import { AuthMeTC } from "features/Auth/authThunks";
 import { IUpdatedUserInfo } from "../Profile/profileAPI";
 import { IUser } from "../../common/models";
+import { authMeTC } from "features/Auth/authThunks";
 import { loginTC } from "../Login/loginThunks";
 import { updateUserInfoTC } from "./../Profile/profileThunks";
 
@@ -35,7 +35,7 @@ const userSlice = createSlice({
       .addCase(updateUserInfoTC.fulfilled, (state, action) => {
         return action.payload;
       })
-      .addCase(AuthMeTC.fulfilled, (state, action) => {
+      .addCase(authMeTC.fulfilled, (state, action) => {
         return { ...action.payload };
       });
   },
