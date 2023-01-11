@@ -90,6 +90,7 @@ describe("cards extra reducers", () => {
 
     expect(finalState.cards[0].grade).toBe(thunkResult.grade);
   });
+
   test("should set new state with 'getCardsTC.fulfilled'", () => {
     const finalState = cardsReducer(
       cardsInitialState,

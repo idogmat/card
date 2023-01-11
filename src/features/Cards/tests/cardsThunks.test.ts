@@ -26,8 +26,6 @@ const errorMessage = "error placeholder";
 jest.mock("../cardsAPI.ts");
 const cardsAPIMock = cardsAPI as jest.Mocked<typeof cardsAPI>;
 
-//  status, statusText, headers, config;
-
 describe("cards thunks", () => {
   test("should getCards with resolved response", async () => {
     cardsAPIMock.getCardsRequest.mockResolvedValue({
