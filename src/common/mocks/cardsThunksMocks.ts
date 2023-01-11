@@ -72,5 +72,5 @@ export const mockUpdateCardGradeResponse: IUpdateGradeResponse = {
 };
 export const mockUpdateCardGradeRequest: IUpdateCardGradeRequest = {
   grade: 1,
-  card_id: "",
+  card_id: "1",
 };

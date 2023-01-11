@@ -3,7 +3,7 @@ import { getCardsTC, updateCardGradeTC } from "./cardsThunks";
 
 import { ICard } from "../../common/models";
 
-interface ICardsState {
+export interface ICardsState {
   cards: ICard[];
   cardsTotalCount: number;
   maxGrade: number;

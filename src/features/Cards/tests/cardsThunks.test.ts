@@ -193,7 +193,7 @@ describe("cards thunks", () => {
     cardsAPIMock.updateCardGradeRequest.mockResolvedValue({
       data: mockUpdateCardGradeResponse,
     } as AxiosResponse);
-    const thunkReturn = { card_id: "", grade: 1 };
+    const thunkReturn = { card_id: "1", grade: 1 };
     const thunk = updateCardGradeTC(mockUpdateCardGradeRequest);
     await thunk(dispatch, getState, "");
     const { calls } = dispatch.mock;

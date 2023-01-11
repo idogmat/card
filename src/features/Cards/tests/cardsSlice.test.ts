@@ -1,4 +1,15 @@
-import { CardsAC, cardsInitialState, cardsReducer } from "../cardsSlice";
+import {
+  CardsAC,
+  ICardsState,
+  cardsInitialState,
+  cardsReducer,
+} from "../cardsSlice";
+import { getCardsTC, updateCardGradeTC } from "../cardsThunks";
+import {
+  mockGetCards,
+  mockGetCardsModel,
+  mockUpdateCardGradeRequest,
+} from "common/mocks/cardsThunksMocks";
 
 import { ICard } from "common/models";
 
@@ -66,5 +77,25 @@ describe("cards slice", () => {
 });
 
 describe("cards extra reducers", () => {
-  test("should", () => {});
+  test("should update card grade and attemps with 'updateCardGradeTC.fulfilled'", () => {
+    const updateGradeInitialState = {
+      cards: [{ _id: "1", grade: 0 } as ICard],
+    } as ICardsState;
+    const thunkResult = { card_id: "1", grade: 2 };
+
+    const finalState = cardsReducer(
+      updateGradeInitialState,
+      updateCardGradeTC.fulfilled(thunkResult, "", mockUpdateCardGradeRequest)
+    );
+
+    expect(finalState.cards[0].grade).toBe(thunkResult.grade);
+  });
+  test("should set new state with 'getCardsTC.fulfilled'", () => {
+    const finalState = cardsReducer(
+      cardsInitialState,
+      getCardsTC.fulfilled(mockGetCards, "", mockGetCardsModel)
+    );
+
+    expect(finalState).toStrictEqual(mockGetCards);
+  });
 });
