@@ -3,13 +3,8 @@ import {addPackTC, removePackTC, setPacksTC, updatePackTC} from "../packsThunks"
 import { PacksAPI } from "../packsAPI";
 import { store } from "../../../app/store";
 import { AxiosResponse } from "axios";
-import {
-  APIPackMock,
-  APIPacksMock,
-  fieldsMock,
-  PacksModelMock,
-  payloadMock,
-} from "./mocks";
+import {APIPackMock, APIPacksMock, fieldsMock, PacksModelMock, payloadMock} from "./mocks";
+
 
 jest.mock("../packsAPI.ts");
 const getState = store.getState;

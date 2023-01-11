@@ -75,3 +75,4 @@ const packsSlice = createSlice({
 
 export const packsReducer = packsSlice.reducer;
 export const packsAC = packsSlice.actions;
+export const packsInitialState = packsSlice.getInitialState();

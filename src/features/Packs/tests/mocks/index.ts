@@ -1,4 +1,4 @@
-import { IGetModel } from "../../packsThunks";
+import {IGetModel, setPacksTC} from "../../packsThunks";
 //packsThunksMocks
 export const APIPackMock = {
   _id: "63601a71c2a7d73c18c32f50",
@@ -39,16 +39,6 @@ export const payloadMock = {
   sortPacks: { direction: 0, field: "updated" },
 
 
-};
-export const mockPacksModel: Partial<IGetModel> = {
-  isMyPack: "false",
-  sortPacks: { direction: 0, field: "updated" },
-  packName: "",
-  min: 0,
-  max: 99,
-  page: 1,
-  pageCount: 4,
-  user_id: "",
 };
 export const fieldsMock = {
   id:"1111",
