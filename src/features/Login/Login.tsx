@@ -21,7 +21,7 @@ import { Preloader } from "../../common/components/Preloader/Preloader";
 import { appStateSelector } from "app/selectors";
 import { hasError } from "../../common/utils/errorHandlers";
 import { loginTC } from "./loginThunks";
-import styles from "../../common/styles/common.module.css";
+import styles from "../../common/styles/common/common.module.scss";;
 import { useFormik } from "formik";
 import { validMail } from "../../common/utils/regExp";
 

@@ -8,7 +8,7 @@ import { Notifications } from "../common/components/Notifications/Notifications"
 import { Preloader } from "../common/components/Preloader/Preloader";
 import { appStateSelector } from "./selectors";
 import { initAppTC } from "./appThunks";
-import styles from "./App.module.css";
+import styles from "./App.module.scss";
 
 function App() {
   const { isInit } = useAllSelector(appStateSelector);

@@ -27,7 +27,7 @@ import { getItemFromLC } from "common/utils/localStorage";
 import { packsCardsPacksSelector } from "features/Packs/selectors";
 import { selectOptions } from "./Cards.data";
 import { setPacksTC } from "./../Packs/packsThunks";
-import styles from "common/styles/common.module.css";
+import styles from "../../common/styles/common/common.module.scss";
 import { userStateSelector } from "../User/selectors";
 
 // Types

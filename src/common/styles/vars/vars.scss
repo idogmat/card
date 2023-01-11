@@ -1,0 +1,24 @@
+:root {
+	// Fonts
+	--family: "Montserrat";
+	--fw-regular: 400;
+	--fw-bold: 600;
+	--fw-black: 900;
+	--fs-sm: 14px;
+	--fs-md: 16px;
+	--fs-big: 20px;
+
+	// Other
+	--radius: 12px;
+	--color-blue: rgb(104, 126, 188);
+}
+
+body[data-theme="dark"] {
+	--color-primary: #000;
+	--color-secondary: #fff;
+}
+
+body[data-theme="light"] {
+	--color-primary: #fff;
+	--color-secondary: #000;
+}

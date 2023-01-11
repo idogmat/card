@@ -20,7 +20,7 @@ import { getImgBase64File } from "common/utils/base64Converter";
 import { lime } from "@mui/material/colors";
 import { logOutTC } from "../Login/loginThunks";
 import { openFileSelector } from "features/Cards/components/modals/utils";
-import styles from "../../common/styles/common.module.css";
+import styles from "../../common/styles/common/common.module.scss";
 import { updateUserInfoTC } from "./profileThunks";
 import { userStateSelector } from "../User/selectors";
 
