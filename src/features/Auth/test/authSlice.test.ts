@@ -1,20 +1,35 @@
-import { AuthAC, authInitialState, authReducer } from "../authSlice";
+import { authInitialState, authReducer } from "../authSlice";
+import { logOutTC, loginTC } from "features/Login/loginThunks";
+import { mockNewUser, mockUserFields } from "features/User/test/mock";
 
-describe("auth slice", () => {
-  test("should return default state when passed an empty action", () => {
-    const action = { type: "", payload: "" };
+import { IUser } from "common/models";
+import { authMeTC } from "../authThunks";
+import { mockAuthMeResponse } from "./mock";
 
-    const result = authReducer(undefined, action);
+describe("auth extra reducers", () => {
+  test("should set isAuth to true with 'loginTC.fulfilled'", () => {
+    const finalState = authReducer(
+      authInitialState,
+      loginTC.fulfilled({ user: mockNewUser }, "", mockUserFields)
+    );
 
-    expect(result).toEqual(authInitialState);
+    expect(finalState.isAuth).toBe(true);
   });
 
-  test('should set isAuth with "setIsAuth" action', () => {
-    const isAuth = true;
-    const action = { type: AuthAC.setIsAuth, payload: { isAuth } };
+  test("should set isAuth to false with 'logOutTC.fulfilled'", () => {
+    const finalState = authReducer(
+      authInitialState,
+      logOutTC.fulfilled({ user: {} as IUser }, "")
+    );
 
-    const result = authReducer(authInitialState, action);
+    expect(finalState.isAuth).toBe(false);
+  });
 
-    expect(result.isAuth).toEqual(isAuth);
+  test("should set isAuth true with 'authMeTC.fulfilled'", () => {
+    const finalState = authReducer(
+      authInitialState,
+      authMeTC.fulfilled(mockAuthMeResponse, "")
+    );
+    expect(finalState.isAuth).toBe(true);
   });
 });

@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { logOutTC, loginTC } from "../Login/loginThunks";
 
-import { AuthMeTC } from "./authThunks";
+import { authMeTC } from "./authThunks";
 
 export interface IAuthState {
   isAuth: boolean;
@@ -13,11 +13,7 @@ const initialState: IAuthState = {
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {
-    setIsAuth: (draft, action: PayloadAction<{ isAuth: boolean }>) => {
-      draft.isAuth = action.payload.isAuth;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(loginTC.fulfilled, (state, action) => {
@@ -26,7 +22,7 @@ const authSlice = createSlice({
       .addCase(logOutTC.fulfilled, (state, action) => {
         state.isAuth = false;
       })
-      .addCase(AuthMeTC.fulfilled, (state, action) => {
+      .addCase(authMeTC.fulfilled, (state, action) => {
         state.isAuth = true;
       });
   },

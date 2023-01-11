@@ -1,8 +1,15 @@
-import { IUserFields, loginTC } from "../Login/loginThunks";
-import { UserAC, userInitialState, userReducer } from "./userReducer";
+import {
+  mockAuthMeUser,
+  mockNewUser,
+  mockUpdateUserFields,
+  mockUpdatedUser,
+  mockUserFields,
+} from "./test/mock";
+import { userInitialState, userReducer } from "./userReducer";
 
-import { IUpdatedUserInfo } from "../Profile/profileAPI";
-import { IUser } from "../../common/models";
+import { authMeTC } from "features/Auth/authThunks";
+import { loginTC } from "../Login/loginThunks";
+import { updateUserInfoTC } from "features/Profile/profileThunks";
 
 describe("user slice", () => {
   test("should return default state when passed an empty action", () => {
@@ -13,63 +20,48 @@ describe("user slice", () => {
     expect(result).toEqual(userInitialState);
   });
 
-  test("should set new user with 'setUser' action", () => {
-    const newUser: IUser = {
-      name: "Eddie",
-      email: "eddie@gmail.com",
-      _id: "2",
-      avatar: null,
-      created: new Date(),
-      updated: new Date(),
-      isAdmin: true,
-      publicCardPacksCount: 23,
-      verified: true,
-    };
-    const userFields: IUserFields = {
-      email: "eddie@gmail.com",
-      password: "111111111",
-      rememberMe: true,
-    };
+  test("should set new user with 'loginTC.fulfilled' action", () => {
     const finalState = userReducer(
       userInitialState,
-      loginTC.fulfilled({ user: newUser }, "ddddd", userFields)
+      loginTC.fulfilled({ user: mockNewUser }, "", mockUserFields)
     );
-    expect(finalState.name).toBe(newUser.name);
-    expect(finalState.email).toBe(newUser.email);
-    expect(finalState._id).toBe(newUser._id);
-    expect(finalState.avatar).toBe(newUser.avatar);
-    expect(finalState.created).toBe(newUser.created);
-    expect(finalState.updated).toBe(newUser.updated);
-    expect(finalState.isAdmin).toBe(newUser.isAdmin);
-    expect(finalState.publicCardPacksCount).toBe(newUser.publicCardPacksCount);
-    expect(finalState.verified).toBe(newUser.verified);
+
+    expect(finalState.name).toBe(mockNewUser.name);
+    expect(finalState.email).toBe(mockNewUser.email);
+    expect(finalState._id).toBe(mockNewUser._id);
+    expect(finalState.avatar).toBe(mockNewUser.avatar);
+    expect(finalState.created).toBe(mockNewUser.created);
+    expect(finalState.updated).toBe(mockNewUser.updated);
+    expect(finalState.isAdmin).toBe(mockNewUser.isAdmin);
+    expect(finalState.publicCardPacksCount).toBe(
+      mockNewUser.publicCardPacksCount
+    );
+    expect(finalState.verified).toBe(mockNewUser.verified);
   });
 
-  test("should update user's name with 'updateUser' action", () => {
-    const name = "name placeholder";
-    const model: IUpdatedUserInfo = {
-      name,
-      avatar: null,
-    };
-
+  test("should set new user info with 'updateUserInfoTC.fulfilled'", () => {
     const finalState = userReducer(
       userInitialState,
-      UserAC.updateUser({ model })
+      updateUserInfoTC.fulfilled(mockUpdatedUser, "", mockUpdateUserFields)
     );
 
-    expect(finalState.name).toBe(name);
+    expect(finalState.avatar).toBe(mockUpdateUserFields.avatar);
+    expect(finalState.name).toBe(mockUpdateUserFields.name);
   });
 
-  test("should update user's avatar with 'updateUser' action", () => {
-    const avatar = "avatar link";
-    const model: IUpdatedUserInfo = {
-      name: "name",
-      avatar,
-    };
+  test("should set new user info with 'AuthMeTC.fulfilled'", () => {
     const finalState = userReducer(
       userInitialState,
-      UserAC.updateUser({ model })
+      authMeTC.fulfilled(mockAuthMeUser, "")
     );
-    expect(finalState.avatar).toBe(avatar);
+
+    expect(finalState.name).toEqual(mockAuthMeUser.name);
+    expect(finalState.avatar).toEqual(mockAuthMeUser.avatar);
+    expect(finalState.email).toEqual(mockAuthMeUser.email);
+    expect(finalState.verified).toEqual(mockAuthMeUser.verified);
+    expect(finalState.isAdmin).toEqual(mockAuthMeUser.isAdmin);
+    expect(finalState.publicCardPacksCount).toEqual(
+      mockAuthMeUser.publicCardPacksCount
+    );
   });
 });
