@@ -4,7 +4,7 @@ import {
   Box,
   Button,
   Container,
-  Menu,
+
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
@@ -18,6 +18,8 @@ import logo from "../../../assets/img/logo.svg";
 import { pageIcons } from "./Header.data";
 import { useAllSelector } from "../../hooks";
 import { userStateSelector } from "../../../features/User/selectors";
+import NavMenu from "../../ui-kit/NavMenu";
+import Menu from "../../ui-kit/Menu";
 
 export const Header = React.memo(() => {
   const { isAuth } = useAllSelector(authStateSelector);
@@ -66,7 +68,8 @@ export const Header = React.memo(() => {
           }}
         >
           <img src={logo} alt="IT-Incubator" />
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+
+          <Box sx={{ position:"relative", display: "flex", alignItems: "center", gap: 2 }}>
             <Button
               onClick={openMenu}
               sx={{
@@ -85,37 +88,17 @@ export const Header = React.memo(() => {
                 {/*{user.name[0]}*/}
               </Avatar>
             </Button>
-            <Menu
-              open={isMenuOpen}
-              onClose={closeMenu}
-              anchorEl={menuAnchor}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              sx={{
-                "& .menu-text-icon": {
-                  display: "flex",
-                  gap: 1,
-                  alignItems: "center",
-                },
-              }}
-            >
+            {/*<Menu*/}
+            {/*  open={isMenuOpen}*/}
+            {/*  onClose={closeMenu}*/}
+            {/*  anchorEl={menuAnchor}*/}
+
+            {/*>*/}
+            <Menu open={isMenuOpen} close={closeMenu}>
               {isAuth ? (
-                <div>
-                  {authPages.map((page) => (
-                    <HeaderLink page={page} key={page} icon={pageIcons[page]} />
-                  ))}
-                  <HeaderLink page={"logout"} icon={pageIcons["logout"]} />
-                </div>
-              ) : (
-                unAuthPages.map((page) => (
-                  <HeaderLink icon={pageIcons[page]} page={page} key={page} />
-                ))
+                  <NavMenu isAuth={isAuth} authPages={authPages}></NavMenu>
+              ) :(
+                  <NavMenu isAuth={isAuth} authPages={unAuthPages}></NavMenu>
               )}
             </Menu>
           </Box>
