@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { useAllSelector, useAppDispatch } from "../common/hooks";
 
 import { AppRouter } from "../common/components/AppRouter/AppRouter";
@@ -9,6 +8,7 @@ import { Preloader } from "../common/components/Preloader/Preloader";
 import { appStateSelector } from "./selectors";
 import { initAppTC } from "./appThunks";
 import styles from "./App.module.scss";
+import { useEffect } from "react";
 
 function App() {
   const { isInit } = useAllSelector(appStateSelector);

@@ -1,23 +1,34 @@
-import {
-  AppBar,
-  Avatar,
-  Box,
-  Button,
-  Container,
-  Menu,
-  Typography,
-} from "@mui/material";
+import { AppBar, Box, Button, Menu } from "@mui/material";
 import React, { useState } from "react";
 import { authRoutes, unAuthRoutes } from "../../routes";
+import { lightGreen, lime } from "@mui/material/colors";
 
+import { Avatar } from "common/ui-kit/Avatar/Avatar";
+import { Container } from "common/ui-kit/Container/Container";
+import { Flex } from "common/ui-kit/Flex/Flex";
 import { HeaderLink } from "./HeaderLink";
+import { StyledComponent } from "common/ui-kit/types";
+import { Typography } from "common/ui-kit/Text/Text";
 import { authStateSelector } from "../../../features/Auth/selectors";
 import { getRouteName } from "../../utils";
-import { lime } from "@mui/material/colors";
 import logo from "../../../assets/img/logo.svg";
 import { pageIcons } from "./Header.data";
+import styled from "@emotion/styled";
 import { useAllSelector } from "../../hooks";
 import { userStateSelector } from "../../../features/User/selectors";
+
+const StyledHeader = styled.header<StyledComponent<{}>>`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: white;
+  box-shadow: 0px 2px 10px rgba(109, 109, 109, 0.25),
+    inset 0px 1px 0px rgba(255, 255, 255, 0.3);
+  padding: 0.625rem 0px;
+  z-index: 50;
+  ${(p) => ({ ...p.sx })}
+`;
 
 export const Header = React.memo(() => {
   const { isAuth } = useAllSelector(authStateSelector);
@@ -39,34 +50,11 @@ export const Header = React.memo(() => {
   };
 
   return (
-    <AppBar
-      position={"absolute"}
-      sx={{
-        top: "0",
-        left: "0",
-        backgroundColor: "white",
-        boxShadow:
-          " 0px 2px 10px rgba(109, 109, 109, 0.25), inset 0px 1px 0px rgba(255, 255, 255, 0.3)",
-        padding: "10px 0px",
-        zIndex: "50",
-      }}
-    >
-      <Container maxWidth={"xl"}>
-        <Box
-          display={"flex"}
-          sx={{
-            gap: "10px",
-            justifyContent: "space-between",
-            alignItems: "center",
-            ["@media (max-width: 768px)"]: {
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            },
-          }}
-        >
+    <StyledHeader>
+      <Container variant="sm">
+        <Flex justify="space-between" align="center" sx={{ gap: "1.25rem" }}>
           <img src={logo} alt="IT-Incubator" />
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Flex align="center" sx={{ gap: "0.625rem" }}>
             <Button
               onClick={openMenu}
               sx={{
@@ -76,14 +64,16 @@ export const Header = React.memo(() => {
                 alignItems: "center",
               }}
             >
-              <Typography>{user.name}</Typography>
+              <Typography as="p" variant="sub-title-md">
+                {user.name}
+              </Typography>
               <Avatar
-                sx={{ bgcolor: lime[600] }}
-                alt={user.name}
-                src={user.avatar ? user.avatar : undefined}
-              >
-                {/*{user.name[0]}*/}
-              </Avatar>
+                bgColor={"#baffac"}
+                text={user.name}
+                src={user.avatar}
+                widthSize={"2.5rem"}
+                heightSize={"2.5rem"}
+              />
             </Button>
             <Menu
               open={isMenuOpen}
@@ -118,9 +108,9 @@ export const Header = React.memo(() => {
                 ))
               )}
             </Menu>
-          </Box>
-        </Box>
+          </Flex>
+        </Flex>
       </Container>
-    </AppBar>
+    </StyledHeader>
   );
 });
