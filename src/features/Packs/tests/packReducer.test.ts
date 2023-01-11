@@ -1,21 +1,8 @@
-import { packsAC, packsReducer } from "../packsReducer";
+import {initialState, packsAC, packsReducer} from "../packsReducer";
 
 import { IPackResponse } from "../packsAPI";
 import axios from "axios";
 
-const initialState = {
-  cardPacks: [] as IPackResponse[],
-  maxCardsCount: 10,
-  minCardsCount: 0,
-  max: 15,
-  min: 0,
-  page: 1,
-  pageCount: 4,
-  sortPacks: { direction: 0, field: "updated" },
-  cardPacksTotalCount: 10,
-  isMyPack: false,
-  packName: "",
-};
 
 describe("Packs slice", () => {
   test("setRangeValue", () => {
@@ -71,4 +58,5 @@ describe("Packs slice", () => {
     );
     expect(changePageCount.pageCount).toBe(pageCount);
   });
+
 });

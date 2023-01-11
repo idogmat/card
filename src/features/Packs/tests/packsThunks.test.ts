@@ -1,125 +1,174 @@
-import { IGetModel, setPacksTC } from "../packsThunks";
+import {addPackTC, removePackTC, setPacksTC, updatePackTC} from "../packsThunks";
 
-import { IPackResponse } from "../packsAPI";
+import { PacksAPI } from "../packsAPI";
 import { store } from "../../../app/store";
+import { AxiosResponse } from "axios";
+import {
+  APIPackMock,
+  APIPacksMock,
+  fieldsMock,
+  PacksModelMock,
+  payloadMock,
+} from "./mocks";
 
-const APIMock = {
-  cardPacks: [
-    {
-      _id: "63601a71c2a7d73c18c32f50",
-      user_id: "634d7464b8d71d2d44433e40",
-      user_name: "pasha1",
-      private: false,
-      name: "1111",
-      path: "/def",
-      grade: 0,
-      shots: 0,
-      cardsCount: 1,
-      type: "pack",
-      rating: 0,
-      created: "2022-10-31T18:56:49.530Z",
-      updated: "2022-10-31T18:57:06.446Z",
-      more_id: "634d7464b8d71d2d44433e40",
-      __v: 0,
-    },
-    {
-      _id: "635ce2ac6bf29218ccf37df6",
-      user_id: "634d7464b8d71d2d44433e40",
-      user_name: "pasha1",
-      private: false,
-      name: "11111",
-      path: "/def",
-      grade: 0,
-      shots: 0,
-      cardsCount: 0,
-      type: "pack",
-      rating: 0,
-      created: "2022-10-29T08:22:04.175Z",
-      updated: "2022-10-29T16:12:58.048Z",
-      more_id: "634d7464b8d71d2d44433e40",
-      __v: 0,
-      deckCover: null,
-    },
-    {
-      _id: "633b38344bbf5d0100b99ed2",
-      user_id: "6331b0594c722b2330529fe0",
-      user_name: "Roman",
-      private: false,
-      name: "11111",
-      path: "/def",
-      grade: 0,
-      shots: 0,
-      cardsCount: 0,
-      type: "pack",
-      rating: 0,
-      created: "2022-10-03T19:29:56.620Z",
-      updated: "2022-10-03T19:29:56.620Z",
-      more_id: "6331b0594c722b2330529fe0",
-      __v: 0,
-    },
-  ],
-  page: 5,
-  pageCount: 4,
-  cardPacksTotalCount: 19,
-  minCardsCount: 0,
-  maxCardsCount: 53,
-  token: "7d4fdea0-9016-11ed-b34f-513d5598287e",
-  tokenDeathTime: 1673276978442,
-};
-const initialState = {
-  cardPacks: [] as IPackResponse[],
-  maxCardsCount: 10,
-  minCardsCount: 0,
-  max: 15,
-  min: 0,
-  page: 1,
-  pageCount: 4,
-  sortPacks: { direction: 0, field: "updated" },
-  cardPacksTotalCount: 10,
-  isMyPack: false,
-  packName: "",
-};
-const mockPacksModel: Partial<IGetModel> = {
-  isMyPack: "false",
-  sortPacks: { direction: 0, field: "updated" },
-  packName: "",
-  min: 0,
-  max: 99,
-  page: 1,
-  pageCount: 4,
-  user_id: "",
-};
-global.fetch = jest.fn();
+jest.mock("../packsAPI.ts");
+const getState = store.getState;
+const packsAPIMock = PacksAPI as jest.Mocked<typeof PacksAPI>;
 describe("packs Thunks", () => {
-  it("should fetchPacks with rejected response", async () => {
+  it("should getCards with resolved response with model", async () => {
+    packsAPIMock.getPacks.mockResolvedValue({
+      data: APIPacksMock,
+    } as AxiosResponse);
+    const dispatch = jest.fn();
+    const mockResult = { ...payloadMock };
+    const thunk = setPacksTC(PacksModelMock);
+    await thunk(dispatch, getState, "");
+
+    const { calls } = dispatch.mock;
+    const [start, enableLoading, disableLoading, end] = calls;
+
+    expect(calls).toHaveLength(4);
+    expect(start[0].type).toBe("packs/setPacks/pending");
+    expect(enableLoading[0].type).toBe("app/setIsLoading");
+    expect(disableLoading[0].type).toBe("app/setIsLoading");
+    expect(end[0].type).toBe("packs/setPacks/fulfilled");
+    expect(end[0].payload).toStrictEqual(mockResult);
+  });
+  it("should getCards with resolved response without model", async () => {
+    packsAPIMock.getPacks.mockResolvedValue({
+      data: APIPacksMock,
+    } as AxiosResponse);
     const dispatch = jest.fn();
     const thunk = setPacksTC({});
-
-    await thunk(dispatch, store.getState, "packs/setPacks/pending");
+    await thunk(dispatch, getState, "");
 
     const { calls } = dispatch.mock;
-    const [start, ...rest] = calls;
-    expect(calls[0][0].type).toBe("packs/setPacks/pending");
-  });
+    const [start, enableLoading, disableLoading, end] = calls;
 
-  it("should fetchPacks with resolved response", async () => {
+    expect(calls).toHaveLength(4);
+    expect(start[0].type).toBe("packs/setPacks/pending");
+    expect(enableLoading[0].type).toBe("app/setIsLoading");
+    expect(disableLoading[0].type).toBe("app/setIsLoading");
+    expect(end[0].type).toBe("packs/setPacks/fulfilled");
+    expect(end[0].payload).toStrictEqual(payloadMock);
+  });
+  it("should fetchPacks with reject", async () => {
     const dispatch = jest.fn();
-    // fetch.mockResolvedValue(() =>
-    //   Promise.resolve({
-    //     data: APIMock.cardPacks,
-    //     min: 0,
-    //     max: 15,
-    //     packName: "",
-    //     isMyPack: "false",
-    //     sortPacks: { direction: 0, field: "update" },
-    //   })
-    // );
-    const thunk = setPacksTC({ isMyPack: "true" });
-    await thunk(dispatch, store.getState, "packs/setPacks/fulfilled");
+    const thunk = setPacksTC({});
+    await thunk(dispatch, getState, "");
 
     const { calls } = dispatch.mock;
-    const [start, ...rest] = calls;
-    // expect(calls).toHaveLength(2);
-    expect(calls[0][0].type).toBe("packs/setPacks/pending");
+    const [start, enableLoading,setError, disableLoading, end] = calls;
+
+    expect(calls).toHaveLength(5);
+    expect(start[0].type).toBe("packs/setPacks/pending");
+    expect(enableLoading[0].type).toBe("app/setIsLoading");
+    expect(setError[0].type).toBe("app/setError");
+    expect(disableLoading[0].type).toBe("app/setIsLoading");
+    expect(end[0].type).toBe("packs/setPacks/rejected");
+
   });
+  it("should addPack with resolved", async () => {
+    const dispatch = jest.fn();
+    packsAPIMock.addPack.mockResolvedValue({
+      data: APIPackMock,
+      statusText: "Created"
+    } as AxiosResponse);
+    const thunk = addPackTC( {...fieldsMock} );
+    await thunk(dispatch, getState, "");
+
+    const { calls } = dispatch.mock;
+    const [start, enableLoading, _, setSuccessMessage, disableLoading, end] =
+      calls;
+
+    expect(calls).toHaveLength(6);
+    expect(start[0].type).toBe("packs/addPack/pending");
+    expect(enableLoading[0].type).toBe("app/setIsLoading");
+    expect(disableLoading[0].type).toBe("app/setIsLoading");
+    expect(setSuccessMessage[0].type).toBe("app/setSuccessMessage");
+    expect(end[0].type).toBe("packs/addPack/fulfilled");
+  });
+  it("should addPack with rejected", async () => {
+    const dispatch = jest.fn();
+    const thunk = addPackTC( {...fieldsMock} );
+    await thunk(dispatch, getState, "");
+
+    const { calls } = dispatch.mock;
+    const [start, enableLoading,setError, disableLoading, end] = calls;
+
+    expect(calls).toHaveLength(5);
+    expect(start[0].type).toBe("packs/addPack/pending");
+    expect(enableLoading[0].type).toBe("app/setIsLoading");
+    expect(setError[0].type).toBe("app/setError");
+    expect(disableLoading[0].type).toBe("app/setIsLoading");
+    expect(end[0].type).toBe("packs/addPack/rejected");
+  });
+  it("should removePack with resolved", async () => {
+    packsAPIMock.deletePack.mockResolvedValue({
+      data: { statusText: "OK" },
+    } as AxiosResponse);
+    const id ='1111'
+    const dispatch = jest.fn();
+    const thunk = removePackTC( id );
+    await thunk(dispatch, getState, "");
+
+    const { calls } = dispatch.mock;
+    const [start, enableLoading, disableLoading, end] = calls;
+
+    expect(calls).toHaveLength(4);
+    expect(start[0].type).toBe("packs/removePack/pending");
+    expect(enableLoading[0].type).toBe("app/setIsLoading");
+    expect(disableLoading[0].type).toBe("app/setIsLoading");
+    expect(end[0].type).toBe("packs/removePack/fulfilled");
+  });
+  it("should removePack with rejected", async () => {
+    const id ='1111'
+    const dispatch = jest.fn();
+    const thunk = removePackTC( id );
+    await thunk(dispatch, getState, "");
+
+    const { calls } = dispatch.mock;
+    const [start, enableLoading,setError, disableLoading, end] = calls;
+
+    expect(calls).toHaveLength(5);
+    expect(start[0].type).toBe("packs/removePack/pending");
+    expect(enableLoading[0].type).toBe("app/setIsLoading");
+    expect(setError[0].type).toBe("app/setError");
+    expect(disableLoading[0].type).toBe("app/setIsLoading");
+    expect(end[0].type).toBe("packs/removePack/rejected");
+  });
+  ///
+  it("should updatePack with resolved", async () => {
+    packsAPIMock.updatePack.mockResolvedValue({
+      data: { statusText: "OK" },
+    } as AxiosResponse);
+    const dispatch = jest.fn();
+    const thunk = updatePackTC({ ...fieldsMock });
+    await thunk(dispatch, getState, "");
+
+    const { calls } = dispatch.mock;
+    const [start, enableLoading, disableLoading, end] = calls;
+
+    expect(calls).toHaveLength(4);
+    expect(start[0].type).toBe("packs/updatePack/pending");
+    expect(enableLoading[0].type).toBe("app/setIsLoading");
+    expect(disableLoading[0].type).toBe("app/setIsLoading");
+    expect(end[0].type).toBe("packs/updatePack/fulfilled");
+  });
+  it("should updatePack with rejected", async () => {
+    const dispatch = jest.fn();
+    const thunk = updatePackTC({ ...fieldsMock });
+    await thunk(dispatch, getState, "");
+
+    const { calls } = dispatch.mock;
+    const [start, enableLoading,setError, disableLoading, end] = calls;
+
+    expect(calls).toHaveLength(5);
+    expect(start[0].type).toBe("packs/updatePack/pending");
+    expect(enableLoading[0].type).toBe("app/setIsLoading");
+    expect(setError[0].type).toBe("app/setError");
+    expect(disableLoading[0].type).toBe("app/setIsLoading");
+    expect(end[0].type).toBe("packs/updatePack/rejected");
+  });
+
 });
