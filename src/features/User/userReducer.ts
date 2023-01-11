@@ -26,10 +26,6 @@ const userSlice = createSlice({
     setUser: (draft, action: PayloadAction<{ user: IUser }>) => {
       return action.payload.user;
     },
-    updateUser: (draft, action: PayloadAction<{ model: IUpdatedUserInfo }>) => {
-      draft.name = action.payload.model.name;
-      draft.avatar = action.payload.model.avatar;
-    },
   },
   extraReducers: (builder) => {
     builder
