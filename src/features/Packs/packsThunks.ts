@@ -38,7 +38,7 @@ export const setPacksTC = createAppAsyncThunk(
           max: 15,
           packName: "",
           isMyPack: false,
-          sortPacks: { direction: 0, field: "update" },
+          sortPacks: { direction: 0, field: "updated" },
         };
       } else {
         const { _id } = thunkAPI.getState().user;
@@ -76,12 +76,14 @@ export const addPackTC = createAppAsyncThunk(
       const { isMyPack } = thunkAPI.getState().packs;
       PacksAPI.addPack(fields.name, fields.deckCover, fields.isPrivate).then(
         (res) => {
-          thunkAPI.dispatch(
-            setPacksTC({ isMyPack: isMyPack ? "true" : "false" })
-          );
-          thunkAPI.dispatch(
-            AppAC.setSuccessMessage({ message: "Successfully updated" })
-          );
+          if (res.statusText === "Created") {
+            thunkAPI.dispatch(
+              setPacksTC({ isMyPack: isMyPack ? "true" : "false" })
+            );
+            thunkAPI.dispatch(
+              AppAC.setSuccessMessage({ message: "Successfully updated" })
+            );
+          }
         }
       );
     });
@@ -91,12 +93,16 @@ export const removePackTC = createAppAsyncThunk(
   "packs/removePack",
   async (id: string, thunkAPI) => {
     return errorHandlingThunk(thunkAPI, async () => {
-      const { data } = await PacksAPI.deletePack(id);
-      const { isMyPack } = thunkAPI.getState().packs;
-      thunkAPI.dispatch(setPacksTC({ isMyPack: isMyPack ? "true" : "false" }));
-      thunkAPI.dispatch(
-        AppAC.setSuccessMessage({ message: "Successfully updated" })
-      );
+      const res = await PacksAPI.deletePack(id);
+      if (res.statusText==="OK") {
+        const { isMyPack } = thunkAPI.getState().packs;
+        thunkAPI.dispatch(
+          setPacksTC({ isMyPack: isMyPack ? "true" : "false" })
+        );
+        thunkAPI.dispatch(
+          AppAC.setSuccessMessage({ message: "Successfully updated" })
+        );
+      }
     });
   }
 );
@@ -112,16 +118,18 @@ export const updatePackTC = createAppAsyncThunk(
     thunkAPI
   ) => {
     return errorHandlingThunk(thunkAPI, async () => {
-      const { data } = await PacksAPI.updatePack(
+      const res = await PacksAPI.updatePack(
         fields.id,
         fields.name,
         fields.deckCover
       );
-      const { isMyPack } = thunkAPI.getState().packs;
-      thunkAPI.dispatch(setPacksTC({ isMyPack: isMyPack ? "true" : "false" }));
-      thunkAPI.dispatch(
-        AppAC.setSuccessMessage({ message: "Successfully updated" })
-      );
+      if (res.statusText==="OK") {
+        const {isMyPack} = thunkAPI.getState().packs;
+        thunkAPI.dispatch(setPacksTC({isMyPack: isMyPack ? "true" : "false"}));
+        thunkAPI.dispatch(
+          AppAC.setSuccessMessage({message: "Successfully updated"})
+        );
+      }
     });
   }
 );

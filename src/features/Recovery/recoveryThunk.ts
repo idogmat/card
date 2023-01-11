@@ -1,25 +1,26 @@
 import { AppAC } from "../../app/appSlice";
-import { AppThunkActionType } from "../../common/hooks/useAllSelector";
 import { loginAPI } from "../Login/loginAPI";
 import { recoveryEmail } from "../../common/components/RecoveryEmail/RecoveryEmail";
+import { createAppAsyncThunk } from "../../common/utils/AsyncThunk";
+import { errorHandlingThunk } from "../../common/utils/errorHandlers";
 
-export const recoveryThunk =
-  (field: string): AppThunkActionType<Promise<boolean | undefined>> =>
-  async (dispatch) => {
-    const recoveryRequest = {
-      email: field,
-      from: "test-front-admin <ai73a@yandex.by>",
-      message: recoveryEmail,
-    };
-    return loginAPI
-      .recoveryPassword(recoveryRequest)
-      .then((res) => {
-        if (res.data.success === true) {
-          return res.data.success;
-        }
-      })
-      .catch((e: any) => {
-        dispatch(AppAC.setError({ error: e.message }));
-        return false;
-      });
-  };
+export const recoveryThunk = createAppAsyncThunk(
+  "auth/recovery",
+  async (field: string, thunkAPI) => {
+    return errorHandlingThunk(thunkAPI, async () => {
+      const recoveryRequest = {
+        email: field,
+        from: "test-front-admin <ai73a@yandex.by>",
+        message: recoveryEmail,
+      };
+      const res = await loginAPI
+        .recoveryPassword(recoveryRequest)
+          if (res.data.success === true) {
+            thunkAPI.dispatch(AppAC.setSuccessMessage({
+              message: "Check your email",
+            }))
+            return res.data.success;
+          }
+    });
+  }
+);
