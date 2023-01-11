@@ -1,7 +1,5 @@
-import {initialState, packsAC, packsReducer} from "../packsReducer";
-
-import { IPackResponse } from "../packsAPI";
-import axios from "axios";
+import {initialState, packsAC, packsInitialState, packsReducer} from "../packsReducer";
+import {setPacksTC} from "../packsThunks";
 
 
 describe("Packs slice", () => {
@@ -60,3 +58,29 @@ describe("Packs slice", () => {
   });
 
 });
+describe("packs extra reducers", () => {
+  test("packsInitialState check default type", () => {
+    const result = packsReducer(undefined, {type: ""});
+
+    expect(result).toEqual(packsInitialState);
+  });
+  test("should set packs changed with setPacks action", () => {
+    const action = {
+        max: 20,
+        min: 10,
+        packName: 'string',
+        isMyPack: "false",
+        sortPacks: { direction: 1, field: "updated" }
+    }
+    const finalState = packsReducer(
+      packsInitialState,
+      setPacksTC.fulfilled(action, "", { ...action })
+    );
+
+    expect(finalState.max).toEqual(action.max);
+    expect(finalState.min).toEqual(action.min);
+    expect(finalState.packName).toEqual(action.packName);
+    expect(finalState.sortPacks).toEqual(action.sortPacks);
+    expect(finalState.isMyPack).toEqual(action.isMyPack);
+  });
+})
