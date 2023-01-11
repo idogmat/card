@@ -13,14 +13,15 @@ export const recoveryThunk = createAppAsyncThunk(
         from: "test-front-admin <ai73a@yandex.by>",
         message: recoveryEmail,
       };
-      const res = await loginAPI
-        .recoveryPassword(recoveryRequest)
-          if (res.data.success === true) {
-            thunkAPI.dispatch(AppAC.setSuccessMessage({
-              message: "Check your email",
-            }))
-            return res.data.success;
-          }
+      const res = await loginAPI.recoveryPassword(recoveryRequest);
+      if (res.data.success === true) {
+        thunkAPI.dispatch(
+          AppAC.setSuccessMessage({
+            message: "Check your email",
+          })
+        );
+        return res.data.success;
+      }
     });
   }
 );

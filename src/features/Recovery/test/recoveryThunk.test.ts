@@ -1,11 +1,8 @@
-
-
 import { store } from "../../../app/store";
 import { AxiosResponse } from "axios";
-import { setNewPassword } from "../setNewPasswordThunk";
-import {recoveryEmailMock, setNewPasswordForm} from "./mock";
-import {loginAPI} from "../../Login/loginAPI";
-import {recoveryThunk} from "../recoveryThunk";
+import { recoveryEmailMock } from "./mock";
+import { loginAPI } from "../../Login/loginAPI";
+import { recoveryThunk } from "../recoveryThunk";
 
 jest.mock("../../Login/loginAPI.ts");
 const getState = store.getState;
