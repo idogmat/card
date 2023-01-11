@@ -14,7 +14,7 @@ export const recoveryThunk = createAppAsyncThunk(
         message: recoveryEmail,
       };
       const res = await loginAPI.recoveryPassword(recoveryRequest);
-      if (res.data.success === true) {
+      if (res.data.success) {
         thunkAPI.dispatch(
           AppAC.setSuccessMessage({
             message: "Check your email",
