@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { MdCameraAlt, MdLogout } from "react-icons/md";
 import {
   ProfileContainer,
@@ -11,7 +11,7 @@ import {
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
 
 import { Avatar } from "common/ui-kit/Avatar/Avatar";
-import { Button } from "common/ui-kit/Button/Button";
+import { Checkbox } from "common/ui-kit/Checkbox/Checkbox";
 import { EditableText } from "../../common/components/EditableText/EditableText";
 import { FileLoader } from "common/components/FileLoader/FileLoader";
 import { Flex } from "common/ui-kit/Flex/Flex";
