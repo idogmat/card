@@ -8,7 +8,7 @@ import { useAppDispatch } from "../../../common/hooks";
 import { packsModalsAC } from "../packsModalsSlice";
 import RangeSlider from "../../../common/components/RangeSlider/RangeSlider";
 import { IParams } from "../packsThunks";
-import UInput from "../../../common/ui-kit/UInput";
+import { Input } from "../../../common/ui-kit/Input/Input";
 
 interface IHeaderProps {
   packName: string;
@@ -61,7 +61,6 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
               searchValue={packName}
               searchChangeHandler={changeSearchHandler}
             />
-            <UInput type={"file"}></UInput>
             <FormControl
               style={{
                 display: "flex",

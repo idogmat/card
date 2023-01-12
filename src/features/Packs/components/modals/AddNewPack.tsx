@@ -9,6 +9,8 @@ import { addNewModalSelector } from "./modalsSelectors";
 import { addPackTC } from "../../packsThunks";
 import { packsModalsAC } from "../../packsModalsSlice";
 import { getImgBase64File } from "../../../../common/utils/base64Converter";
+import { FormInModal, Modal } from "../../../../common/ui-kit/Modal/Modal";
+import { Flex } from "../../../../common/ui-kit/Flex/Flex";
 
 export interface INewPack {
   name: string;
@@ -57,63 +59,65 @@ export const AddNewPack = React.memo(() => {
   };
 
   return (
-    <ModalBase
-      open={isOpen}
-      handleClose={handleClose}
-      modalTitle={"Add New Pack"}
-    >
-      <Box>
-        <FormGroup>
-          {newPackData.deckCover && (
-            <img
-              src={newPackData.deckCover}
-              style={{
-                width: "100%",
-                height: "9.375rem",
-                objectFit: "cover",
-              }}
-              alt="deckCover"
-            />
-          )}
-          <TextField
-            label="Name pack"
-            variant="standard"
-            color="primary"
-            value={newPackData.name}
-            onChange={handleChangeName}
-          />
-          <Box>
-            Private pack{" "}
-            <Checkbox
-              checked={newPackData.isPrivate}
-              onChange={handleChangeIsPrivate}
-              color="primary"
-            />
-          </Box>
-          <Box>
-            <label>
-              <input
-                style={{ display: "none" }}
-                type="file"
-                accept={"image/*"}
-                onChange={(e) => handleChangeCover(e)}
+    <Modal open={isOpen} close={handleClose}>
+      <FormInModal>
+        <Flex
+          align={"center"}
+          justify={"center"}
+          sx={{ margin: "auto", display: "flex", flexDirection: "column" }}
+        >
+          <FormGroup>
+            {newPackData.deckCover && (
+              <img
+                src={newPackData.deckCover}
+                style={{
+                  width: "100%",
+                  height: "9.375rem",
+                  objectFit: "cover",
+                }}
+                alt="deckCover"
               />
-              <IconButton component="span" color={"primary"}>
-                <PhotoCamera />
-              </IconButton>
-            </label>
-          </Box>
-        </FormGroup>
+            )}
+            <TextField
+              label="Name pack"
+              variant="standard"
+              color="primary"
+              value={newPackData.name}
+              onChange={handleChangeName}
+            />
+            <Box>
+              Private pack{" "}
+              <Checkbox
+                checked={newPackData.isPrivate}
+                onChange={handleChangeIsPrivate}
+                color="primary"
+              />
+            </Box>
+            <Box>
+              <label>
+                <input
+                  style={{ display: "none" }}
+                  type="file"
+                  accept={"image/*"}
+                  onChange={(e) => handleChangeCover(e)}
+                />
+                <IconButton component="span" color={"primary"}>
+                  <PhotoCamera />
+                </IconButton>
+              </label>
+            </Box>
+          </FormGroup>
 
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Button onClick={handleClose} color="primary" variant="contained">
-            Cancel
-          </Button>
-          <Button onClick={addNewPack} color="primary" variant="contained">
-            Add Pack
-          </Button>
-        </Box>
-      </Box>
-    </ModalBase>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Button onClick={handleClose} color="primary" variant="contained">
+              Cancel
+            </Button>
+            <Button onClick={addNewPack} color="primary" variant="contained">
+              Add Pack
+            </Button>
+          </Box>
+        </Flex>
+      </FormInModal>
+    </Modal>
   );
 });

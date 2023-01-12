@@ -58,12 +58,11 @@ const Icon = styled.div`
   right: 10%;
   top: 50%;
 `;
-const Input: FC<Partial<InputBaseProps>> = ({
+export const Input: FC<Partial<InputBaseProps>> = ({
   children,
   endItem,
   ...props
 }) => {
-  console.log(props);
   const ref = useRef<HTMLInputElement>(null);
   const [onFocus, setFocus] = useState<boolean>(false);
   useEffect(() => {
@@ -81,5 +80,3 @@ const Input: FC<Partial<InputBaseProps>> = ({
     </div>
   );
 };
-
-export default Input;

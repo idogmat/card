@@ -15,8 +15,8 @@ import logo from "../../../assets/img/logo.svg";
 import { pageIcons } from "./Header.data";
 import { useAllSelector } from "../../hooks";
 import { userStateSelector } from "../../../features/User/selectors";
-import NavMenu from "../../ui-kit/NavMenu";
-import Menu from "../../ui-kit/Menu";
+import { NavMenu } from "../../ui-kit/Menu/NavMenu";
+import { Menu } from "../../ui-kit/Menu/Menu";
 
 export const Header = React.memo(() => {
   // Dispatch & selectors
@@ -74,9 +74,9 @@ export const Header = React.memo(() => {
             {/*>*/}
             <Menu open={isMenuOpen} close={closeMenu}>
               {isAuth ? (
-                  <NavMenu isAuth={isAuth} authPages={authPages}></NavMenu>
-              ) :(
-                  <NavMenu isAuth={isAuth} authPages={unAuthPages}></NavMenu>
+                <NavMenu isAuth={isAuth} authPages={authPages}></NavMenu>
+              ) : (
+                <NavMenu isAuth={isAuth} authPages={unAuthPages}></NavMenu>
               )}
             </Menu>
           </Flex>

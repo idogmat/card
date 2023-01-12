@@ -15,6 +15,8 @@ import { acceptableImgFormats } from "../../../../common/utils/regExp";
 import { packsModalsAC } from "../../packsModalsSlice";
 import { updateModalSelector } from "./modalsSelectors";
 import { updatePackTC } from "../../packsThunks";
+import { FormInModal, Modal } from "../../../../common/ui-kit/Modal/Modal";
+import { Flex } from "../../../../common/ui-kit/Flex/Flex";
 
 interface IUpdatePack {
   name: string;
@@ -69,58 +71,64 @@ export const EditPack = memo(() => {
       );
   };
   return (
-    <ModalBase open={isOpen} handleClose={handleClose} modalTitle={"Edit Pack"}>
-      <Box>
-        <FormGroup>
-          <img
-            src={pack.deckCover}
-            style={{
-              width: "100%",
-              height: "9.375rem",
-              objectFit: "cover",
-            }}
-            alt="deckCover"
-          />
-          <TextField
-            label="Name pack"
-            variant="standard"
-            color="primary"
-            value={pack.name}
-            onChange={handleChangeName}
-          />
-          <Box>
-            Private pack{" "}
-            <Checkbox
-              checked={pack.private}
-              onChange={handleChangeIsPrivate}
-              color="primary"
+    <Modal open={isOpen} close={handleClose}>
+      <FormInModal>
+        <Flex
+          align={"center"}
+          justify={"center"}
+          sx={{ margin: "auto", display: "flex", flexDirection: "column" }}
+        >
+          <FormGroup>
+            <img
+              src={pack.deckCover}
+              style={{
+                width: "100%",
+                height: "9.375rem",
+                objectFit: "cover",
+              }}
+              alt="deckCover"
             />
-          </Box>
-          <Box>
-            <label>
-              <input
-                style={{ display: "none" }}
-                type="file"
-                accept={"image/*"}
-                onChange={(e) => handleChangeCover(e)}
+            <TextField
+              label="Name pack"
+              variant="standard"
+              color="primary"
+              value={pack.name}
+              onChange={handleChangeName}
+            />
+            <Box>
+              Private pack{" "}
+              <Checkbox
+                checked={pack.private}
+                onChange={handleChangeIsPrivate}
+                color="primary"
               />
-              <IconButton component="span" color={"primary"}>
-                <PhotoCamera />
-              </IconButton>
-            </label>
-          </Box>
-        </FormGroup>
+            </Box>
+            <Box>
+              <label>
+                <input
+                  style={{ display: "none" }}
+                  type="file"
+                  accept={"image/*"}
+                  onChange={(e) => handleChangeCover(e)}
+                />
+                <IconButton component="span" color={"primary"}>
+                  <PhotoCamera />
+                </IconButton>
+              </label>
+            </Box>
+          </FormGroup>
 
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Button onClick={handleClose} color="primary" variant="contained">
-            Cancel
-          </Button>
-          <Button onClick={updatePack} color="primary" variant="contained">
-            Save pack
-          </Button>
-        </Box>
-      </Box>
-    </ModalBase>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Button onClick={handleClose} color="primary" variant="contained">
+              Cancel
+            </Button>
+            <Button onClick={updatePack} color="primary" variant="contained">
+              Save pack
+            </Button>
+          </Box>
+        </Flex>
+      </FormInModal>
+    </Modal>
   );
 });
 

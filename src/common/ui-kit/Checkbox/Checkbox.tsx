@@ -59,9 +59,6 @@ export const Checkbox: FC<ICheckboxProps> = ({
   children,
   cbSettings,
 }) => {
-  console.log(onChange);
-  console.log(checked);
-
   return (
     <>
       <StyledInput {...cbSettings} checked={checked} />

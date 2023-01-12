@@ -3,11 +3,12 @@ import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
 
 import Button from "@mui/material/Button/Button";
 import { IPackResponse } from "../../packsAPI";
-import { ModalBase } from "../../../../common/components/Modal";
 import { deleteModalSelector } from "./modalsSelectors";
 import { memo } from "react";
 import { packsModalsAC } from "../../packsModalsSlice";
 import { removePackTC } from "../../packsThunks";
+import { FormInModal, Modal } from "../../../../common/ui-kit/Modal/Modal";
+import { Flex } from "../../../../common/ui-kit/Flex/Flex";
 
 export const DeletePack = memo(() => {
   // Dispatch & selectors
@@ -29,29 +30,31 @@ export const DeletePack = memo(() => {
   };
 
   return (
-    <ModalBase
-      open={isOpen}
-      handleClose={handleClose}
-      modalTitle={"Delete Pack"}
-    >
-      <Box>
-        <FormGroup>
-          <Box sx={{ padding: 2 }}>
-            <Typography sx={{ marginBottom: 2 }}>
-              Do you really want to remove <b>{pack.name}</b>
-            </Typography>
-          </Box>
-        </FormGroup>
+    <Modal open={isOpen} close={handleClose}>
+      <FormInModal>
+        <Flex
+          align={"center"}
+          justify={"center"}
+          sx={{ margin: "auto", display: "flex", flexDirection: "column" }}
+        >
+          <FormGroup>
+            <Box sx={{ padding: 2 }}>
+              <Typography sx={{ marginBottom: 2 }}>
+                Do you really want to remove <b>{pack.name}</b>
+              </Typography>
+            </Box>
+          </FormGroup>
 
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Button onClick={handleClose} color="primary" variant="contained">
-            Cancel
-          </Button>
-          <Button onClick={deletePack} color="primary" variant="contained">
-            Delete
-          </Button>
-        </Box>
-      </Box>
-    </ModalBase>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Button onClick={handleClose} color="primary" variant="contained">
+              Cancel
+            </Button>
+            <Button onClick={deletePack} color="primary" variant="contained">
+              Delete
+            </Button>
+          </Box>
+        </Flex>
+      </FormInModal>
+    </Modal>
   );
 });
