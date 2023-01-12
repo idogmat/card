@@ -5,7 +5,7 @@ import { acceptableImgFormats } from "./regExp";
 
 export const BACKEND_MAX_IMG_WEIGHT = 100000000;
 
-export const _fileToBase = (file: File) => {
+export const fileToBase = (file: File) => {
   const reader = new FileReader();
   reader.readAsDataURL(file);
   return new Promise((resolve) => {
@@ -13,7 +13,7 @@ export const _fileToBase = (file: File) => {
   });
 };
 
-export const _uploadHandler = async (
+export const uploadHandler = async (
   dispatch: AppDispatchType,
   e: ChangeEvent<HTMLInputElement>,
   typeRE: RegExp,
@@ -23,7 +23,7 @@ export const _uploadHandler = async (
   if (e?.target?.files?.length) {
     const file = e.target.files[0];
     if (typeRE.test(file.type) && file.size < size) {
-      const fileBase64 = (await _fileToBase(file)) as string;
+      const fileBase64 = (await fileToBase(file)) as string;
       return fileBase64;
     }
   }
@@ -34,7 +34,7 @@ export const getImgBase64File = async (
   e: ChangeEvent<HTMLInputElement>,
   dispatch: AppDispatchType
 ) => {
-  return await _uploadHandler(
+  return await uploadHandler(
     dispatch,
     e,
     acceptableImgFormats,

@@ -1,16 +1,13 @@
-import {
-  AppBar,
-  Avatar,
-  Box,
-  Button,
-  Container,
-
-  Typography,
-} from "@mui/material";
+import { Button } from "@mui/material";
+import { HeaderContainer, HeaderWrapper } from "./HeaderStyles";
 import React, { useState } from "react";
 import { authRoutes, unAuthRoutes } from "../../routes";
 
+import { Avatar } from "common/ui-kit/Avatar/Avatar";
+import { Container } from "common/ui-kit/Container/Container";
+import { Flex } from "common/ui-kit/Flex/Flex";
 import { HeaderLink } from "./HeaderLink";
+import { Typography } from "common/ui-kit/Text/Text";
 import { authStateSelector } from "../../../features/Auth/selectors";
 import { getRouteName } from "../../utils";
 import { lime } from "@mui/material/colors";
@@ -22,16 +19,19 @@ import NavMenu from "../../ui-kit/NavMenu";
 import Menu from "../../ui-kit/Menu";
 
 export const Header = React.memo(() => {
+  // Dispatch & selectors
   const { isAuth } = useAllSelector(authStateSelector);
   const user = useAllSelector(userStateSelector);
 
-  const unAuthPages = getRouteName(unAuthRoutes);
-  const authPages = getRouteName(authRoutes);
-
+  // LocalStates
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
 
+  // Vars
+  const unAuthPages = getRouteName(unAuthRoutes);
+  const authPages = getRouteName(authRoutes);
   const isMenuOpen = !!menuAnchor;
 
+  // Utils
   const openMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
     setMenuAnchor(e.currentTarget);
   };
@@ -41,35 +41,11 @@ export const Header = React.memo(() => {
   };
 
   return (
-    <AppBar
-      position={"absolute"}
-      sx={{
-        top: "0",
-        left: "0",
-        backgroundColor: "white",
-        boxShadow:
-          " 0px 2px 10px rgba(109, 109, 109, 0.25), inset 0px 1px 0px rgba(255, 255, 255, 0.3)",
-        padding: "10px 0px",
-        zIndex: "50",
-      }}
-    >
-      <Container maxWidth={"xl"}>
-        <Box
-          display={"flex"}
-          sx={{
-            gap: "10px",
-            justifyContent: "space-between",
-            alignItems: "center",
-            ["@media (max-width: 768px)"]: {
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            },
-          }}
-        >
+    <HeaderContainer>
+      <Container variant="sm">
+        <HeaderWrapper>
           <img src={logo} alt="IT-Incubator" />
-
-          <Box sx={{ position:"relative", display: "flex", alignItems: "center", gap: 2 }}>
+          <Flex align="center">
             <Button
               onClick={openMenu}
               sx={{
@@ -79,14 +55,16 @@ export const Header = React.memo(() => {
                 alignItems: "center",
               }}
             >
-              <Typography>{user.name}</Typography>
+              <Typography as="p" variant="sub-title-md" align="center">
+                {user.name}
+              </Typography>
               <Avatar
-                sx={{ bgcolor: lime[600] }}
-                alt={user.name}
-                src={user.avatar ? user.avatar : undefined}
-              >
-                {/*{user.name[0]}*/}
-              </Avatar>
+                bgColor={"#baffac"}
+                text={user.name}
+                src={user.avatar}
+                widthSize={"2.5rem"}
+                heightSize={"2.5rem"}
+              />
             </Button>
             {/*<Menu*/}
             {/*  open={isMenuOpen}*/}
@@ -101,9 +79,9 @@ export const Header = React.memo(() => {
                   <NavMenu isAuth={isAuth} authPages={unAuthPages}></NavMenu>
               )}
             </Menu>
-          </Box>
-        </Box>
+          </Flex>
+        </HeaderWrapper>
       </Container>
-    </AppBar>
+    </HeaderContainer>
   );
 });

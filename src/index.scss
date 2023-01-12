@@ -1,4 +1,14 @@
+@import "./common/styles/base/mixins.scss";
+@import "./common/styles/fonts/fonts.scss";
+@import "./common/styles/vars/vars.scss";
 
 #root {
     height: 100vh;
+}
+
+body {
+    color: var(--color-primary);
+    background: var(--color-secondary);
+    font-family: var(--family);
+    font-weight: var(--fw-regular);
 }

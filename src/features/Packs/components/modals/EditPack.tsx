@@ -1,3 +1,8 @@
+import {
+  BACKEND_MAX_IMG_WEIGHT,
+  getImgBase64File,
+  uploadHandler,
+} from "../../../../common/utils/base64Converter";
 import { Box, Checkbox, FormGroup, IconButton, TextField } from "@mui/material";
 import { ChangeEvent, memo, useEffect, useState } from "react";
 import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
@@ -6,15 +11,10 @@ import Button from "@mui/material/Button/Button";
 import { IPackResponse } from "../../packsAPI";
 import { ModalBase } from "../../../../common/components/Modal";
 import { PhotoCamera } from "@mui/icons-material";
+import { acceptableImgFormats } from "../../../../common/utils/regExp";
 import { packsModalsAC } from "../../packsModalsSlice";
 import { updateModalSelector } from "./modalsSelectors";
 import { updatePackTC } from "../../packsThunks";
-import {
-  _uploadHandler,
-  BACKEND_MAX_IMG_WEIGHT,
-  getImgBase64File,
-} from "../../../../common/utils/base64Converter";
-import { acceptableImgFormats } from "../../../../common/utils/regExp";
 
 interface IUpdatePack {
   name: string;

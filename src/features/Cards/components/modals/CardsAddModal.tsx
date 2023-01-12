@@ -6,8 +6,8 @@ import {
 } from "@mui/material";
 import { ChangeEvent, FC, useRef, useState } from "react";
 import { ICardData, IFieldFormats } from "./CardsModals";
-import { _uploadHandler, getImgBase64File } from "common/utils/base64Converter";
 import { defaultFieldsFormats, formatSelectOptions } from "./CardsModals.data";
+import { getImgBase64File, uploadHandler } from "common/utils/base64Converter";
 import { useAllSelector, useAppDispatch } from "common/hooks";
 
 import { Box } from "@mui/system";

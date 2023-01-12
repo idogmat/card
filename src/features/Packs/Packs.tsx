@@ -1,4 +1,6 @@
 import { Box, debounce } from "@mui/material";
+import { Clear, HorizontalRule } from "@mui/icons-material";
+import { IParams, removePackTC, setPacksTC } from "./packsThunks";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   packsCardsPacksSelector,
@@ -13,22 +15,20 @@ import {
   packsSortPacksSelector,
   packsTotalCardsSelector,
 } from "./selectors";
-import { IParams, removePackTC, setPacksTC } from "./packsThunks";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
 
-import { Clear, HorizontalRule } from "@mui/icons-material";
 import PacksHeader from "./components/PacksHeader";
 import PacksModals from "./components/modals/PacksModals";
 import PacksTable from "./components/PacksTable";
 import { Preloader } from "../../common/components/Preloader/Preloader";
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
+import { TimeoutId } from "@reduxjs/toolkit/dist/query/core/buildMiddleware/types";
 import { appStateSelector } from "app/selectors";
 import { getSortIcon } from "../../common/utils/assets";
 import { packsAC } from "./packsReducer";
-import styles from "../../common/styles/common.module.css";
+import styles from "../../common/styles/common/common.module.scss";
 import { useSearchParams } from "react-router-dom";
 import { userStateSelector } from "features/User/selectors";
-import { TimeoutId } from "@reduxjs/toolkit/dist/query/core/buildMiddleware/types";
 
 const Packs = () => {
   // Selectors

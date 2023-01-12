@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
+import { MainWrapper, PageWrapper } from "./AppStyles";
 import { useAllSelector, useAppDispatch } from "../common/hooks";
 
 import { AppRouter } from "../common/components/AppRouter/AppRouter";
-import { Container } from "@mui/material";
+import { Container } from "common/ui-kit/Container/Container";
 import { Header } from "../common/components/Header/Header";
 import { Notifications } from "../common/components/Notifications/Notifications";
 import { Preloader } from "../common/components/Preloader/Preloader";
 import { appStateSelector } from "./selectors";
 import { initAppTC } from "./appThunks";
-import styles from "./App.module.css";
+import { useEffect } from "react";
 
 function App() {
   const { isInit } = useAllSelector(appStateSelector);
@@ -19,15 +19,15 @@ function App() {
   }, []);
 
   return isInit ? (
-    <div className={styles.wrapper}>
+    <PageWrapper>
       <Header />
-      <main className={styles.page}>
-        <Container maxWidth="lg">
+      <MainWrapper>
+        <Container variant="sm">
           <AppRouter />
         </Container>
         <Notifications />
-      </main>
-    </div>
+      </MainWrapper>
+    </PageWrapper>
   ) : (
     <Preloader />
   );
