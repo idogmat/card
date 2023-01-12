@@ -47,6 +47,7 @@ const StyledLabel = styled.label<
 `;
 
 interface ICheckboxProps {
+  children: React.ReactNode;
   onChange: (e: React.MouseEvent<HTMLLabelElement>) => void;
   checked: boolean;
   cbSettings?: Partial<IStyledCheckboxProps> & Partial<IStyledInputProps>;
@@ -55,6 +56,7 @@ interface ICheckboxProps {
 export const Checkbox: FC<ICheckboxProps> = ({
   onChange,
   checked,
+  children,
   cbSettings,
 }) => {
   console.log(onChange);
@@ -64,7 +66,7 @@ export const Checkbox: FC<ICheckboxProps> = ({
     <>
       <StyledInput {...cbSettings} checked={checked} />
       <StyledLabel {...cbSettings} onClick={onChange}>
-        Label
+        {children}
       </StyledLabel>
     </>
   );
