@@ -76,7 +76,7 @@ export const EditPack = memo(() => {
         <Flex
           align={"center"}
           justify={"center"}
-          sx={{ margin: "auto", display: "flex", flexDirection: "column" }}
+          sx={{ margin: "auto", flexDirection: "column" }}
         >
           <FormGroup>
             <img
@@ -131,5 +131,3 @@ export const EditPack = memo(() => {
     </Modal>
   );
 });
-
-export default EditPack;

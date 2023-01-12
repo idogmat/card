@@ -2,13 +2,15 @@ import React, { FC } from "react";
 import { Box, Container, Toolbar } from "@mui/material";
 import { Search } from "../../../common/components/Search/Search";
 import FormControl from "@mui/material/FormControl/FormControl";
-import Button from "@mui/material/Button/Button";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useAppDispatch } from "../../../common/hooks";
 import { packsModalsAC } from "../packsModalsSlice";
 import RangeSlider from "../../../common/components/RangeSlider/RangeSlider";
 import { IParams } from "../packsThunks";
 import { Input } from "../../../common/ui-kit/Input/Input";
+import { Button } from "../../../common/ui-kit/Button/Button";
+import { MyPackButton } from "../PacksStyle";
+import search from "../../../assets/img/search.svg";
 
 interface IHeaderProps {
   packName: string;
@@ -60,6 +62,7 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
             <Search
               searchValue={packName}
               searchChangeHandler={changeSearchHandler}
+              endItem={<img src={search} />}
             />
             <FormControl
               style={{
@@ -68,19 +71,19 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
                 margin: "auto 1rem",
               }}
             >
-              <Button
+              <MyPackButton
                 style={{ margin: "auto 1rem" }}
-                variant={isMyPack ? "contained" : "outlined"}
+                // selected={isMyPack}
                 onClick={() => handlerIsMyPack(true)}
               >
                 My
-              </Button>
-              <Button
-                variant={!isMyPack ? "contained" : "outlined"}
+              </MyPackButton>
+              <MyPackButton
+                // selected={!isMyPack}
                 onClick={() => handlerIsMyPack(false)}
               >
                 All
-              </Button>
+              </MyPackButton>
             </FormControl>
 
             <RangeSlider
@@ -91,9 +94,7 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
               onChangeSlider={changeRangeHandler}
               params={params}
             />
-            <Button variant="contained" onClick={modalAddPack}>
-              Add new Pack
-            </Button>
+            <Button onClick={modalAddPack}>Add new Pack</Button>
             <Button onClick={() => removeSort()} style={{ margin: "auto 0" }}>
               <DeleteForeverIcon />
             </Button>

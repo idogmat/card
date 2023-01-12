@@ -9,11 +9,11 @@ import React, {
 } from "react";
 import styled, { CSSProperties } from "styled-components";
 import s from "./Input.module.scss";
-import { IconButton, InputAdornment } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+
 const StyledInput = styled.input.attrs((props) => ({
   type: props.type || "text",
   size: props.size || "1em",
+
   error: props.onError ? "1px solid red" : "1px solid #0c0c0c",
 }))`
   color: #1a191a;
@@ -24,22 +24,26 @@ const StyledInput = styled.input.attrs((props) => ({
   margin: ${(props) => props.size};
   padding: ${(props) => props.size};
   transition: 0.3s;
+
   ::-webkit-input-placeholder {
     text-transform: capitalize;
   }
+
   :-moz-placeholder {
     text-transform: capitalize;
   }
+
   ::-moz-placeholder {
     text-transform: capitalize;
   }
+
   :-ms-input-placeholder {
     text-transform: capitalize;
   }
 `;
 
 type InputBaseProps = {
-  children: ReactChild;
+  children: JSX.Element;
   className: string;
   onError: boolean | string;
   id: string;

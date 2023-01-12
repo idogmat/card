@@ -23,7 +23,7 @@ export const Menu: FC<IMenu> = ({ open, close, children }) => {
       {open ? (
         <>
           <Modal close={close} open={open} />
-          <MenuInModal>{children}</MenuInModal>
+          <MenuInModal onClick={close}>{children}</MenuInModal>
         </>
       ) : (
         <> </>

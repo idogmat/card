@@ -33,22 +33,18 @@ interface IModal {
 
 export const Modal: FC<IModal> = ({ open, close, children }) => {
   const catchClick = (e: any) => {
-    console.log(e.target);
     if (e.target.id === "modal") {
-      console.log(e);
       close();
     }
   };
   return (
     <>
-      {open ? (
+      {open && (
         <ModalBase>
           <InsideModal id={"modal"} onClick={catchClick}>
             {children}
           </InsideModal>
         </ModalBase>
-      ) : (
-        <></>
       )}
     </>
   );

@@ -6,6 +6,8 @@
   text-transform:capitalize;
 }
 .unFocus{
-  display: none;
+  position: absolute;
+  font-size: 0;
+  z-index: -5;
   transition: .3s;
 }
