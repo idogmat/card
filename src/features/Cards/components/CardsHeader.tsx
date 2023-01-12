@@ -1,15 +1,11 @@
-import {
-  Box,
-  Button,
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-} from "@mui/material";
+import { CardBanner, CardTitle, CardsHeaderWrapper } from "../CardsStyles";
 import { DeleteOutline, Edit, MoreHoriz, School } from "@mui/icons-material";
+import { IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import React, { FC, useState } from "react";
 
+import { Button } from "common/ui-kit/Button/Button";
 import { CardsModalsAC } from "features/Cards/cardsModalsSlice";
+import { Flex } from "common/ui-kit/Flex/Flex";
 import { IPackResponse } from "./../../Packs/packsAPI";
 import { NavLink } from "react-router-dom";
 import { Search } from "../../../common/components/Search/Search";
@@ -56,20 +52,8 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
 
     return (
       <>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            gap: 2,
-            alignItems: "center",
-            marginBottom: 5,
-          }}
-        >
-          <Typography
-            variant={"h3"}
-            component={"h3"}
-            sx={{ display: "flex", alignItems: "center", maxWidth: "100%" }}
-          >
+        <CardsHeaderWrapper>
+          <CardTitle>
             {pack.name}
             {isPackMine && (
               <>
@@ -120,30 +104,18 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
                 </Menu>
               </>
             )}
-          </Typography>
-          {pack.deckCover && (
-            <img
-              src={pack.deckCover}
-              alt=""
-              style={{ width: "300px", height: "100px", objectFit: "cover" }}
-            />
-          )}
+          </CardTitle>
+          {pack.deckCover && <CardBanner src={pack.deckCover} alt="" />}
           {isPackMine && (
-            <Button
-              sx={{ borderRadius: "24px" }}
-              variant={"contained"}
-              onClick={openAddNewCardModal}
-            >
-              Add new card
-            </Button>
+            <Button onClick={openAddNewCardModal}>Add new card</Button>
           )}
-        </Box>
-        <Box sx={{ marginBottom: 2 }}>
+        </CardsHeaderWrapper>
+        <Flex sx={{ marginBottom: "1.25rem" }}>
           <Search
             searchChangeHandler={setSearchRequest}
             searchValue={searchValue}
           />
-        </Box>
+        </Flex>
       </>
     );
   }

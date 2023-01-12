@@ -1,27 +1,22 @@
-import {
-  Box,
-  IconButton,
-  Rating,
-  Skeleton,
-  TableCell,
-  TableRow,
-} from "@mui/material";
-import { DeleteOutline, Edit } from "@mui/icons-material";
+import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import React, { FC } from "react";
+import { TableBodyItem, TableBodyLine } from "common/ui-kit/Table/Table";
 
+import { CardsIconButton } from "../CardsStyles";
 import { CardsModalsAC } from "../cardsModalsSlice";
+import { Flex } from "common/ui-kit/Flex/Flex";
 import { ICard } from "../../../common/models";
+import { Rating } from "@mui/material";
 import { formDate } from "../../../common/utils/date";
 import { useAppDispatch } from "common/hooks";
 
 interface ICardsTableRowProps {
   card: ICard;
   isPackMine: boolean;
-  isLoading: boolean;
 }
 
 export const CardsTableRow: FC<ICardsTableRowProps> = React.memo(
-  ({ card, isPackMine, isLoading }) => {
+  ({ card, isPackMine }) => {
     // dispatch & selectors
     const dispatch = useAppDispatch();
     const deleteCardData = {
@@ -46,8 +41,8 @@ export const CardsTableRow: FC<ICardsTableRowProps> = React.memo(
     };
 
     return (
-      <TableRow key={card._id}>
-        <TableCell>
+      <TableBodyLine cols="repeat(4, minmax(250px, 1fr))">
+        <TableBodyItem>
           {isCardQuestionImg ? (
             <img
               src={card.questionImg}
@@ -57,8 +52,8 @@ export const CardsTableRow: FC<ICardsTableRowProps> = React.memo(
           ) : (
             card.question
           )}
-        </TableCell>
-        <TableCell>
+        </TableBodyItem>
+        <TableBodyItem>
           {isCardAnswerImg ? (
             <img
               src={card.answerImg}
@@ -68,10 +63,10 @@ export const CardsTableRow: FC<ICardsTableRowProps> = React.memo(
           ) : (
             card.answer
           )}
-        </TableCell>
-        <TableCell>{formDate(`${card.updated}`)}</TableCell>
-        <TableCell>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        </TableBodyItem>
+        <TableBodyItem>{formDate(`${card.updated}`)}</TableBodyItem>
+        <TableBodyItem>
+          <Flex align="center" sx={{ gap: "0.625rem" }}>
             <Rating
               name={"read-only"}
               value={Math.floor(card.grade)}
@@ -80,17 +75,17 @@ export const CardsTableRow: FC<ICardsTableRowProps> = React.memo(
             />
             {isPackMine && (
               <>
-                <IconButton>
-                  <Edit onClick={openUpdateModal} />
-                </IconButton>
-                <IconButton onClick={openDeleteModal}>
-                  {isLoading ? <Skeleton /> : <DeleteOutline />}
-                </IconButton>
+                <CardsIconButton semantic onClick={openUpdateModal}>
+                  <AiOutlineEdit />
+                </CardsIconButton>
+                <CardsIconButton semantic onClick={openDeleteModal}>
+                  <AiOutlineDelete />
+                </CardsIconButton>
               </>
             )}
-          </Box>
-        </TableCell>
-      </TableRow>
+          </Flex>
+        </TableBodyItem>
+      </TableBodyLine>
     );
   }
 );
