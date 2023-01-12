@@ -1,17 +1,15 @@
 import { CardsSwipeIcon, CardsTableWrapper } from "../CardsStyles";
-import React, { FC } from "react";
-import {
-  TableBody,
-  TableHeader,
-  TableWrapper,
-} from "common/ui-kit/Table/Table";
+import React, { FC, useState } from "react";
+import { TableBody, TableHeader } from "common/ui-kit/Table/Table";
 
 import { CardsTableRow } from "./CardsTableRow";
 import { Flex } from "common/ui-kit/Flex/Flex";
 import { HorizontalRule } from "@mui/icons-material";
 import { ICard } from "../../../common/models";
 import { IFieldSort } from "../Cards";
-import { MdArrowRightAlt } from "react-icons/md";
+import { IFormatSelectOption } from "./modals/FormatSelect";
+import { MdArrowDownward } from "react-icons/md";
+import { Select } from "common/ui-kit/Select/Select";
 import { getSortIcon } from "../../../common/utils/assets";
 
 interface ICardsTableProps {
@@ -34,8 +32,27 @@ export const CardsTable: FC<ICardsTableProps> = React.memo(
       return sort.field === field ? sortIcon : <HorizontalRule />;
     };
 
+    const options: IFormatSelectOption[] = [
+      { selectValue: "123", UIValue: "123" },
+      { selectValue: "321", UIValue: "321" },
+      { selectValue: "213", UIValue: "213" },
+    ];
+
+    const [selected, setSelected] = useState("");
+
+    const selectChange = (option: string) => {
+      setSelected(option);
+    };
+
     return (
       <Flex direction="column">
+        <Select
+          options={options}
+          selected={selected}
+          onChange={selectChange}
+          label="select somethin"
+          endIcon={<MdArrowDownward />}
+        />
         <CardsSwipeIcon />
         <CardsTableWrapper>
           <TableHeader cols="repeat(4, minmax(250px, 1fr))">
