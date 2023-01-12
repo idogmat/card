@@ -7,7 +7,7 @@ import { Avatar } from "common/ui-kit/Avatar/Avatar";
 import { Container } from "common/ui-kit/Container/Container";
 import { Flex } from "common/ui-kit/Flex/Flex";
 import { HeaderLink } from "./HeaderLink";
-import { Typography } from "common/ui-kit/Text/Text";
+import { Typography } from "common/ui-kit/Text/Typography";
 import { authStateSelector } from "../../../features/Auth/selectors";
 import { getRouteName } from "../../utils";
 import { lime } from "@mui/material/colors";
