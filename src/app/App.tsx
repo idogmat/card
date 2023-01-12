@@ -1,7 +1,7 @@
 import { useAllSelector, useAppDispatch } from "../common/hooks";
 
 import { AppRouter } from "../common/components/AppRouter/AppRouter";
-import { Container } from "@mui/material";
+import { Container } from "common/ui-kit/Container/Container";
 import { Header } from "../common/components/Header/Header";
 import { Notifications } from "../common/components/Notifications/Notifications";
 import { Preloader } from "../common/components/Preloader/Preloader";
@@ -22,7 +22,7 @@ function App() {
     <div className={styles.wrapper}>
       <Header />
       <main className={styles.page}>
-        <Container maxWidth="lg">
+        <Container variant="sm">
           <AppRouter />
         </Container>
         <Notifications />

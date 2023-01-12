@@ -1,29 +1,29 @@
-import {
-  Avatar,
-  Badge,
-  Box,
-  Button,
-  Grid,
-  IconButton,
-  Paper,
-  Typography,
-  TypographyProps,
-} from "@mui/material";
-import { Logout, PhotoCameraBackOutlined } from "@mui/icons-material";
-import React, { ChangeEvent, useRef } from "react";
+import { Button, Paper, TypographyProps } from "@mui/material";
+import { ChangeEvent, useRef } from "react";
+import { MdCameraAlt, MdLogout } from "react-icons/md";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
 
+import { Avatar } from "common/ui-kit/Avatar/Avatar";
 import { EditableText } from "../../common/components/EditableText/EditableText";
+import { FileLoader } from "common/components/FileLoader/FileLoader";
+import { Flex } from "common/ui-kit/Flex/Flex";
 import { Preloader } from "../../common/components/Preloader/Preloader";
+import { Typography } from "common/ui-kit/Text/Text";
+import { UploadImgBage } from "common/ui-kit/UploadImgBage/UploadImgBage";
 import { appStateSelector } from "app/selectors";
 import { getImgBase64File } from "common/utils/base64Converter";
-import { lime } from "@mui/material/colors";
 import { logOutTC } from "../Login/loginThunks";
 import { openFileSelector } from "features/Cards/components/modals/utils";
+import styled from "styled-components";
 import styles from "../../common/styles/common/common.module.scss";
 import { updateUserInfoTC } from "./profileThunks";
 import { userStateSelector } from "../User/selectors";
 
+const UserEmailText = styled(Typography)`
+  color: gray;
+  margin-bottom: 1.2rem;
+`;
+// eslint-disable-next-line react/jsx-no-undef
 export const Profile = () => {
   // Dispatch & selectors
   const dispatch = useAppDispatch();
@@ -34,7 +34,6 @@ export const Profile = () => {
   const avatarFileRef = useRef<HTMLInputElement>(null);
 
   // Utils
-
   const handleAvatarUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     const avatar = await getImgBase64File(e, dispatch);
 
@@ -54,76 +53,37 @@ export const Profile = () => {
   };
 
   return (
-    <Grid
-      container
-      sx={{ height: "100vh" }}
-      justifyContent={"center"}
-      alignItems={"center"}
-    >
-      <Grid item sx={{ minWidth: "360px" }}>
+    <Flex justify="center" sx={{ height: "100vh", paddingTop: "8.5rem" }}>
+      <Flex sx={{ minWidth: "360px", alignSelf: "flex-start" }}>
         {isLoading && (
           <div className={styles.preventSending}>
             <Preloader />
           </div>
         )}
         <Paper sx={{ padding: "25px 80px" }}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-            }}
-          >
-            <Typography variant={"h4"} component={"h1"} mb={"20px"}>
-              Personal Information
+          <Flex justify="center" align="center" direction="column">
+            <Typography variant="title" as="h1" sx={{ marginBottom: "1.5rem" }}>
+              Personal information
             </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                marginBottom: "30px",
-              }}
-            >
-              <input
-                type="file"
-                accept="image/*"
-                ref={avatarFileRef}
-                onChange={handleAvatarUpload}
-                style={{ display: "none" }}
+            <Flex justify="center" sx={{ marginBottom: "30px" }}>
+              <FileLoader
+                link={avatarFileRef}
+                onFileLoaded={handleAvatarUpload}
               />
-              <Badge
-                overlap={"circular"}
-                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                badgeContent={
-                  <IconButton onClick={() => openFileSelector(avatarFileRef)}>
-                    <PhotoCameraBackOutlined
-                      sx={{
-                        background: "grey",
-                        borderRadius: "50%",
-                        height: "32px",
-                        width: "32px",
-                        padding: "5px",
-                        border: "2px solid #fff",
-                      }}
-                    />
-                  </IconButton>
-                }
-              >
-                <Avatar
-                  sx={{
-                    width: "100px",
-                    height: "100px",
-                    borderRadius: "50%",
-                    bgcolor: lime[400],
-                  }}
-                  alt={"ProfilePicture"}
-                  src={user.avatar ? user.avatar : ""}
+              <Avatar src={user.avatar} text={user.name}>
+                <UploadImgBage
+                  pos="bottom-right"
+                  wSize="1.8rem"
+                  hSize="1.8rem"
+                  xAsset="-1rem"
+                  yAsset="-1rem"
+                  onClick={() => openFileSelector(avatarFileRef)}
+                  border={"2px solid #fff"}
                 >
-                  {user.name[0]}
-                </Avatar>
-              </Badge>
-            </Box>
+                  <MdCameraAlt />
+                </UploadImgBage>
+              </Avatar>
+            </Flex>
             <EditableText
               valueToDisplay={user.name}
               onChangeText={changeNameHandler}
@@ -132,15 +92,9 @@ export const Profile = () => {
               }
               disabled={isLoading}
             />
-
-            <Typography
-              variant={"subtitle2"}
-              component={"p"}
-              color={"gray"}
-              sx={{ marginBottom: "25px" }}
-            >
+            <UserEmailText variant="sub-title-sm" as="span">
               {user.email}
-            </Typography>
+            </UserEmailText>
             <Button
               variant={"contained"}
               sx={{
@@ -162,12 +116,12 @@ export const Profile = () => {
               onClick={handleLogout}
               disabled={isLoading}
             >
-              <Logout fontSize={"small"} />
+              <MdLogout fontSize={"small"} />
               Log out
             </Button>
-          </Box>
+          </Flex>
         </Paper>
-      </Grid>
-    </Grid>
+      </Flex>
+    </Flex>
   );
 };

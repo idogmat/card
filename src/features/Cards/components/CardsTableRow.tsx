@@ -32,13 +32,14 @@ export const CardsTableRow: FC<ICardsTableRowProps> = React.memo(
     // Vars
     const isCardQuestionImg =
       card.questionImg && card.questionImg !== "undefined";
-    const isCardAnswerImg = card.questionImg && card.answerImg !== "undefined";
+    const isCardAnswerImg = card.answerImg && card.answerImg !== "undefined";
 
     // Utils
     const openDeleteModal = () => {
       dispatch(CardsModalsAC.setDeleteCardState({ state: true }));
       dispatch(CardsModalsAC.setDeleteCardData(deleteCardData));
     };
+
     const openUpdateModal = () => {
       dispatch(CardsModalsAC.setUpdateCardState({ state: true }));
       dispatch(CardsModalsAC.setInitialUpdateCardData({ card }));
