@@ -24,6 +24,7 @@ import { loginTC } from "./loginThunks";
 import styles from "../../common/styles/common.module.css";
 import { useFormik } from "formik";
 import { validMail } from "../../common/utils/regExp";
+import Input from "../../common/ui-kit/UInput";
 
 interface ILoginErrorType {
   email?: string;
@@ -101,39 +102,22 @@ export const Login = () => {
                 </Typography>
               </FormLabel>
               <FormGroup>
-                <TextField
-                  error={loginHasError("email")}
-                  label={
-                    loginHasError("email") ? loginForm.errors.email : "Email"
-                  }
-                  margin={"normal"}
-                  variant={"standard"}
+                <Input
+                  onError={loginHasError("email") && loginForm.errors.email}
                   {...loginForm.getFieldProps("email")}
-                />
-                <TextField
-                  sx={{
-                    marginBottom: "1rem",
-                  }}
-                  error={loginHasError("password")}
-                  label={
-                    loginHasError("password")
-                      ? loginForm.errors.password
-                      : "Password"
-                  }
-                  margin={"normal"}
-                  type={passwordFieldType}
-                  variant={"standard"}
+                ></Input>
+                <Input
+                  type={showPassword ? "password" : "text"}
+                  onError={loginHasError("password") && loginForm.errors.email}
                   {...loginForm.getFieldProps("password")}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position={"end"}>
-                        <IconButton onClick={changePasswordFieldType}>
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
+                  endItem={
+                    <InputAdornment position={"end"}>
+                      <IconButton onClick={changePasswordFieldType}>
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                ></Input>
               </FormGroup>
               <FormControlLabel
                 label={"Remember me"}
@@ -141,6 +125,11 @@ export const Login = () => {
                 {...loginForm.getFieldProps("rememberMe")}
                 checked={loginForm.values.rememberMe}
               />
+              <Input
+                type={"checkbox"}
+                {...loginForm.getFieldProps("rememberMe")}
+              ></Input>
+
               <Typography sx={{ marginBottom: "1rem", textAlign: "end" }}>
                 <Link to={"/recovery"}>Forgot Password?</Link>
               </Typography>

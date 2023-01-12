@@ -1,0 +1,11 @@
+.focus{
+  position: absolute;
+  font-size: 12px;
+  left: 30px;
+  transition: .3s;
+  text-transform:capitalize;
+}
+.unFocus{
+  display: none;
+  transition: .3s;
+}

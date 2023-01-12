@@ -23,6 +23,8 @@ const MenuInModal = styled.div`
   top: 65px;
   width: 100px;
   z-index: 100;
+  background: #fff;
+  box-shadow: 0px 4px 4px 2px #888888;
 `;
 const Menu: FC<IMenu> = ({ open, close, children }) => {
   return (
