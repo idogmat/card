@@ -1,7 +1,7 @@
 import { Badge } from "../Badge/Badge";
 import styled from "styled-components";
 
-export const UploadImgBage = styled(Badge)`
+export const UploadImgBadge = styled(Badge)`
   background: grey;
   display: flex;
   justify-content: center;

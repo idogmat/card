@@ -1,3 +1,4 @@
+import { MainWrapper, PageWrapper } from "./AppStyles";
 import { useAllSelector, useAppDispatch } from "../common/hooks";
 
 import { AppRouter } from "../common/components/AppRouter/AppRouter";
@@ -7,7 +8,6 @@ import { Notifications } from "../common/components/Notifications/Notifications"
 import { Preloader } from "../common/components/Preloader/Preloader";
 import { appStateSelector } from "./selectors";
 import { initAppTC } from "./appThunks";
-import styles from "./App.module.scss";
 import { useEffect } from "react";
 
 function App() {
@@ -19,15 +19,15 @@ function App() {
   }, []);
 
   return isInit ? (
-    <div className={styles.wrapper}>
+    <PageWrapper>
       <Header />
-      <main className={styles.page}>
+      <MainWrapper>
         <Container variant="sm">
           <AppRouter />
         </Container>
         <Notifications />
-      </main>
-    </div>
+      </MainWrapper>
+    </PageWrapper>
   ) : (
     <Preloader />
   );

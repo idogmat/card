@@ -1,5 +1,5 @@
 import { ChangeEvent, FC, useRef } from "react";
-import { _uploadHandler, getImgBase64File } from "common/utils/base64Converter";
+import { getImgBase64File, uploadHandler } from "common/utils/base64Converter";
 import { useAllSelector, useAppDispatch } from "common/hooks";
 
 import Box from "@mui/material/Box/Box";

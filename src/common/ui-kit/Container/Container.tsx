@@ -11,7 +11,7 @@ interface IContainerProps {
 export const Container = styled.div<StyledComponent<IContainerProps>>`
   width: 100%;
   margin: 0px auto;
-  padding: rem(15);
+  padding: 0 0.95rem;
   ${(p) =>
     p.variant === "sm" &&
     css`

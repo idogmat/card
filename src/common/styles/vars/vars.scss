@@ -18,11 +18,11 @@
 }
 
 body[data-theme="dark"] {
-	--color-primary: #000;
-	--color-secondary: #fff;
+	--color-primary: #fff;
+	--color-secondary: #000;
 }
 
 body[data-theme="light"] {
-	--color-primary: #fff;
-	--color-secondary: #000;
+	--color-primary: #000;
+	--color-secondary: #fff;
 }

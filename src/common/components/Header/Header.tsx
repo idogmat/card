@@ -1,46 +1,34 @@
-import { AppBar, Box, Button, Menu } from "@mui/material";
+import { Button, Menu } from "@mui/material";
+import { HeaderContainer, HeaderWrapper } from "./HeaderStyles";
 import React, { useState } from "react";
 import { authRoutes, unAuthRoutes } from "../../routes";
-import { lightGreen, lime } from "@mui/material/colors";
 
 import { Avatar } from "common/ui-kit/Avatar/Avatar";
 import { Container } from "common/ui-kit/Container/Container";
 import { Flex } from "common/ui-kit/Flex/Flex";
 import { HeaderLink } from "./HeaderLink";
-import { StyledComponent } from "common/ui-kit/types";
 import { Typography } from "common/ui-kit/Text/Text";
 import { authStateSelector } from "../../../features/Auth/selectors";
 import { getRouteName } from "../../utils";
 import logo from "../../../assets/img/logo.svg";
 import { pageIcons } from "./Header.data";
-import styled from "@emotion/styled";
 import { useAllSelector } from "../../hooks";
 import { userStateSelector } from "../../../features/User/selectors";
 
-const StyledHeader = styled.header<StyledComponent<{}>>`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background: white;
-  box-shadow: 0px 2px 10px rgba(109, 109, 109, 0.25),
-    inset 0px 1px 0px rgba(255, 255, 255, 0.3);
-  padding: 0.625rem 0px;
-  z-index: 50;
-  ${(p) => ({ ...p.sx })}
-`;
-
 export const Header = React.memo(() => {
+  // Dispatch & selectors
   const { isAuth } = useAllSelector(authStateSelector);
   const user = useAllSelector(userStateSelector);
 
-  const unAuthPages = getRouteName(unAuthRoutes);
-  const authPages = getRouteName(authRoutes);
-
+  // LocalStates
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
 
+  // Vars
+  const unAuthPages = getRouteName(unAuthRoutes);
+  const authPages = getRouteName(authRoutes);
   const isMenuOpen = !!menuAnchor;
 
+  // Utils
   const openMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
     setMenuAnchor(e.currentTarget);
   };
@@ -50,11 +38,11 @@ export const Header = React.memo(() => {
   };
 
   return (
-    <StyledHeader>
+    <HeaderContainer>
       <Container variant="sm">
-        <Flex justify="space-between" align="center" sx={{ gap: "1.25rem" }}>
+        <HeaderWrapper>
           <img src={logo} alt="IT-Incubator" />
-          <Flex align="center" sx={{ gap: "0.625rem" }}>
+          <Flex align="center">
             <Button
               onClick={openMenu}
               sx={{
@@ -64,7 +52,7 @@ export const Header = React.memo(() => {
                 alignItems: "center",
               }}
             >
-              <Typography as="p" variant="sub-title-md">
+              <Typography as="p" variant="sub-title-md" align="center">
                 {user.name}
               </Typography>
               <Avatar
@@ -109,8 +97,8 @@ export const Header = React.memo(() => {
               )}
             </Menu>
           </Flex>
-        </Flex>
+        </HeaderWrapper>
       </Container>
-    </StyledHeader>
+    </HeaderContainer>
   );
 });

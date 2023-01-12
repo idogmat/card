@@ -4,10 +4,13 @@ import { StyledComponent } from "../types";
 
 interface ITypographyProps {
   variant: "title" | "sub-title-md" | "sub-title-sm";
+  align: string;
 }
 
-export const Typography = styled.p<StyledComponent<ITypographyProps>>`
+export const Typography = styled.p<StyledComponent<Partial<ITypographyProps>>>`
+  color: var(--color-primary);
   font-family: var(--family);
+  text-align: ${({ align }) => align || "left"};
   ${(p) =>
     p.variant === "title" &&
     css`

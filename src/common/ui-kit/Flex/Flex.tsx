@@ -5,6 +5,7 @@ interface IFlexProps {
   align: string;
   justify: string;
   direction: string;
+  fWrap: string;
 }
 
 export const Flex = styled.div<StyledComponent<Partial<IFlexProps>>>`
@@ -12,5 +13,6 @@ export const Flex = styled.div<StyledComponent<Partial<IFlexProps>>>`
   justify-content: ${({ justify }) => justify || "stretch"};
   align-items: ${({ align }) => align || "stretch"};
   flex-direction: ${({ direction }) => direction || "row"};
+  flex-wrap: ${({ fWrap }) => fWrap || "nowrap"};
   ${(p) => ({ ...p.sx })};
 `;

@@ -16,7 +16,7 @@ export const Avatar = styled.div<StyledComponent<Partial<IAvatarProps>>>`
     border-radius: 50%;
     width: ${({ widthSize }) => widthSize || "6.25rem"};
     height: ${({ heightSize }) => heightSize || "6.25rem"};
-    background: ${({ bgColor }) => bgColor || "white"};
+    background: ${({ bgColor }) => bgColor || "var(--color-primary)"};
     ${({ src }) =>
       src &&
       css`
