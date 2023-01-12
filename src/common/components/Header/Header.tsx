@@ -1,4 +1,4 @@
-import { Button, Menu } from "@mui/material";
+import { Button } from "@mui/material";
 import { HeaderContainer, HeaderWrapper } from "./HeaderStyles";
 import React, { useState } from "react";
 import { authRoutes, unAuthRoutes } from "../../routes";
@@ -10,10 +10,13 @@ import { HeaderLink } from "./HeaderLink";
 import { Typography } from "common/ui-kit/Text/Typography";
 import { authStateSelector } from "../../../features/Auth/selectors";
 import { getRouteName } from "../../utils";
+import { lime } from "@mui/material/colors";
 import logo from "../../../assets/img/logo.svg";
 import { pageIcons } from "./Header.data";
 import { useAllSelector } from "../../hooks";
 import { userStateSelector } from "../../../features/User/selectors";
+import { NavMenu } from "../../ui-kit/Menu/NavMenu";
+import { Menu } from "../../ui-kit/Menu/Menu";
 
 export const Header = React.memo(() => {
   // Dispatch & selectors
@@ -63,37 +66,17 @@ export const Header = React.memo(() => {
                 heightSize={"2.5rem"}
               />
             </Button>
-            <Menu
-              open={isMenuOpen}
-              onClose={closeMenu}
-              anchorEl={menuAnchor}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              sx={{
-                "& .menu-text-icon": {
-                  display: "flex",
-                  gap: 1,
-                  alignItems: "center",
-                },
-              }}
-            >
+            {/*<Menu*/}
+            {/*  open={isMenuOpen}*/}
+            {/*  onClose={closeMenu}*/}
+            {/*  anchorEl={menuAnchor}*/}
+
+            {/*>*/}
+            <Menu open={isMenuOpen} close={closeMenu}>
               {isAuth ? (
-                <div>
-                  {authPages.map((page) => (
-                    <HeaderLink page={page} key={page} icon={pageIcons[page]} />
-                  ))}
-                  <HeaderLink page={"logout"} icon={pageIcons["logout"]} />
-                </div>
+                <NavMenu isAuth={isAuth} authPages={authPages}></NavMenu>
               ) : (
-                unAuthPages.map((page) => (
-                  <HeaderLink icon={pageIcons[page]} page={page} key={page} />
-                ))
+                <NavMenu isAuth={isAuth} authPages={unAuthPages}></NavMenu>
               )}
             </Menu>
           </Flex>

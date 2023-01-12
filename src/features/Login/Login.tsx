@@ -1,5 +1,4 @@
 import {
-  Checkbox,
   FormControlLabel,
   FormLabel,
   Grid,
@@ -24,6 +23,9 @@ import { loginTC } from "./loginThunks";
 import styles from "../../common/styles/common/common.module.scss";
 import { useFormik } from "formik";
 import { validMail } from "../../common/utils/regExp";
+import { Input } from "../../common/ui-kit/Input/Input";
+import { Checkbox } from "../../common/ui-kit/Checkbox/Checkbox";
+import { Flex } from "../../common/ui-kit/Flex/Flex";
 
 interface ILoginErrorType {
   email?: string;
@@ -71,101 +73,80 @@ export const Login = () => {
   const changePasswordFieldType = () => setShowPassword((prev) => !prev);
 
   return (
-    <Grid
-      container
-      justifyContent={"center"}
-      alignContent={"center"}
-      sx={{ height: "100vh" }}
-    >
-      <Grid
-        item
-        justifyContent={"center"}
-        xs={3}
-        sx={{
-          minWidth: "360px",
-          position: "relative",
-          pointerEvents: `${isLoading ? "none" : "auto"}`,
-        }}
-      >
-        {isLoading && (
-          <div className={styles.preventSending}>
-            <Preloader />
-          </div>
-        )}
-        <Paper sx={{ padding: "35px" }}>
-          <form onSubmit={loginForm.handleSubmit}>
-            <FormControl sx={{ width: "100%", textAlign: "center" }}>
-              <FormLabel>
-                <Typography variant={"h3"} sx={{ textAlign: "center" }}>
-                  Sign in
-                </Typography>
-              </FormLabel>
-              <FormGroup>
-                <TextField
-                  error={loginHasError("email")}
-                  label={
-                    loginHasError("email") ? loginForm.errors.email : "Email"
-                  }
-                  margin={"normal"}
-                  variant={"standard"}
-                  {...loginForm.getFieldProps("email")}
-                />
-                <TextField
-                  sx={{
-                    marginBottom: "1rem",
-                  }}
-                  error={loginHasError("password")}
-                  label={
-                    loginHasError("password")
-                      ? loginForm.errors.password
-                      : "Password"
-                  }
-                  margin={"normal"}
-                  type={passwordFieldType}
-                  variant={"standard"}
-                  {...loginForm.getFieldProps("password")}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position={"end"}>
-                        <IconButton onClick={changePasswordFieldType}>
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </FormGroup>
-              <FormControlLabel
-                label={"Remember me"}
-                control={<Checkbox />}
-                {...loginForm.getFieldProps("rememberMe")}
-                checked={loginForm.values.rememberMe}
-              />
-              <Typography sx={{ marginBottom: "1rem", textAlign: "end" }}>
-                <Link to={"/recovery"}>Forgot Password?</Link>
-              </Typography>
-
-              <Button
-                type={"submit"}
-                variant={"contained"}
-                disabled={loginHasError("email") || loginHasError("password")}
-                color={"primary"}
-                sx={{ borderRadius: "30px", marginBottom: "30px" }}
-              >
+    <Flex justify={"center"}>
+      {isLoading && (
+        <div className={styles.preventSending}>
+          <Preloader />
+        </div>
+      )}
+      <div style={{ padding: "35px", boxShadow: "black 0px 0px 1px 1px" }}>
+        <form onSubmit={loginForm.handleSubmit}>
+          <FormControl sx={{ width: "100%", textAlign: "center" }}>
+            <FormLabel>
+              <Typography variant={"h3"} sx={{ textAlign: "center" }}>
                 Sign in
-              </Button>
-              <Typography mb={1} variant={"subtitle1"} component={"span"}>
-                Haven't account?
               </Typography>
-              <Typography sx={{ fontSize: "16px", color: "#366EFF" }}>
-                <Link to={"/register"} style={{ color: "inherit" }}>
-                  Sign up
-                </Link>
-              </Typography>
-            </FormControl>
-          </form>
-        </Paper>
-      </Grid>
-    </Grid>
+            </FormLabel>
+            <FormGroup>
+              <Input
+                onError={loginHasError("email") && loginForm.errors.email}
+                {...loginForm.getFieldProps("email")}
+              ></Input>
+              <Input
+                type={showPassword ? "password" : "text"}
+                onError={loginHasError("password") && loginForm.errors.email}
+                {...loginForm.getFieldProps("password")}
+                endItem={
+                  <InputAdornment position={"end"}>
+                    <IconButton onClick={changePasswordFieldType}>
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              ></Input>
+            </FormGroup>
+            {/*<FormControlLabel*/}
+            {/*  label={"Remember me"}*/}
+            {/*  control={<Checkbox />}*/}
+            {/*  {...loginForm.getFieldProps("rememberMe")}*/}
+            {/*  checked={loginForm.values.rememberMe}*/}
+            {/*/>*/}
+            <Checkbox
+              onChange={() =>
+                loginForm.setFieldValue(
+                  "rememberMe",
+                  !loginForm.values.rememberMe
+                )
+              }
+              checked={loginForm.values.rememberMe}
+            >
+              <span>Remember me</span>
+            </Checkbox>
+
+            <Typography sx={{ marginBottom: "1rem", textAlign: "end" }}>
+              <Link to={"/recovery"}>Forgot Password?</Link>
+            </Typography>
+
+            <Button
+              type={"submit"}
+              variant={"contained"}
+              disabled={loginHasError("email") || loginHasError("password")}
+              color={"primary"}
+              sx={{ borderRadius: "30px", marginBottom: "30px" }}
+            >
+              Sign in
+            </Button>
+            <Typography mb={1} variant={"subtitle1"} component={"span"}>
+              Haven't account?
+            </Typography>
+            <Typography sx={{ fontSize: "16px", color: "#366EFF" }}>
+              <Link to={"/register"} style={{ color: "inherit" }}>
+                Sign up
+              </Link>
+            </Typography>
+          </FormControl>
+        </form>
+      </div>
+    </Flex>
   );
 };

@@ -8,6 +8,7 @@ import { useAppDispatch } from "../../../common/hooks";
 import { packsModalsAC } from "../packsModalsSlice";
 import RangeSlider from "../../../common/components/RangeSlider/RangeSlider";
 import { IParams } from "../packsThunks";
+import { Input } from "../../../common/ui-kit/Input/Input";
 
 interface IHeaderProps {
   packName: string;
