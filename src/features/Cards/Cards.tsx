@@ -1,4 +1,3 @@
-import { Box, debounce } from "@mui/material";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   cardsCardQuestionSelector,
@@ -25,6 +24,7 @@ import { NotFoundElements } from "common/components/NotFoundElements/NotFoundEle
 import { Pagination } from "common/ui-kit/Pagination/Pagination";
 import { Preloader } from "common/components/Preloader/Preloader";
 import { appStateSelector } from "app/selectors";
+import { debounce } from "@mui/material";
 import { getCardsTC } from "./cardsThunks";
 import { getItemFromLC } from "common/utils/localStorage";
 import { selectOptions } from "./Cards.data";
@@ -154,7 +154,7 @@ export const Cards = React.memo(() => {
   return (
     <Container variant="sm" sx={{ paddingTop: "8.75rem" }}>
       <Flex sx={{ position: "relative" }} fDirection="column">
-        {true && (
+        {isLoading && (
           <div className={styles.preventSending}>
             <Preloader />
           </div>
@@ -171,14 +171,14 @@ export const Cards = React.memo(() => {
         />
         {cards.length > 0 ? (
           <>
-            <Box sx={{ marginBottom: 3 }}>
+            <div style={{ marginBottom: "1.25rem" }}>
               <CardsTable
                 cards={cards}
                 isPackMine={isPackMine}
                 sort={sort}
                 setSort={handleChangeSort}
               />
-            </Box>
+            </div>
             <Pagination
               selectProps={{
                 options: selectOptions,

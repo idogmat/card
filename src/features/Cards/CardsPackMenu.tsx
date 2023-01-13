@@ -2,11 +2,9 @@ import { AiOutlineBook, AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import { CardsDropdownButton, CardsDropdownNavLink } from "./CardsStyles";
 import { Dropdown, DropdownItem } from "common/ui-kit/Dropdown/Dropdown";
 
-import { Button } from "common/ui-kit/Button/Button";
 import { ElementPosition } from "common/ui-kit/types";
 import { FC } from "react";
 import { IPackResponse } from "features/Packs/packsAPI";
-import { NavLink } from "react-router-dom";
 import { packsModalsAC } from "features/Packs/packsModalsSlice";
 import { useAppDispatch } from "common/hooks";
 
