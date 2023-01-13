@@ -12,6 +12,13 @@ import { Button } from "../../../common/ui-kit/Button/Button";
 import { MyPackButton } from "../PacksStyle";
 import search from "../../../assets/img/search.svg";
 import { ReactSVG } from "react-svg";
+import {
+  MdImageSearch,
+  MdImagesearchRoller,
+  MdManageSearch,
+  MdOutlineSearch,
+  MdPhoneIphone,
+} from "react-icons/md";
 
 interface IHeaderProps {
   packName: string;
@@ -63,7 +70,7 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
             <Search
               searchValue={packName}
               searchChangeHandler={changeSearchHandler}
-              endItem={<ReactSVG src={search} />}
+              endItem={<MdOutlineSearch />}
             />
             <FormControl
               style={{

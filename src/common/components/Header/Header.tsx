@@ -66,12 +66,6 @@ export const Header = React.memo(() => {
                 heightSize={"2.5rem"}
               />
             </Button>
-            {/*<Menu*/}
-            {/*  open={isMenuOpen}*/}
-            {/*  onClose={closeMenu}*/}
-            {/*  anchorEl={menuAnchor}*/}
-
-            {/*>*/}
             <Menu open={isMenuOpen} close={closeMenu}>
               {isAuth ? (
                 <NavMenu isAuth={isAuth} authPages={authPages}></NavMenu>

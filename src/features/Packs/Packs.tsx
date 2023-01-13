@@ -1,7 +1,7 @@
 import { Box, debounce } from "@mui/material";
-import { Clear, HorizontalRule } from "@mui/icons-material";
+import { HorizontalRule } from "@mui/icons-material";
 import { IParams, removePackTC, setPacksTC } from "./packsThunks";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import {
   packsCardsPacksSelector,
   packsIsMyPackSelector,
@@ -29,6 +29,8 @@ import { packsAC } from "./packsReducer";
 import styles from "../../common/styles/common/common.module.scss";
 import { useSearchParams } from "react-router-dom";
 import { userStateSelector } from "features/User/selectors";
+import { TablePagination } from "../../common/components/TablePagination/TablePagination";
+import { selectOptions } from "./Packs.data";
 
 const Packs = () => {
   // Selectors
@@ -206,18 +208,21 @@ const Packs = () => {
       <PacksTable
         id={user._id}
         cardPacks={cardPacks}
-        totalPageCount={totalPageCount}
-        pageCount={pageCount}
-        page={page}
-        changePage={changePage}
-        handleChangeRowsPerPage={handleChangeRowsPerPage}
         changeSort={changeSort}
         showSortIcon={showSortIcon}
         removePack={removePack}
         isMyPack={isMyPack}
         isLoading={isLoading}
       />
-
+      <TablePagination
+        title={"Packs"}
+        totalPages={totalPageCount}
+        elementsPerPage={pageCount}
+        changePageHandler={changePage}
+        changeElementsPerPage={handleChangeRowsPerPage}
+        currentPage={page}
+        selectOptions={selectOptions}
+      />
       <PacksModals />
     </Box>
   );

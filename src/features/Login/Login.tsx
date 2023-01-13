@@ -66,7 +66,6 @@ export const Login = () => {
   });
 
   // Vars
-  const passwordFieldType = showPassword ? "text" : "password";
   const loginHasError = hasError.bind(null, loginForm);
 
   // Utils
@@ -95,24 +94,16 @@ export const Login = () => {
               ></Input>
               <Input
                 styleType={"underline"}
-                type={showPassword ? "password" : "text"}
+                type={showPassword ? "text" : "password"}
                 error={loginHasError("password") && loginForm.errors.email}
                 {...loginForm.getFieldProps("password")}
                 endItem={
-                  <InputAdornment position={"end"}>
-                    <IconButton onClick={changePasswordFieldType}>
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
+                  <IconButton onClick={changePasswordFieldType}>
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
                 }
               ></Input>
             </FormGroup>
-            {/*<FormControlLabel*/}
-            {/*  label={"Remember me"}*/}
-            {/*  control={<Checkbox />}*/}
-            {/*  {...loginForm.getFieldProps("rememberMe")}*/}
-            {/*  checked={loginForm.values.rememberMe}*/}
-            {/*/>*/}
             <Checkbox
               onChange={() =>
                 loginForm.setFieldValue(

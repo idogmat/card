@@ -36,7 +36,7 @@ const StyledInput = styled.input.attrs<
   &:focus {
     border-color: var(--color-blue);
   }
-  &:focus + div div div svg {
+  &:focus + div svg {
     fill: var(--color-blue);
   }
   ::-webkit-input-placeholder {
@@ -75,7 +75,11 @@ type InputBaseProps = {
 const Icon = styled.div`
   position: absolute;
   right: 30px;
-  top: 33px;
+  top: 30px;
+  svg {
+    width: 30px;
+    height: 30px;
+  }
 `;
 export const Input: FC<Partial<InputBaseProps>> = ({
   children,

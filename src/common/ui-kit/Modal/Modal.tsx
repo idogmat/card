@@ -11,14 +11,17 @@ export const ModalBase = styled.div`
   z-index: 50;
 `;
 export const InsideModal = styled.div`
+  position: fixed;
   display: flex;
   flex-direction: column;
-  background: rgba(100, 100, 100, 0.3);
+  background: transparent;
   width: 100vw;
   height: 100vh;
   z-index: 100;
+  overflow: hidden;
 `;
 export const FormInModal = styled.div`
+  position: fixed;
   display: flex;
   margin: auto;
   width: 50%;

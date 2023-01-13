@@ -10,7 +10,7 @@ interface IMenu {
 
 const MenuInModal = styled.div`
   position: absolute;
-  right: 0;
+  right: 5px;
   top: 65px;
   width: 100px;
   z-index: 100;
