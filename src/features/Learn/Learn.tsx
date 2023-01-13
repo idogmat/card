@@ -8,6 +8,7 @@ import { Button } from "common/ui-kit/Button/Button";
 import { Flex } from "common/ui-kit/Flex/Flex";
 import { ICard } from "common/models";
 import { IPackResponse } from "./../Packs/packsAPI";
+import { LearnContainer } from "./LearnStyles";
 import { LearnRate } from "./LearnRate";
 import { Paper } from "common/ui-kit/Paper/Paper";
 import { Preloader } from "common/components/Preloader/Preloader";
@@ -74,14 +75,7 @@ export const Learn = () => {
   if (isLoading || !card) return <Preloader />;
 
   return (
-    <Flex
-      fDirection="column"
-      justify="center"
-      sx={{
-        paddingTop: "100px",
-        position: "relative",
-      }}
-    >
+    <LearnContainer>
       <Flex sx={{ marginBottom: "1rem" }}>
         <BackTo route={`/packs?${previousURL}`} title={"Back to packs"} />
       </Flex>
@@ -125,6 +119,6 @@ export const Learn = () => {
           )}
         </Paper>
       </Flex>
-    </Flex>
+    </LearnContainer>
   );
 };
