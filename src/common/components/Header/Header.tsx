@@ -1,10 +1,11 @@
-import { Button } from "@mui/material";
 import { HeaderContainer, HeaderWrapper } from "./HeaderStyles";
 import React, { useState } from "react";
 import { authRoutes, unAuthRoutes } from "../../routes";
 
 import { Avatar } from "common/ui-kit/Avatar/Avatar";
+import { Button } from "@mui/material";
 import { Container } from "common/ui-kit/Container/Container";
+import { Dropdown } from "common/ui-kit/Dropdown/Dropdown";
 import { Flex } from "common/ui-kit/Flex/Flex";
 import { HeaderLink } from "./HeaderLink";
 import { Typography } from "common/ui-kit/Text/Typography";
@@ -14,9 +15,8 @@ import { lime } from "@mui/material/colors";
 import logo from "../../../assets/img/logo.svg";
 import { pageIcons } from "./Header.data";
 import { useAllSelector } from "../../hooks";
+import { useComponentVisible } from "../../hooks/isComponentVisible";
 import { userStateSelector } from "../../../features/User/selectors";
-import { NavMenu } from "../../ui-kit/Menu/NavMenu";
-import { Menu } from "../../ui-kit/Menu/Menu";
 
 export const Header = React.memo(() => {
   // Dispatch & selectors
@@ -30,14 +30,12 @@ export const Header = React.memo(() => {
   const unAuthPages = getRouteName(unAuthRoutes);
   const authPages = getRouteName(authRoutes);
   const isMenuOpen = !!menuAnchor;
+  const { ref, isComponentVisible, setIsComponentVisible } =
+    useComponentVisible(false);
 
   // Utils
   const openMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setMenuAnchor(e.currentTarget);
-  };
-
-  const closeMenu = () => {
-    setMenuAnchor(null);
+    setIsComponentVisible(true);
   };
 
   return (
@@ -45,14 +43,16 @@ export const Header = React.memo(() => {
       <Container variant="sm">
         <HeaderWrapper>
           <img src={logo} alt="IT-Incubator" />
-          <Flex align="center">
+          <Flex align="center" sx={{ position: "relative" }}>
             <Button
               onClick={openMenu}
+              ref={ref}
               sx={{
                 color: "#000",
                 display: "flex",
                 gap: 1,
                 alignItems: "center",
+                position: "relative",
               }}
             >
               <Typography as="p" variant="sub-title-md" align="center">
@@ -66,13 +66,18 @@ export const Header = React.memo(() => {
                 heightSize={"2.5rem"}
               />
             </Button>
-            <Menu open={isMenuOpen} close={closeMenu}>
-              {isAuth ? (
-                <NavMenu isAuth={isAuth} authPages={authPages}></NavMenu>
-              ) : (
-                <NavMenu isAuth={isAuth} authPages={unAuthPages}></NavMenu>
-              )}
-            </Menu>
+            <Dropdown
+              posSettings={{ bottom: "0px", right: "0px" }}
+              open={isComponentVisible}
+            >
+              {isAuth
+                ? authPages.map((page) => {
+                    return <HeaderLink page={page} icon={pageIcons[page]} />;
+                  })
+                : unAuthPages.map((page) => {
+                    return <HeaderLink page={page} icon={pageIcons[page]} />;
+                  })}
+            </Dropdown>
           </Flex>
         </HeaderWrapper>
       </Container>
