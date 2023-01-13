@@ -1,3 +1,4 @@
+import { Button } from "common/ui-kit/Button/Button";
 import { Flex } from "common/ui-kit/Flex/Flex";
 import { StyledComponent } from "common/ui-kit/types";
 import styled from "styled-components";
@@ -24,4 +25,13 @@ export const HeaderWrapper = styled.div`
     flex-direction: column;
     justify-content: stretch;
   } ;
+`;
+
+export const HeaderMenuButton = styled(Button).attrs({
+  semantic: true,
+})`
+  display: flex;
+  align-items: center;
+  position: relative;
+  gap: 0.3125rem;
 `;

@@ -16,6 +16,7 @@ import { CardsAC } from "./cardsSlice";
 import CardsHeader from "./components/CardsHeader";
 import { CardsModals } from "./components/modals/CardsModals";
 import { CardsTable } from "./components/CardsTable";
+import { Container } from "common/ui-kit/Container/Container";
 import { Flex } from "common/ui-kit/Flex/Flex";
 import { IGetCardsRequest } from "./cardsAPI";
 import { IPackResponse } from "./../Packs/packsAPI";
@@ -151,58 +152,51 @@ export const Cards = React.memo(() => {
   );
 
   return (
-    <Flex
-      justify="center"
-      sx={{
-        paddingTop: "150px",
-      }}
-    >
-      <Flex sx={{ position: "relative" }}>
+    <Container variant="sm" sx={{ paddingTop: "8.75rem" }}>
+      <Flex sx={{ position: "relative" }} fDirection="column">
         {isLoading && (
           <div className={styles.preventSending}>
             <Preloader />
           </div>
         )}
-        <Flex fDirection="column">
-          <Flex justify="flex-start">
-            <BackTo title={"Back to packs"} route={`/packs?${previousURL}`} />
-          </Flex>
-          <CardsHeader
-            isPackMine={isPackMine}
-            pack={pack}
-            setSearchRequest={changeSearchRequestHandler}
-            searchValue={cardQuestion || ""}
-            previousURL={previousURL}
-          />
-          {cards.length > 0 ? (
-            <>
-              <Box sx={{ marginBottom: 3 }}>
-                <CardsTable
-                  cards={cards}
-                  isPackMine={isPackMine}
-                  sort={sort}
-                  setSort={handleChangeSort}
-                />
-              </Box>
-              <Pagination
-                selectProps={{
-                  options: selectOptions,
-                  selected: pageCount.toString(),
-                  onChange: changeShowPerPage,
-                  endIcon: <MdKeyboardArrowDown />,
-                }}
-                label="Cards"
-                changePage={changePageHandler}
-                currentPage={page}
-                totalPages={totalPages}
-              />
-            </>
-          ) : (
-            <NotFoundElements title={"Empty"} />
-          )}
-          <CardsModals pack={pack} />
+        <Flex justify="flex-start">
+          <BackTo title={"Back to packs"} route={`/packs?${previousURL}`} />
         </Flex>
+        <CardsHeader
+          isPackMine={isPackMine}
+          pack={pack}
+          setSearchRequest={changeSearchRequestHandler}
+          searchValue={cardQuestion || ""}
+          previousURL={previousURL}
+        />
+        {cards.length > 0 ? (
+          <>
+            <Box sx={{ marginBottom: 3 }}>
+              <CardsTable
+                cards={cards}
+                isPackMine={isPackMine}
+                sort={sort}
+                setSort={handleChangeSort}
+              />
+            </Box>
+            <Pagination
+              selectProps={{
+                options: selectOptions,
+                selected: pageCount.toString(),
+                onChange: changeShowPerPage,
+                endIcon: <MdKeyboardArrowDown />,
+              }}
+              label="Cards"
+              changePage={changePageHandler}
+              currentPage={page}
+              totalPages={totalPages}
+            />
+          </>
+        ) : (
+          <NotFoundElements title={"Empty"} />
+        )}
+        <CardsModals pack={pack} />
       </Flex>
-    </Flex>
+    </Container>
   );
 });
