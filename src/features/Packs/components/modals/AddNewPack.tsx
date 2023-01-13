@@ -1,4 +1,3 @@
-import { Box, Checkbox, FormGroup, IconButton, TextField } from "@mui/material";
 import React, { ChangeEvent, useState } from "react";
 import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
 
@@ -11,6 +10,9 @@ import { packsModalsAC } from "../../packsModalsSlice";
 import { getImgBase64File } from "../../../../common/utils/base64Converter";
 import { FormInModal, Modal } from "../../../../common/ui-kit/Modal/Modal";
 import { Flex } from "../../../../common/ui-kit/Flex/Flex";
+import { Input } from "../../../../common/ui-kit/Input/Input";
+import { Grid } from "../../../../common/ui-kit/Grid/Grid";
+import { Checkbox } from "../../../../common/ui-kit/Checkbox/Checkbox";
 
 export interface INewPack {
   name: string;
@@ -20,7 +22,7 @@ export interface INewPack {
 
 export const AddNewPack = React.memo(() => {
   // Selector & dispatch
-  const { isOpen } = useAllSelector(addNewModalSelector);
+  const { isOpen, pack } = useAllSelector(addNewModalSelector);
   const dispatch = useAppDispatch();
 
   // Local states
@@ -62,60 +64,58 @@ export const AddNewPack = React.memo(() => {
     <Modal open={isOpen} close={handleClose}>
       <FormInModal>
         <Flex
-          align={"center"}
-          justify={"center"}
-          sx={{ margin: "auto", display: "flex", flexDirection: "column" }}
+          justify={"space-between"}
+          fDirection={"column"}
+          sx={{ margin: "auto", gap: "10px" }}
         >
-          <FormGroup>
-            {newPackData.deckCover && (
-              <img
-                src={newPackData.deckCover}
-                style={{
-                  width: "100%",
-                  height: "9.375rem",
-                  objectFit: "cover",
-                }}
-                alt="deckCover"
-              />
-            )}
-            <TextField
-              label="Name pack"
-              variant="standard"
-              color="primary"
-              value={newPackData.name}
-              onChange={handleChangeName}
+          {newPackData.deckCover && (
+            <img
+              src={newPackData.deckCover}
+              style={{
+                width: "100%",
+                height: "9.375rem",
+                objectFit: "cover",
+              }}
+              alt="deckCover"
             />
-            <Box>
-              Private pack{" "}
-              <Checkbox
-                checked={newPackData.isPrivate}
-                onChange={handleChangeIsPrivate}
-                color="primary"
-              />
-            </Box>
-            <Box>
-              <label>
-                <input
-                  style={{ display: "none" }}
-                  type="file"
-                  accept={"image/*"}
-                  onChange={(e) => handleChangeCover(e)}
-                />
-                <IconButton component="span" color={"primary"}>
-                  <PhotoCamera />
-                </IconButton>
-              </label>
-            </Box>
-          </FormGroup>
+          )}
 
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Input
+            type={"text"}
+            style={{ margin: "auto" }}
+            styleType={"underline"}
+            placeholder="Name pack"
+            value={newPackData.name}
+            onChange={handleChangeName}
+          />
+
+          <Checkbox
+            checked={newPackData.isPrivate}
+            onChange={handleChangeIsPrivate}
+            children={<span>Private pack</span>}
+          />
+          <label style={{ textAlign: "center", display: "inline-flex" }}>
+            <input
+              style={{ display: "none" }}
+              type="file"
+              accept={"image/*"}
+              onChange={(e) => handleChangeCover(e)}
+            />
+            <PhotoCamera />
+            Add cover
+          </label>
+          <Flex
+            justify={"space-between"}
+            fDirection={"row"}
+            sx={{ margin: "auto" }}
+          >
             <Button onClick={handleClose} color="primary" variant="contained">
               Cancel
             </Button>
             <Button onClick={addNewPack} color="primary" variant="contained">
               Add Pack
             </Button>
-          </Box>
+          </Flex>
         </Flex>
       </FormInModal>
     </Modal>

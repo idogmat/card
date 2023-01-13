@@ -21,12 +21,14 @@ export const InsideModal = styled.div`
   overflow: hidden;
 `;
 export const FormInModal = styled.div`
-  position: fixed;
   display: flex;
+  flex-direction: column;
   margin: auto;
   width: 50%;
-  height: 80%;
+  height: 50%;
   background: white;
+  box-shadow: 0px 0px 8px 8px var(--color-blue);
+  border-radius: 5px;
 `;
 interface IModal {
   open: boolean;

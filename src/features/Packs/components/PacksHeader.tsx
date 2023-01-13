@@ -55,6 +55,7 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
     return (
       <Flex justify={"space-between"}>
         <Search
+          topPosition={"30px"}
           searchValue={packName}
           searchChangeHandler={changeSearchHandler}
           endItem={<MdOutlineSearch />}
