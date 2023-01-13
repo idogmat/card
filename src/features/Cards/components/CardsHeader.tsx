@@ -1,16 +1,22 @@
-import { CardBanner, CardTitle, CardsHeaderWrapper } from "../CardsStyles";
-import { DeleteOutline, Edit, MoreHoriz, School } from "@mui/icons-material";
-import { IconButton, Menu, MenuItem, Typography } from "@mui/material";
+import {
+  CardBanner,
+  CardTitle,
+  CardsHeaderInfo,
+  CardsHeaderWrapper,
+} from "../CardsStyles";
 import React, { FC, useState } from "react";
 
 import { Button } from "common/ui-kit/Button/Button";
 import { CardsModalsAC } from "features/Cards/cardsModalsSlice";
+import { CardsPackMenu } from "../CardsPackMenu";
 import { Flex } from "common/ui-kit/Flex/Flex";
 import { IPackResponse } from "./../../Packs/packsAPI";
+import { MdMoreHoriz } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { Search } from "../../../common/components/Search/Search";
 import { packsModalsAC } from "./../../Packs/packsModalsSlice";
 import { useAppDispatch } from "common/hooks";
+import { useComponentVisible } from "common/hooks/isComponentVisible";
 
 interface ICardsHeaderProps {
   isPackMine: boolean;
@@ -26,85 +32,37 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
     const dispatch = useAppDispatch();
 
     // Local States & Vars
-    const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
-    const isMenuOpen = !!menuAnchor;
+    const { ref, isComponentVisible, setIsComponentVisible } =
+      useComponentVisible(false);
 
     // Utils
     const openMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
-      setMenuAnchor(e.currentTarget);
-    };
-
-    const closeMenu = () => {
-      setMenuAnchor(null);
+      console.log("opening menu", isComponentVisible);
+      setIsComponentVisible(true);
     };
 
     const openAddNewCardModal = () => {
       dispatch(CardsModalsAC.setAddCardState({ state: true }));
     };
 
-    const openEditPackModal = () => {
-      dispatch(packsModalsAC.setUpdatePackState({ status: true, pack }));
-    };
-
-    const openDeletePackModal = () => {
-      dispatch(packsModalsAC.setDeletePackState({ status: true, pack }));
-    };
-
     return (
       <>
         <CardsHeaderWrapper>
-          <CardTitle>
-            {pack.name}
+          <CardsHeaderInfo>
+            <CardTitle>{pack.name}</CardTitle>
             {isPackMine && (
               <>
-                <IconButton onClick={openMenu}>
-                  <MoreHoriz />
-                </IconButton>
-                <Menu
-                  open={isMenuOpen}
-                  onClose={closeMenu}
-                  anchorEl={menuAnchor}
-                  sx={{
-                    "& .menu-text-icon": {
-                      display: "flex",
-                      gap: 1,
-                      alignItems: "center",
-                    },
-                  }}
-                >
-                  <MenuItem>
-                    <Typography
-                      className={"menu-text-icon"}
-                      onClick={openEditPackModal}
-                    >
-                      <Edit />
-                      Edit
-                    </Typography>
-                  </MenuItem>
-                  <MenuItem>
-                    <Typography
-                      className={"menu-text-icon"}
-                      onClick={openDeletePackModal}
-                    >
-                      <DeleteOutline />
-                      Delete
-                    </Typography>
-                  </MenuItem>
-                  <MenuItem>
-                    <Typography className={"menu-text-icon"}>
-                      <NavLink
-                        to={`/learn/${pack._id}`}
-                        state={{ previousURL: previousURL, pack }}
-                      >
-                        <School />
-                        Learn
-                      </NavLink>
-                    </Typography>
-                  </MenuItem>
-                </Menu>
+                <Button ref={ref} onClick={openMenu} semantic>
+                  <MdMoreHoriz fontSize={"1.25rem"} />
+                </Button>
+                <CardsPackMenu
+                  open={isComponentVisible}
+                  posSettings={{ bottom: "0", right: "0" }}
+                  pack={pack}
+                />
               </>
             )}
-          </CardTitle>
+          </CardsHeaderInfo>
           {pack.deckCover && <CardBanner src={pack.deckCover} alt="" />}
           {isPackMine && (
             <Button onClick={openAddNewCardModal}>Add new card</Button>

@@ -4,4 +4,11 @@ export type SXType = {
   };
 };
 
+export interface ElementPosition {
+  left: string;
+  right: string;
+  top: string;
+  bottom: string;
+}
+
 export type StyledComponent<D> = SXType & D;

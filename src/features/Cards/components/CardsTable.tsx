@@ -1,5 +1,6 @@
 import { CardsSwipeIcon, CardsTableWrapper } from "../CardsStyles";
-import React, { FC } from "react";
+import { Dropdown, DropdownItem } from "common/ui-kit/Dropdown/Dropdown";
+import React, { FC, useState } from "react";
 import { TableBody, TableHeader } from "common/ui-kit/Table/Table";
 
 import { CardsTableRow } from "./CardsTableRow";

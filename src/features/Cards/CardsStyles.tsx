@@ -1,8 +1,10 @@
 import styled, { keyframes } from "styled-components";
 
 import { Button } from "common/ui-kit/Button/Button";
+import { DropdownItem } from "common/ui-kit/Dropdown/Dropdown";
 import { Flex } from "common/ui-kit/Flex/Flex";
 import { MdPhoneIphone } from "react-icons/md";
+import { NavLink } from "react-router-dom";
 import { TableWrapper } from "common/ui-kit/Table/Table";
 import { Typography } from "common/ui-kit/Text/Typography";
 
@@ -47,6 +49,8 @@ export const CardTitle = styled(Typography).attrs({
   display: flex;
   align-items: center;
   font-size: 1.875rem;
+  position: relative;
+  gap: 0.3125rem;
 `;
 
 export const CardBanner = styled.img`
@@ -72,4 +76,27 @@ export const CardsSwipeIcon = styled(MdPhoneIphone)`
   @media (max-width: 62.375rem) {
     display: block;
   }
+`;
+
+export const CardsDropdownButton = styled(Button).attrs({
+  semantic: true,
+})`
+  display: flex;
+  font-size: var(--fs-big);
+  align-items: center;
+  gap: 0.3125rem;
+`;
+
+export const CardsDropdownNavLink = styled(NavLink)`
+  display: flex;
+  font-size: var(--fs-big);
+  align-items: center;
+  gap: 0.3125rem;
+`;
+
+export const CardsHeaderInfo = styled(Flex).attrs({
+  align: "center",
+})`
+  position: relative;
+  gap: 0.3125rem;
 `;
