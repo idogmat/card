@@ -89,12 +89,14 @@ export const Login = () => {
             </FormLabel>
             <FormGroup>
               <Input
-                onError={loginHasError("email") && loginForm.errors.email}
+                styleType={"underline"}
+                error={loginHasError("email") && loginForm.errors.email}
                 {...loginForm.getFieldProps("email")}
               ></Input>
               <Input
+                styleType={"underline"}
                 type={showPassword ? "password" : "text"}
-                onError={loginHasError("password") && loginForm.errors.email}
+                error={loginHasError("password") && loginForm.errors.email}
                 {...loginForm.getFieldProps("password")}
                 endItem={
                   <InputAdornment position={"end"}>

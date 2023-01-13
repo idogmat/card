@@ -11,6 +11,7 @@ import { Input } from "../../../common/ui-kit/Input/Input";
 import { Button } from "../../../common/ui-kit/Button/Button";
 import { MyPackButton } from "../PacksStyle";
 import search from "../../../assets/img/search.svg";
+import { ReactSVG } from "react-svg";
 
 interface IHeaderProps {
   packName: string;
@@ -62,7 +63,7 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
             <Search
               searchValue={packName}
               searchChangeHandler={changeSearchHandler}
-              endItem={<img src={search} />}
+              endItem={<ReactSVG src={search} />}
             />
             <FormControl
               style={{
@@ -73,13 +74,13 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
             >
               <MyPackButton
                 style={{ margin: "auto 1rem" }}
-                // selected={isMyPack}
+                selected={isMyPack}
                 onClick={() => handlerIsMyPack(true)}
               >
                 My
               </MyPackButton>
               <MyPackButton
-                // selected={!isMyPack}
+                selected={!isMyPack}
                 onClick={() => handlerIsMyPack(false)}
               >
                 All

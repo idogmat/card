@@ -2,29 +2,43 @@ import React, {
   ChangeEvent,
   FC,
   HTMLInputTypeAttribute,
-  ReactChild,
+  ReactEventHandler,
   useEffect,
   useRef,
   useState,
 } from "react";
 import styled, { CSSProperties } from "styled-components";
 import s from "./Input.module.scss";
+import { StyledComponent } from "../types";
+interface IStyledInput {
+  styleType: "underline" | undefined;
+  border: string;
+  error: string | false | undefined;
+}
 
-const StyledInput = styled.input.attrs((props) => ({
+const StyledInput = styled.input.attrs<
+  StyledComponent<Partial<InputBaseProps & IStyledInput>>
+>((props) => ({
   type: props.type || "text",
   size: props.size || "1em",
-
-  error: props.onError ? "1px solid red" : "1px solid #0c0c0c",
-}))`
+  border: props?.styleType === "underline" ? "none" : "1px solid #0c0c0c",
+  error: props.error ? "1px solid red" : "1px solid #0c0c0c",
+}))<StyledComponent<Partial<InputBaseProps & IStyledInput>>>`
   color: #1a191a;
   font-size: 1em;
-  border: none;
+  border: ${(props) => props?.border};
+  border-radius: ${(props) => (props?.border === "none" ? "none" : "5px")};
   outline: none;
-  border-bottom: ${(props) => props.error};
+  border-bottom: ${(props) => props?.error};
   margin: ${(props) => props.size};
   padding: ${(props) => props.size};
   transition: 0.3s;
-
+  &:focus {
+    border-color: var(--color-blue);
+  }
+  &:focus + div div div svg {
+    fill: var(--color-blue);
+  }
   ::-webkit-input-placeholder {
     text-transform: capitalize;
   }
@@ -45,7 +59,7 @@ const StyledInput = styled.input.attrs((props) => ({
 type InputBaseProps = {
   children: JSX.Element;
   className: string;
-  onError: boolean | string;
+  error: string | false | undefined;
   id: string;
   label: string;
   name: string;
@@ -56,11 +70,12 @@ type InputBaseProps = {
   type: HTMLInputTypeAttribute;
   value: string;
   endItem: React.ReactNode;
+  styleType: "underline" | undefined;
 };
 const Icon = styled.div`
   position: absolute;
-  right: 10%;
-  top: 50%;
+  right: 30px;
+  top: 33px;
 `;
 export const Input: FC<Partial<InputBaseProps>> = ({
   children,
@@ -75,7 +90,7 @@ export const Input: FC<Partial<InputBaseProps>> = ({
   return (
     <div style={{ position: "relative" }}>
       <label className={onFocus ? s.focus : s.unFocus} htmlFor={props.name}>
-        {props.onError || props.name}
+        {props.error || props.name}
       </label>
       <StyledInput ref={ref} placeholder={props.name} {...props}></StyledInput>
       {endItem && <Icon>{endItem}</Icon>}

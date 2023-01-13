@@ -6,7 +6,6 @@ import { HashRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { ThemeProvider } from "@emotion/react";
 import reportWebVitals from "./reportWebVitals";
 import { store } from "./app/store";
 
