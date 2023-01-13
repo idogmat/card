@@ -48,6 +48,8 @@ export const Button = styled.button<StyledComponent<Partial<IButtonProps>>>`
           border: none;
           padding: 0;
         `};
-
+  &:hover svg {
+    fill: var(--color-blue);
+  }
   ${({ sx }) => ({ ...sx })}
 `;

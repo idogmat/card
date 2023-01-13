@@ -19,6 +19,8 @@ import {
   MdOutlineSearch,
   MdPhoneIphone,
 } from "react-icons/md";
+import { Flex } from "../../../common/ui-kit/Flex/Flex";
+import { IoTrashBin } from "react-icons/io5";
 
 interface IHeaderProps {
   packName: string;
@@ -51,64 +53,56 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
     const modalAddPack = () =>
       dispatch(packsModalsAC.setAddPackState({ status: true }));
     return (
-      <Box sx={{ flexGrow: 1 }}>
-        <Toolbar
+      <Flex justify={"space-between"}>
+        <Search
+          searchValue={packName}
+          searchChangeHandler={changeSearchHandler}
+          endItem={<MdOutlineSearch />}
+        />
+        <FormControl
           style={{
             display: "flex",
-            justifyContent: "space-between",
-            padding: "0",
+            flexDirection: "row",
+            margin: "auto 1rem",
           }}
         >
-          <Container
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              padding: "0",
-            }}
+          <MyPackButton
+            style={{ margin: "auto 1rem" }}
+            selected={isMyPack}
+            onClick={() => handlerIsMyPack(true)}
           >
-            <Search
-              searchValue={packName}
-              searchChangeHandler={changeSearchHandler}
-              endItem={<MdOutlineSearch />}
-            />
-            <FormControl
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                margin: "auto 1rem",
-              }}
-            >
-              <MyPackButton
-                style={{ margin: "auto 1rem" }}
-                selected={isMyPack}
-                onClick={() => handlerIsMyPack(true)}
-              >
-                My
-              </MyPackButton>
-              <MyPackButton
-                selected={!isMyPack}
-                onClick={() => handlerIsMyPack(false)}
-              >
-                All
-              </MyPackButton>
-            </FormControl>
+            My
+          </MyPackButton>
+          <MyPackButton
+            selected={!isMyPack}
+            onClick={() => handlerIsMyPack(false)}
+          >
+            All
+          </MyPackButton>
+        </FormControl>
 
-            <RangeSlider
-              max={max}
-              min={min}
-              minCardsCount={minCardsCount}
-              maxCardsCount={maxCardsCount}
-              onChangeSlider={changeRangeHandler}
-              params={params}
-            />
-            <Button onClick={modalAddPack}>Add new Pack</Button>
-            <Button onClick={() => removeSort()} style={{ margin: "auto 0" }}>
-              <DeleteForeverIcon />
-            </Button>
-          </Container>
-        </Toolbar>
-      </Box>
+        <RangeSlider
+          max={max}
+          min={min}
+          minCardsCount={minCardsCount}
+          maxCardsCount={maxCardsCount}
+          onChangeSlider={changeRangeHandler}
+          params={params}
+        />
+        <Button
+          style={{ padding: "0px 5px", margin: "20px 0px" }}
+          onClick={modalAddPack}
+        >
+          Add new Pack
+        </Button>
+        <Button
+          semantic
+          onClick={() => removeSort()}
+          style={{ margin: "auto 0" }}
+        >
+          <IoTrashBin />
+        </Button>
+      </Flex>
     );
   }
 );

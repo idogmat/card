@@ -21,7 +21,6 @@ import PacksHeader from "./components/PacksHeader";
 import PacksModals from "./components/modals/PacksModals";
 import PacksTable from "./components/PacksTable";
 import { Preloader } from "../../common/components/Preloader/Preloader";
-import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
 import { TimeoutId } from "@reduxjs/toolkit/dist/query/core/buildMiddleware/types";
 import { appStateSelector } from "app/selectors";
 import { getSortIcon } from "../../common/utils/assets";
@@ -29,8 +28,9 @@ import { packsAC } from "./packsReducer";
 import styles from "../../common/styles/common/common.module.scss";
 import { useSearchParams } from "react-router-dom";
 import { userStateSelector } from "features/User/selectors";
-import { TablePagination } from "../../common/components/TablePagination/TablePagination";
 import { selectOptions } from "./Packs.data";
+import { Pagination } from "../../common/ui-kit/Pagination/Pagination";
+import { MdKeyboardArrowDown } from "react-icons/md";
 
 const Packs = () => {
   // Selectors
@@ -83,9 +83,9 @@ const Packs = () => {
     };
     dispatch(setPacksTC(model));
   }, [searchParams]);
-
+  //page
   const changePage = useCallback(
-    (event: React.ChangeEvent<unknown>, newPage: number) => {
+    (newPage: number) => {
       dispatch(packsAC.setCurrentPage({ page: newPage }));
       setSearchParams({ ...params, page: `${newPage}` });
     },
@@ -93,16 +93,12 @@ const Packs = () => {
   );
 
   const handleChangeRowsPerPage = useCallback(
-    (event: SelectChangeEvent) => {
-      dispatch(packsAC.setPageCount({ pageCount: +event.target.value }));
-      setSearchParams({ ...params, pageCount: event.target.value });
+    (value: string) => {
+      dispatch(packsAC.setPageCount({ pageCount: +value }));
+      setSearchParams({ ...params, pageCount: value });
     },
     [setSearchParams, packsAC.setPageCount]
   );
-
-  const removePack = useCallback((id: string) => {
-    dispatch(removePackTC(id));
-  }, []);
 
   const setSearchQueryParams = useCallback(
     debounce(
@@ -111,7 +107,7 @@ const Packs = () => {
     ),
     [setSearchParams]
   );
-
+  //search
   const changeSearchHandler = useCallback(
     (value: string) => {
       dispatch(packsAC.setPackName({ packName: value }));
@@ -127,7 +123,7 @@ const Packs = () => {
     },
     [setSearchParams, packsAC.setPreferencePacks]
   );
-
+  //sort
   const changeSort = useCallback(
     (field: string) => {
       dispatch(
@@ -143,7 +139,7 @@ const Packs = () => {
     },
     [packsAC.setPacksSort, setSearchParams]
   );
-
+  //range
   const optDebounce = (
     type: { valueRange: number[]; params: any },
     ms: number
@@ -171,6 +167,10 @@ const Packs = () => {
       <HorizontalRule />
     );
   };
+
+  const removePack = useCallback((id: string) => {
+    dispatch(removePackTC(id));
+  }, []);
 
   const removeSort = useCallback(() => {
     dispatch(packsAC.clearSettings({}));
@@ -214,14 +214,17 @@ const Packs = () => {
         isMyPack={isMyPack}
         isLoading={isLoading}
       />
-      <TablePagination
-        title={"Packs"}
-        totalPages={totalPageCount}
-        elementsPerPage={pageCount}
-        changePageHandler={changePage}
-        changeElementsPerPage={handleChangeRowsPerPage}
+      <Pagination
+        selectProps={{
+          options: selectOptions,
+          selected: pageCount.toString(),
+          onChange: handleChangeRowsPerPage,
+          endIcon: <MdKeyboardArrowDown />,
+        }}
+        label="Packs"
+        changePage={changePage}
         currentPage={page}
-        selectOptions={selectOptions}
+        totalPages={totalPageCount}
       />
       <PacksModals />
     </Box>

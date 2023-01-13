@@ -13,6 +13,7 @@ import {
 } from "../../../common/ui-kit/Table/Table";
 import { Button } from "../../../common/ui-kit/Button/Button";
 import { AiOutlineAudit, AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
+import { Flex } from "../../../common/ui-kit/Flex/Flex";
 
 interface IRowProps {
   id: string;
@@ -41,7 +42,7 @@ const PackElement: React.FC<IRowProps> = React.memo(
     };
 
     return (
-      <TableBodyLine cols="minmax(100px,200px) 100px 100px 100px minmax(100px,200px) minmax(100px,200px)">
+      <TableBodyLine cols="100px minmax(100px,300px) 120px 150px minmax(100px,300px) minmax(80px,150px)">
         <TableBodyItem>
           {isLoading ? (
             <Skeleton />
@@ -56,24 +57,29 @@ const PackElement: React.FC<IRowProps> = React.memo(
           )}
         </TableBodyItem>
         <TableBodyItem>
-          <NavLink
-            state={backToState}
-            to={`/packs/${pack._id}`}
-            onClick={savePackData}
-          >
-            {isLoading ? <Skeleton /> : pack.name}
-          </NavLink>
+          <Flex style={{ overflow: "hidden" }}>
+            <NavLink
+              state={backToState}
+              to={`/packs/${pack._id}`}
+              onClick={savePackData}
+              style={{ overflow: "hidden" }}
+            >
+              {isLoading ? <Skeleton /> : pack.name}
+            </NavLink>
+          </Flex>
         </TableBodyItem>
-        <TableBodyItem>
+        <TableBodyItem style={{ margin: "auto" }}>
           {isLoading ? <Skeleton /> : pack.cardsCount}
         </TableBodyItem>
         <TableBodyItem>
           {isLoading ? <Skeleton /> : formDate(pack.created)}
         </TableBodyItem>
         <TableBodyItem style={{ width: "100%" }}>
-          {isLoading ? <Skeleton /> : pack.user_name}
+          <Flex style={{ overflow: "hidden" }}>
+            {isLoading ? <Skeleton /> : pack.user_name}
+          </Flex>
         </TableBodyItem>
-        <TableBodyItem>
+        <TableBodyItem style={{ margin: "auto" }}>
           <NavLink
             to={`/learn/${pack._id}`}
             state={{ ...backToState, cardsCount: pack.cardsCount }}

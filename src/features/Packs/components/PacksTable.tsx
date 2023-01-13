@@ -25,15 +25,22 @@ const PacksTable: React.FC<ITableProps> = React.memo(
       <Flex fDirection="column">
         <CardsSwipeIcon />
         <CardsTableWrapper>
-          <TableHeader cols="repeat(6, minmax(100px, 1fr))">
+          <TableHeader cols="100px minmax(100px,300px) 120px 150px minmax(100px,300px) minmax(100px,150px)">
             <Flex>Cover</Flex>
             <Flex>Name</Flex>
             <Flex align={"center"}>CardsCount</Flex>
-            <Flex onClick={() => changeSort("updated")} align={"center"}>
-              <Box>Updated{showSortIcon("updated")}</Box>
+            <Flex
+              className={"table-cell-icon"}
+              onClick={() => changeSort("updated")}
+              align="center"
+            >
+              Updated
+              {showSortIcon("updated")}
             </Flex>
             <Flex align={"center"}>Author Name</Flex>
-            <Flex align={"center"}>Actions</Flex>
+            <Flex align={"center"} style={{ margin: "auto" }}>
+              Actions
+            </Flex>
           </TableHeader>
           <TableBody>
             {!!cardPacks ? (
