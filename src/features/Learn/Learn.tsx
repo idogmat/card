@@ -1,17 +1,20 @@
-import { Button, Paper, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { getCardsTC, updateCardGradeTC } from "./../Cards/cardsThunks";
 import { useAllSelector, useAppDispatch } from "common/hooks";
 import { useLocation, useParams } from "react-router-dom";
 
 import { BackTo } from "common/components/BackTo/BackTo";
-import { Box } from "@mui/system";
+import { Button } from "common/ui-kit/Button/Button";
+import { Flex } from "common/ui-kit/Flex/Flex";
 import { ICard } from "common/models";
 import { IPackResponse } from "./../Packs/packsAPI";
 import { LearnRate } from "./LearnRate";
+import { Paper } from "common/ui-kit/Paper/Paper";
 import { Preloader } from "common/components/Preloader/Preloader";
+import { Typography } from "common/ui-kit/Text/Typography";
 import { appStateSelector } from "app/selectors";
 import { cardsCardsSelector } from "features/Cards/selectors";
+import { getItemFromLC } from "common/utils/localStorage";
 import { grades } from "./Learn.data";
 
 export const Learn = () => {
@@ -33,13 +36,18 @@ export const Learn = () => {
 
   // Vars
   const { state } = useLocation();
-  const previousURL = state ? state.previousURL : "";
-  const pack: IPackResponse = state ? state.pack : {};
+  const backToState = getItemFromLC("backToState");
+  const previousURL = backToState?.previousURL || "packs";
+  const pack =
+    backToState?.pack || ({ name: "namePlaceholder" } as IPackResponse);
+
   const cardsCount = state ? state.cardsCount : 0;
   const getCardsConfig = {
     cardsPack_id: packID ? packID : "",
     pageCount: cardsCount,
   };
+  const hasQuestionImg = card.questionImg && card.questionImg !== "undefined";
+  const hasAnswerImg = card.questionImg && card.answerImg !== "undefined";
 
   // Utils
 
@@ -49,11 +57,12 @@ export const Learn = () => {
 
   const handleShowGrades = () => setShowGrades(true);
 
-  const changeGrade = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setSelectedGrade(e.target.value);
+  const changeGrade = (value: string) => setSelectedGrade(value);
 
   const handleNext = () => {
     const selectedGradeNumber = grades.indexOf(selectedGrade) + 1;
+    console.log(selectedGradeNumber);
+
     dispatch(
       updateCardGradeTC({ card_id: card._id, grade: selectedGradeNumber })
     );
@@ -65,56 +74,57 @@ export const Learn = () => {
   if (isLoading || !card) return <Preloader />;
 
   return (
-    <Box
+    <Flex
+      fDirection="column"
+      justify="center"
       sx={{
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "column",
         paddingTop: "100px",
         position: "relative",
       }}
     >
-      <Box sx={{ marginBottom: 2 }}>
+      <Flex sx={{ marginBottom: "1rem" }}>
         <BackTo route={`/packs?${previousURL}`} title={"Back to packs"} />
-      </Box>
-      <Box
-        sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}
-      >
-        <Typography component="h1" variant="h3" sx={{ marginBottom: 2 }}>
+      </Flex>
+      <Flex fDirection="column" align="center">
+        <Typography variant="title" as="h3" sx={{ marginBottom: "0.625rem" }}>
           <b>Learn "{pack.name}"</b>
         </Typography>
-        <Paper sx={{ padding: 5, minWidth: "320px" }}>
+        <Paper sx={{ padding: "2.3rem", minWidth: "320px" }}>
           <Typography>
-            <b>Question</b>: {card.question}
+            <b>Question</b>:{" "}
+            {hasQuestionImg ? (
+              <img src={card.questionImg} alt="questionImage" />
+            ) : (
+              card.question
+            )}
           </Typography>
-          <Typography sx={{ marginBottom: 3 }}>
+          <Typography sx={{ marginBottom: "1.25rem" }}>
             Attempts: {card.shots}
           </Typography>
           {!showGrades ? (
-            <Button onClick={handleShowGrades} variant="contained">
-              Show answer
-            </Button>
+            <Button onClick={handleShowGrades}>Show answer</Button>
           ) : (
             <>
               <Typography>
-                <b>Answer:</b> {card.answer}
+                <b>Answer</b>:{" "}
+                {hasAnswerImg ? (
+                  <img src={card.answerImg} alt="answerImage" />
+                ) : (
+                  card.answer
+                )}
               </Typography>
               <Typography>Rate yourself:</Typography>
               <LearnRate
                 changeGrade={changeGrade}
                 selectedGrade={selectedGrade}
               />
-              <Button
-                variant="contained"
-                onClick={handleNext}
-                disabled={!selectedGrade}
-              >
+              <Button onClick={handleNext} disabled={!selectedGrade}>
                 Go next
               </Button>
             </>
           )}
         </Paper>
-      </Box>
-    </Box>
+      </Flex>
+    </Flex>
   );
 };

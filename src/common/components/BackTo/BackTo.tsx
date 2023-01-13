@@ -1,9 +1,9 @@
-import { Button, Typography } from "@mui/material";
-import { Navigate, useNavigate } from "react-router-dom";
-import React, { FC, useRef, useState } from "react";
+import React, { FC, useState } from "react";
 
-import { ArrowBack } from "@mui/icons-material";
-import styles from "./BackTo.module.css";
+import { BackToButton } from "./BackToStyles";
+import { MdKeyboardBackspace } from "react-icons/md";
+import { Navigate } from "react-router-dom";
+import { Typography } from "common/ui-kit/Text/Typography";
 
 interface IBackToProps {
   title: string;
@@ -18,10 +18,10 @@ export const BackTo: FC<IBackToProps> = React.memo(({ title, route }) => {
   };
 
   return (
-    <Button className={styles.link} onClick={onClickHandler}>
+    <BackToButton semantic onClick={onClickHandler}>
       {shouldNavigate && <Navigate to={route} />}
-      <ArrowBack />
+      <MdKeyboardBackspace />
       <Typography>{title}</Typography>
-    </Button>
+    </BackToButton>
   );
 });

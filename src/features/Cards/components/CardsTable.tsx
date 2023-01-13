@@ -1,13 +1,12 @@
 import { CardsSwipeIcon, CardsTableWrapper } from "../CardsStyles";
-import { Dropdown, DropdownItem } from "common/ui-kit/Dropdown/Dropdown";
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import { TableBody, TableHeader } from "common/ui-kit/Table/Table";
 
 import { CardsTableRow } from "./CardsTableRow";
 import { Flex } from "common/ui-kit/Flex/Flex";
-import { HorizontalRule } from "@mui/icons-material";
 import { ICard } from "../../../common/models";
 import { IFieldSort } from "../Cards";
+import { MdKeyboardArrowDown } from "react-icons/md";
 import { getSortIcon } from "../../../common/utils/assets";
 
 interface ICardsTableProps {
@@ -27,7 +26,7 @@ export const CardsTable: FC<ICardsTableProps> = React.memo(
     };
 
     const showSortIcon = (field: string) => {
-      return sort.field === field ? sortIcon : <HorizontalRule />;
+      return sort.field === field ? sortIcon : <MdKeyboardArrowDown />;
     };
 
     return (

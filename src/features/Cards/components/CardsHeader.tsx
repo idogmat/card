@@ -4,7 +4,7 @@ import {
   CardsHeaderInfo,
   CardsHeaderWrapper,
 } from "../CardsStyles";
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 
 import { Button } from "common/ui-kit/Button/Button";
 import { CardsModalsAC } from "features/Cards/cardsModalsSlice";
@@ -12,9 +12,7 @@ import { CardsPackMenu } from "../CardsPackMenu";
 import { Flex } from "common/ui-kit/Flex/Flex";
 import { IPackResponse } from "./../../Packs/packsAPI";
 import { MdMoreHoriz } from "react-icons/md";
-import { NavLink } from "react-router-dom";
 import { Search } from "../../../common/components/Search/Search";
-import { packsModalsAC } from "./../../Packs/packsModalsSlice";
 import { useAppDispatch } from "common/hooks";
 import { useComponentVisible } from "common/hooks/isComponentVisible";
 

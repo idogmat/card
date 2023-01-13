@@ -16,6 +16,7 @@ import { useAllSelector, useAppDispatch } from "../../common/hooks";
 
 import { Link } from "react-router-dom";
 import { Preloader } from "../../common/components/Preloader/Preloader";
+import { RadioButton } from "common/ui-kit/RadioButton/RadioButton";
 import { appStateSelector } from "app/selectors";
 import { hasError } from "../../common/utils/errorHandlers";
 import { registerTC } from "./registerThunks";
@@ -70,7 +71,7 @@ export const Register = () => {
       alignContent={"center"}
       sx={{
         height: "100vh",
-        ["@media (max-width: 768px)"]: {
+        "@media (max-width: 768px)": {
           paddingTop: "400px",
           paddingBottom: "5vh",
         },

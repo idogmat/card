@@ -40,6 +40,7 @@ const PaginationList = styled.ul`
 `;
 
 const PaginationItem = styled.li<IPaginationItemProps>`
+  cursor: pointer;
   height: 1.5625rem;
   width: 1.5625rem;
 

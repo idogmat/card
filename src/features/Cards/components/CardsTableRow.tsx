@@ -6,7 +6,7 @@ import { CardsIconButton } from "../CardsStyles";
 import { CardsModalsAC } from "../cardsModalsSlice";
 import { Flex } from "common/ui-kit/Flex/Flex";
 import { ICard } from "../../../common/models";
-import { Rating } from "@mui/material";
+import ReactStars from "react-stars";
 import { formDate } from "../../../common/utils/date";
 import { useAppDispatch } from "common/hooks";
 
@@ -67,12 +67,13 @@ export const CardsTableRow: FC<ICardsTableRowProps> = React.memo(
         <TableBodyItem>{formDate(`${card.updated}`)}</TableBodyItem>
         <TableBodyItem>
           <Flex align="center" sx={{ gap: "0.625rem" }}>
-            <Rating
+            {/* <Rating
               name={"read-only"}
               value={Math.floor(card.grade)}
               readOnly
               precision={0.5}
-            />
+            /> */}
+            <ReactStars value={Math.floor(card.grade)} edit={false} size={30} />
             {isPackMine && (
               <>
                 <CardsIconButton semantic onClick={openUpdateModal}>
