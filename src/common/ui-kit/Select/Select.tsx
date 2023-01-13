@@ -102,11 +102,11 @@ export const SelectEndIcon = styled.div<ISelectEndIconProps>`
     `}
 `;
 
-interface ISelectProps {
+export interface ISelectProps {
   options: IFormatSelectOption[];
   selected: string;
   onChange: (option: string) => void;
-  label: string;
+  label?: string;
   endIcon?: React.ReactNode;
 }
 
