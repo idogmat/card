@@ -93,6 +93,7 @@ export const Login = () => {
                 {...loginForm.getFieldProps("email")}
               ></Input>
               <Input
+                padding={true}
                 styleType={"underline"}
                 type={showPassword ? "text" : "password"}
                 error={loginHasError("password") && loginForm.errors.password}

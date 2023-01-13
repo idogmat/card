@@ -19,17 +19,37 @@ interface IStyledInput {
   error: string | false | undefined;
 }
 
+type InputBaseProps = {
+  children: JSX.Element;
+  className: string;
+  error: string | false | undefined;
+  id: string;
+  label: string;
+  name: string;
+  onBlur: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  style: CSSProperties;
+  type: HTMLInputTypeAttribute;
+  value: string;
+  endItem: React.ReactNode;
+  styleType: "underline" | undefined;
+  padding: true;
+};
 const FormForInput = styled.div``;
 const StyledInput = styled.input.attrs<
   StyledComponent<Partial<InputBaseProps & IStyledInput>>
 >((props) => ({
   type: props.type || "text",
   size: props.size || "1em",
+  endItem: props.endItem,
+  padding: props.padding,
   border: props?.styleType === "underline" ? "none" : "1px solid #0c0c0c",
   error: props.error,
 }))<StyledComponent<Partial<InputBaseProps & IStyledInput>>>`
   color: #1a191a;
   font-size: 1em;
+  box-sizing: border-box;
   border: ${(props) => props?.border};
   border-radius: ${(props) => (props?.border === "none" ? "none" : "5px")};
   outline: none;
@@ -38,6 +58,17 @@ const StyledInput = styled.input.attrs<
   padding: ${(props) => props.size};
   background: transparent;
   transition: 0.3s;
+  ${(props) =>
+    props.endItem &&
+    props.padding &&
+    css`
+      &[type="password"] {
+        padding-right: 55px;
+      }
+      &[type="text"] {
+        padding-right: 55px;
+      }
+    `}
   ${(props) =>
     props?.error
       ? css`
@@ -71,22 +102,6 @@ const StyledInput = styled.input.attrs<
   }
 `;
 
-type InputBaseProps = {
-  children: JSX.Element;
-  className: string;
-  error: string | false | undefined;
-  id: string;
-  label: string;
-  name: string;
-  onBlur: (event: ChangeEvent<HTMLInputElement>) => void;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  placeholder?: string;
-  style: CSSProperties;
-  type: HTMLInputTypeAttribute;
-  value: string;
-  endItem: React.ReactNode;
-  styleType: "underline" | undefined;
-};
 const Icon = styled.div`
   position: absolute;
   right: 30px;
@@ -159,6 +174,7 @@ export const Input: FC<Partial<InputBaseProps>> = ({
       <StyledInput
         ref={ref}
         {...props}
+        endItem={endItem ? true : false}
         onFocus={() => setFocus(true)}
         error={props.error ? props.error : undefined}
       ></StyledInput>
