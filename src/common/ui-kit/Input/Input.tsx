@@ -88,22 +88,6 @@ const StyledInput = styled.input.attrs<
   &:focus ~ div svg {
     fill: var(--color-blue);
   }
-
-  ::-webkit-input-placeholder {
-    text-transform: capitalize;
-  }
-
-  :-moz-placeholder {
-    text-transform: capitalize;
-  }
-
-  ::-moz-placeholder {
-    text-transform: capitalize;
-  }
-
-  :-ms-input-placeholder {
-    text-transform: capitalize;
-  }
 `;
 
 const Icon = styled.div<StyledComponent<Partial<{ topPosition: string }>>>`

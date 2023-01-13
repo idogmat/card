@@ -1,24 +1,13 @@
 import React, { FC } from "react";
-import { Box, Container, Toolbar } from "@mui/material";
 import { Search } from "../../../common/components/Search/Search";
 import FormControl from "@mui/material/FormControl/FormControl";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useAppDispatch } from "../../../common/hooks";
 import { packsModalsAC } from "../packsModalsSlice";
 import RangeSlider from "../../../common/components/RangeSlider/RangeSlider";
 import { IParams } from "../packsThunks";
-import { Input } from "../../../common/ui-kit/Input/Input";
 import { Button } from "../../../common/ui-kit/Button/Button";
 import { MyPackButton } from "../PacksStyle";
-import search from "../../../assets/img/search.svg";
-import { ReactSVG } from "react-svg";
-import {
-  MdImageSearch,
-  MdImagesearchRoller,
-  MdManageSearch,
-  MdOutlineSearch,
-  MdPhoneIphone,
-} from "react-icons/md";
+import { MdOutlineSearch } from "react-icons/md";
 import { Flex } from "../../../common/ui-kit/Flex/Flex";
 import { IoTrashBin } from "react-icons/io5";
 
