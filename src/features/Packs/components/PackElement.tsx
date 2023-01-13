@@ -41,7 +41,7 @@ const PackElement: React.FC<IRowProps> = React.memo(
     };
 
     return (
-      <TableBodyLine cols="repeat(6, minmax(100px, 1fr))">
+      <TableBodyLine cols="minmax(100px,200px) 100px 100px 100px minmax(100px,200px) minmax(100px,200px)">
         <TableBodyItem>
           {isLoading ? (
             <Skeleton />

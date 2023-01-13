@@ -22,7 +22,7 @@ interface ITableProps {
 const PacksTable: React.FC<ITableProps> = React.memo(
   ({ id, changeSort, showSortIcon, cardPacks, isLoading }) => {
     return (
-      <Flex direction="column">
+      <Flex fDirection="column">
         <CardsSwipeIcon />
         <CardsTableWrapper>
           <TableHeader cols="repeat(6, minmax(100px, 1fr))">
