@@ -57,11 +57,12 @@ export const Learn = () => {
 
   const handleShowGrades = () => setShowGrades(true);
 
-  const changeGrade = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setSelectedGrade(e.target.value);
+  const changeGrade = (value: string) => setSelectedGrade(value);
 
   const handleNext = () => {
     const selectedGradeNumber = grades.indexOf(selectedGrade) + 1;
+    console.log(selectedGradeNumber);
+
     dispatch(
       updateCardGradeTC({ card_id: card._id, grade: selectedGradeNumber })
     );
@@ -91,7 +92,11 @@ export const Learn = () => {
         <Paper sx={{ padding: "2.3rem", minWidth: "320px" }}>
           <Typography>
             <b>Question</b>:{" "}
-            {hasQuestionImg ? <img src={card.questionImg} /> : card.question}
+            {hasQuestionImg ? (
+              <img src={card.questionImg} alt="questionImage" />
+            ) : (
+              card.question
+            )}
           </Typography>
           <Typography sx={{ marginBottom: "1.25rem" }}>
             Attempts: {card.shots}
@@ -102,7 +107,11 @@ export const Learn = () => {
             <>
               <Typography>
                 <b>Answer</b>:{" "}
-                {hasAnswerImg ? <img src={card.answerImg} /> : card.answer}
+                {hasAnswerImg ? (
+                  <img src={card.answerImg} alt="answerImage" />
+                ) : (
+                  card.answer
+                )}
               </Typography>
               <Typography>Rate yourself:</Typography>
               <LearnRate

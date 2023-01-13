@@ -49,5 +49,10 @@ export const Button = styled.button<StyledComponent<Partial<IButtonProps>>>`
           padding: 0;
         `};
 
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
   ${({ sx }) => ({ ...sx })}
 `;
