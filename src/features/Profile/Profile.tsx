@@ -62,7 +62,7 @@ export const Profile = () => {
           </div>
         )}
         <Paper asset="1.5rem 5rem">
-          <Flex justify="center" align="center" direction="column">
+          <Flex justify="center" align="center" fDirection="column">
             <ProfileTitle>Personal information</ProfileTitle>
             <Flex justify="center" sx={{ marginBottom: "30px" }}>
               <FileLoader

@@ -1,4 +1,4 @@
-import { Box, SelectChangeEvent, debounce } from "@mui/material";
+import { Box, debounce } from "@mui/material";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   cardsCardQuestionSelector,
@@ -16,17 +16,17 @@ import { CardsAC } from "./cardsSlice";
 import CardsHeader from "./components/CardsHeader";
 import { CardsModals } from "./components/modals/CardsModals";
 import { CardsTable } from "./components/CardsTable";
+import { Flex } from "common/ui-kit/Flex/Flex";
 import { IGetCardsRequest } from "./cardsAPI";
 import { IPackResponse } from "./../Packs/packsAPI";
+import { MdKeyboardArrowDown } from "react-icons/md";
 import { NotFoundElements } from "common/components/NotFoundElements/NotFoundElements";
+import { Pagination } from "common/ui-kit/Pagination/Pagination";
 import { Preloader } from "common/components/Preloader/Preloader";
-import { TablePagination } from "common/components/TablePagination/TablePagination";
 import { appStateSelector } from "app/selectors";
 import { getCardsTC } from "./cardsThunks";
 import { getItemFromLC } from "common/utils/localStorage";
-import { packsCardsPacksSelector } from "features/Packs/selectors";
 import { selectOptions } from "./Cards.data";
-import { setPacksTC } from "./../Packs/packsThunks";
 import styles from "../../common/styles/common/common.module.scss";
 import { userStateSelector } from "../User/selectors";
 
@@ -81,7 +81,7 @@ export const Cards = React.memo(() => {
   );
 
   const isPageCountValid = selectOptions.some(
-    (option) => option.value === +params.showPerPage
+    (option) => option.selectValue === params.showPerPage
   );
 
   useEffect(() => {
@@ -97,8 +97,8 @@ export const Cards = React.memo(() => {
   }, [searchParams]);
 
   const changeShowPerPage = useCallback(
-    (event: SelectChangeEvent) => {
-      const rowsPerPage = +event.target.value;
+    (value: string) => {
+      const rowsPerPage = +value;
       const existingPages = cardsTotalCount / rowsPerPage;
       const lastPage = Math.ceil(existingPages);
       if (lastPage < totalPages && page >= lastPage) {
@@ -117,7 +117,7 @@ export const Cards = React.memo(() => {
   );
 
   const changePageHandler = useCallback(
-    (event: React.ChangeEvent<unknown>, value: number) => {
+    (value: number) => {
       dispatch(CardsAC.setPage({ page: value }));
       setSearchParams({ ...params, currentPage: value.toString() });
     },
@@ -151,22 +151,22 @@ export const Cards = React.memo(() => {
   );
 
   return (
-    <Box
+    <Flex
+      justify="center"
       sx={{
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "column",
-        paddingTop: "100px",
+        paddingTop: "150px",
       }}
     >
-      <Box sx={{ position: "relative" }}>
+      <Flex sx={{ position: "relative" }}>
         {isLoading && (
           <div className={styles.preventSending}>
             <Preloader />
           </div>
         )}
-        <>
-          <BackTo title={"Back to packs"} route={`/packs?${previousURL}`} />
+        <Flex fDirection="column">
+          <Flex justify="flex-start">
+            <BackTo title={"Back to packs"} route={`/packs?${previousURL}`} />
+          </Flex>
           <CardsHeader
             isPackMine={isPackMine}
             pack={pack}
@@ -184,22 +184,25 @@ export const Cards = React.memo(() => {
                   setSort={handleChangeSort}
                 />
               </Box>
-              <TablePagination
-                title={"Cards"}
-                totalPages={totalPages}
-                elementsPerPage={pageCount}
-                changePageHandler={changePageHandler}
-                changeElementsPerPage={changeShowPerPage}
+              <Pagination
+                selectProps={{
+                  options: selectOptions,
+                  selected: pageCount.toString(),
+                  onChange: changeShowPerPage,
+                  endIcon: <MdKeyboardArrowDown />,
+                }}
+                label="Cards"
+                changePage={changePageHandler}
                 currentPage={page}
-                selectOptions={selectOptions}
+                totalPages={totalPages}
               />
             </>
           ) : (
             <NotFoundElements title={"Empty"} />
           )}
           <CardsModals pack={pack} />
-        </>
-      </Box>
-    </Box>
+        </Flex>
+      </Flex>
+    </Flex>
   );
 });
