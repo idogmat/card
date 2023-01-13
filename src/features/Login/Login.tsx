@@ -95,7 +95,7 @@ export const Login = () => {
               <Input
                 styleType={"underline"}
                 type={showPassword ? "text" : "password"}
-                error={loginHasError("password") && loginForm.errors.email}
+                error={loginHasError("password") && loginForm.errors.password}
                 {...loginForm.getFieldProps("password")}
                 endItem={
                   <IconButton onClick={changePasswordFieldType}>
