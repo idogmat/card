@@ -1,11 +1,12 @@
 import React from "react";
-import { Grid, Paper, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
-import Button from "@mui/material/Button/Button";
-import FormControl from "@mui/material/FormControl/FormControl";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "../../common/hooks";
 import { setNewPassword } from "./setNewPasswordThunk";
+import { Flex } from "../../common/ui-kit/Flex/Flex";
+import { Typography } from "../../common/ui-kit/Text/Typography";
+import { Input } from "../../common/ui-kit/Input/Input";
+import { Button } from "../../common/ui-kit/Button/Button";
 
 const SetNewPassword = () => {
   const navigate = useNavigate();
@@ -40,58 +41,53 @@ const SetNewPassword = () => {
   };
 
   return (
-    <Grid
-      container
-      justifyContent={"center"}
-      alignContent={"center"}
-      sx={{ height: "100vh" }}
-    >
-      <Grid item justifyContent={"center"} xs={3} sx={{ minWidth: "360px" }}>
-        <Paper sx={{ padding: "35px" }}>
-          <form onSubmit={setPasswordForm.handleSubmit}>
-            <FormControl sx={{ width: "100%", textAlign: "center" }}>
-              <Typography
-                style={{ marginBottom: "3rem" }}
-                variant={"h5"}
-                sx={{ textAlign: "center" }}
-              >
-                Create new password
-              </Typography>
-              <TextField
-                style={{ marginBottom: "3rem" }}
-                error={hasError("password")}
-                label={
-                  hasError("password")
-                    ? setPasswordForm.errors.password
-                    : "Password"
-                }
-                margin={"normal"}
-                variant={"standard"}
-                {...setPasswordForm.getFieldProps("password")}
-              />
-              <Typography
-                style={{ marginBottom: "3rem" }}
-                sx={{ textAlign: "start" }}
-              >
-                <p style={{ opacity: ".7" }}>
-                  Enter your email address and we will send you further
-                  instructions
-                </p>
-              </Typography>
-              <Button
-                type={"submit"}
-                variant={"contained"}
-                disabled={hasError("password")}
-                color={"primary"}
-                sx={{ borderRadius: "30px", marginBottom: "30px" }}
-              >
-                Create new password
-              </Button>
-            </FormControl>
-          </form>
-        </Paper>
-      </Grid>
-    </Grid>
+    <Flex justify={"center"} sx={{ paddingTop: "8rem", margin: "0 2rem" }}>
+      <Flex
+        sx={{
+          padding: "35px",
+          borderRadius: "5px",
+          boxShadow: "black 0px 0px 1px 1px",
+        }}
+      >
+        <form onSubmit={setPasswordForm.handleSubmit}>
+          <Flex
+            fDirection={"column"}
+            sx={{ width: "100%", textAlign: "center" }}
+          >
+            <Typography variant={"title"} sx={{ textAlign: "center" }}>
+              Create new password
+            </Typography>
+            <Input
+              styleType={"underline"}
+              error={hasError("password") && setPasswordForm.errors.password}
+              label={
+                hasError("password")
+                  ? setPasswordForm.errors.password
+                  : "Password"
+              }
+              {...setPasswordForm.getFieldProps("password")}
+            />
+            <Typography
+              style={{ marginBottom: "3rem" }}
+              sx={{ textAlign: "start" }}
+            >
+              <p style={{ opacity: ".7" }}>
+                Enter your email address and we will send you further
+                instructions
+              </p>
+            </Typography>
+            <Button
+              type={"submit"}
+              disabled={hasError("password")}
+              color={"primary"}
+              sx={{ borderRadius: "30px", marginBottom: "30px" }}
+            >
+              Create new password
+            </Button>
+          </Flex>
+        </form>
+      </Flex>
+    </Flex>
   );
 };
 

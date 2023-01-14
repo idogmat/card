@@ -13,9 +13,9 @@ interface FormValues {
 const SendMailForm: FC<FormValues> = React.memo(({ recoveryForm }) => {
   const sendMailHasError = hasError.bind(null, recoveryForm);
   return (
-    <Flex justify={"center"} sx={{ paddingTop: "8rem" }}>
+    <Flex justify={"center"} sx={{ paddingTop: "8rem", margin: "0 2rem" }}>
       <Flex
-        style={{
+        sx={{
           padding: "35px",
           borderRadius: "5px",
           boxShadow: "black 0px 0px 1px 1px",
