@@ -1,15 +1,8 @@
-import {
-  defaultErrorMessage,
-  errorHandlingThunk,
-} from "../../common/utils/errorHandlers";
+import { errorHandlingThunk } from "../../common/utils/errorHandlers";
 
 import { AppAC } from "../../app/appSlice";
-import { AppThunkActionType } from "../../common/hooks/useAllSelector";
 import { PacksAPI } from "./packsAPI";
-import { RootState } from "../../app/store";
 import { createAppAsyncThunk } from "../../common/utils/AsyncThunk";
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { packsAC } from "./packsReducer";
 
 export interface IParams {
   [p: string]: string;
@@ -94,7 +87,7 @@ export const removePackTC = createAppAsyncThunk(
   async (id: string, thunkAPI) => {
     return errorHandlingThunk(thunkAPI, async () => {
       const res = await PacksAPI.deletePack(id);
-      if (res.statusText==="OK") {
+      if (res.statusText === "OK") {
         const { isMyPack } = thunkAPI.getState().packs;
         thunkAPI.dispatch(
           setPacksTC({ isMyPack: isMyPack ? "true" : "false" })
@@ -123,11 +116,13 @@ export const updatePackTC = createAppAsyncThunk(
         fields.name,
         fields.deckCover
       );
-      if (res.statusText==="OK") {
-        const {isMyPack} = thunkAPI.getState().packs;
-        thunkAPI.dispatch(setPacksTC({isMyPack: isMyPack ? "true" : "false"}));
+      if (res.statusText === "OK") {
+        const { isMyPack } = thunkAPI.getState().packs;
         thunkAPI.dispatch(
-          AppAC.setSuccessMessage({message: "Successfully updated"})
+          setPacksTC({ isMyPack: isMyPack ? "true" : "false" })
+        );
+        thunkAPI.dispatch(
+          AppAC.setSuccessMessage({ message: "Successfully updated" })
         );
       }
     });

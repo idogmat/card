@@ -42,22 +42,16 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
     const modalAddPack = () =>
       dispatch(packsModalsAC.setAddPackState({ status: true }));
     return (
-      <Flex justify={"space-between"}>
+      <Flex justify={"space-between"} fWrap={"wrap"}>
         <Search
           topPosition={"30px"}
           searchValue={packName}
           searchChangeHandler={changeSearchHandler}
+          padding={true}
           endItem={<MdOutlineSearch />}
         />
-        <FormControl
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            margin: "auto 1rem",
-          }}
-        >
+        <Flex sx={{ gap: "1rem" }}>
           <MyPackButton
-            style={{ margin: "auto 1rem" }}
             selected={isMyPack}
             onClick={() => handlerIsMyPack(true)}
           >
@@ -69,7 +63,7 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
           >
             All
           </MyPackButton>
-        </FormControl>
+        </Flex>
 
         <RangeSlider
           max={max}
@@ -88,7 +82,7 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
         <Button
           semantic
           onClick={() => removeSort()}
-          style={{ margin: "auto 0" }}
+          style={{ margin: "20px 0", padding: "10px 5px" }}
         >
           <IoTrashBin />
         </Button>

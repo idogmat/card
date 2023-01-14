@@ -1,20 +1,5 @@
-import {
-  FormControlLabel,
-  FormLabel,
-  Grid,
-  IconButton,
-  InputAdornment,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
 import React, { useState } from "react";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
-
-import Button from "@mui/material/Button/Button";
-import FormControl from "@mui/material/FormControl/FormControl";
-import FormGroup from "@mui/material/FormGroup/FormGroup";
 import { Link } from "react-router-dom";
 import { Preloader } from "../../common/components/Preloader/Preloader";
 import { appStateSelector } from "app/selectors";
@@ -26,6 +11,9 @@ import { validMail } from "../../common/utils/regExp";
 import { Input } from "../../common/ui-kit/Input/Input";
 import { Checkbox } from "../../common/ui-kit/Checkbox/Checkbox";
 import { Flex } from "../../common/ui-kit/Flex/Flex";
+import { Typography } from "../../common/ui-kit/Text/Typography";
+import { Button } from "../../common/ui-kit/Button/Button";
+import { BiHide, BiShow } from "react-icons/bi";
 
 interface ILoginErrorType {
   email?: string;
@@ -72,39 +60,48 @@ export const Login = () => {
   const changePasswordFieldType = () => setShowPassword((prev) => !prev);
 
   return (
-    <Flex justify={"center"}>
+    <Flex justify={"center"} sx={{ paddingTop: "8rem" }}>
       {isLoading && (
         <div className={styles.preventSending}>
           <Preloader />
         </div>
       )}
-      <div style={{ padding: "35px", boxShadow: "black 0px 0px 1px 1px" }}>
+      <Flex
+        style={{
+          padding: "35px",
+          borderRadius: "5px",
+          boxShadow: "black 0px 0px 1px 1px",
+        }}
+      >
         <form onSubmit={loginForm.handleSubmit}>
-          <FormControl sx={{ width: "100%", textAlign: "center" }}>
-            <FormLabel>
-              <Typography variant={"h3"} sx={{ textAlign: "center" }}>
-                Sign in
-              </Typography>
-            </FormLabel>
-            <FormGroup>
-              <Input
-                styleType={"underline"}
-                error={loginHasError("email") && loginForm.errors.email}
-                {...loginForm.getFieldProps("email")}
-              ></Input>
-              <Input
-                padding={true}
-                styleType={"underline"}
-                type={showPassword ? "text" : "password"}
-                error={loginHasError("password") && loginForm.errors.password}
-                {...loginForm.getFieldProps("password")}
-                endItem={
-                  <IconButton onClick={changePasswordFieldType}>
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                }
-              ></Input>
-            </FormGroup>
+          <Flex
+            fDirection={"column"}
+            sx={{ width: "100%", textAlign: "center" }}
+          >
+            <Typography
+              variant={"title"}
+              sx={{ textAlign: "center", fontSize: "3rem" }}
+            >
+              Sign in
+            </Typography>
+            <Input
+              styleType={"underline"}
+              error={loginHasError("email") && loginForm.errors.email}
+              {...loginForm.getFieldProps("email")}
+            ></Input>
+            <Input
+              padding={true}
+              styleType={"underline"}
+              topPosition={"30px"}
+              type={showPassword ? "text" : "password"}
+              error={loginHasError("password") && loginForm.errors.password}
+              {...loginForm.getFieldProps("password")}
+              endItem={
+                <Button semantic onClick={changePasswordFieldType}>
+                  {showPassword ? <BiShow /> : <BiHide />}
+                </Button>
+              }
+            ></Input>
             <Checkbox
               onChange={() =>
                 loginForm.setFieldValue(
@@ -117,30 +114,32 @@ export const Login = () => {
               <span>Remember me</span>
             </Checkbox>
 
-            <Typography sx={{ marginBottom: "1rem", textAlign: "end" }}>
+            <Typography sx={{ margin: "1rem 0", textAlign: "end" }}>
               <Link to={"/recovery"}>Forgot Password?</Link>
             </Typography>
 
             <Button
               type={"submit"}
-              variant={"contained"}
               disabled={loginHasError("email") || loginHasError("password")}
               color={"primary"}
               sx={{ borderRadius: "30px", marginBottom: "30px" }}
             >
               Sign in
             </Button>
-            <Typography mb={1} variant={"subtitle1"} component={"span"}>
-              Haven't account?
-            </Typography>
-            <Typography sx={{ fontSize: "16px", color: "#366EFF" }}>
-              <Link to={"/register"} style={{ color: "inherit" }}>
-                Sign up
-              </Link>
-            </Typography>
-          </FormControl>
+            <Flex
+              fDirection={"column"}
+              sx={{ width: "100%", textAlign: "center" }}
+            >
+              <Typography>Haven't account?</Typography>
+              <Typography sx={{ fontSize: "16px", color: "#366EFF" }}>
+                <Link to={"/register"} style={{ color: "inherit" }}>
+                  Sign up
+                </Link>
+              </Typography>
+            </Flex>
+          </Flex>
         </form>
-      </div>
+      </Flex>
     </Flex>
   );
 };

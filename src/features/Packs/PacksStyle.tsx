@@ -9,6 +9,8 @@ export const MyPackButton = styled(Button).attrs<
 >(({ selected }) => ({
   bgColor: selected ? "var(--color-blue)" : "var(--color-primary)",
 }))<StyledComponent<Partial<IMyPackButton>>>`
+  padding: 0 1rem;
+  margin: 20px 4px;
   &:hover {
     bgcolor: "var(--color-blue)";
   }

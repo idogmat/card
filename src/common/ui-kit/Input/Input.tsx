@@ -39,6 +39,7 @@ type InputBaseProps = {
 };
 const FormForInput = styled.div`
   position: relative;
+  display: -webkit-inline-box;
 `;
 const StyledInput = styled.input.attrs<
   StyledComponent<Partial<InputBaseProps & IStyledInput>>

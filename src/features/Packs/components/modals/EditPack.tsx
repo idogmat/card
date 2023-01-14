@@ -1,22 +1,17 @@
-import {
-  BACKEND_MAX_IMG_WEIGHT,
-  getImgBase64File,
-  uploadHandler,
-} from "../../../../common/utils/base64Converter";
-import { Box, Checkbox, FormGroup, IconButton, TextField } from "@mui/material";
-import { ChangeEvent, memo, useEffect, useState } from "react";
+import { getImgBase64File } from "../../../../common/utils/base64Converter";
+import React, { ChangeEvent, memo } from "react";
 import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
 
 import Button from "@mui/material/Button/Button";
 import { IPackResponse } from "../../packsAPI";
-import { ModalBase } from "../../../../common/components/Modal";
 import { PhotoCamera } from "@mui/icons-material";
-import { acceptableImgFormats } from "../../../../common/utils/regExp";
 import { packsModalsAC } from "../../packsModalsSlice";
 import { updateModalSelector } from "./modalsSelectors";
 import { updatePackTC } from "../../packsThunks";
 import { FormInModal, Modal } from "../../../../common/ui-kit/Modal/Modal";
 import { Flex } from "../../../../common/ui-kit/Flex/Flex";
+import { Checkbox } from "../../../../common/ui-kit/Checkbox/Checkbox";
+import { Input } from "../../../../common/ui-kit/Input/Input";
 
 interface IUpdatePack {
   name: string;
@@ -76,9 +71,10 @@ export const EditPack = memo(() => {
         <Flex
           align={"center"}
           justify={"center"}
-          sx={{ margin: "auto", flexDirection: "column" }}
+          fDirection={"column"}
+          sx={{ margin: "auto", gap: "10px", padding: "5px" }}
         >
-          <FormGroup>
+          {pack.deckCover && (
             <img
               src={pack.deckCover}
               style={{
@@ -88,44 +84,39 @@ export const EditPack = memo(() => {
               }}
               alt="deckCover"
             />
-            <TextField
-              label="Name pack"
-              variant="standard"
-              color="primary"
-              value={pack.name}
-              onChange={handleChangeName}
+          )}
+          <Input
+            label="Pack name"
+            value={pack.name}
+            onChange={handleChangeName}
+          />
+          <Checkbox
+            checked={pack.private}
+            onChange={handleChangeIsPrivate}
+            children={<span>Private pack</span>}
+          />
+          <label style={{ textAlign: "center", display: "inline-flex" }}>
+            <input
+              style={{ display: "none" }}
+              type="file"
+              accept={"image/*"}
+              onChange={(e) => handleChangeCover(e)}
             />
-            <Box>
-              Private pack{" "}
-              <Checkbox
-                checked={pack.private}
-                onChange={handleChangeIsPrivate}
-                color="primary"
-              />
-            </Box>
-            <Box>
-              <label>
-                <input
-                  style={{ display: "none" }}
-                  type="file"
-                  accept={"image/*"}
-                  onChange={(e) => handleChangeCover(e)}
-                />
-                <IconButton component="span" color={"primary"}>
-                  <PhotoCamera />
-                </IconButton>
-              </label>
-            </Box>
-          </FormGroup>
-
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <PhotoCamera />
+            Add cover
+          </label>
+          <Flex
+            justify={"space-between"}
+            fDirection={"row"}
+            sx={{ margin: "auto", gap: "5px" }}
+          >
             <Button onClick={handleClose} color="primary" variant="contained">
               Cancel
             </Button>
             <Button onClick={updatePack} color="primary" variant="contained">
               Save pack
             </Button>
-          </Box>
+          </Flex>
         </Flex>
       </FormInModal>
     </Modal>

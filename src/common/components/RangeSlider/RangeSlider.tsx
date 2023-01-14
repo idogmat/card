@@ -30,12 +30,12 @@ const RangeSlider: React.FC<ISuperRangeProps> = React.memo(
 
     useEffect(() => {
       if (max > maxCardsCount)
-        onChangeSlider([Number(min), Number(maxCardsCount)], params);
+        onChangeSlider([Number(minCardsCount), Number(maxCardsCount)], params);
       setRange([Number(min), Number(max)]);
     }, [min, max, maxCardsCount, minCardsCount]);
 
     return (
-      <Flex sx={{ width: "20%" }}>
+      <Flex sx={{ minWidth: "45%", maxWidth: "100%" }}>
         <output style={{ margin: "auto 5px" }} id="output1">
           {minCardsCount.toFixed(0)}
         </output>

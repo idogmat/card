@@ -2,7 +2,6 @@ import React, { ChangeEvent, useState } from "react";
 import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
 
 import Button from "@mui/material/Button";
-import { ModalBase } from "../../../../common/components/Modal";
 import { PhotoCamera } from "@mui/icons-material";
 import { addNewModalSelector } from "./modalsSelectors";
 import { addPackTC } from "../../packsThunks";
@@ -11,7 +10,6 @@ import { getImgBase64File } from "../../../../common/utils/base64Converter";
 import { FormInModal, Modal } from "../../../../common/ui-kit/Modal/Modal";
 import { Flex } from "../../../../common/ui-kit/Flex/Flex";
 import { Input } from "../../../../common/ui-kit/Input/Input";
-import { Grid } from "../../../../common/ui-kit/Grid/Grid";
 import { Checkbox } from "../../../../common/ui-kit/Checkbox/Checkbox";
 
 export interface INewPack {
@@ -64,9 +62,10 @@ export const AddNewPack = React.memo(() => {
     <Modal open={isOpen} close={handleClose}>
       <FormInModal>
         <Flex
-          justify={"space-between"}
+          align={"center"}
+          justify={"center"}
           fDirection={"column"}
-          sx={{ margin: "auto", gap: "10px" }}
+          sx={{ margin: "auto", gap: "10px", padding: "5px" }}
         >
           {newPackData.deckCover && (
             <img
@@ -107,7 +106,7 @@ export const AddNewPack = React.memo(() => {
           <Flex
             justify={"space-between"}
             fDirection={"row"}
-            sx={{ margin: "auto" }}
+            sx={{ margin: "auto", gap: "5px" }}
           >
             <Button onClick={handleClose} color="primary" variant="contained">
               Cancel

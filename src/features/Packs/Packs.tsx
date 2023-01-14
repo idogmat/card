@@ -31,6 +31,7 @@ import { userStateSelector } from "features/User/selectors";
 import { selectOptions } from "./Packs.data";
 import { Pagination } from "../../common/ui-kit/Pagination/Pagination";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { Flex } from "../../common/ui-kit/Flex/Flex";
 
 const Packs = () => {
   // Selectors
@@ -178,14 +179,7 @@ const Packs = () => {
   }, []);
 
   return (
-    <Box
-      sx={{
-        position: "relative",
-        padding: "6rem 2rem",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <Flex fDirection={"column"} sx={{ padding: "8rem 2rem" }}>
       {isLoading && (
         <div className={styles.preventSending}>
           <Preloader />
@@ -227,7 +221,7 @@ const Packs = () => {
         totalPages={totalPageCount}
       />
       <PacksModals />
-    </Box>
+    </Flex>
   );
 };
 

@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import styled from "styled-components";
+import { StyledComponent } from "../types";
 
 export const ModalBase = styled.div`
   position: fixed;
@@ -20,16 +21,19 @@ export const InsideModal = styled.div`
   z-index: 100;
   overflow: hidden;
 `;
-export const FormInModal = styled.div`
+export const FormInModal = styled.div<
+  StyledComponent<Partial<{ size: string }>>
+>`
   display: flex;
   flex-direction: column;
   margin: auto;
-  width: 50%;
-  height: 50%;
+  width: ${(p) => p.size || "50%"};
+  height: ${(p) => p.size || "50%"};
   background: white;
-  box-shadow: 0px 0px 8px 8px var(--color-blue);
+  box-shadow: 0 0 8px 8px var(--color-blue);
   border-radius: 5px;
 `;
+
 interface IModal {
   open: boolean;
   close: () => void;

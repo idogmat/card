@@ -1,6 +1,4 @@
-import { Box, FormGroup, Typography } from "@mui/material";
 import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
-
 import Button from "@mui/material/Button/Button";
 import { IPackResponse } from "../../packsAPI";
 import { deleteModalSelector } from "./modalsSelectors";
@@ -9,6 +7,7 @@ import { packsModalsAC } from "../../packsModalsSlice";
 import { removePackTC } from "../../packsThunks";
 import { FormInModal, Modal } from "../../../../common/ui-kit/Modal/Modal";
 import { Flex } from "../../../../common/ui-kit/Flex/Flex";
+import { Typography } from "../../../../common/ui-kit/Text/Typography";
 
 export const DeletePack = memo(() => {
   // Dispatch & selectors
@@ -31,28 +30,27 @@ export const DeletePack = memo(() => {
 
   return (
     <Modal open={isOpen} close={handleClose}>
-      <FormInModal>
+      <FormInModal size={"30%"}>
         <Flex
           align={"center"}
           justify={"center"}
           sx={{ margin: "auto", display: "flex", flexDirection: "column" }}
         >
-          <FormGroup>
-            <Box sx={{ padding: 2 }}>
-              <Typography sx={{ marginBottom: 2 }}>
-                Do you really want to remove <b>{pack.name}</b>
-              </Typography>
-            </Box>
-          </FormGroup>
-
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography>
+            Do you really want to remove <b>{pack.name}</b>
+          </Typography>
+          <Flex
+            justify={"space-between"}
+            fDirection={"row"}
+            sx={{ margin: "auto", gap: "5px", paddingTop: "10px" }}
+          >
             <Button onClick={handleClose} color="primary" variant="contained">
               Cancel
             </Button>
             <Button onClick={deletePack} color="primary" variant="contained">
               Delete
             </Button>
-          </Box>
+          </Flex>
         </Flex>
       </FormInModal>
     </Modal>

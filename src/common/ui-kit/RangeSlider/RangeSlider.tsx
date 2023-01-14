@@ -42,8 +42,8 @@ export const Thumb = styled.div<StyledComponent<Partial<IRangeLineBG>>>`
   justify-content: center;
   align-items: center;
   box-shadow: 0 2px 6px #aaa;
-  &:focus {
-    outline: none;
+  &:focus div {
+    outline: #aaaaaaff;
   }
   ${(p) => ({ ...p.style })};
 `;
