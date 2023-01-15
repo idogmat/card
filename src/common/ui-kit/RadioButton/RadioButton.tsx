@@ -15,15 +15,6 @@ const RadioButtonWrapper = styled.div<StyledComponent<{}>>`
   ${(p) => ({ ...p.sx })}
 `;
 
-const RadioButtonInput = styled.input.attrs({
-  type: "radio",
-})`
-  position: absolute;
-  width: 0;
-  height: 0;
-  opacity: 0;
-`;
-
 const RadioButtonCircle = styled.div<IRadioButtonCircle>`
   position: relative;
 
