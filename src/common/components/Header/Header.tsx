@@ -48,7 +48,7 @@ export const Header = memo(() => {
                 {user.name}
               </Typography>
               <Avatar
-                bgColor={"#baffac"}
+                bgColor="var(--color-blue)"
                 text={user.name}
                 src={user.avatar}
                 widthSize={"2.5rem"}

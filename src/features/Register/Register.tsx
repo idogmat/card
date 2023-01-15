@@ -35,10 +35,16 @@ export const Register = () => {
   const registerForm = useFormik({
     validate: (values) => {
       const errors = {} as IRegisterFormErrors;
+      console.log(values.password);
       if (values.password.length < 8) {
+        console.log("in password validate", values.password);
+
         errors.password = "Incorrect password";
       }
+
       if (values.confirmPassword !== values.password) {
+        console.log("config password not equal to password");
+
         errors.confirmPassword = "Different password";
       }
       if (!values.email.length || !validMail.test(values.email)) {
@@ -61,6 +67,8 @@ export const Register = () => {
 
   const registerHasError = hasError.bind(null, registerForm);
 
+  console.log(registerForm.errors);
+
   return (
     <RegisterWrapper>
       <RegisterContent>
@@ -77,17 +85,6 @@ export const Register = () => {
             Sign up
           </Typography>
           <RegisterForm onSubmit={registerForm.handleSubmit}>
-            {/* <TextField
-                  error={registerHasError("email")}
-                  label={
-                    registerHasError("email")
-                      ? registerForm.errors.email
-                      : "Email"
-                  }
-                  margin={"normal"}
-                  variant={"standard"}
-                  {...registerForm.getFieldProps("email")}
-                /> */}
             <Input
               error={registerHasError("email")}
               label={
@@ -95,27 +92,7 @@ export const Register = () => {
               }
               {...registerForm.getFieldProps("email")}
             />
-            {/* <TextField
-                  error={registerHasError("password")}
-                  label={
-                    registerHasError("password")
-                      ? registerForm.errors.password
-                      : "Password"
-                  }
-                  margin={"normal"}
-                  type={passwordFieldType}
-                  variant={"standard"}
-                  {...registerForm.getFieldProps("password")}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position={"end"}>
-                        <IconButton onClick={changePasswordFieldType}>
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                /> */}
+
             <Input
               error={registerHasError("password")}
               label={
@@ -126,34 +103,17 @@ export const Register = () => {
               {...registerForm.getFieldProps("email")}
               type={passwordFieldType}
               endItem={
-                <Button semantic onClick={changePasswordFieldType}>
+                <Button
+                  semantic
+                  type="button"
+                  onClick={changePasswordFieldType}
+                >
                   {showPassword ? <Visibility /> : <VisibilityOff />}
                 </Button>
               }
               {...registerForm.getFieldProps("password")}
             />
-            {/* <TextField
-                  error={registerHasError("confirmPassword")}
-                  label={
-                    registerHasError("confirmPassword")
-                      ? registerForm.errors.confirmPassword
-                      : "Confirm password"
-                  }
-                  margin={"normal"}
-                  type={passwordFieldType}
-                  variant={"standard"}
-                  sx={{ marginBottom: "20px" }}
-                  {...registerForm.getFieldProps("confirmPassword")}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position={"end"}>
-                        <IconButton onClick={changePasswordFieldType}>
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                /> */}
+
             <Input
               error={registerHasError("confirmPassword")}
               label={
@@ -161,16 +121,19 @@ export const Register = () => {
                   ? registerForm.errors.confirmPassword
                   : "Confirm password"
               }
-              {...registerForm.getFieldProps("email")}
               type={passwordFieldType}
               endItem={
-                <Button semantic onClick={changePasswordFieldType}>
+                <Button
+                  type="button"
+                  semantic
+                  onClick={changePasswordFieldType}
+                >
                   {showPassword ? <Visibility /> : <VisibilityOff />}
                 </Button>
               }
               {...registerForm.getFieldProps("confirmPassword")}
             />
-            <Button disabled={isLoading} sx={{ width: "100%" }}>
+            <Button type="submit" disabled={isLoading} sx={{ width: "100%" }}>
               Sign up
             </Button>
             <RegisterOffer>

@@ -1,13 +1,9 @@
-import { FC, memo, useRef, useState } from "react";
+import React, { FC, memo, useRef, useState } from "react";
 import styled, { css } from "styled-components";
 
 interface IInputLabel {
   active: boolean;
   error: boolean;
-}
-
-interface IInputField {
-  type: string;
 }
 
 const InputWrapper = styled.div<IInputLabel>`
@@ -55,9 +51,7 @@ const InputLabel = styled.label`
   transition: font-size 0.2s linear 0s, bottom 0.3s ease 0s, color 0.3s ease 0s;
 `;
 
-const InputField = styled.input.attrs<IInputField>((props) => ({
-  type: props.type || "text",
-}))`
+const InputField = styled.input`
   position: relative;
   z-index: 10;
 
@@ -72,35 +66,41 @@ const InputField = styled.input.attrs<IInputField>((props) => ({
 
 const InputEndItemWrapper = styled.div``;
 
-interface IInputProps {
+interface IInputProps
+  extends Partial<React.InputHTMLAttributes<HTMLInputElement>> {
   label?: string;
   error: boolean;
   endItem?: React.ReactNode;
-  type?: string;
 }
 
 export const Input: FC<IInputProps> = memo(
-  ({ label, error, endItem, type }) => {
+  ({ label, error, endItem, ...props }) => {
     // Vars
     const [isFocused, setIsFocused] = useState(false);
     const inpRef = useRef<HTMLInputElement>(null);
-    const inpHasText = inpRef.current?.value;
+    const inpHasText = inpRef.current?.value.length;
     const active = !!(isFocused || inpHasText);
 
     // Utils
-    const enableFocus = () => setIsFocused(true);
-    const disableFocus = () => setIsFocused(false);
-
-    console.log("error", error);
+    const focusHandler = (e: React.FocusEvent<HTMLInputElement>) => {
+      props.onFocus?.(e);
+      setIsFocused(true);
+      console.log("focus", isFocused);
+    };
+    const blurHandler = (e: React.FocusEvent<HTMLInputElement>) => {
+      props.onBlur?.(e);
+      setIsFocused(false);
+      console.log("blur", isFocused);
+    };
 
     return (
       <InputWrapper active={active} error={error}>
         <InputLabel>{label}</InputLabel>
         <InputField
           ref={inpRef}
-          onFocus={enableFocus}
-          onBlur={disableFocus}
-          type={type}
+          {...props}
+          onFocus={focusHandler}
+          onBlur={blurHandler}
         />
         {endItem && <InputEndItemWrapper>{endItem}</InputEndItemWrapper>}
       </InputWrapper>

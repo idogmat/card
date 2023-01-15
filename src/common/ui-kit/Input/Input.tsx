@@ -9,8 +9,7 @@ import React, {
 } from "react";
 import styled, { CSSProperties } from "styled-components";
 import s from "./Input.module.scss";
-import { IconButton, InputAdornment } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+
 const StyledInput = styled.input.attrs((props) => ({
   type: props.type || "text",
   size: props.size || "1em",
@@ -53,11 +52,13 @@ type InputBaseProps = {
   value: string;
   endItem: React.ReactNode;
 };
+
 const Icon = styled.div`
   position: absolute;
   right: 10%;
   top: 50%;
 `;
+
 export const Input: FC<Partial<InputBaseProps>> = ({
   children,
   endItem,
