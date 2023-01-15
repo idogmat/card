@@ -5,7 +5,7 @@ import { setPacksTC } from "./packsThunks";
 
 export const initialState = {
   cardPacks: [] as IPackResponse[],
-  maxCardsCount: 10,
+  maxCardsCount: 100,
   minCardsCount: 0,
   max: 15,
   min: 0,

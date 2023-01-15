@@ -53,6 +53,9 @@ export const Button = styled.button<StyledComponent<Partial<IButtonProps>>>`
     opacity: 0.5;
     pointer-events: none;
   }
+  &:hover svg {
+    fill: var(--color-blue);
+  }
 
   ${({ sx }) => ({ ...sx })}
 `;

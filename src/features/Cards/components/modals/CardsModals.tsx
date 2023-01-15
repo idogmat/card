@@ -2,7 +2,7 @@ import { CardsAddModal } from "./CardsAddModal";
 import { CardsDeleteModal } from "./CardDeleteModal";
 import { CardsUpdateModal } from "./CardsUpdateModal";
 import { DeletePack } from "features/Packs/components/modals/DeletePack";
-import EditPack from "features/Packs/components/modals/EditPack";
+import { EditPack } from "features/Packs/components/modals/EditPack";
 import { FC } from "react";
 import { FieldFormatsEnum } from "./FormatSelect";
 import { IPackResponse } from "./../../../Packs/packsAPI";

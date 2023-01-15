@@ -1,6 +1,14 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Box, Grid, Slider } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { IParams } from "../../../features/Packs/packsThunks";
+import { Flex } from "../../ui-kit/Flex/Flex";
+import { Range } from "react-range";
+import {
+  RangeField,
+  RangeLine,
+  Thumb,
+  ThumbDot,
+  ThumbView,
+} from "../../ui-kit/RangeSlider/RangeSlider";
 
 interface ISuperRangeProps {
   onChangeSlider: (valueRange: number[], params: any) => void;
@@ -13,47 +21,58 @@ interface ISuperRangeProps {
 
 const RangeSlider: React.FC<ISuperRangeProps> = React.memo(
   ({ onChangeSlider, min, max, maxCardsCount, minCardsCount, params }) => {
-    const [range, setRange] = useState([Number(min), Number(max)]);
+    const [range, setRange] = useState<number[]>([Number(min), Number(max)]);
 
-    const onChangeHandler = (e: any, value: number | number[]) => {
+    const onChangeHandler = (value: number[]) => {
       setRange(value as number[]);
       onChangeSlider(value as number[], params);
     };
 
     useEffect(() => {
+      if (max > maxCardsCount)
+        onChangeSlider([Number(minCardsCount), Number(maxCardsCount)], params);
       setRange([Number(min), Number(max)]);
-    }, [min, max]);
+    }, [min, max, maxCardsCount, minCardsCount]);
 
     return (
-      <Box style={{ margin: "auto 0", display: "flex" }} sx={{ width: 200 }}>
-        <Grid
-          sx={{
-            margin: "auto .5rem",
-            border: "1px solid #bebebe",
-            padding: "0 0.5rem",
-          }}
-        >
-          <span>{minCardsCount}</span>
-        </Grid>
-        <Slider
-          color={"primary"}
-          disableSwap
-          valueLabelDisplay="on"
-          onChange={onChangeHandler}
-          value={range}
+      <Flex sx={{ minWidth: "45%", maxWidth: "100%" }}>
+        <output style={{ margin: "auto 5px" }} id="output1">
+          {minCardsCount.toFixed(0)}
+        </output>
+        <Range
+          step={1}
           min={minCardsCount}
           max={maxCardsCount}
+          values={range}
+          onChange={(values) => onChangeHandler(values)}
+          renderTrack={({ props, children }) => (
+            <RangeField
+              onMouseDown={props.onMouseDown}
+              onTouchStart={props.onTouchStart}
+            >
+              {!!range[1] && (
+                <RangeLine
+                  ref={props.ref}
+                  range={[+min, +max]}
+                  minCardsCount={minCardsCount}
+                  maxCardsCount={maxCardsCount}
+                >
+                  {children}
+                </RangeLine>
+              )}
+            </RangeField>
+          )}
+          renderThumb={({ index, props, isDragged }) => (
+            <Thumb {...props}>
+              <ThumbView>{range[index].toFixed(0)}</ThumbView>
+              <ThumbDot isDragged={isDragged} />
+            </Thumb>
+          )}
         />
-        <Grid
-          sx={{
-            margin: "auto .5rem",
-            border: "1px solid #bebebe",
-            padding: "0 0.5rem",
-          }}
-        >
-          <span>{maxCardsCount}</span>
-        </Grid>
-      </Box>
+        <output style={{ margin: "auto 5px" }} id="output2">
+          {maxCardsCount.toFixed(0)}
+        </output>
+      </Flex>
     );
   }
 );

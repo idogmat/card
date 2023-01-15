@@ -1,7 +1,7 @@
-import { ITablePaginationOption } from "../../common/components/TablePagination/TablePagination";
+import { IFormatSelectOption } from "../Cards/components/modals/FormatSelect";
 
-export const selectOptions: ITablePaginationOption[] = [
-  { title: 4, value: 4 },
-  { title: 7, value: 7 },
-  { title: 10, value: 10 },
+export const selectOptions: IFormatSelectOption[] = [
+  { selectValue: "4", UIValue: "4" },
+  { selectValue: "7", UIValue: "7" },
+  { selectValue: "10", UIValue: "10" },
 ];

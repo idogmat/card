@@ -10,7 +10,7 @@ interface IMenu {
 
 const MenuInModal = styled.div`
   position: absolute;
-  right: 0;
+  right: 5px;
   top: 65px;
   width: 100px;
   z-index: 100;
@@ -23,7 +23,7 @@ export const Menu: FC<IMenu> = ({ open, close, children }) => {
       {open ? (
         <>
           <Modal close={close} open={open} />
-          <MenuInModal>{children}</MenuInModal>
+          <MenuInModal onClick={close}>{children}</MenuInModal>
         </>
       ) : (
         <> </>
