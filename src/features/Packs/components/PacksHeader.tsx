@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 import { Search } from "../../../common/components/Search/Search";
-import FormControl from "@mui/material/FormControl/FormControl";
 import { useAppDispatch } from "../../../common/hooks";
 import { packsModalsAC } from "../packsModalsSlice";
 import RangeSlider from "../../../common/components/RangeSlider/RangeSlider";

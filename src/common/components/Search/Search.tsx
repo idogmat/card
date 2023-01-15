@@ -1,5 +1,4 @@
 import React, { FC } from "react";
-import search from "./../../../assets/img/search.svg";
 import { Input } from "../../ui-kit/Input/Input";
 import { Flex } from "../../ui-kit/Flex/Flex";
 

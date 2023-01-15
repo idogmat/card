@@ -14,6 +14,7 @@ import { Flex } from "../../common/ui-kit/Flex/Flex";
 import { Typography } from "../../common/ui-kit/Text/Typography";
 import { Button } from "../../common/ui-kit/Button/Button";
 import { BiHide, BiShow } from "react-icons/bi";
+import { Container } from "../../common/ui-kit/Container/Container";
 
 interface ILoginErrorType {
   email?: string;
@@ -39,7 +40,7 @@ export const Login = () => {
     validate: (values) => {
       const errors: ILoginErrorType = {};
       if (!values.email) {
-        errors.email = "Required";
+        errors.email = "Required field";
       } else if (!validMail.test(values.email)) {
         errors.email = "Invalid email address";
       }
@@ -60,86 +61,88 @@ export const Login = () => {
   const changePasswordFieldType = () => setShowPassword((prev) => !prev);
 
   return (
-    <Flex justify={"center"} sx={{ paddingTop: "8rem" }}>
-      {isLoading && (
-        <div className={styles.preventSending}>
-          <Preloader />
-        </div>
-      )}
-      <Flex
-        style={{
-          padding: "35px",
-          borderRadius: "5px",
-          boxShadow: "black 0px 0px 1px 1px",
-        }}
-      >
-        <form onSubmit={loginForm.handleSubmit}>
-          <Flex
-            fDirection={"column"}
-            sx={{ width: "100%", textAlign: "center" }}
-          >
-            <Typography
-              variant={"title"}
-              sx={{ textAlign: "center", fontSize: "3rem" }}
-            >
-              Sign in
-            </Typography>
-            <Input
-              styleType={"underline"}
-              error={loginHasError("email") && loginForm.errors.email}
-              {...loginForm.getFieldProps("email")}
-            ></Input>
-            <Input
-              padding={true}
-              styleType={"underline"}
-              topPosition={"30px"}
-              type={showPassword ? "text" : "password"}
-              error={loginHasError("password") && loginForm.errors.password}
-              {...loginForm.getFieldProps("password")}
-              endItem={
-                <Button semantic onClick={changePasswordFieldType}>
-                  {showPassword ? <BiShow /> : <BiHide />}
-                </Button>
-              }
-            ></Input>
-            <Checkbox
-              onChange={() =>
-                loginForm.setFieldValue(
-                  "rememberMe",
-                  !loginForm.values.rememberMe
-                )
-              }
-              checked={loginForm.values.rememberMe}
-            >
-              <span>Remember me</span>
-            </Checkbox>
-
-            <Typography sx={{ margin: "1rem 0", textAlign: "end" }}>
-              <Link to={"/recovery"}>Forgot Password?</Link>
-            </Typography>
-
-            <Button
-              type={"submit"}
-              disabled={loginHasError("email") || loginHasError("password")}
-              color={"primary"}
-              sx={{ borderRadius: "30px", marginBottom: "30px" }}
-            >
-              Sign in
-            </Button>
+    <Container variant="sm" sx={{ paddingTop: "8.75rem" }}>
+      <Flex justify={"center"}>
+        {isLoading && (
+          <div className={styles.preventSending}>
+            <Preloader />
+          </div>
+        )}
+        <Flex
+          style={{
+            padding: "35px",
+            borderRadius: "5px",
+            boxShadow: "black 0px 0px 1px 1px",
+          }}
+        >
+          <form onSubmit={loginForm.handleSubmit}>
             <Flex
               fDirection={"column"}
               sx={{ width: "100%", textAlign: "center" }}
             >
-              <Typography>Haven't account?</Typography>
-              <Typography sx={{ fontSize: "16px", color: "#366EFF" }}>
-                <Link to={"/register"} style={{ color: "inherit" }}>
-                  Sign up
-                </Link>
+              <Typography
+                variant={"title"}
+                sx={{ textAlign: "center", fontSize: "3rem" }}
+              >
+                Sign in
               </Typography>
+              <Input
+                styleType={"underline"}
+                error={loginHasError("email") && loginForm.errors.email}
+                {...loginForm.getFieldProps("email")}
+              ></Input>
+              <Input
+                padding={true}
+                styleType={"underline"}
+                topPosition={"30px"}
+                type={showPassword ? "text" : "password"}
+                error={loginHasError("password") && loginForm.errors.password}
+                {...loginForm.getFieldProps("password")}
+                endItem={
+                  <Button semantic onClick={changePasswordFieldType}>
+                    {showPassword ? <BiShow /> : <BiHide />}
+                  </Button>
+                }
+              ></Input>
+              <Checkbox
+                onChange={() =>
+                  loginForm.setFieldValue(
+                    "rememberMe",
+                    !loginForm.values.rememberMe
+                  )
+                }
+                checked={loginForm.values.rememberMe}
+              >
+                <span>Remember me</span>
+              </Checkbox>
+
+              <Typography sx={{ margin: "1rem 0", textAlign: "end" }}>
+                <Link to={"/recovery"}>Forgot Password?</Link>
+              </Typography>
+
+              <Button
+                type={"submit"}
+                disabled={loginHasError("email") || loginHasError("password")}
+                color={"primary"}
+                sx={{ borderRadius: "30px", marginBottom: "30px" }}
+              >
+                Sign in
+              </Button>
+              <Flex
+                fDirection={"column"}
+                sx={{ width: "100%", textAlign: "center" }}
+              >
+                <Typography>Haven't account?</Typography>
+                <Typography sx={{ fontSize: "16px", color: "#366EFF" }}>
+                  <Link to={"/register"} style={{ color: "inherit" }}>
+                    Sign up
+                  </Link>
+                </Typography>
+              </Flex>
             </Flex>
-          </Flex>
-        </form>
+          </form>
+        </Flex>
       </Flex>
-    </Flex>
+    </Container>
   );
 };

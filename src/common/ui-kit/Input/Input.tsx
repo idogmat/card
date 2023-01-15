@@ -103,26 +103,23 @@ const Icon = styled.div<StyledComponent<Partial<{ topPosition: string }>>>`
 `;
 const Label = styled.label.attrs<
   StyledComponent<
-    Partial<
-      HTMLLabelElement & {
-        focus: true | undefined;
-        error: string | false | undefined;
-      }
-    >
+    Partial<{
+      focus: true | undefined;
+      error: string | false | undefined;
+    }>
   >
 >((props) => ({
   focus: !!props.focus,
   error: !!props.error,
 }))<
   StyledComponent<
-    Partial<
-      HTMLLabelElement & { focus: boolean; error: string | false | undefined }
-    >
+    Partial<{ focus: boolean; error: string | false | undefined }>
   >
 >`
   transition: 0.3s;
   position: absolute;
   z-index: -2;
+  text-transform: capitalize;
   ${(props) =>
     props.focus
       ? css`
@@ -146,7 +143,7 @@ const Label = styled.label.attrs<
       text-transform: capitalize;
       transform: translateY(-90px);
     `}
-`<any>;
+`;
 export const Input: FC<Partial<InputBaseProps>> = ({
   children,
   endItem,

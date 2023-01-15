@@ -1,5 +1,3 @@
-import { Box, debounce } from "@mui/material";
-import { HorizontalRule } from "@mui/icons-material";
 import { IParams, removePackTC, setPacksTC } from "./packsThunks";
 import React, { useCallback, useEffect, useRef } from "react";
 import {
@@ -16,7 +14,6 @@ import {
   packsTotalCardsSelector,
 } from "./selectors";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
-
 import PacksHeader from "./components/PacksHeader";
 import PacksModals from "./components/modals/PacksModals";
 import PacksTable from "./components/PacksTable";
@@ -32,6 +29,9 @@ import { selectOptions } from "./Packs.data";
 import { Pagination } from "../../common/ui-kit/Pagination/Pagination";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { Flex } from "../../common/ui-kit/Flex/Flex";
+import { Container } from "../../common/ui-kit/Container/Container";
+import { useDebounce } from "../../common/hooks/useDebounce";
+import { debounce } from "@mui/material";
 
 const Packs = () => {
   // Selectors
@@ -102,9 +102,8 @@ const Packs = () => {
   );
 
   const setSearchQueryParams = useCallback(
-    debounce(
-      (value: string) => setSearchParams({ ...params, packName: value }),
-      1000
+    debounce((value: string) =>
+      setSearchParams({ ...params, packName: value })
     ),
     [setSearchParams]
   );
@@ -165,7 +164,7 @@ const Packs = () => {
     return sortPacks.field === field ? (
       getSortIcon(sortPacks.direction === 1)
     ) : (
-      <HorizontalRule />
+      <MdKeyboardArrowDown />
     );
   };
 
@@ -179,49 +178,51 @@ const Packs = () => {
   }, []);
 
   return (
-    <Flex fDirection={"column"} sx={{ padding: "8rem 2rem" }}>
-      {isLoading && (
-        <div className={styles.preventSending}>
-          <Preloader />
-        </div>
-      )}
-      <PacksHeader
-        removeSort={removeSort}
-        changeRangeHandler={changeRangeHandler}
-        packName={packName}
-        changeSearchHandler={changeSearchHandler}
-        isMyPack={isMyPack}
-        max={max}
-        min={min}
-        maxCardsCount={maxCardsCount}
-        minCardsCount={minCardsCount}
-        handlerIsMyPack={handlerIsMyPack}
-        params={params}
-      />
-      {/*TABLE*/}
-      <PacksTable
-        id={user._id}
-        cardPacks={cardPacks}
-        changeSort={changeSort}
-        showSortIcon={showSortIcon}
-        removePack={removePack}
-        isMyPack={isMyPack}
-        isLoading={isLoading}
-      />
-      <Pagination
-        selectProps={{
-          options: selectOptions,
-          selected: pageCount.toString(),
-          onChange: handleChangeRowsPerPage,
-          endIcon: <MdKeyboardArrowDown />,
-        }}
-        label="Packs"
-        changePage={changePage}
-        currentPage={page}
-        totalPages={totalPageCount}
-      />
-      <PacksModals />
-    </Flex>
+    <Container variant="sm" sx={{ paddingTop: "8.75rem" }}>
+      <Flex fDirection={"column"}>
+        {isLoading && (
+          <div className={styles.preventSending}>
+            <Preloader />
+          </div>
+        )}
+        <PacksHeader
+          removeSort={removeSort}
+          changeRangeHandler={changeRangeHandler}
+          packName={packName}
+          changeSearchHandler={changeSearchHandler}
+          isMyPack={isMyPack}
+          max={max}
+          min={min}
+          maxCardsCount={maxCardsCount}
+          minCardsCount={minCardsCount}
+          handlerIsMyPack={handlerIsMyPack}
+          params={params}
+        />
+        {/*TABLE*/}
+        <PacksTable
+          id={user._id}
+          cardPacks={cardPacks}
+          changeSort={changeSort}
+          showSortIcon={showSortIcon}
+          removePack={removePack}
+          isMyPack={isMyPack}
+          isLoading={isLoading}
+        />
+        <Pagination
+          selectProps={{
+            options: selectOptions,
+            selected: pageCount.toString(),
+            onChange: handleChangeRowsPerPage,
+            endIcon: <MdKeyboardArrowDown />,
+          }}
+          label="Packs"
+          changePage={changePage}
+          currentPage={page}
+          totalPages={totalPageCount}
+        />
+        <PacksModals />
+      </Flex>
+    </Container>
   );
 };
 
