@@ -1,13 +1,7 @@
-import {
-  defaultErrorMessage,
-  errorHandlingThunk,
-} from "../../common/utils/errorHandlers";
+import { errorHandlingThunk } from "../../common/utils/errorHandlers";
 
 import { AppAC } from "../../app/appSlice";
-import { AppThunkActionType } from "../../common/hooks/useAllSelector";
-import { AuthAC } from "../Auth/authSlice";
 import { IUser } from "../../common/models";
-import { UserAC } from "../User/userReducer";
 import { createAppAsyncThunk } from "../../common/utils/AsyncThunk";
 import { loginAPI } from "./loginAPI";
 

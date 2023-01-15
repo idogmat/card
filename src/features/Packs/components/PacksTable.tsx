@@ -1,4 +1,3 @@
-import { Box, TableBody } from "@mui/material";
 import React, { ReactNode } from "react";
 
 import { IPackResponse } from "../packsAPI";
@@ -7,7 +6,7 @@ import PackElement from "./PackElement";
 import TableRow from "@mui/material/TableRow/TableRow";
 import { CardsSwipeIcon, CardsTableWrapper } from "../../Cards/CardsStyles";
 import { Flex } from "../../../common/ui-kit/Flex/Flex";
-import { TableHeader } from "../../../common/ui-kit/Table/Table";
+import { TableBody, TableHeader } from "../../../common/ui-kit/Table/Table";
 
 interface ITableProps {
   id: string;

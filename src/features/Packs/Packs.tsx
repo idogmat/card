@@ -105,7 +105,7 @@ const Packs = () => {
     debounce((value: string) =>
       setSearchParams({ ...params, packName: value })
     ),
-    [setSearchParams]
+    [setSearchParams, debounce]
   );
   //search
   const changeSearchHandler = useCallback(

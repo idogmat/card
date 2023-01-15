@@ -80,10 +80,7 @@ const PackElement: React.FC<IRowProps> = React.memo(
           </Flex>
         </TableBodyItem>
         <TableBodyItem style={{ margin: "auto" }}>
-          <NavLink
-            to={`/learn/${pack._id}`}
-            state={{ ...backToState, cardsCount: pack.cardsCount }}
-          >
+          <NavLink to={`/learn/${pack._id}`} state={backToState}>
             {isLoading ? (
               <Skeleton />
             ) : (

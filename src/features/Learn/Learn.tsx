@@ -85,7 +85,7 @@ export const Learn = () => {
         </Typography>
         <Paper sx={{ padding: "2.3rem", minWidth: "320px" }}>
           <Typography>
-            <b>Question</b>:{" "}
+            <b>Question</b>
             {hasQuestionImg ? (
               <img src={card.questionImg} alt="questionImage" />
             ) : (
