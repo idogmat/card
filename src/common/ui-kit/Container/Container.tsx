@@ -15,12 +15,12 @@ export const Container = styled.div<StyledComponent<IContainerProps>>`
   ${(p) =>
     p.variant === "sm" &&
     css`
-      max-width: 75rem;
+      max-width: 65rem;
     `}
   ${(p) =>
     p.variant === "md" &&
     css`
-      max-width: 87.5rem;
+      max-width: 70rem;
     `}
 	${(p) => ({ ...p.sx })}
 `;

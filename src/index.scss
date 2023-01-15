@@ -2,13 +2,16 @@
 @import "./common/styles/fonts/fonts.scss";
 @import "./common/styles/vars/vars.scss";
 
+html {
+}
+
 #root {
-    height: 100vh;
+  height: 100vh;
 }
 
 body {
-    color: var(--color-primary);
-    background: var(--color-secondary);
-    font-family: var(--family);
-    font-weight: var(--fw-regular);
+  color: var(--color-primary);
+  background: var(--color-secondary);
+  font-family: var(--family);
+  font-weight: var(--fw-regular);
 }

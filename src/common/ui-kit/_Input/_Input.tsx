@@ -78,19 +78,17 @@ export const Input: FC<IInputProps> = memo(
     // Vars
     const [isFocused, setIsFocused] = useState(false);
     const inpRef = useRef<HTMLInputElement>(null);
-    const inpHasText = inpRef.current?.value.length;
+    const inpHasText = inpRef.current?.value.length || props.value;
     const active = !!(isFocused || inpHasText);
 
     // Utils
     const focusHandler = (e: React.FocusEvent<HTMLInputElement>) => {
       props.onFocus?.(e);
       setIsFocused(true);
-      console.log("focus", isFocused);
     };
     const blurHandler = (e: React.FocusEvent<HTMLInputElement>) => {
       props.onBlur?.(e);
       setIsFocused(false);
-      console.log("blur", isFocused);
     };
 
     return (

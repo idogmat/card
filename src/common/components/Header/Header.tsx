@@ -39,7 +39,7 @@ export const Header = memo(() => {
 
   return (
     <HeaderContainer>
-      <Container variant="sm">
+      <Container variant="md">
         <HeaderWrapper>
           <img src={logo} alt="IT-Incubator" />
           <Flex align="center" sx={{ position: "relative" }}>
@@ -61,10 +61,22 @@ export const Header = memo(() => {
             >
               {isAuth
                 ? authPages.map((page) => {
-                    return <HeaderLink page={page} icon={pageIcons[page]} />;
+                    return (
+                      <HeaderLink
+                        key={page}
+                        page={page}
+                        icon={pageIcons[page]}
+                      />
+                    );
                   })
                 : unAuthPages.map((page) => {
-                    return <HeaderLink page={page} icon={pageIcons[page]} />;
+                    return (
+                      <HeaderLink
+                        key={page}
+                        page={page}
+                        icon={pageIcons[page]}
+                      />
+                    );
                   })}
             </Dropdown>
           </Flex>

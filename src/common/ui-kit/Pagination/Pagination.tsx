@@ -87,7 +87,6 @@ export const Pagination: FC<IPaginationProps> = ({
     .map((_, i) => i + 1);
   const selected = currentPage;
   const pagesBeforeSelected = selected - 3 >= 0 ? selected - 3 : 0;
-  console.log(pagesBeforeSelected);
 
   const pagesToRender = [
     ...pages.slice(pagesBeforeSelected, selected),
@@ -114,6 +113,7 @@ export const Pagination: FC<IPaginationProps> = ({
             };
             return (
               <PaginationItem
+                key={page}
                 onClick={changePageHandler}
                 selected={page === currentPage}
               >

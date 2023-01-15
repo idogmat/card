@@ -35,7 +35,6 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
 
     // Utils
     const openMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
-      console.log("opening menu", isComponentVisible);
       setIsComponentVisible(true);
     };
 

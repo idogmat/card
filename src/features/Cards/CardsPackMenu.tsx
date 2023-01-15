@@ -21,7 +21,6 @@ export const CardsPackMenu: FC<ICardsPackMenuProps> = ({
 }) => {
   // Dispatch
   const dispatch = useAppDispatch();
-  console.log("dropdown is currently", open);
 
   // Utils
   const openEditPackModal = () => {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
 import { Input } from "common/ui-kit/_Input/_Input";
+import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 
 import { Link } from "react-router-dom";
 import { Preloader } from "../../common/components/Preloader/Preloader";
@@ -35,16 +35,11 @@ export const Register = () => {
   const registerForm = useFormik({
     validate: (values) => {
       const errors = {} as IRegisterFormErrors;
-      console.log(values.password);
       if (values.password.length < 8) {
-        console.log("in password validate", values.password);
-
         errors.password = "Incorrect password";
       }
 
       if (values.confirmPassword !== values.password) {
-        console.log("config password not equal to password");
-
         errors.confirmPassword = "Different password";
       }
       if (!values.email.length || !validMail.test(values.email)) {
@@ -64,10 +59,9 @@ export const Register = () => {
 
   const changePasswordFieldType = () => setShowPassword((prev) => !prev);
   const passwordFieldType = showPassword ? "text" : "password";
+  const passwordIcon = showPassword ? <MdVisibility /> : <MdVisibilityOff />;
 
   const registerHasError = hasError.bind(null, registerForm);
-
-  console.log(registerForm.errors);
 
   return (
     <RegisterWrapper>
@@ -108,7 +102,7 @@ export const Register = () => {
                   type="button"
                   onClick={changePasswordFieldType}
                 >
-                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                  {passwordIcon}
                 </Button>
               }
               {...registerForm.getFieldProps("password")}
@@ -128,7 +122,7 @@ export const Register = () => {
                   semantic
                   onClick={changePasswordFieldType}
                 >
-                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                  {passwordIcon}
                 </Button>
               }
               {...registerForm.getFieldProps("confirmPassword")}

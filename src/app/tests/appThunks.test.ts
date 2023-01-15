@@ -12,7 +12,6 @@ describe("app thunks", () => {
 
     const { calls } = dispatch.mock;
     expect(calls).toHaveLength(3);
-    console.log(calls);
 
     const [pending, sendAuthMeRequest, end] = calls;
 

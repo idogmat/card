@@ -62,7 +62,6 @@ export const Learn = () => {
 
   const handleNext = () => {
     const selectedGradeNumber = grades.indexOf(selectedGrade) + 1;
-    console.log(selectedGradeNumber);
 
     dispatch(
       updateCardGradeTC({ card_id: card._id, grade: selectedGradeNumber })
