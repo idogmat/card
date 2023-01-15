@@ -21,3 +21,4 @@ export const LearnContainer = styled(Container).attrs({
   justify-content: center;
   padding: 6.25rem 0px 0px 0px;
 `;
+

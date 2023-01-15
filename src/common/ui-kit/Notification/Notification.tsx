@@ -21,7 +21,7 @@ const NotificationWrapper = styled.div<INotificationWrapperProps>`
 
   display: flex;
   gap: 0.625rem;
-  padding: 0.9375rem;
+  padding: 1.56rem 5px 5px 5px;
 
   background: ${({ variant }) =>
     variant === "success" ? "var(--color-success)" : "var(--color-error)"};
@@ -45,9 +45,7 @@ const NotificationWrapper = styled.div<INotificationWrapperProps>`
     left 0.3s ease 0s;
 `;
 
-const NotificationIcon = styled.div`
-  flex: 0 1 2rem;
-`;
+const NotificationIcon = styled.div``;
 
 const NotificationCloseIcon = styled(MdClose)`
   cursor: pointer;

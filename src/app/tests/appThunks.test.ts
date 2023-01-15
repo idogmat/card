@@ -11,6 +11,8 @@ describe("app thunks", () => {
     await thunk(dispatch, getState, "");
 
     const { calls } = dispatch.mock;
+    expect(calls).toHaveLength(3);
+
     const [pending, sendAuthMeRequest, end] = calls;
 
     expect(calls).toHaveLength(3);

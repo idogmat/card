@@ -1,16 +1,9 @@
-import {
-  Button,
-  FormControl,
-  FormGroup,
-  SelectChangeEvent,
-} from "@mui/material";
 import { ChangeEvent, FC, useRef, useState } from "react";
 import { ICardData, IFieldFormats } from "./CardsModals";
 import { defaultFieldsFormats, formatSelectOptions } from "./CardsModals.data";
-import { getImgBase64File, uploadHandler } from "common/utils/base64Converter";
+import { getImgBase64File } from "common/utils/base64Converter";
 import { useAllSelector, useAppDispatch } from "common/hooks";
 
-import { Box } from "@mui/system";
 import { CardsModalsAC } from "features/Cards/cardsModalsSlice";
 import { FieldFormatsEnum } from "./FormatSelect";
 import { IAddCardRequest } from "../../cardsAPI";
@@ -19,6 +12,8 @@ import { SelectTypeField } from "./SelectTypeField";
 import { addCardModalSelector } from "./modalsSelectors";
 import { addCardTC } from "../../cardsThunks";
 import { openFileSelector } from "./utils";
+import { Flex } from "common/ui-kit/Flex/Flex";
+import { Button } from "common/ui-kit/Button/Button";
 
 interface ICardsAddModalProps {
   packID: string;
@@ -39,6 +34,10 @@ export const CardsAddModal: FC<ICardsAddModalProps> = ({ packID }) => {
   const [fieldsFormats, setFieldFormats] =
     useState<IFieldFormats>(defaultFieldsFormats);
 
+  const btnError =
+    (!textCardData.question && !imgCardData.question) ||
+    (!textCardData.answer && imgCardData.answer);
+
   // Utils
 
   const isFieldPicture = (field: "question" | "answer") =>
@@ -54,13 +53,13 @@ export const CardsAddModal: FC<ICardsAddModalProps> = ({ packID }) => {
     if (answer) setImgCardData({ ...imgCardData, answer });
   };
 
-  const changeQuestionFormat = (e: SelectChangeEvent) => {
-    const questionFormat = e.target.value as FieldFormatsEnum;
+  const changeQuestionFormat = (option: string) => {
+    const questionFormat = option as FieldFormatsEnum;
     setFieldFormats({ ...fieldsFormats, question: questionFormat });
   };
 
-  const changeAnswerFormat = (e: SelectChangeEvent) => {
-    const answerFormat = e.target.value as FieldFormatsEnum;
+  const changeAnswerFormat = (option: string) => {
+    const answerFormat = option as FieldFormatsEnum;
     setFieldFormats({ ...fieldsFormats, answer: answerFormat });
   };
 
@@ -111,8 +110,8 @@ export const CardsAddModal: FC<ICardsAddModalProps> = ({ packID }) => {
         handleClose={handleClose}
         modalTitle="Add new card"
       >
-        <Box sx={{ padding: 2 }}>
-          <FormGroup sx={{ display: "grid", gap: 1 }}>
+        <Flex sx={{ padding: "0.6rem" }}>
+          <Flex fDirection="column" sx={{ gap: "0.43rem" }}>
             <SelectTypeField
               selectTitle={"Choose question format"}
               options={formatSelectOptions}
@@ -137,17 +136,17 @@ export const CardsAddModal: FC<ICardsAddModalProps> = ({ packID }) => {
               textFieldValue={textCardData.answer}
               changeTextFieldValue={setTextCardDataAnswer}
             />
-            <FormControl>
+            <Flex sx={{ marginTop: "1.25rem" }}>
               <Button
-                variant="contained"
+                disabled={!!btnError}
                 sx={{ alignSelf: "start" }}
                 onClick={addNewCardHandler}
               >
                 Add new pack
               </Button>
-            </FormControl>
-          </FormGroup>
-        </Box>
+            </Flex>
+          </Flex>
+        </Flex>
       </ModalBase>
     </div>
   );

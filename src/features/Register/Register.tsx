@@ -1,28 +1,25 @@
-import {
-  Button,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  Grid,
-  IconButton,
-  InputAdornment,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
 import React, { useState } from "react";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
+import { Input } from "common/ui-kit/_Input/_Input";
+import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 
 import { Link } from "react-router-dom";
 import { Preloader } from "../../common/components/Preloader/Preloader";
-import { RadioButton } from "common/ui-kit/RadioButton/RadioButton";
 import { appStateSelector } from "app/selectors";
 import { hasError } from "../../common/utils/errorHandlers";
 import { registerTC } from "./registerThunks";
 import styles from "../../common/styles/common/common.module.scss";
 import { useFormik } from "formik";
 import { validMail } from "../../common/utils/regExp";
+import { Button } from "common/ui-kit/Button/Button";
+import {
+  RegisterContent,
+  RegisterForm,
+  RegisterOffer,
+  RegisterWrapper,
+} from "./RegisterStyles";
+import { Paper } from "common/ui-kit/Paper/Paper";
+import { Typography } from "common/ui-kit/Text/Typography";
 
 export interface IRegisterFormErrors {
   email: string;
@@ -41,6 +38,7 @@ export const Register = () => {
       if (values.password.length < 8) {
         errors.password = "Incorrect password";
       }
+
       if (values.confirmPassword !== values.password) {
         errors.confirmPassword = "Different password";
       }
@@ -61,111 +59,79 @@ export const Register = () => {
 
   const changePasswordFieldType = () => setShowPassword((prev) => !prev);
   const passwordFieldType = showPassword ? "text" : "password";
+  const passwordIcon = showPassword ? <MdVisibility /> : <MdVisibilityOff />;
 
   const registerHasError = hasError.bind(null, registerForm);
 
   return (
-    <Grid
-      container
-      justifyContent={"center"}
-      alignContent={"center"}
-      sx={{
-        height: "100vh",
-        "@media (max-width: 768px)": {
-          paddingTop: "400px",
-          paddingBottom: "5vh",
-        },
-      }}
-    >
-      <Grid
-        item
-        justifyContent={"center"}
-        xs={3}
-        sx={{
-          minWidth: "360px",
-          position: "relative",
-          pointerEvents: `${isLoading ? "none" : "auto"}`,
-        }}
-      >
+    <RegisterWrapper>
+      <RegisterContent>
         {isLoading && (
           <div className={styles.preventSending}>
             <Preloader />
           </div>
         )}
         <Paper sx={{ padding: "35px" }}>
-          <form onSubmit={registerForm.handleSubmit}>
-            <FormControl sx={{ width: "100%", textAlign: "center" }}>
-              <FormLabel>
-                <Typography variant={"h3"} sx={{ textAlign: "center" }}>
-                  Sign up
-                </Typography>
-              </FormLabel>
-              <FormGroup>
-                <TextField
-                  error={registerHasError("email")}
-                  label={
-                    registerHasError("email")
-                      ? registerForm.errors.email
-                      : "Email"
-                  }
-                  margin={"normal"}
-                  variant={"standard"}
-                  {...registerForm.getFieldProps("email")}
-                />
-                <TextField
-                  error={registerHasError("password")}
-                  label={
-                    registerHasError("password")
-                      ? registerForm.errors.password
-                      : "Password"
-                  }
-                  margin={"normal"}
-                  type={passwordFieldType}
-                  variant={"standard"}
-                  {...registerForm.getFieldProps("password")}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position={"end"}>
-                        <IconButton onClick={changePasswordFieldType}>
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-                <TextField
-                  error={registerHasError("confirmPassword")}
-                  label={
-                    registerHasError("confirmPassword")
-                      ? registerForm.errors.confirmPassword
-                      : "Confirm password"
-                  }
-                  margin={"normal"}
-                  type={passwordFieldType}
-                  variant={"standard"}
-                  sx={{ marginBottom: "20px" }}
-                  {...registerForm.getFieldProps("confirmPassword")}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position={"end"}>
-                        <IconButton onClick={changePasswordFieldType}>
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </FormGroup>
-              <Button
-                type={"submit"}
-                variant={"contained"}
-                color={"primary"}
-                sx={{ borderRadius: "30px", marginBottom: "30px" }}
-                disabled={isLoading}
-              >
-                Sign up
-              </Button>
-              <Typography mb={1} variant={"subtitle1"} component={"span"}>
+          <Typography
+            variant={"title"}
+            sx={{ textAlign: "center", marginBottom: "0.6rem" }}
+          >
+            Sign up
+          </Typography>
+          <RegisterForm onSubmit={registerForm.handleSubmit}>
+            <Input
+              error={registerHasError("email")}
+              label={
+                registerHasError("email") ? registerForm.errors.email : "Email"
+              }
+              {...registerForm.getFieldProps("email")}
+            />
+
+            <Input
+              error={registerHasError("password")}
+              label={
+                registerHasError("password")
+                  ? registerForm.errors.password
+                  : "Password"
+              }
+              {...registerForm.getFieldProps("email")}
+              type={passwordFieldType}
+              endItem={
+                <Button
+                  semantic
+                  type="button"
+                  onClick={changePasswordFieldType}
+                >
+                  {passwordIcon}
+                </Button>
+              }
+              {...registerForm.getFieldProps("password")}
+            />
+
+            <Input
+              error={registerHasError("confirmPassword")}
+              label={
+                registerHasError("confirmPassword")
+                  ? registerForm.errors.confirmPassword
+                  : "Confirm password"
+              }
+              type={passwordFieldType}
+              endItem={
+                <Button
+                  type="button"
+                  semantic
+                  onClick={changePasswordFieldType}
+                >
+                  {passwordIcon}
+                </Button>
+              }
+              {...registerForm.getFieldProps("confirmPassword")}
+            />
+            <Button type="submit" disabled={isLoading} sx={{ width: "100%" }}>
+              Sign up
+            </Button>
+            <RegisterOffer>
+              <Typography variant={"sub-title-md"} as={"span"}>
                 Already have an account?
               </Typography>
               <Typography sx={{ fontSize: "16px", color: "#366EFF" }}>
@@ -173,10 +139,10 @@ export const Register = () => {
                   Sign in
                 </Link>
               </Typography>
-            </FormControl>
-          </form>
+            </RegisterOffer>
+          </RegisterForm>
         </Paper>
-      </Grid>
-    </Grid>
+      </RegisterContent>
+    </RegisterWrapper>
   );
 };
