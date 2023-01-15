@@ -56,7 +56,7 @@ export const CardTitle = styled(Typography).attrs({
 export const CardBanner = styled.img`
   width: 300px;
   height: 100px;
-  objectfit: cover;
+  object-fit: cover;
 `;
 
 export const CardsTableWrapper = styled(TableWrapper)`

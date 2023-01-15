@@ -21,7 +21,7 @@ const NotificationWrapper = styled.div<INotificationWrapperProps>`
 
   display: flex;
   gap: 0.625rem;
-  padding: 0.9375rem;
+  padding: 0.3125rem;
 
   background: ${({ variant }) =>
     variant === "success" ? "var(--color-success)" : "var(--color-error)"};
@@ -36,7 +36,7 @@ const NotificationWrapper = styled.div<INotificationWrapperProps>`
     open &&
     css`
       opacity: 1;
-      visibility: visible;
+      visibility: visible
       pointer-events: auto;
       left: 1%;
     `}
