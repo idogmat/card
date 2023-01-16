@@ -36,7 +36,7 @@ export const setPacksTC = createAppAsyncThunk(
       } else {
         const { _id } = thunkAPI.getState().user;
         const res = await PacksAPI.getPacks({
-          user_id: isMyPack ? _id : "",
+          user_id: model.isMyPack === "true" ? _id : "",
           packName: model.packName || packName,
           pageCount: model.pageCount || pageCount,
           page: model.page || page,
@@ -51,7 +51,7 @@ export const setPacksTC = createAppAsyncThunk(
           min: model.min || min,
           max: model.max || max,
           packName: model.packName || packName,
-          isMyPack: isMyPack,
+          isMyPack: model.isMyPack === "true",
           sortPacks: sortPacks,
         };
       }

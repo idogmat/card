@@ -59,7 +59,7 @@ export interface IUpdateGradeResponse {
 
 export interface IUpdateCardGradeRequest {
   grade: number;
-  card_id: string;
+  card_id: string | undefined;
 }
 
 const getCardsRequest = (data: IGetCardsRequest) => {

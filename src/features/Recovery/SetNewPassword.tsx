@@ -3,10 +3,16 @@ import { useFormik } from "formik";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "../../common/hooks";
 import { setNewPassword } from "./setNewPasswordThunk";
-import { Flex } from "../../common/ui-kit/Flex/Flex";
+import { hasError } from "../../common/utils/errorHandlers";
 import { Typography } from "../../common/ui-kit/Text/Typography";
-import { Input } from "../../common/ui-kit/Input/Input";
+import { Input } from "common/ui-kit/_Input/_Input";
 import { Button } from "../../common/ui-kit/Button/Button";
+import {
+  RegisterContent,
+  RegisterForm,
+  RegisterWrapper,
+} from "../Register/RegisterStyles";
+import { Paper } from "../../common/ui-kit/Paper/Paper";
 
 const SetNewPassword = () => {
   const navigate = useNavigate();
@@ -36,58 +42,42 @@ const SetNewPassword = () => {
     },
   });
   //fix
-  const hasError = (prop: "password") => {
-    return !!setPasswordForm.errors[prop] && !!setPasswordForm.touched[prop];
-  };
+  const setPasswordFormHasError = hasError.bind(null, setPasswordForm);
 
   return (
-    <Flex justify={"center"} sx={{ paddingTop: "8rem", margin: "0 2rem" }}>
-      <Flex
-        sx={{
-          padding: "35px",
-          borderRadius: "5px",
-          boxShadow: "black 0px 0px 1px 1px",
-        }}
-      >
-        <form onSubmit={setPasswordForm.handleSubmit}>
-          <Flex
-            fDirection={"column"}
-            sx={{ width: "100%", textAlign: "center" }}
-          >
+    <RegisterWrapper>
+      <RegisterContent>
+        <Paper sx={{ margin: "10px" }}>
+          <RegisterForm onSubmit={setPasswordForm.handleSubmit}>
             <Typography variant={"title"} sx={{ textAlign: "center" }}>
               Create new password
             </Typography>
             <Input
-              styleType={"underline"}
-              error={hasError("password") && setPasswordForm.errors.password}
+              error={setPasswordFormHasError("password")}
               label={
-                hasError("password")
+                setPasswordFormHasError("password")
                   ? setPasswordForm.errors.password
                   : "Password"
               }
               {...setPasswordForm.getFieldProps("password")}
             />
             <Typography
-              style={{ marginBottom: "3rem" }}
+              style={{ marginBottom: "1rem" }}
               sx={{ textAlign: "start" }}
             >
-              <p style={{ opacity: ".7" }}>
-                Enter your email address and we will send you further
-                instructions
-              </p>
+              <p style={{ opacity: ".7" }}>Enter your new password</p>
             </Typography>
             <Button
-              type={"submit"}
-              disabled={hasError("password")}
+              disabled={setPasswordFormHasError("password")}
               color={"primary"}
-              sx={{ borderRadius: "30px", marginBottom: "30px" }}
+              sx={{ borderRadius: "30px" }}
             >
               Create new password
             </Button>
-          </Flex>
-        </form>
-      </Flex>
-    </Flex>
+          </RegisterForm>
+        </Paper>
+      </RegisterContent>
+    </RegisterWrapper>
   );
 };
 

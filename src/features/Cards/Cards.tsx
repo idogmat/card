@@ -190,7 +190,6 @@ export const Cards = React.memo(() => {
           ) : (
             <CardsPreloader />
           )}
-
           <CardsModals pack={pack} />
         </>
       </Flex>

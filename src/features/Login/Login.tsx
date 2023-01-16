@@ -8,28 +8,45 @@ import { loginTC } from "./loginThunks";
 import styles from "../../common/styles/common/common.module.scss";
 import { useFormik } from "formik";
 import { validMail } from "../../common/utils/regExp";
-import { Input } from "../../common/ui-kit/Input/Input";
+import { Input } from "common/ui-kit/_Input/_Input";
 import { Checkbox } from "../../common/ui-kit/Checkbox/Checkbox";
-import { Flex } from "../../common/ui-kit/Flex/Flex";
 import { Typography } from "../../common/ui-kit/Text/Typography";
 import { Button } from "../../common/ui-kit/Button/Button";
-import { BiHide, BiShow } from "react-icons/bi";
-import { Container } from "../../common/ui-kit/Container/Container";
-
+import { MdVisibility, MdVisibilityOff } from "react-icons/md";
+import {
+  RegisterContent,
+  RegisterForm,
+  RegisterOffer,
+  RegisterWrapper,
+} from "../Register/RegisterStyles";
+import { Paper } from "../../common/ui-kit/Paper/Paper";
+import * as yup from "yup";
 interface ILoginErrorType {
   email?: string;
   password?: string;
   rememberMe?: boolean;
 }
 
+export const basicSchema = yup.object().shape({
+  email: yup.string().email("Enter valid Email").required("Required"),
+  password: yup.string().min(8).required("Required"),
+});
+export const basicSchema2 = yup.object().shape({
+  email: yup.string().email("Enter valid Email").required("Required"),
+  password: yup.string().min(8).required("Required"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password"), null])
+    .required("Required"),
+});
 export const Login = () => {
   // Dispatch & selectors
   const dispatch = useAppDispatch();
   const { isLoading } = useAllSelector(appStateSelector);
 
-  // Local Stataes
+  // Local State
   const [showPassword, setShowPassword] = useState(false);
-
+  const passwordIcon = showPassword ? <MdVisibility /> : <MdVisibilityOff />;
   // Formik
   const loginForm = useFormik({
     initialValues: {
@@ -37,18 +54,19 @@ export const Login = () => {
       password: "",
       rememberMe: false,
     },
-    validate: (values) => {
-      const errors: ILoginErrorType = {};
-      if (!values.email) {
-        errors.email = "Required field";
-      } else if (!validMail.test(values.email)) {
-        errors.email = "Invalid email address";
-      }
-      if (values.password.length < 8) {
-        errors.password = "Invalid password length";
-      }
-      return errors;
-    },
+    validationSchema: basicSchema,
+    // validate: (values) => {
+    //   const errors: ILoginErrorType = {};
+    //   if (!values.email) {
+    //     errors.email = "Required field";
+    //   } else if (!validMail.test(values.email)) {
+    //     errors.email = "Invalid email address";
+    //   }
+    //   if (values.password.length < 8) {
+    //     errors.password = "Invalid password length";
+    //   }
+    //   return errors;
+    // },
     onSubmit: (values, { resetForm }) => {
       dispatch(loginTC(values));
     },
@@ -59,90 +77,85 @@ export const Login = () => {
 
   // Utils
   const changePasswordFieldType = () => setShowPassword((prev) => !prev);
-
+  // console.log(ReviewSchema.isValid({ email: loginForm.values.email }));
   return (
-    <Container variant="sm" sx={{ paddingTop: "8.75rem" }}>
-      <Flex justify={"center"}>
+    <RegisterWrapper>
+      <RegisterContent>
         {isLoading && (
           <div className={styles.preventSending}>
             <Preloader />
           </div>
         )}
-        <Flex
-          style={{
-            padding: "35px",
-            borderRadius: "5px",
-            boxShadow: "black 0px 0px 1px 1px",
-          }}
-        >
-          <form onSubmit={loginForm.handleSubmit}>
-            <Flex
-              fDirection={"column"}
-              sx={{ width: "100%", textAlign: "center" }}
+        <Paper sx={{ padding: "35px" }}>
+          <Typography
+            variant={"title"}
+            sx={{ textAlign: "center", marginBottom: "0.6rem" }}
+          >
+            Sign in
+          </Typography>
+          <RegisterForm onSubmit={loginForm.handleSubmit}>
+            <Input
+              error={loginHasError("email")}
+              label={loginHasError("email") ? loginForm.errors.email : "Email"}
+              {...loginForm.getFieldProps("email")}
+            ></Input>
+            <Input
+              type={showPassword ? "text" : "password"}
+              error={loginHasError("password")}
+              label={
+                loginHasError("confirmPassword")
+                  ? loginForm.errors.password
+                  : "Password"
+              }
+              {...loginForm.getFieldProps("password")}
+              endItem={
+                <Button
+                  type="button"
+                  semantic
+                  onClick={changePasswordFieldType}
+                >
+                  {passwordIcon}
+                </Button>
+              }
+            ></Input>
+            <Checkbox
+              onChange={() =>
+                loginForm.setFieldValue(
+                  "rememberMe",
+                  !loginForm.values.rememberMe
+                )
+              }
+              checked={loginForm.values.rememberMe}
             >
-              <Typography
-                variant={"title"}
-                sx={{ textAlign: "center", fontSize: "3rem" }}
-              >
-                Sign in
-              </Typography>
-              <Input
-                styleType={"underline"}
-                error={loginHasError("email") && loginForm.errors.email}
-                {...loginForm.getFieldProps("email")}
-              ></Input>
-              <Input
-                padding={true}
-                styleType={"underline"}
-                topPosition={"30px"}
-                type={showPassword ? "text" : "password"}
-                error={loginHasError("password") && loginForm.errors.password}
-                {...loginForm.getFieldProps("password")}
-                endItem={
-                  <Button semantic onClick={changePasswordFieldType}>
-                    {showPassword ? <BiShow /> : <BiHide />}
-                  </Button>
-                }
-              ></Input>
-              <Checkbox
-                onChange={() =>
-                  loginForm.setFieldValue(
-                    "rememberMe",
-                    !loginForm.values.rememberMe
-                  )
-                }
-                checked={loginForm.values.rememberMe}
-              >
-                <span>Remember me</span>
-              </Checkbox>
+              <span>Remember me</span>
+            </Checkbox>
 
-              <Typography sx={{ margin: "1rem 0", textAlign: "end" }}>
-                <Link to={"/recovery"}>Forgot Password?</Link>
+            <Typography
+              sx={{ fontSize: "16px", color: "#366EFF", textAlign: "end" }}
+            >
+              <Link to={"/recovery"}>Forgot Password?</Link>
+            </Typography>
+            <Button
+              type={"submit"}
+              disabled={loginHasError("email") || loginHasError("password")}
+              color={"primary"}
+              sx={{ borderRadius: "30px", marginBottom: "30px" }}
+            >
+              Sign in
+            </Button>
+            <RegisterOffer>
+              <Typography variant={"sub-title-md"} as={"span"}>
+                Haven't account?
               </Typography>
-
-              <Button
-                type={"submit"}
-                disabled={loginHasError("email") || loginHasError("password")}
-                color={"primary"}
-                sx={{ borderRadius: "30px", marginBottom: "30px" }}
-              >
-                Sign in
-              </Button>
-              <Flex
-                fDirection={"column"}
-                sx={{ width: "100%", textAlign: "center" }}
-              >
-                <Typography>Haven't account?</Typography>
-                <Typography sx={{ fontSize: "16px", color: "#366EFF" }}>
-                  <Link to={"/register"} style={{ color: "inherit" }}>
-                    Sign up
-                  </Link>
-                </Typography>
-              </Flex>
-            </Flex>
-          </form>
-        </Flex>
-      </Flex>
-    </Container>
+              <Typography sx={{ fontSize: "16px", color: "#366EFF" }}>
+                <Link to={"/register"} style={{ color: "inherit" }}>
+                  Sign up
+                </Link>
+              </Typography>
+            </RegisterOffer>
+          </RegisterForm>
+        </Paper>
+      </RegisterContent>
+    </RegisterWrapper>
   );
 };

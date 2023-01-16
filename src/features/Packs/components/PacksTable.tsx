@@ -1,4 +1,3 @@
-import { Box, TableBody } from "@mui/material";
 import React, { ReactNode } from "react";
 
 import { IPackResponse } from "../packsAPI";
@@ -7,7 +6,10 @@ import PackElement from "./PackElement";
 import TableRow from "@mui/material/TableRow/TableRow";
 import { CardsSwipeIcon, CardsTableWrapper } from "../../Cards/CardsStyles";
 import { Flex } from "../../../common/ui-kit/Flex/Flex";
-import { TableHeader } from "../../../common/ui-kit/Table/Table";
+import { TableBody, TableHeader } from "../../../common/ui-kit/Table/Table";
+import { useAllSelector } from "../../../common/hooks";
+import { appStateSelector } from "../../../app/selectors";
+import { PacksPreloader } from "./PacksPreloader";
 
 interface ITableProps {
   id: string;
@@ -22,7 +24,7 @@ interface ITableProps {
 const PacksTable: React.FC<ITableProps> = React.memo(
   ({ id, changeSort, showSortIcon, cardPacks, isLoading }) => {
     return (
-      <Flex fDirection="column">
+      <Flex fDirection="column" sx={{ paddingBottom: "10px" }}>
         <CardsSwipeIcon />
         <CardsTableWrapper>
           <TableHeader cols="100px minmax(100px,300px) 120px 150px minmax(100px,300px) minmax(100px,150px)">
@@ -43,7 +45,7 @@ const PacksTable: React.FC<ITableProps> = React.memo(
             </Flex>
           </TableHeader>
           <TableBody>
-            {!!cardPacks ? (
+            {cardPacks.length > 0 ? (
               cardPacks.map((pack) => (
                 <PackElement
                   key={pack._id}

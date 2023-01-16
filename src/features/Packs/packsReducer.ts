@@ -1,6 +1,5 @@
 import { IPackResponse, ResponseGetPacks } from "./packsAPI";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-
 import { setPacksTC } from "./packsThunks";
 
 export const initialState = {
@@ -16,7 +15,7 @@ export const initialState = {
   isMyPack: false,
   packName: "",
 };
-type StateType = typeof initialState;
+
 const packsSlice = createSlice({
   name: "packs",
   initialState,
