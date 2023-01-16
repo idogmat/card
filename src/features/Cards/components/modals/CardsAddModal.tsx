@@ -36,7 +36,13 @@ export const CardsAddModal: FC<ICardsAddModalProps> = ({ packID }) => {
 
   const btnError =
     (!textCardData.question && !imgCardData.question) ||
-    (!textCardData.answer && imgCardData.answer);
+    (!textCardData.answer && !imgCardData.answer);
+  console.log(
+    (!textCardData.question || !imgCardData.question) &&
+      (!textCardData.answer || !imgCardData.answer),
+    !textCardData.question || !imgCardData.question,
+    !textCardData.answer || !imgCardData.answer
+  );
 
   // Utils
 
@@ -73,9 +79,6 @@ export const CardsAddModal: FC<ICardsAddModalProps> = ({ packID }) => {
 
   const handleClose = () => {
     dispatch(CardsModalsAC.setAddCardState({ state: false }));
-    setTextCardData({} as ICardData);
-    setImgCardData({} as ICardData);
-    setFieldFormats(defaultFieldsFormats);
   };
 
   const addNewCardHandler = () => {
@@ -100,6 +103,9 @@ export const CardsAddModal: FC<ICardsAddModalProps> = ({ packID }) => {
       },
     };
     dispatch(addCardTC(cardData));
+    setTextCardData({} as ICardData);
+    setImgCardData({} as ICardData);
+    setFieldFormats(defaultFieldsFormats);
     handleClose();
   };
 

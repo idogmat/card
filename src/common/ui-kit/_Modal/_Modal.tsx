@@ -45,6 +45,7 @@ const ModalContent = styled.div<{ opened: boolean }>`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  margin-bottom: 2.5rem;
 
   display: flex;
   flex-direction: column;

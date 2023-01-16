@@ -8,7 +8,12 @@ import { Button } from "common/ui-kit/Button/Button";
 import { Flex } from "common/ui-kit/Flex/Flex";
 import { ICard } from "common/models";
 import { IPackResponse } from "./../Packs/packsAPI";
-import { LearnCardImg, LearnContainer } from "./LearnStyles";
+import {
+  LearnCardImg,
+  LearnCardWrapper,
+  LearnContainer,
+  LearnContent,
+} from "./LearnStyles";
 import { LearnRate } from "./LearnRate";
 import { Paper } from "common/ui-kit/Paper/Paper";
 import { Preloader } from "common/components/Preloader/Preloader";
@@ -39,18 +44,17 @@ export const Learn = () => {
     return finalCard;
   }, cards[0]);
 
-  const { state } = useLocation();
   const backToState = getItemFromLC("backToState");
   const previousURL = backToState?.previousURL || "packs";
   const pack =
-    backToState?.pack || ({ name: "namePlaceholder" } as IPackResponse);
-
-  const cardsCount = state ? state.cardsCount : 0;
+    backToState?.pack ||
+    ({ name: "namePlaceholder", cardsCount: Infinity } as IPackResponse);
 
   const hasQuestionImg =
     currentCard &&
     currentCard.questionImg &&
     currentCard.questionImg !== "undefined";
+
   const hasAnswerImg =
     currentCard &&
     currentCard.questionImg &&
@@ -61,7 +65,7 @@ export const Learn = () => {
   useEffect(() => {
     const getCardsConfig = {
       cardsPack_id: packID ? packID : "",
-      pageCount: cardsCount,
+      pageCount: pack.cardsCount,
     };
 
     dispatch(getCardsTC(getCardsConfig));
@@ -94,28 +98,24 @@ export const Learn = () => {
       <Flex sx={{ marginBottom: "1rem" }}>
         <BackTo route={`/packs?${previousURL}`} title={"Back to packs"} />
       </Flex>
-      <Flex fDirection="column" align="center">
+      <LearnContent>
         {currentCard ? (
           <>
-            <Typography
-              variant="title"
-              as="h3"
-              sx={{ marginBottom: "0.625rem" }}
-            >
+            <Typography variant="title" as="h3">
               <b>Learn "{pack.name}"</b>
             </Typography>
-            <Paper sx={{ padding: "2.3rem", minWidth: "320px" }}>
-              <Typography>
+            <LearnCardWrapper>
+              <Typography sx={{ marginBottom: "0.6rem" }}>
                 <b>Question</b>:{" "}
-                {hasQuestionImg ? (
-                  <LearnCardImg
-                    src={currentCard.questionImg}
-                    alt="questionImage"
-                  />
-                ) : (
-                  currentCard.question
-                )}
               </Typography>
+              {hasQuestionImg ? (
+                <LearnCardImg
+                  src={currentCard.questionImg}
+                  alt="questionImage"
+                />
+              ) : (
+                <Typography>{currentCard.question}</Typography>
+              )}
               <Typography sx={{ marginBottom: "1.25rem" }}>
                 Attempts: {currentCard.shots}
               </Typography>
@@ -123,18 +123,21 @@ export const Learn = () => {
                 <Button onClick={handleShowGrades}>Show answer</Button>
               ) : (
                 <>
-                  <Typography>
+                  <Typography sx={{ marginBottom: "0.6rem" }}>
                     <b>Answer</b>:{" "}
-                    {hasAnswerImg ? (
-                      <LearnCardImg
-                        src={currentCard.answerImg}
-                        alt="answerImage"
-                      />
-                    ) : (
-                      currentCard.answer
-                    )}
                   </Typography>
-                  <Typography>Rate yourself:</Typography>
+
+                  {hasAnswerImg ? (
+                    <LearnCardImg
+                      src={currentCard.answerImg}
+                      alt="answerImage"
+                    />
+                  ) : (
+                    <Typography>{currentCard.answer}</Typography>
+                  )}
+                  <Typography sx={{ marginTop: "1rem" }}>
+                    Rate yourself:
+                  </Typography>
                   <LearnRate
                     changeGrade={changeGrade}
                     selectedGrade={selectedGrade}
@@ -144,12 +147,12 @@ export const Learn = () => {
                   </Button>
                 </>
               )}
-            </Paper>
+            </LearnCardWrapper>
           </>
         ) : (
           <NotFoundElements title="You have learn all the cards." />
         )}
-      </Flex>
+      </LearnContent>
     </LearnContainer>
   );
 };
