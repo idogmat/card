@@ -1,20 +1,20 @@
 import React, { ReactElement } from "react";
 import {
-  Inventory,
-  LockOpen,
-  Login,
-  Logout,
-  Person4,
-} from "@mui/icons-material";
+  MdInventory,
+  MdLockOpen,
+  MdLogout,
+  MdOutlineLogin,
+  MdPersonOutline,
+} from "react-icons/md";
 
 interface IPageIcons {
   [key: string]: ReactElement;
 }
 
 export const pageIcons: IPageIcons = {
-  profile: <Person4 />,
-  packs: <Inventory />,
-  login: <Login />,
-  register: <LockOpen />,
-  logout: <Logout />,
+  profile: <MdPersonOutline />,
+  packs: <MdInventory />,
+  login: <MdOutlineLogin />,
+  register: <MdLockOpen />,
+  logout: <MdLogout />,
 };
