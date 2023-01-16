@@ -1,4 +1,3 @@
-import { Box, debounce } from "@mui/material";
 import { HorizontalRule } from "@mui/icons-material";
 import { removePackTC, setPacksTC } from "./packsThunks";
 import React, { useCallback, useEffect } from "react";
@@ -16,29 +15,22 @@ import {
   packsTotalCardsSelector,
 } from "./selectors";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
-
 import PacksHeader from "./components/PacksHeader";
 import PacksModals from "./components/modals/PacksModals";
 import PacksTable from "./components/PacksTable";
-import { Preloader } from "../../common/components/Preloader/Preloader";
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
 import { appStateSelector } from "app/selectors";
 import { getSortIcon } from "../../common/utils/assets";
 import { packsAC } from "./packsReducer";
-import styles from "../../common/styles/common/common.module.scss";
 import { useSearchParams } from "react-router-dom";
 import { userStateSelector } from "features/User/selectors";
-<<<<<<< HEAD
 import { selectOptions } from "./Packs.data";
 import { Pagination } from "../../common/ui-kit/Pagination/Pagination";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { Flex } from "../../common/ui-kit/Flex/Flex";
 import { Container } from "../../common/ui-kit/Container/Container";
-import { debounce } from "@mui/material";
 import { PacksPreloader } from "./components/PacksPreloader";
-=======
 import { useDebounce } from "../../common/hooks/useDebounce";
->>>>>>> dev
 
 const Packs = () => {
   // Selectors
@@ -91,7 +83,7 @@ const Packs = () => {
   }, [searchParams]);
 
   const changePage = useCallback(
-    (event: React.ChangeEvent<unknown>, newPage: number) => {
+    (newPage: number) => {
       dispatch(packsAC.setCurrentPage({ page: newPage }));
       setSearchParams({ ...params, page: `${newPage}` });
     },
@@ -99,9 +91,9 @@ const Packs = () => {
   );
 
   const handleChangeRowsPerPage = useCallback(
-    (event: SelectChangeEvent) => {
-      dispatch(packsAC.setPageCount({ pageCount: +event.target.value }));
-      setSearchParams({ ...params, pageCount: event.target.value });
+    (value: string) => {
+      dispatch(packsAC.setPageCount({ pageCount: +value }));
+      setSearchParams({ ...params, pageCount: value });
     },
     [params, packsAC.setPageCount]
   );
@@ -111,15 +103,11 @@ const Packs = () => {
   }, []);
 
   const setSearchQueryParams = useCallback(
-    debounce(
+    useDebounce(
       (value: string) => setSearchParams({ ...params, packName: value }),
       1000
     ),
-<<<<<<< HEAD
-    [setSearchParams, debounce]
-=======
-    [params]
->>>>>>> dev
+    [setSearchParams, useDebounce]
   );
 
   const changeSearchHandler = useCallback(
@@ -153,66 +141,26 @@ const Packs = () => {
     },
     [params, packsAC.setPacksSort]
   );
-<<<<<<< HEAD
-  //range
-  const optDebounce = useCallback(
-    debounce((valueRange: number[]) => {
-=======
-
-  // const optDebounce = useCallback(
-  //   debounce((valueRange: number[]) => {
-  //     console.log("settings params");
-  //     setSearchParams({
-  //       ...params,
-  //       min: valueRange[0].toString(),
-  //       max: valueRange[1].toString(),
-  //     });
-  //   }, 700),
-  //   [params]
-  // );
 
   const optDebounce = useCallback(
     useDebounce((valueRange: number[]) => {
->>>>>>> dev
       setSearchParams({
         ...params,
         min: valueRange[0].toString(),
         max: valueRange[1].toString(),
       });
-      console.log("setted");
+      // console.log("setted");
     }, 1000),
     [params]
   );
-<<<<<<< HEAD
-=======
 
->>>>>>> dev
   const changeRangeHandler = useCallback(
     (valueRange: number[]) => {
       // dispatch(packsAC.setRangeValue({ range: valueRange }));
       optDebounce(valueRange);
     },
-<<<<<<< HEAD
     [packsAC.setRangeValue, optDebounce, params]
   );
-=======
-    [dispatch, optDebounce]
-  );
-
-  //
-  // const optDebounce = debounce((valueRange: number[]) => {
-  //   setSearchParams({
-  //     ...params,
-  //     min: valueRange[0].toString(),
-  //     max: valueRange[1].toString(),
-  //   });
-  // }, 1000);
-  //
-  // const changeRangeHandler = (valueRange: number[]) => {
-  //   optDebounce(valueRange);
-  //   dispatch(packsAC.setRangeValue({ range: valueRange }));
-  // };
->>>>>>> dev
 
   const showSortIcon = (field: string) => {
     return sortPacks.field === field ? (
@@ -228,7 +176,6 @@ const Packs = () => {
   }, []);
 
   return (
-<<<<<<< HEAD
     <Container variant="sm" sx={{ paddingTop: "8.75rem" }}>
       {!isLoading ? (
         <Flex fDirection={"column"}>
@@ -267,58 +214,12 @@ const Packs = () => {
             currentPage={page}
             totalPages={totalPageCount}
           />
-
           <PacksModals />
         </Flex>
       ) : (
         <PacksPreloader />
       )}
     </Container>
-=======
-    <Box
-      sx={{
-        position: "relative",
-        padding: "6rem 2rem",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      {isLoading && (
-        <div className={styles.preventSending}>
-          <Preloader />
-        </div>
-      )}
-      <PacksHeader
-        removeSort={removeSort}
-        changeRangeHandler={changeRangeHandler}
-        packName={packName}
-        changeSearchHandler={changeSearchHandler}
-        isMyPack={isMyPack}
-        max={max}
-        min={min}
-        maxCardsCount={maxCardsCount}
-        minCardsCount={minCardsCount}
-        handlerIsMyPack={handlerIsMyPack}
-      />
-      {/*TABLE*/}
-      <PacksTable
-        id={user._id}
-        cardPacks={cardPacks}
-        totalPageCount={totalPageCount}
-        pageCount={pageCount}
-        page={page}
-        changePage={changePage}
-        handleChangeRowsPerPage={handleChangeRowsPerPage}
-        changeSort={changeSort}
-        showSortIcon={showSortIcon}
-        removePack={removePack}
-        isMyPack={isMyPack}
-        isLoading={isLoading}
-      />
-
-      <PacksModals />
-    </Box>
->>>>>>> dev
   );
 };
 

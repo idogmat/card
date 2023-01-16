@@ -11,26 +11,11 @@ interface ISuperRangeProps {
 
 const RangeSlider: React.FC<ISuperRangeProps> = React.memo(
   ({ onChangeSlider, min, max, maxCardsCount, minCardsCount }) => {
-<<<<<<< HEAD
     const [range, setRange] = useState<number[]>([Number(min), Number(max)]);
-=======
-    const [range, setRange] = useState([Number(min), Number(max)]);
->>>>>>> dev
-
     const onChangeHandler = (e: any, value: number | number[]) => {
       setRange(value as number[]);
       onChangeSlider(value as number[]);
     };
-
-    useEffect(() => {
-<<<<<<< HEAD
-      if (max > maxCardsCount)
-        onChangeSlider([Number(minCardsCount), Number(maxCardsCount)]);
-=======
->>>>>>> dev
-      setRange([Number(min), Number(max)]);
-    }, [min, max]);
-
     return (
       <Box style={{ margin: "auto 0", display: "flex" }} sx={{ width: 200 }}>
         <Grid
