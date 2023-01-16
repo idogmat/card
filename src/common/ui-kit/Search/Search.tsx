@@ -1,15 +1,23 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import styled from "styled-components";
 import { Button } from "../Button/Button";
 import { Flex } from "../Flex/Flex";
 import { MdSearch } from "react-icons/md";
 
+interface ISearchWrapperProps {
+  focused: boolean;
+}
+
 const SearchWrapper = styled(Flex).attrs({
   alignItems: "center",
-})`
-  border: 1px solid gray;
+})<ISearchWrapperProps>`
+  border: 1px solid transparent;
+  border-color: ${({ focused }) =>
+    focused ? "var(--color-darker-blue)" : "grey"};
   border-radius: var(--radius);
   height: 3.4375rem;
+
+  transition: border-color 0.3s ease 0s;
 `;
 
 const SearchInput = styled.input.attrs({
@@ -49,16 +57,28 @@ export const Search: FC<ISearchProps> = ({
   btnDisabled,
   onClick,
 }) => {
+  // Vars
+  const [isFocused, setIsFocused] = useState(false);
+
+  // Utils
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.currentTarget.value);
   };
 
+  const enableFocus = () => setIsFocused(true);
+  const disableFocus = () => setIsFocused(false);
+
   return (
-    <SearchWrapper>
+    <SearchWrapper focused={isFocused}>
       <SearchIconButton semantic disabled={btnDisabled} onClick={onClick}>
         <SearchIcon />
       </SearchIconButton>
-      <SearchInput value={value} onChange={changeHandler} />
+      <SearchInput
+        value={value}
+        onChange={changeHandler}
+        onFocus={enableFocus}
+        onBlur={disableFocus}
+      />
     </SearchWrapper>
   );
 };

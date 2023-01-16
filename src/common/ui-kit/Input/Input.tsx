@@ -64,17 +64,21 @@ export const Input: FC<Partial<InputBaseProps>> = ({
   endItem,
   ...props
 }) => {
+  // Vars
   const ref = useRef<HTMLInputElement>(null);
   const [onFocus, setFocus] = useState<boolean>(false);
+
+  // Utils
   useEffect(() => {
     document.activeElement === ref.current && setFocus(true);
-  });
+  }, [document.activeElement]);
+
   return (
     <div style={{ position: "relative" }}>
       <label className={onFocus ? s.focus : s.unFocus} htmlFor={props.name}>
         {props.onError || props.name}
       </label>
-      <StyledInput ref={ref} placeholder={props.name} {...props}></StyledInput>
+      <StyledInput ref={ref} placeholder={props.name} {...props} />
       {endItem && <Icon>{endItem}</Icon>}
       {/*{children}*/}
       {/*{props.onError && <span>{props.onError}</span>}*/}

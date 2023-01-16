@@ -37,12 +37,6 @@ export const CardsAddModal: FC<ICardsAddModalProps> = ({ packID }) => {
   const btnError =
     (!textCardData.question && !imgCardData.question) ||
     (!textCardData.answer && !imgCardData.answer);
-  console.log(
-    (!textCardData.question || !imgCardData.question) &&
-      (!textCardData.answer || !imgCardData.answer),
-    !textCardData.question || !imgCardData.question,
-    !textCardData.answer || !imgCardData.answer
-  );
 
   // Utils
 

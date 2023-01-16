@@ -24,8 +24,6 @@ export const getCardsTC = createAppAsyncThunk(
   "cards/getCards",
   async (model: IGetCardsRequest, { dispatch, rejectWithValue }) => {
     return errorHandlingThunk({ dispatch, rejectWithValue }, async () => {
-      console.log("getting cards");
-
       const { data } = await cardsAPI.getCardsRequest(model);
 
       return { ...data, cardQuestion: model.cardQuestion };

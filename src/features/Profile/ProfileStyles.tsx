@@ -9,13 +9,10 @@ export const UserEmailText = styled(Typography)`
   margin-bottom: 1.2rem;
 `;
 
-export const ProfileWrapper = styled(Flex)`
-  height: 100vh;
-  paddingtop: 8.5rem;
-`;
+export const ProfileWrapper = styled(Flex)``;
 
 export const ProfileContainer = styled(Flex)`
-  padding-top: 7rem;
+  padding: 7rem 0px 7rem 0px;
   max-width: 22.5rem;
   align-self: flex-start;
 `;

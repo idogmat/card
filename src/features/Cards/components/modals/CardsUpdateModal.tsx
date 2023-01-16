@@ -139,7 +139,6 @@ export const CardsUpdateModal: FC<IUpdateCardModalProps> = ({ packID }) => {
         [answerNull]: "undefined",
       },
     };
-    console.log(model);
     dispatch(updateCardTC({ packID, model }));
     handleClose();
   };
