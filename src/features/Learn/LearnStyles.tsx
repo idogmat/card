@@ -19,6 +19,13 @@ export const LearnContainer = styled(Container).attrs({
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 6.25rem 0px 0px 0px;
+  padding: 3.1rem 0px 0px 0px;
 `;
 
+export const LearnCardImg = styled.img`
+  height: 12.5rem;
+  width: 12.5rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-blue);
+  object-fit: cover;
+`;
