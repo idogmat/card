@@ -51,7 +51,7 @@ const PackElement: React.FC<IRowProps> = React.memo(
               <img
                 src={pack.deckCover}
                 alt={"cover"}
-                style={{ width: "80px" }}
+                style={{ width: "80px", borderRadius: "10px" }}
               />
             )
           )}

@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Input } from "../../ui-kit/Input/Input";
+import { Input } from "../../ui-kit/_Input/_Input";
 import { Flex } from "../../ui-kit/Flex/Flex";
 
 interface ISearchProps {

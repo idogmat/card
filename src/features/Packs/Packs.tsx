@@ -186,6 +186,8 @@ const Packs = () => {
             isMyPack={isMyPack}
             max={max}
             min={min}
+            minCardsCount={minCardsCount}
+            maxCardsCount={maxCardsCount}
             handlerIsMyPack={handlerIsMyPack}
           />
           {/*TABLE*/}
