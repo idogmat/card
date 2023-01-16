@@ -8,7 +8,7 @@ import { Button } from "common/ui-kit/Button/Button";
 import { Flex } from "common/ui-kit/Flex/Flex";
 import { ICard } from "common/models";
 import { IPackResponse } from "./../Packs/packsAPI";
-import { LearnContainer } from "./LearnStyles";
+import { LearnCardImg, LearnContainer } from "./LearnStyles";
 import { LearnRate } from "./LearnRate";
 import { Paper } from "common/ui-kit/Paper/Paper";
 import { Preloader } from "common/components/Preloader/Preloader";
@@ -17,16 +17,14 @@ import { appStateSelector } from "app/selectors";
 import { cardsCardsSelector } from "features/Cards/selectors";
 import { getItemFromLC } from "common/utils/localStorage";
 import { grades } from "./Learn.data";
+import { CardsAC } from "features/Cards/cardsSlice";
+import { NotFoundElements } from "common/components/NotFoundElements/NotFoundElements";
 
 export const Learn = () => {
   // dispatch & selectors
   const dispatch = useAppDispatch();
   const cards = useAllSelector(cardsCardsSelector);
   const { isLoading } = useAllSelector(appStateSelector);
-  const card = cards.reduce<ICard>((finalCard, currentCard) => {
-    finalCard = currentCard.grade < finalCard.grade ? currentCard : finalCard;
-    return finalCard;
-  }, cards[0]);
 
   // Query
   const { packID } = useParams();
@@ -36,6 +34,11 @@ export const Learn = () => {
   const [selectedGrade, setSelectedGrade] = useState("");
 
   // Vars
+  const currentCard = cards.reduce<ICard>((finalCard, currentCard) => {
+    finalCard = currentCard.grade < finalCard.grade ? currentCard : finalCard;
+    return finalCard;
+  }, cards[0]);
+
   const { state } = useLocation();
   const backToState = getItemFromLC("backToState");
   const previousURL = backToState?.previousURL || "packs";
@@ -43,18 +46,26 @@ export const Learn = () => {
     backToState?.pack || ({ name: "namePlaceholder" } as IPackResponse);
 
   const cardsCount = state ? state.cardsCount : 0;
-  const getCardsConfig = {
-    cardsPack_id: packID ? packID : "",
-    pageCount: cardsCount,
-  };
-  const hasQuestionImg = card.questionImg && card.questionImg !== "undefined";
-  const hasAnswerImg = card.questionImg && card.answerImg !== "undefined";
+
+  const hasQuestionImg =
+    currentCard &&
+    currentCard.questionImg &&
+    currentCard.questionImg !== "undefined";
+  const hasAnswerImg =
+    currentCard &&
+    currentCard.questionImg &&
+    currentCard.answerImg !== "undefined";
 
   // Utils
 
   useEffect(() => {
+    const getCardsConfig = {
+      cardsPack_id: packID ? packID : "",
+      pageCount: cardsCount,
+    };
+
     dispatch(getCardsTC(getCardsConfig));
-  }, []);
+  }, [dispatch]);
 
   const handleShowGrades = () => setShowGrades(true);
 
@@ -62,17 +73,21 @@ export const Learn = () => {
 
   const handleNext = () => {
     const selectedGradeNumber = grades.indexOf(selectedGrade) + 1;
-    console.log(selectedGradeNumber);
 
     dispatch(
-      updateCardGradeTC({ card_id: card._id, grade: selectedGradeNumber })
+      updateCardGradeTC({
+        card_id: currentCard._id,
+        grade: selectedGradeNumber,
+      })
     );
 
     setShowGrades(false);
+    const filteredCards = cards.filter((card) => card._id !== currentCard._id);
+    dispatch(CardsAC.setCards({ cards: filteredCards }));
     setSelectedGrade("");
   };
 
-  if (isLoading || !card) return <Preloader />;
+  if (isLoading) return <Preloader />;
 
   return (
     <LearnContainer>
@@ -80,44 +95,60 @@ export const Learn = () => {
         <BackTo route={`/packs?${previousURL}`} title={"Back to packs"} />
       </Flex>
       <Flex fDirection="column" align="center">
-        <Typography variant="title" as="h3" sx={{ marginBottom: "0.625rem" }}>
-          <b>Learn "{pack.name}"</b>
-        </Typography>
-        <Paper sx={{ padding: "2.3rem", minWidth: "320px" }}>
-          <Typography>
-            <b>Question</b>
-            {hasQuestionImg ? (
-              <img src={card.questionImg} alt="questionImage" />
-            ) : (
-              card.question
-            )}
-          </Typography>
-          <Typography sx={{ marginBottom: "1.25rem" }}>
-            Attempts: {card.shots}
-          </Typography>
-          {!showGrades ? (
-            <Button onClick={handleShowGrades}>Show answer</Button>
-          ) : (
-            <>
+        {currentCard ? (
+          <>
+            <Typography
+              variant="title"
+              as="h3"
+              sx={{ marginBottom: "0.625rem" }}
+            >
+              <b>Learn "{pack.name}"</b>
+            </Typography>
+            <Paper sx={{ padding: "2.3rem", minWidth: "320px" }}>
               <Typography>
-                <b>Answer</b>:{" "}
-                {hasAnswerImg ? (
-                  <img src={card.answerImg} alt="answerImage" />
+                <b>Question</b>:{" "}
+                {hasQuestionImg ? (
+                  <LearnCardImg
+                    src={currentCard.questionImg}
+                    alt="questionImage"
+                  />
                 ) : (
-                  card.answer
+                  currentCard.question
                 )}
               </Typography>
-              <Typography>Rate yourself:</Typography>
-              <LearnRate
-                changeGrade={changeGrade}
-                selectedGrade={selectedGrade}
-              />
-              <Button onClick={handleNext} disabled={!selectedGrade}>
-                Go next
-              </Button>
-            </>
-          )}
-        </Paper>
+              <Typography sx={{ marginBottom: "1.25rem" }}>
+                Attempts: {currentCard.shots}
+              </Typography>
+              {!showGrades ? (
+                <Button onClick={handleShowGrades}>Show answer</Button>
+              ) : (
+                <>
+                  <Typography>
+                    <b>Answer</b>:{" "}
+                    {hasAnswerImg ? (
+                      <LearnCardImg
+                        src={currentCard.answerImg}
+                        alt="answerImage"
+                      />
+                    ) : (
+                      currentCard.answer
+                    )}
+                  </Typography>
+                  <Typography>Rate yourself:</Typography>
+                  <LearnRate
+                    changeGrade={changeGrade}
+                    selectedGrade={selectedGrade}
+                  />
+                  <Button onClick={handleNext} disabled={!selectedGrade}>
+                    Go next
+                  </Button>
+                </>
+              )}
+            </Paper>
+          </>
+        ) : (
+          <NotFoundElements title="You have learn all the cards." />
+        )}
       </Flex>
     </LearnContainer>
   );

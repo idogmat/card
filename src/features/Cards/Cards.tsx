@@ -152,7 +152,7 @@ export const Cards = React.memo(() => {
   );
 
   return (
-    <Container variant="sm" sx={{ paddingTop: "8.75rem" }}>
+    <Container variant="sm" sx={{ paddingTop: "3.125rem" }}>
       <Flex sx={{ position: "relative" }} fDirection="column">
         {isLoading && (
           <div className={styles.preventSending}>

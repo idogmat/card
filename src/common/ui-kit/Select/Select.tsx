@@ -155,6 +155,7 @@ export const Select: FC<ISelectProps> = ({
         {options.map((option) => {
           return (
             <SelectItem
+              key={option.selectValue}
               selected={option.selectValue === selected}
               onClick={() => selectOption(option.selectValue)}
             >

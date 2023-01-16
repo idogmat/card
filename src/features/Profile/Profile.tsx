@@ -69,7 +69,11 @@ export const Profile = () => {
                 link={avatarFileRef}
                 onFileLoaded={handleAvatarUpload}
               />
-              <Avatar src={user.avatar} text={user.name}>
+              <Avatar
+                src={user.avatar}
+                text={user.name}
+                bgColor="var(--color-blue)"
+              >
                 <ProfileUploadImgBadge
                   onClick={() => openFileSelector(avatarFileRef)}
                 >

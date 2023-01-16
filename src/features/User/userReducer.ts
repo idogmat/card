@@ -1,7 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-import { AuthAC } from "features/Auth/authSlice";
-import { IUpdatedUserInfo } from "../Profile/profileAPI";
 import { IUser } from "../../common/models";
 import { authMeTC } from "features/Auth/authThunks";
 import { loginTC } from "../Login/loginThunks";

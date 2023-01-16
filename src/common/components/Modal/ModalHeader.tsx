@@ -1,9 +1,8 @@
-import { IconButton, Typography } from "@mui/material";
-
-import Box from "@mui/material/Box";
-import { Close } from "@mui/icons-material";
+import { MdClose } from "react-icons/md";
 import { FC } from "react";
-import { modalHeaderStyle } from "./style";
+import { Flex } from "common/ui-kit/Flex/Flex";
+import { Button } from "common/ui-kit/Button/Button";
+import { Typography } from "common/ui-kit/Text/Typography";
 
 interface IModalHeaderProps {
   title: string;
@@ -12,13 +11,13 @@ interface IModalHeaderProps {
 
 export const ModalHeader: FC<IModalHeaderProps> = ({ title, handleClose }) => {
   return (
-    <Box sx={modalHeaderStyle}>
-      <Typography variant={"h4"} component="h3">
+    <Flex justify="space-between" sx={{ gap: "0.6rem" }}>
+      <Typography variant={"title"} as="h3">
         {title}
       </Typography>
-      <IconButton onClick={handleClose}>
-        <Close />
-      </IconButton>
-    </Box>
+      <Button semantic onClick={handleClose}>
+        <MdClose />
+      </Button>
+    </Flex>
   );
 };

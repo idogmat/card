@@ -56,7 +56,7 @@ export const CardTitle = styled(Typography).attrs({
 export const CardBanner = styled.img`
   width: 300px;
   height: 100px;
-  objectfit: cover;
+  object-fit: cover;
 `;
 
 export const CardsTableWrapper = styled(TableWrapper)`
@@ -99,4 +99,20 @@ export const CardsHeaderInfo = styled(Flex).attrs({
 })`
   position: relative;
   gap: 0.3125rem;
+`;
+
+export const CardsTableImg = styled.img`
+  width: 6.25rem;
+  height: 5rem;
+  object-fit: cover;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-blue);
+`;
+
+export const CardsCoverPreview = styled.img`
+  width: 100%;
+  height: 9.2rem;
+  object-fit: cover;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-blue);
 `;
