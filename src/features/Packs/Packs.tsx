@@ -18,7 +18,6 @@ import { useAllSelector, useAppDispatch } from "../../common/hooks";
 import PacksHeader from "./components/PacksHeader";
 import PacksModals from "./components/modals/PacksModals";
 import PacksTable from "./components/PacksTable";
-import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
 import { appStateSelector } from "app/selectors";
 import { getSortIcon } from "../../common/utils/assets";
 import { packsAC } from "./packsReducer";
@@ -123,7 +122,7 @@ const Packs = () => {
       dispatch(packsAC.setPreferencePacks({ isMine: param }));
       setSearchParams({ ...params, isMyPack: `${param}` });
     },
-    [params, packsAC.setPreferencePacks]
+    [params, packsAC.setPreferencePacks, setSearchParams]
   );
 
   const changeSort = useCallback(

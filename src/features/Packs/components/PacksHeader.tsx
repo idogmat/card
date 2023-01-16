@@ -54,7 +54,7 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
           </MyPackButton>
           <MyPackButton
             selected={!isMyPack}
-            onClick={() => handlerIsMyPack(true)}
+            onClick={() => handlerIsMyPack(false)}
           >
             All
           </MyPackButton>
