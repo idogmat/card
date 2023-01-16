@@ -1,8 +1,6 @@
-import { Drafts } from "@mui/icons-material";
 import { FieldFormatsEnum } from "./components/modals/FormatSelect";
 import { ICard } from "common/models";
-import { PayloadAction } from "@reduxjs/toolkit";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface IUpdateCardData {
   answer: string;

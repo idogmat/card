@@ -1,7 +1,7 @@
 import { Box, debounce } from "@mui/material";
-import { Clear, HorizontalRule } from "@mui/icons-material";
-import { IParams, removePackTC, setPacksTC } from "./packsThunks";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { HorizontalRule } from "@mui/icons-material";
+import { removePackTC, setPacksTC } from "./packsThunks";
+import React, { useCallback, useEffect } from "react";
 import {
   packsCardsPacksSelector,
   packsIsMyPackSelector,
@@ -22,13 +22,13 @@ import PacksModals from "./components/modals/PacksModals";
 import PacksTable from "./components/PacksTable";
 import { Preloader } from "../../common/components/Preloader/Preloader";
 import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
-import { TimeoutId } from "@reduxjs/toolkit/dist/query/core/buildMiddleware/types";
 import { appStateSelector } from "app/selectors";
 import { getSortIcon } from "../../common/utils/assets";
 import { packsAC } from "./packsReducer";
 import styles from "../../common/styles/common/common.module.scss";
 import { useSearchParams } from "react-router-dom";
 import { userStateSelector } from "features/User/selectors";
+import { useDebounce } from "../../common/hooks/useDebounce";
 
 const Packs = () => {
   // Selectors
@@ -49,13 +49,11 @@ const Packs = () => {
   // Query
   const [searchParams, setSearchParams] = useSearchParams();
   const params = Object.fromEntries(searchParams);
-  // Local states
 
   // Utils
   const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
   const isParamsSet = Object.keys(params).length > 0;
   const dispatch = useAppDispatch();
-  let timeout = useRef<TimeoutId>();
 
   useEffect(() => {
     if (!isParamsSet) {
@@ -87,7 +85,7 @@ const Packs = () => {
       dispatch(packsAC.setCurrentPage({ page: newPage }));
       setSearchParams({ ...params, page: `${newPage}` });
     },
-    [packsAC.setCurrentPage, setSearchParams]
+    [params, packsAC.setCurrentPage]
   );
 
   const handleChangeRowsPerPage = useCallback(
@@ -95,7 +93,7 @@ const Packs = () => {
       dispatch(packsAC.setPageCount({ pageCount: +event.target.value }));
       setSearchParams({ ...params, pageCount: event.target.value });
     },
-    [setSearchParams, packsAC.setPageCount]
+    [params, packsAC.setPageCount]
   );
 
   const removePack = useCallback((id: string) => {
@@ -107,7 +105,7 @@ const Packs = () => {
       (value: string) => setSearchParams({ ...params, packName: value }),
       1000
     ),
-    [setSearchParams]
+    [params]
   );
 
   const changeSearchHandler = useCallback(
@@ -123,7 +121,7 @@ const Packs = () => {
       dispatch(packsAC.setPreferencePacks({ isMine: param }));
       setSearchParams({ ...params, isMyPack: `${param}` });
     },
-    [setSearchParams, packsAC.setPreferencePacks]
+    [params, packsAC.setPreferencePacks]
   );
 
   const changeSort = useCallback(
@@ -139,28 +137,54 @@ const Packs = () => {
         sortPacks: (sortPacks.direction + sortPacks.field).toString(),
       });
     },
-    [packsAC.setPacksSort, setSearchParams]
+    [params, packsAC.setPacksSort]
   );
 
-  const optDebounce = (
-    type: { valueRange: number[]; params: any },
-    ms: number
-  ) => {
-    function callFunc() {
-      setSearchParams({
-        ...type.params,
-        min: type.valueRange[0].toString(),
-        max: type.valueRange[1].toString(),
-      });
-    }
-    clearTimeout(timeout.current);
-    timeout.current = setTimeout(callFunc, ms);
-  };
+  // const optDebounce = useCallback(
+  //   debounce((valueRange: number[]) => {
+  //     console.log("settings params");
+  //     setSearchParams({
+  //       ...params,
+  //       min: valueRange[0].toString(),
+  //       max: valueRange[1].toString(),
+  //     });
+  //   }, 700),
+  //   [params]
+  // );
 
-  const changeRangeHandler = (valueRange: number[], params: IParams) => {
-    dispatch(packsAC.setRangeValue({ range: valueRange }));
-    optDebounce({ valueRange, params }, 700);
-  };
+  const optDebounce = useCallback(
+    useDebounce((valueRange: number[]) => {
+      setSearchParams({
+        ...params,
+        min: valueRange[0].toString(),
+        max: valueRange[1].toString(),
+      });
+      console.log("setted");
+    }, 1000),
+    [params]
+  );
+
+  const changeRangeHandler = useCallback(
+    (valueRange: number[]) => {
+      // dispatch(packsAC.setRangeValue({ range: valueRange }));
+      optDebounce(valueRange);
+    },
+    [dispatch, optDebounce]
+  );
+
+  //
+  // const optDebounce = debounce((valueRange: number[]) => {
+  //   setSearchParams({
+  //     ...params,
+  //     min: valueRange[0].toString(),
+  //     max: valueRange[1].toString(),
+  //   });
+  // }, 1000);
+  //
+  // const changeRangeHandler = (valueRange: number[]) => {
+  //   optDebounce(valueRange);
+  //   dispatch(packsAC.setRangeValue({ range: valueRange }));
+  // };
 
   const showSortIcon = (field: string) => {
     return sortPacks.field === field ? (
@@ -200,7 +224,6 @@ const Packs = () => {
         maxCardsCount={maxCardsCount}
         minCardsCount={minCardsCount}
         handlerIsMyPack={handlerIsMyPack}
-        params={params}
       />
       {/*TABLE*/}
       <PacksTable

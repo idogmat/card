@@ -5,6 +5,23 @@ import { lockPadding, unlockPadding } from "common/utils/lockPadding";
 import FocusTrap from "focus-trap-react";
 import React, { FC, useEffect } from "react";
 import styled, { css } from "styled-components";
+import { Flex } from "../Flex/Flex";
+
+const ModalWrapper = styled(Flex).attrs({
+  align: "center",
+  justify: "center",
+})`
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100vw;
+  height: 100%;
+
+  z-index: 70;
+
+  overflow: auto;
+`;
 
 const ModalBackground = styled.div<{ opened: boolean }>`
   position: fixed;
@@ -16,7 +33,7 @@ const ModalBackground = styled.div<{ opened: boolean }>`
   align-items: center;
 
   width: 100vw;
-  height: 100vh;
+  height: 100%;
 
   background: rgba(0, 0, 0, 0.6);
 
@@ -39,13 +56,6 @@ const ModalBackground = styled.div<{ opened: boolean }>`
 
 const ModalContent = styled.div<{ opened: boolean }>`
   transition: visibility 0.3s ease 0s, opacity 0.3s ease 0s;
-
-  position: fixed;
-
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin-bottom: 2.5rem;
 
   display: flex;
   flex-direction: column;
@@ -103,10 +113,12 @@ export const Modal: FC<IModalProps> = ({ open, onClose, children }) => {
   return (
     <>
       <FocusTrap>
-        <div>
+        <ModalWrapper>
           <ModalBackground opened={fullyAssembled} onClick={onClose} />
-          <ModalContent opened={open}>{children}</ModalContent>
-        </div>
+          <div style={{ padding: "20px 0", zIndex: "100" }}>
+            <ModalContent opened={open}>{children}</ModalContent>
+          </div>
+        </ModalWrapper>
       </FocusTrap>
     </>
   );
