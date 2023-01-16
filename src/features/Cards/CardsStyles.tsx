@@ -106,7 +106,7 @@ export const CardsTableImg = styled.img`
   height: 5rem;
   object-fit: cover;
   border-radius: var(--radius);
-  border: 1px solid var(--color-blue);
+  border: 1px solid var(--color-blue);\
 `;
 
 export const CardsCoverPreview = styled.img<StyledComponent<{}>>`

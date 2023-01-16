@@ -8,19 +8,19 @@ import styled, { css } from "styled-components";
 import { Flex } from "../Flex/Flex";
 
 const ModalWrapper = styled(Flex).attrs({
-  align: "center",
   justify: "center",
+  align: "center",
 })`
   position: fixed;
   top: 0;
   left: 0;
 
-  width: 100vw;
+  width: 100%;
   height: 100%;
 
   z-index: 70;
 
-  overflow: auto;
+  overflow-y: auto;
 `;
 
 const ModalBackground = styled.div<{ opened: boolean }>`
@@ -54,18 +54,13 @@ const ModalBackground = styled.div<{ opened: boolean }>`
   transition: opacity 3s ease 0s, visibility 0.4s ease 0s;
 `;
 
-const ModalContent = styled.div<{ opened: boolean }>`
+const ModalContentWrapper = styled.div<{ opened: boolean }>`
   transition: visibility 0.3s ease 0s, opacity 0.3s ease 0s;
 
-  display: flex;
-  flex-direction: column;
+  max-height: calc(100vh - 2rem);
 
-  /* background: var(--color-primary); */
-  background: #fff;
-  max-width: 25rem;
-  padding: 1.5625rem;
-  box-shadow: 0px 0px 8px 0px rgba(64, 64, 64, 0.2);
-  border-radius: var(--radius);
+  position: absolute;
+  padding: 0.5rem;
 
   opacity: 0;
   visibility: hidden;
@@ -80,6 +75,14 @@ const ModalContent = styled.div<{ opened: boolean }>`
     `};
 
   z-index: 61;
+`;
+
+const ModalContent = styled.div`
+  background: #fff;
+  max-width: 25rem;
+  padding: 1.2rem;
+  box-shadow: 0px 0px 8px 0px rgba(64, 64, 64, 0.2);
+  border-radius: var(--radius);
 `;
 
 interface IModalProps {
@@ -115,9 +118,9 @@ export const Modal: FC<IModalProps> = ({ open, onClose, children }) => {
       <FocusTrap>
         <ModalWrapper>
           <ModalBackground opened={fullyAssembled} onClick={onClose} />
-          <div style={{ padding: "20px 0", zIndex: "100" }}>
-            <ModalContent opened={open}>{children}</ModalContent>
-          </div>
+          <ModalContentWrapper opened={open}>
+            <ModalContent>{children}</ModalContent>
+          </ModalContentWrapper>
         </ModalWrapper>
       </FocusTrap>
     </>

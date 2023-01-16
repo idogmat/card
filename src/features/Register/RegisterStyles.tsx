@@ -10,7 +10,6 @@ export const RegisterWrapper = styled(Flex).attrs({
   padding-top: 5rem;
 
   @media (max-width: 768px) {
-    padding-top: 10rem;
     padding-bottom: 5vh;
   } ;
 `;

@@ -15,6 +15,10 @@ export const ProfileContainer = styled(Flex)`
   padding: 7rem 0px 7rem 0px;
   max-width: 22.5rem;
   align-self: flex-start;
+
+  @media (max-width: 768px) {
+    padding: 5rem 0px 5rem 0px;
+  }
 `;
 
 export const ProfileTitle = styled(Typography).attrs({

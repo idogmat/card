@@ -23,7 +23,6 @@ export const CardsDeleteModal: FC<IUpdateCardModalProps> = ({ packID }) => {
   const isQuestionImg = card.questionImg && card.questionImg !== "undefined";
 
   // Utils
-
   const handleClose = () =>
     dispatch(CardsModalsAC.setDeleteCardState({ state: false }));
 
