@@ -12,9 +12,10 @@ import { CardsPackMenu } from "../CardsPackMenu";
 import { Flex } from "common/ui-kit/Flex/Flex";
 import { IPackResponse } from "./../../Packs/packsAPI";
 import { MdMoreHoriz } from "react-icons/md";
-import { Search } from "../../../common/components/Search/Search";
+// import { Search } from "../../../common/components/Search/Search";
 import { useAppDispatch } from "common/hooks";
 import { useComponentVisible } from "common/hooks/isComponentVisible";
+import { Search } from "common/ui-kit/Search/Search";
 
 interface ICardsHeaderProps {
   isPackMine: boolean;
@@ -67,8 +68,9 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
         </CardsHeaderWrapper>
         <Flex sx={{ marginBottom: "1.25rem" }}>
           <Search
-            searchChangeHandler={setSearchRequest}
-            searchValue={searchValue}
+            onChange={setSearchRequest}
+            value={searchValue}
+            btnDisabled={true}
           />
         </Flex>
       </>

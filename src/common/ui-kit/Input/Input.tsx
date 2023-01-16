@@ -146,8 +146,11 @@ export const Input: FC<Partial<InputBaseProps>> = ({
   endItem,
   ...props
 }) => {
+  // Vars
   const ref = useRef<HTMLInputElement>(null);
   const [onFocus, setFocus] = useState<boolean>(false);
+
+  // Utils
   useEffect(() => {
     document.activeElement === ref.current && setFocus(true);
     console.log(props.error);

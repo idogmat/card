@@ -1,7 +1,6 @@
 import { errorHandlingThunk } from "../../common/utils/errorHandlers";
 
 import { AppAC } from "../../app/appSlice";
-import { IUser } from "../../common/models";
 import { createAppAsyncThunk } from "../../common/utils/AsyncThunk";
 import { loginAPI } from "./loginAPI";
 
@@ -33,7 +32,6 @@ export const logOutTC = createAppAsyncThunk(
       thunkAPI.dispatch(
         AppAC.setSuccessMessage({ message: "You have successfully logged out" })
       );
-      return { user: {} as IUser };
     });
   }
 );
