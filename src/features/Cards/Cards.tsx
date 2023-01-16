@@ -22,14 +22,13 @@ import { IPackResponse } from "./../Packs/packsAPI";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { NotFoundElements } from "common/components/NotFoundElements/NotFoundElements";
 import { Pagination } from "common/ui-kit/Pagination/Pagination";
-import { Preloader } from "common/components/Preloader/Preloader";
 import { appStateSelector } from "app/selectors";
 import { debounce } from "@mui/material";
 import { getCardsTC } from "./cardsThunks";
 import { getItemFromLC } from "common/utils/localStorage";
 import { selectOptions } from "./Cards.data";
-import styles from "../../common/styles/common/common.module.scss";
 import { userStateSelector } from "../User/selectors";
+import { CardsPreloader } from "./CardsPreloader";
 
 // Types
 export interface IFieldSort {
@@ -154,48 +153,50 @@ export const Cards = React.memo(() => {
   return (
     <Container variant="sm" sx={{ paddingTop: "3.125rem" }}>
       <Flex sx={{ position: "relative" }} fDirection="column">
-        {isLoading && (
-          <div className={styles.preventSending}>
-            <Preloader />
-          </div>
-        )}
-        <Flex justify="flex-start">
-          <BackTo title={"Back to packs"} route={`/packs?${previousURL}`} />
-        </Flex>
-        <CardsHeader
-          isPackMine={isPackMine}
-          pack={pack}
-          setSearchRequest={changeSearchRequestHandler}
-          searchValue={cardQuestion || ""}
-          previousURL={previousURL}
-        />
-        {cards.length > 0 ? (
-          <>
-            <div style={{ marginBottom: "1.25rem" }}>
-              <CardsTable
-                cards={cards}
-                isPackMine={isPackMine}
-                sort={sort}
-                setSort={handleChangeSort}
-              />
-            </div>
-            <Pagination
-              selectProps={{
-                options: selectOptions,
-                selected: pageCount.toString(),
-                onChange: changeShowPerPage,
-                endIcon: <MdKeyboardArrowDown />,
-              }}
-              label="Cards"
-              changePage={changePageHandler}
-              currentPage={page}
-              totalPages={totalPages}
-            />
-          </>
-        ) : (
-          <NotFoundElements title={"Empty"} />
-        )}
-        <CardsModals pack={pack} />
+        <>
+          <Flex justify="flex-start">
+            <BackTo title={"Back to packs"} route={`/packs?${previousURL}`} />
+          </Flex>
+          <CardsHeader
+            isPackMine={isPackMine}
+            pack={pack}
+            setSearchRequest={changeSearchRequestHandler}
+            searchValue={cardQuestion || ""}
+            previousURL={previousURL}
+          />
+          {isLoading ? (
+            cards.length > 0 ? (
+              <>
+                <div style={{ marginBottom: "1.25rem" }}>
+                  <CardsTable
+                    cards={cards}
+                    isPackMine={isPackMine}
+                    sort={sort}
+                    setSort={handleChangeSort}
+                  />
+                </div>
+                <Pagination
+                  selectProps={{
+                    options: selectOptions,
+                    selected: pageCount.toString(),
+                    onChange: changeShowPerPage,
+                    endIcon: <MdKeyboardArrowDown />,
+                  }}
+                  label="Cards"
+                  changePage={changePageHandler}
+                  currentPage={page}
+                  totalPages={totalPages}
+                />
+              </>
+            ) : (
+              <NotFoundElements title={"Empty"} />
+            )
+          ) : (
+            <CardsPreloader />
+          )}
+
+          <CardsModals pack={pack} />
+        </>
       </Flex>
     </Container>
   );
