@@ -109,7 +109,7 @@ const Packs = () => {
     [setSearchParams, useDebounce]
   );
 
-  const changeSearchHandler = useCallback(
+  const searchChangeHandler = useCallback(
     (value: string) => {
       dispatch(packsAC.setPackName({ packName: value }));
       setSearchQueryParams(value);
@@ -117,10 +117,10 @@ const Packs = () => {
     [setSearchQueryParams, packsAC.setPackName]
   );
 
-  const handlerIsMyPack = useCallback(
+  const handleChangeIsMyPack = useCallback(
     (param: boolean) => {
       dispatch(packsAC.setPreferencePacks({ isMine: param }));
-      setSearchParams({ ...params, isMyPack: `${param}` });
+      setSearchParams({ isMyPack: `${param}` });
     },
     [params, packsAC.setPreferencePacks, setSearchParams]
   );
@@ -135,7 +135,7 @@ const Packs = () => {
 
       setSearchParams({
         ...params,
-        sortPacks: (sortPacks.direction + sortPacks.field).toString(),
+        sortPacks: `${sortPacks.direction}${sortPacks.field}`,
       });
     },
     [params, packsAC.setPacksSort]
@@ -148,14 +148,18 @@ const Packs = () => {
         min: valueRange[0].toString(),
         max: valueRange[1].toString(),
       });
-      // console.log("setted");
     }, 1000),
     [params]
   );
 
   const changeRangeHandler = useCallback(
     (valueRange: number[]) => {
-      optDebounce(valueRange);
+      const min = valueRange[0] < minCardsCount ? minCardsCount : valueRange[0];
+      const max = valueRange[1] > maxCardsCount ? maxCardsCount : valueRange[1];
+      const range = [min, max];
+
+      dispatch(packsAC.setRangeValue({ range }));
+      optDebounce(range);
     },
     [packsAC.setRangeValue, optDebounce, params]
   );
@@ -181,13 +185,13 @@ const Packs = () => {
             removeSort={removeSort}
             changeRangeHandler={changeRangeHandler}
             packName={packName}
-            changeSearchHandler={changeSearchHandler}
+            changeSearchHandler={searchChangeHandler}
             isMyPack={isMyPack}
             max={max}
             min={min}
             minCardsCount={minCardsCount}
             maxCardsCount={maxCardsCount}
-            handlerIsMyPack={handlerIsMyPack}
+            handlerIsMyPack={handleChangeIsMyPack}
           />
           {/*TABLE*/}
 

@@ -7,9 +7,6 @@ import TableRow from "@mui/material/TableRow/TableRow";
 import { CardsSwipeIcon, CardsTableWrapper } from "../../Cards/CardsStyles";
 import { Flex } from "../../../common/ui-kit/Flex/Flex";
 import { TableBody, TableHeader } from "../../../common/ui-kit/Table/Table";
-import { useAllSelector } from "../../../common/hooks";
-import { appStateSelector } from "../../../app/selectors";
-import { PacksPreloader } from "./PacksPreloader";
 
 interface ITableProps {
   id: string;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Range } from "react-range";
 import { Flex } from "../../ui-kit/Flex/Flex";
 import {
@@ -8,12 +8,6 @@ import {
   ThumbDot,
   ThumbView,
 } from "../../ui-kit/RangeSlider/RangeSlider";
-import { useAllSelector, useAppDispatch } from "../../hooks";
-import {
-  packsMaxCardsPacksSelector,
-  packsMinCardsPacksSelector,
-} from "../../../features/Packs/selectors";
-import { packsAC } from "../../../features/Packs/packsReducer";
 
 interface ISuperRangeProps {
   onChangeSlider: (valueRange: number[]) => void;
@@ -25,32 +19,25 @@ interface ISuperRangeProps {
 
 const RangeSlider: React.FC<ISuperRangeProps> = React.memo(
   ({ onChangeSlider, min, max, minCardsCount, maxCardsCount }) => {
-    const [range, setRange] = useState<number[]>([Number(min), Number(max)]);
+    const minValue = min < minCardsCount ? minCardsCount : min;
+    const maxValue = max > maxCardsCount ? maxCardsCount : max;
+    const values = [+minValue, +maxValue];
 
     const onChangeHandler = (values: number[]) => {
-      setRange(values as number[]);
       onChangeSlider(values as number[]);
     };
-    const isValid = range[1] < maxCardsCount && range[0] > minCardsCount;
-    useEffect(() => {
-      if (isValid) {
-        setRange([Number(min), Number(max)]);
-        return;
-      }
 
-      onChangeSlider([minCardsCount, maxCardsCount]);
-    }, [min, max, minCardsCount, maxCardsCount]);
     return (
       <Flex sx={{ minWidth: "45%", maxWidth: "100%" }}>
         <output style={{ margin: "auto 5px" }} id="output1">
           {minCardsCount.toFixed(0)}
         </output>
-        {!!range[1] && (
+        {values.length && (
           <Range
             step={1}
             min={minCardsCount}
             max={maxCardsCount}
-            values={range}
+            values={values}
             onChange={(values) => onChangeHandler(values)}
             renderTrack={({ props, children }) => (
               <RangeField
@@ -69,7 +56,7 @@ const RangeSlider: React.FC<ISuperRangeProps> = React.memo(
             )}
             renderThumb={({ index, props, isDragged }) => (
               <Thumb {...props}>
-                <ThumbView>{range[index].toFixed(0)}</ThumbView>
+                <ThumbView>{values[index].toFixed(0)}</ThumbView>
                 <ThumbDot isDragged={isDragged} />
               </Thumb>
             )}
