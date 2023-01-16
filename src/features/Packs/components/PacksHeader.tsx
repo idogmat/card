@@ -1,13 +1,14 @@
 import React, { FC } from "react";
 import { Search } from "../../../common/components/Search/Search";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useAppDispatch } from "../../../common/hooks";
 import { packsModalsAC } from "../packsModalsSlice";
 import RangeSlider from "../../../common/components/RangeSlider/RangeSlider";
+import { IParams } from "../packsThunks";
 import { Button } from "../../../common/ui-kit/Button/Button";
 import { MyPackButton } from "../PacksStyle";
 import { MdOutlineSearch } from "react-icons/md";
 import { Flex } from "../../../common/ui-kit/Flex/Flex";
+import { IoTrashBin } from "react-icons/io5";
 
 interface IHeaderProps {
   packName: string;
@@ -21,7 +22,6 @@ interface IHeaderProps {
   changeRangeHandler: (valueRange: number[]) => void;
   removeSort: () => void;
 }
-
 const PacksHeader: FC<IHeaderProps> = React.memo(
   ({
     removeSort,
@@ -59,6 +59,7 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
             All
           </MyPackButton>
         </Flex>
+
         <RangeSlider
           max={max}
           min={min}
@@ -66,9 +67,18 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
           maxCardsCount={maxCardsCount}
           onChangeSlider={changeRangeHandler}
         />
-        <Button onClick={modalAddPack}>Add new Pack</Button>
-        <Button onClick={() => removeSort()} style={{ margin: "auto 0" }}>
-          <DeleteForeverIcon />
+        <Button
+          style={{ padding: "0px 5px", margin: "20px 0px" }}
+          onClick={modalAddPack}
+        >
+          Add new Pack
+        </Button>
+        <Button
+          semantic
+          onClick={() => removeSort()}
+          style={{ margin: "20px 0", padding: "10px 5px" }}
+        >
+          <IoTrashBin />
         </Button>
       </Flex>
     );

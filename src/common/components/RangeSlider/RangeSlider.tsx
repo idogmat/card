@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Range } from "react-range";
 import { Flex } from "../../ui-kit/Flex/Flex";
 import {
@@ -24,6 +24,9 @@ const RangeSlider: React.FC<ISuperRangeProps> = React.memo(
       setRange(values as number[]);
       onChangeSlider(values as number[]);
     };
+    useEffect(() => {
+      setRange([Number(min), Number(max)]);
+    }, [min, max, maxCardsCount, minCardsCount]);
     return (
       <Flex sx={{ minWidth: "45%", maxWidth: "100%" }}>
         <output style={{ margin: "auto 5px" }} id="output1">
