@@ -155,7 +155,6 @@ const Packs = () => {
 
   const changeRangeHandler = useCallback(
     (valueRange: number[]) => {
-      // dispatch(packsAC.setRangeValue({ range: valueRange }));
       optDebounce(valueRange);
     },
     [packsAC.setRangeValue, optDebounce, params]

@@ -25,25 +25,21 @@ interface ISuperRangeProps {
 
 const RangeSlider: React.FC<ISuperRangeProps> = React.memo(
   ({ onChangeSlider, min, max, minCardsCount, maxCardsCount }) => {
-    const dispatch = useAppDispatch();
     const [range, setRange] = useState<number[]>([Number(min), Number(max)]);
 
     const onChangeHandler = (values: number[]) => {
       setRange(values as number[]);
       onChangeSlider(values as number[]);
     };
+    const isValid = range[1] < maxCardsCount && range[0] > minCardsCount;
     useEffect(() => {
-      if (max > maxCardsCount) {
-        dispatch(
-          packsAC.setRangeValue({
-            range: [Number(minCardsCount), Number(maxCardsCount)],
-          })
-        );
-      } else {
+      if (isValid) {
         setRange([Number(min), Number(max)]);
+        return;
       }
-    }, [min, max, minCardsCount, maxCardsCount]);
 
+      onChangeSlider([minCardsCount, maxCardsCount]);
+    }, [min, max, minCardsCount, maxCardsCount]);
     return (
       <Flex sx={{ minWidth: "45%", maxWidth: "100%" }}>
         <output style={{ margin: "auto 5px" }} id="output1">
