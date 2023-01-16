@@ -20,13 +20,25 @@ import {
   RegisterWrapper,
 } from "../Register/RegisterStyles";
 import { Paper } from "../../common/ui-kit/Paper/Paper";
-
+import * as yup from "yup";
 interface ILoginErrorType {
   email?: string;
   password?: string;
   rememberMe?: boolean;
 }
 
+export const basicSchema = yup.object().shape({
+  email: yup.string().email("Enter valid Email").required("Required"),
+  password: yup.string().min(8).required("Required"),
+});
+export const basicSchema2 = yup.object().shape({
+  email: yup.string().email("Enter valid Email").required("Required"),
+  password: yup.string().min(8).required("Required"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password"), null])
+    .required("Required"),
+});
 export const Login = () => {
   // Dispatch & selectors
   const dispatch = useAppDispatch();
@@ -42,18 +54,19 @@ export const Login = () => {
       password: "",
       rememberMe: false,
     },
-    validate: (values) => {
-      const errors: ILoginErrorType = {};
-      if (!values.email) {
-        errors.email = "Required field";
-      } else if (!validMail.test(values.email)) {
-        errors.email = "Invalid email address";
-      }
-      if (values.password.length < 8) {
-        errors.password = "Invalid password length";
-      }
-      return errors;
-    },
+    validationSchema: basicSchema,
+    // validate: (values) => {
+    //   const errors: ILoginErrorType = {};
+    //   if (!values.email) {
+    //     errors.email = "Required field";
+    //   } else if (!validMail.test(values.email)) {
+    //     errors.email = "Invalid email address";
+    //   }
+    //   if (values.password.length < 8) {
+    //     errors.password = "Invalid password length";
+    //   }
+    //   return errors;
+    // },
     onSubmit: (values, { resetForm }) => {
       dispatch(loginTC(values));
     },
@@ -64,7 +77,7 @@ export const Login = () => {
 
   // Utils
   const changePasswordFieldType = () => setShowPassword((prev) => !prev);
-
+  // console.log(ReviewSchema.isValid({ email: loginForm.values.email }));
   return (
     <RegisterWrapper>
       <RegisterContent>
@@ -92,7 +105,7 @@ export const Login = () => {
               label={
                 loginHasError("confirmPassword")
                   ? loginForm.errors.password
-                  : "Confirm password"
+                  : "Password"
               }
               {...loginForm.getFieldProps("password")}
               endItem={

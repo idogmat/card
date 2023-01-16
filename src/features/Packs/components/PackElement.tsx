@@ -64,49 +64,31 @@ const PackElement: React.FC<IRowProps> = React.memo(
               onClick={savePackData}
               style={{ overflow: "hidden" }}
             >
-              {isLoading ? <Skeleton /> : pack.name}
+              {pack.name}
             </NavLink>
           </Flex>
         </TableBodyItem>
         <TableBodyItem style={{ margin: "auto" }}>
-          {isLoading ? <Skeleton /> : pack.cardsCount}
+          {pack.cardsCount}
         </TableBodyItem>
-        <TableBodyItem>
-          {isLoading ? <Skeleton /> : formDate(pack.created)}
-        </TableBodyItem>
+        <TableBodyItem>{formDate(pack.created)}</TableBodyItem>
         <TableBodyItem style={{ width: "100%" }}>
-          <Flex style={{ overflow: "hidden" }}>
-            {isLoading ? <Skeleton /> : pack.user_name}
-          </Flex>
+          <Flex style={{ overflow: "hidden" }}>{pack.user_name}</Flex>
         </TableBodyItem>
         <TableBodyItem style={{ margin: "auto" }}>
           <NavLink to={`/learn/${pack._id}`} state={backToState}>
-            {isLoading ? (
-              <Skeleton />
-            ) : (
-              <Button semantic>
-                <AiOutlineAudit />
-              </Button>
-            )}
+            <Button semantic>
+              <AiOutlineAudit />
+            </Button>
           </NavLink>
-          {isLoading ? (
-            <Skeleton />
-          ) : (
-            <Button
-              semantic
-              disabled={pack.user_id !== id}
-              onClick={modalDelete}
-            >
-              <AiOutlineDelete />
-            </Button>
-          )}
-          {isLoading ? (
-            <Skeleton />
-          ) : (
-            <Button semantic disabled={pack.user_id !== id} onClick={modalEdit}>
-              <AiOutlineEdit />
-            </Button>
-          )}
+
+          <Button semantic disabled={pack.user_id !== id} onClick={modalDelete}>
+            <AiOutlineDelete />
+          </Button>
+
+          <Button semantic disabled={pack.user_id !== id} onClick={modalEdit}>
+            <AiOutlineEdit />
+          </Button>
         </TableBodyItem>
       </TableBodyLine>
     );

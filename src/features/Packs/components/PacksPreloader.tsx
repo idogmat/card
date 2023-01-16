@@ -1,11 +1,11 @@
 import ContentLoader from "react-content-loader";
 
-export const CardsPreloader = () => {
+export const PacksPreloader = () => {
   return (
     <ContentLoader
       speed={2}
       width={"100%"}
-      height={500}
+      height={400}
       viewBox="0 0 1280 500"
       backgroundColor="#f3f3f3"
       foregroundColor="#ecebeb"

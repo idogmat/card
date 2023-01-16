@@ -164,7 +164,7 @@ export const Cards = React.memo(() => {
             searchValue={cardQuestion || ""}
             previousURL={previousURL}
           />
-          {isLoading ? (
+          {!isLoading ? (
             cards.length > 0 ? (
               <>
                 <div style={{ marginBottom: "1.25rem" }}>
@@ -194,7 +194,6 @@ export const Cards = React.memo(() => {
           ) : (
             <CardsPreloader />
           )}
-
           <CardsModals pack={pack} />
         </>
       </Flex>

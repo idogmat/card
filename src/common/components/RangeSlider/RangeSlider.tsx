@@ -11,8 +11,7 @@ import {
 } from "../../ui-kit/RangeSlider/RangeSlider";
 
 interface ISuperRangeProps {
-  onChangeSlider: (valueRange: number[], params: any) => void;
-  params: IParams;
+  onChangeSlider: (valueRange: number[]) => void;
   max: number | string;
   min: number | string;
   minCardsCount: number;
@@ -20,17 +19,17 @@ interface ISuperRangeProps {
 }
 
 const RangeSlider: React.FC<ISuperRangeProps> = React.memo(
-  ({ onChangeSlider, min, max, maxCardsCount, minCardsCount, params }) => {
+  ({ onChangeSlider, min, max, maxCardsCount, minCardsCount }) => {
     const [range, setRange] = useState<number[]>([Number(min), Number(max)]);
 
     const onChangeHandler = (value: number[]) => {
       setRange(value as number[]);
-      onChangeSlider(value as number[], params);
+      onChangeSlider(value as number[]);
     };
 
     useEffect(() => {
       if (max > maxCardsCount)
-        onChangeSlider([Number(minCardsCount), Number(maxCardsCount)], params);
+        onChangeSlider([Number(minCardsCount), Number(maxCardsCount)]);
       setRange([Number(min), Number(max)]);
     }, [min, max, maxCardsCount, minCardsCount]);
 

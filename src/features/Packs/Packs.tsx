@@ -31,6 +31,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { Flex } from "../../common/ui-kit/Flex/Flex";
 import { Container } from "../../common/ui-kit/Container/Container";
 import { debounce } from "@mui/material";
+import { PacksPreloader } from "./components/PacksPreloader";
 
 const Packs = () => {
   // Selectors
@@ -139,25 +140,24 @@ const Packs = () => {
     [packsAC.setPacksSort, setSearchParams]
   );
   //range
-  const optDebounce = (
-    type: { valueRange: number[]; params: any },
-    ms: number
-  ) => {
-    function callFunc() {
+  const optDebounce = useCallback(
+    debounce((valueRange: number[]) => {
       setSearchParams({
-        ...type.params,
-        min: type.valueRange[0].toString(),
-        max: type.valueRange[1].toString(),
+        ...params,
+        min: valueRange[0].toString(),
+        max: valueRange[1].toString(),
       });
-    }
-    clearTimeout(timeout.current);
-    timeout.current = setTimeout(callFunc, ms);
-  };
-
-  const changeRangeHandler = (valueRange: number[], params: IParams) => {
-    dispatch(packsAC.setRangeValue({ range: valueRange }));
-    optDebounce({ valueRange, params }, 700);
-  };
+      console.log("setted");
+    }, 1000),
+    [params]
+  );
+  const changeRangeHandler = useCallback(
+    (valueRange: number[]) => {
+      // dispatch(packsAC.setRangeValue({ range: valueRange }));
+      optDebounce(valueRange);
+    },
+    [packsAC.setRangeValue, optDebounce, params]
+  );
 
   const showSortIcon = (field: string) => {
     return sortPacks.field === field ? (
@@ -178,49 +178,49 @@ const Packs = () => {
 
   return (
     <Container variant="sm" sx={{ paddingTop: "8.75rem" }}>
-      <Flex fDirection={"column"}>
-        {isLoading && (
-          <div className={styles.preventSending}>
-            <Preloader />
-          </div>
-        )}
-        <PacksHeader
-          removeSort={removeSort}
-          changeRangeHandler={changeRangeHandler}
-          packName={packName}
-          changeSearchHandler={changeSearchHandler}
-          isMyPack={isMyPack}
-          max={max}
-          min={min}
-          maxCardsCount={maxCardsCount}
-          minCardsCount={minCardsCount}
-          handlerIsMyPack={handlerIsMyPack}
-          params={params}
-        />
-        {/*TABLE*/}
-        <PacksTable
-          id={user._id}
-          cardPacks={cardPacks}
-          changeSort={changeSort}
-          showSortIcon={showSortIcon}
-          removePack={removePack}
-          isMyPack={isMyPack}
-          isLoading={isLoading}
-        />
-        <Pagination
-          selectProps={{
-            options: selectOptions,
-            selected: pageCount.toString(),
-            onChange: handleChangeRowsPerPage,
-            endIcon: <MdKeyboardArrowDown />,
-          }}
-          label="Packs"
-          changePage={changePage}
-          currentPage={page}
-          totalPages={totalPageCount}
-        />
-        <PacksModals />
-      </Flex>
+      {!isLoading ? (
+        <Flex fDirection={"column"}>
+          <PacksHeader
+            removeSort={removeSort}
+            changeRangeHandler={changeRangeHandler}
+            packName={packName}
+            changeSearchHandler={changeSearchHandler}
+            isMyPack={isMyPack}
+            max={max}
+            min={min}
+            maxCardsCount={maxCardsCount}
+            minCardsCount={minCardsCount}
+            handlerIsMyPack={handlerIsMyPack}
+          />
+          {/*TABLE*/}
+
+          <PacksTable
+            id={user._id}
+            cardPacks={cardPacks}
+            changeSort={changeSort}
+            showSortIcon={showSortIcon}
+            removePack={removePack}
+            isMyPack={isMyPack}
+            isLoading={isLoading}
+          />
+          <Pagination
+            selectProps={{
+              options: selectOptions,
+              selected: pageCount.toString(),
+              onChange: handleChangeRowsPerPage,
+              endIcon: <MdKeyboardArrowDown />,
+            }}
+            label="Packs"
+            changePage={changePage}
+            currentPage={page}
+            totalPages={totalPageCount}
+          />
+
+          <PacksModals />
+        </Flex>
+      ) : (
+        <PacksPreloader />
+      )}
     </Container>
   );
 };

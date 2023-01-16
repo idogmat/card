@@ -3,7 +3,6 @@ import { Search } from "../../../common/components/Search/Search";
 import { useAppDispatch } from "../../../common/hooks";
 import { packsModalsAC } from "../packsModalsSlice";
 import RangeSlider from "../../../common/components/RangeSlider/RangeSlider";
-import { IParams } from "../packsThunks";
 import { Button } from "../../../common/ui-kit/Button/Button";
 import { MyPackButton } from "../PacksStyle";
 import { MdOutlineSearch } from "react-icons/md";
@@ -19,8 +18,7 @@ interface IHeaderProps {
   maxCardsCount: number;
   max: number | string;
   min: number | string;
-  changeRangeHandler: (valueRange: number[], params: any) => void;
-  params: IParams;
+  changeRangeHandler: (valueRange: number[]) => void;
   removeSort: () => void;
 }
 const PacksHeader: FC<IHeaderProps> = React.memo(
@@ -35,7 +33,6 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
     maxCardsCount,
     minCardsCount,
     handlerIsMyPack,
-    params,
   }) => {
     const dispatch = useAppDispatch();
     const modalAddPack = () =>
@@ -68,7 +65,6 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
           minCardsCount={minCardsCount}
           maxCardsCount={maxCardsCount}
           onChangeSlider={changeRangeHandler}
-          params={params}
         />
         <Button
           style={{ padding: "0px 5px", margin: "20px 0px" }}
