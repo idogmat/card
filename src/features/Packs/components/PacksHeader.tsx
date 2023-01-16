@@ -43,10 +43,8 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
     return (
       <Flex justify={"space-between"} fWrap={"wrap"}>
         <Search
-          topPosition={"30px"}
           searchValue={packName}
           searchChangeHandler={changeSearchHandler}
-          padding={true}
           endItem={<MdOutlineSearch />}
         />
         <Flex sx={{ gap: "1rem" }}>

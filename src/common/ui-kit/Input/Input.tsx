@@ -2,16 +2,12 @@ import React, {
   ChangeEvent,
   FC,
   HTMLInputTypeAttribute,
-  LabelHTMLAttributes,
-  ReactEventHandler,
   useEffect,
   useRef,
   useState,
 } from "react";
 import styled, { css, CSSProperties } from "styled-components";
-import s from "./Input.module.scss";
 import { StyledComponent } from "../types";
-import { FormLabelBaseProps } from "@mui/material";
 
 interface IStyledInput {
   styleType: "underline" | undefined;

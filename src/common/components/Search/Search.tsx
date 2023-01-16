@@ -6,12 +6,10 @@ interface ISearchProps {
   searchValue: string;
   searchChangeHandler: (value: string) => void;
   endItem?: React.ReactNode;
-  padding?: true | undefined;
-  topPosition?: string | undefined;
 }
 
 export const Search: FC<ISearchProps> = React.memo(
-  ({ searchValue, searchChangeHandler, endItem, padding, topPosition }) => {
+  ({ searchValue, searchChangeHandler, endItem, ...props }) => {
     const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
       searchChangeHandler(e.currentTarget.value);
     };
@@ -19,11 +17,11 @@ export const Search: FC<ISearchProps> = React.memo(
     return (
       <Flex>
         <Input
-          topPosition={topPosition}
-          padding={padding}
           value={searchValue}
           onChange={onChangeHandler}
+          error={false}
           endItem={endItem}
+          {...props}
         />
       </Flex>
     );

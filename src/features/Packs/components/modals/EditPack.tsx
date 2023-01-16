@@ -1,23 +1,16 @@
 import { getImgBase64File } from "../../../../common/utils/base64Converter";
 import React, { ChangeEvent, memo } from "react";
 import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
-
-import Button from "@mui/material/Button/Button";
 import { IPackResponse } from "../../packsAPI";
-import { PhotoCamera } from "@mui/icons-material";
 import { packsModalsAC } from "../../packsModalsSlice";
 import { updateModalSelector } from "./modalsSelectors";
 import { updatePackTC } from "../../packsThunks";
 import { FormInModal, Modal } from "../../../../common/ui-kit/Modal/Modal";
 import { Flex } from "../../../../common/ui-kit/Flex/Flex";
 import { Checkbox } from "../../../../common/ui-kit/Checkbox/Checkbox";
-import { Input } from "../../../../common/ui-kit/Input/Input";
-
-interface IUpdatePack {
-  name: string;
-  deckCover: string;
-  isPrivate: boolean;
-}
+import { Input } from "../../../../common/ui-kit/_Input/_Input";
+import { Button } from "../../../../common/ui-kit/Button/Button";
+import { MdPhotoCamera } from "react-icons/md";
 
 export const EditPack = memo(() => {
   // Dispatch & selectors
@@ -26,9 +19,6 @@ export const EditPack = memo(() => {
     state.packs.cardPacks.find((p) => p._id === pack._id)
   );
   const dispatch = useAppDispatch();
-
-  // Local state
-
   // Utils
   const handleClose = () =>
     dispatch(
@@ -88,6 +78,7 @@ export const EditPack = memo(() => {
           <Input
             label="Pack name"
             value={pack.name}
+            error={false}
             onChange={handleChangeName}
           />
           <Checkbox
@@ -95,25 +86,34 @@ export const EditPack = memo(() => {
             onChange={handleChangeIsPrivate}
             children={<span>Private pack</span>}
           />
-          <label style={{ textAlign: "center", display: "inline-flex" }}>
-            <input
+          <label
+            style={{
+              textAlign: "center",
+              display: "inline-flex",
+            }}
+          >
+            <Input
               style={{ display: "none" }}
               type="file"
               accept={"image/*"}
+              error={false}
               onChange={(e) => handleChangeCover(e)}
+              endItem={
+                <div>
+                  <MdPhotoCamera /> Add Cover
+                </div>
+              }
             />
-            <PhotoCamera />
-            Add cover
           </label>
           <Flex
             justify={"space-between"}
             fDirection={"row"}
             sx={{ margin: "auto", gap: "5px" }}
           >
-            <Button onClick={handleClose} color="primary" variant="contained">
+            <Button onClick={handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={updatePack} color="primary" variant="contained">
+            <Button onClick={updatePack} color="primary">
               Save pack
             </Button>
           </Flex>

@@ -30,7 +30,6 @@ import { Pagination } from "../../common/ui-kit/Pagination/Pagination";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { Flex } from "../../common/ui-kit/Flex/Flex";
 import { Container } from "../../common/ui-kit/Container/Container";
-import { useDebounce } from "../../common/hooks/useDebounce";
 import { debounce } from "@mui/material";
 
 const Packs = () => {

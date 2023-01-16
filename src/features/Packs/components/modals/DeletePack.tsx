@@ -1,5 +1,4 @@
 import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
-import Button from "@mui/material/Button/Button";
 import { IPackResponse } from "../../packsAPI";
 import { deleteModalSelector } from "./modalsSelectors";
 import { memo } from "react";
@@ -8,6 +7,7 @@ import { removePackTC } from "../../packsThunks";
 import { FormInModal, Modal } from "../../../../common/ui-kit/Modal/Modal";
 import { Flex } from "../../../../common/ui-kit/Flex/Flex";
 import { Typography } from "../../../../common/ui-kit/Text/Typography";
+import { Button } from "../../../../common/ui-kit/Button/Button";
 
 export const DeletePack = memo(() => {
   // Dispatch & selectors
@@ -44,10 +44,10 @@ export const DeletePack = memo(() => {
             fDirection={"row"}
             sx={{ margin: "auto", gap: "5px", paddingTop: "10px" }}
           >
-            <Button onClick={handleClose} color="primary" variant="contained">
+            <Button onClick={handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={deletePack} color="primary" variant="contained">
+            <Button onClick={deletePack} color="primary">
               Delete
             </Button>
           </Flex>
