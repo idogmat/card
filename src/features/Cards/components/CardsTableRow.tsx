@@ -19,10 +19,6 @@ export const CardsTableRow: FC<ICardsTableRowProps> = React.memo(
   ({ card, isPackMine }) => {
     // dispatch & selectors
     const dispatch = useAppDispatch();
-    const deleteCardData = {
-      cardID: card._id,
-      cardName: card.question,
-    };
 
     // Vars
     const isCardQuestionImg =
@@ -32,7 +28,7 @@ export const CardsTableRow: FC<ICardsTableRowProps> = React.memo(
     // Utils
     const openDeleteModal = () => {
       dispatch(CardsModalsAC.setDeleteCardState({ state: true }));
-      dispatch(CardsModalsAC.setDeleteCardData(deleteCardData));
+      dispatch(CardsModalsAC.setDeleteCardData({ card }));
     };
 
     const openUpdateModal = () => {

@@ -97,6 +97,7 @@ export const CardsAddModal: FC<ICardsAddModalProps> = ({ packID }) => {
       },
     };
     dispatch(addCardTC(cardData));
+
     setTextCardData({} as ICardData);
     setImgCardData({} as ICardData);
     setFieldFormats(defaultFieldsFormats);

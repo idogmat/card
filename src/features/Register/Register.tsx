@@ -10,7 +10,6 @@ import { hasError } from "../../common/utils/errorHandlers";
 import { registerTC } from "./registerThunks";
 import styles from "../../common/styles/common/common.module.scss";
 import { useFormik } from "formik";
-import { validMail } from "../../common/utils/regExp";
 import { Button } from "common/ui-kit/Button/Button";
 import {
   RegisterContent,
@@ -20,6 +19,7 @@ import {
 } from "./RegisterStyles";
 import { Paper } from "common/ui-kit/Paper/Paper";
 import { Typography } from "common/ui-kit/Text/Typography";
+import { registerSchema } from "./RegisterSchema";
 
 export interface IRegisterFormErrors {
   email: string;
@@ -33,20 +33,21 @@ export const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const registerForm = useFormik({
-    validate: (values) => {
-      const errors = {} as IRegisterFormErrors;
-      if (values.password.length < 8) {
-        errors.password = "Incorrect password";
-      }
-
-      if (values.confirmPassword !== values.password) {
-        errors.confirmPassword = "Different password";
-      }
-      if (!values.email.length || !validMail.test(values.email)) {
-        errors.email = "Enter the correct email";
-      }
-      return errors;
-    },
+    // validate: (values) => {
+    //   const errors = {} as IRegisterFormErrors;
+    //   if (values.password.length < 8) {
+    //     errors.password = "Incorrect password";
+    //   }
+    //
+    //   if (values.confirmPassword !== values.password) {
+    //     errors.confirmPassword = "Different password";
+    //   }
+    //   if (!values.email.length || !validMail.test(values.email)) {
+    //     errors.email = "Enter the correct email";
+    //   }
+    //   return errors;
+    // },
+    validationSchema: registerSchema,
     initialValues: {
       email: "",
       password: "",

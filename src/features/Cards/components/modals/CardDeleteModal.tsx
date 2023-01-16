@@ -8,6 +8,7 @@ import { deleteCardTC } from "features/Cards/cardsThunks";
 import { Flex } from "common/ui-kit/Flex/Flex";
 import { Typography } from "common/ui-kit/Text/Typography";
 import { Button } from "common/ui-kit/Button/Button";
+import { CardsCoverPreview } from "../../CardsStyles";
 
 interface IUpdateCardModalProps {
   packID: string;
@@ -16,7 +17,10 @@ interface IUpdateCardModalProps {
 export const CardsDeleteModal: FC<IUpdateCardModalProps> = ({ packID }) => {
   // dispatch & selectors
   const dispatch = useAppDispatch();
-  const { isOpen, cardID, cardName } = useAllSelector(deleteCardModalSelector);
+  const { isOpen, card } = useAllSelector(deleteCardModalSelector);
+
+  // Vars
+  const isQuestionImg = card.questionImg && card.questionImg !== "undefined";
 
   // Utils
 
@@ -24,6 +28,7 @@ export const CardsDeleteModal: FC<IUpdateCardModalProps> = ({ packID }) => {
     dispatch(CardsModalsAC.setDeleteCardState({ state: false }));
 
   const deleteCardHandler = () => {
+    const cardID = card._id;
     dispatch(deleteCardTC({ cardID, packID }));
     handleClose();
   };
@@ -36,8 +41,18 @@ export const CardsDeleteModal: FC<IUpdateCardModalProps> = ({ packID }) => {
         open={isOpen}
       >
         <Flex fDirection="column" sx={{ padding: "0.6rem" }}>
+          {isQuestionImg ? (
+            <CardsCoverPreview
+              src={card.questionImg}
+              sx={{ marginBottom: "0.5rem" }}
+            />
+          ) : (
+            <Typography variant={"title"}>
+              <b>{card.question}</b>
+            </Typography>
+          )}
           <Typography sx={{ marginBottom: "0.6rem" }}>
-            Do you really want to remove <b>{cardName}</b>
+            Do you really want to remove this card?
           </Typography>
           <Flex justify="space-between" sx={{ gap: "0.3rem" }}>
             <Button
