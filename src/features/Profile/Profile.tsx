@@ -15,7 +15,6 @@ import { EditableText } from "../../common/components/EditableText/EditableText"
 import { FileLoader } from "common/components/FileLoader/FileLoader";
 import { Flex } from "common/ui-kit/Flex/Flex";
 import { Paper } from "common/ui-kit/Paper/Paper";
-import { TypographyProps } from "@mui/material";
 import { appStateSelector } from "app/selectors";
 import { getImgBase64File } from "common/utils/base64Converter";
 import { logOutTC } from "../Login/loginThunks";

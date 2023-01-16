@@ -23,22 +23,17 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { NotFoundElements } from "common/components/NotFoundElements/NotFoundElements";
 import { Pagination } from "common/ui-kit/Pagination/Pagination";
 import { appStateSelector } from "app/selectors";
-import { debounce } from "@mui/material";
 import { getCardsTC } from "./cardsThunks";
 import { getItemFromLC } from "common/utils/localStorage";
 import { selectOptions } from "./Cards.data";
 import { userStateSelector } from "../User/selectors";
 import { CardsPreloader } from "./CardsPreloader";
+import { useDebounce } from "../../common/hooks/useDebounce";
 
 // Types
 export interface IFieldSort {
   direction: number;
   field: string;
-}
-
-export interface ILocationState {
-  pack: IPackResponse;
-  previousURL: string;
 }
 
 export const Cards = React.memo(() => {
@@ -65,6 +60,7 @@ export const Cards = React.memo(() => {
   const previousURL = backToState?.previousURL || "packs";
   const pack =
     backToState?.pack || ({ name: "namePlaceholder" } as IPackResponse);
+
   // Local states
   const defaultSort = { direction: 0, field: "updated" };
   const [sort, setSort] = useState<IFieldSort>(defaultSort);
@@ -125,10 +121,10 @@ export const Cards = React.memo(() => {
   );
 
   const setSearchRequestToQuery = useCallback(
-    debounce((value: string) => {
+    useDebounce((value: string) => {
       setSearchParams({ ...params, search: value });
     }, 700),
-    []
+    [params]
   );
 
   const changeSearchRequestHandler = useCallback(
@@ -164,7 +160,7 @@ export const Cards = React.memo(() => {
             searchValue={cardQuestion || ""}
             previousURL={previousURL}
           />
-          {isLoading ? (
+          {!isLoading ? (
             cards.length > 0 ? (
               <>
                 <div style={{ marginBottom: "1.25rem" }}>

@@ -1,5 +1,7 @@
-import { IParams, removePackTC, setPacksTC } from "./packsThunks";
-import React, { useCallback, useEffect, useRef } from "react";
+import { Box, debounce } from "@mui/material";
+import { HorizontalRule } from "@mui/icons-material";
+import { removePackTC, setPacksTC } from "./packsThunks";
+import React, { useCallback, useEffect } from "react";
 import {
   packsCardsPacksSelector,
   packsIsMyPackSelector,
@@ -14,24 +16,19 @@ import {
   packsTotalCardsSelector,
 } from "./selectors";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
+
 import PacksHeader from "./components/PacksHeader";
 import PacksModals from "./components/modals/PacksModals";
 import PacksTable from "./components/PacksTable";
 import { Preloader } from "../../common/components/Preloader/Preloader";
-import { TimeoutId } from "@reduxjs/toolkit/dist/query/core/buildMiddleware/types";
+import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
 import { appStateSelector } from "app/selectors";
 import { getSortIcon } from "../../common/utils/assets";
 import { packsAC } from "./packsReducer";
 import styles from "../../common/styles/common/common.module.scss";
 import { useSearchParams } from "react-router-dom";
 import { userStateSelector } from "features/User/selectors";
-import { selectOptions } from "./Packs.data";
-import { Pagination } from "../../common/ui-kit/Pagination/Pagination";
-import { MdKeyboardArrowDown } from "react-icons/md";
-import { Flex } from "../../common/ui-kit/Flex/Flex";
-import { Container } from "../../common/ui-kit/Container/Container";
 import { useDebounce } from "../../common/hooks/useDebounce";
-import { debounce } from "@mui/material";
 
 const Packs = () => {
   // Selectors
@@ -52,13 +49,11 @@ const Packs = () => {
   // Query
   const [searchParams, setSearchParams] = useSearchParams();
   const params = Object.fromEntries(searchParams);
-  // Local states
 
   // Utils
   const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
   const isParamsSet = Object.keys(params).length > 0;
   const dispatch = useAppDispatch();
-  let timeout = useRef<TimeoutId>();
 
   useEffect(() => {
     if (!isParamsSet) {
@@ -84,30 +79,35 @@ const Packs = () => {
     };
     dispatch(setPacksTC(model));
   }, [searchParams]);
-  //page
+
   const changePage = useCallback(
-    (newPage: number) => {
+    (event: React.ChangeEvent<unknown>, newPage: number) => {
       dispatch(packsAC.setCurrentPage({ page: newPage }));
       setSearchParams({ ...params, page: `${newPage}` });
     },
-    [packsAC.setCurrentPage, setSearchParams]
+    [params, packsAC.setCurrentPage]
   );
 
   const handleChangeRowsPerPage = useCallback(
-    (value: string) => {
-      dispatch(packsAC.setPageCount({ pageCount: +value }));
-      setSearchParams({ ...params, pageCount: value });
+    (event: SelectChangeEvent) => {
+      dispatch(packsAC.setPageCount({ pageCount: +event.target.value }));
+      setSearchParams({ ...params, pageCount: event.target.value });
     },
-    [setSearchParams, packsAC.setPageCount]
+    [params, packsAC.setPageCount]
   );
 
+  const removePack = useCallback((id: string) => {
+    dispatch(removePackTC(id));
+  }, []);
+
   const setSearchQueryParams = useCallback(
-    debounce((value: string) =>
-      setSearchParams({ ...params, packName: value })
+    debounce(
+      (value: string) => setSearchParams({ ...params, packName: value }),
+      1000
     ),
-    [setSearchParams]
+    [params]
   );
-  //search
+
   const changeSearchHandler = useCallback(
     (value: string) => {
       dispatch(packsAC.setPackName({ packName: value }));
@@ -121,9 +121,9 @@ const Packs = () => {
       dispatch(packsAC.setPreferencePacks({ isMine: param }));
       setSearchParams({ ...params, isMyPack: `${param}` });
     },
-    [setSearchParams, packsAC.setPreferencePacks]
+    [params, packsAC.setPreferencePacks]
   );
-  //sort
+
   const changeSort = useCallback(
     (field: string) => {
       dispatch(
@@ -137,40 +137,62 @@ const Packs = () => {
         sortPacks: (sortPacks.direction + sortPacks.field).toString(),
       });
     },
-    [packsAC.setPacksSort, setSearchParams]
+    [params, packsAC.setPacksSort]
   );
-  //range
-  const optDebounce = (
-    type: { valueRange: number[]; params: any },
-    ms: number
-  ) => {
-    function callFunc() {
-      setSearchParams({
-        ...type.params,
-        min: type.valueRange[0].toString(),
-        max: type.valueRange[1].toString(),
-      });
-    }
-    clearTimeout(timeout.current);
-    timeout.current = setTimeout(callFunc, ms);
-  };
 
-  const changeRangeHandler = (valueRange: number[], params: IParams) => {
-    dispatch(packsAC.setRangeValue({ range: valueRange }));
-    optDebounce({ valueRange, params }, 700);
-  };
+  // const optDebounce = useCallback(
+  //   debounce((valueRange: number[]) => {
+  //     console.log("settings params");
+  //     setSearchParams({
+  //       ...params,
+  //       min: valueRange[0].toString(),
+  //       max: valueRange[1].toString(),
+  //     });
+  //   }, 700),
+  //   [params]
+  // );
+
+  const optDebounce = useCallback(
+    useDebounce((valueRange: number[]) => {
+      setSearchParams({
+        ...params,
+        min: valueRange[0].toString(),
+        max: valueRange[1].toString(),
+      });
+      console.log("setted");
+    }, 1000),
+    [params]
+  );
+
+  const changeRangeHandler = useCallback(
+    (valueRange: number[]) => {
+      // dispatch(packsAC.setRangeValue({ range: valueRange }));
+      optDebounce(valueRange);
+    },
+    [dispatch, optDebounce]
+  );
+
+  //
+  // const optDebounce = debounce((valueRange: number[]) => {
+  //   setSearchParams({
+  //     ...params,
+  //     min: valueRange[0].toString(),
+  //     max: valueRange[1].toString(),
+  //   });
+  // }, 1000);
+  //
+  // const changeRangeHandler = (valueRange: number[]) => {
+  //   optDebounce(valueRange);
+  //   dispatch(packsAC.setRangeValue({ range: valueRange }));
+  // };
 
   const showSortIcon = (field: string) => {
     return sortPacks.field === field ? (
       getSortIcon(sortPacks.direction === 1)
     ) : (
-      <MdKeyboardArrowDown />
+      <HorizontalRule />
     );
   };
-
-  const removePack = useCallback((id: string) => {
-    dispatch(removePackTC(id));
-  }, []);
 
   const removeSort = useCallback(() => {
     dispatch(packsAC.clearSettings({}));
@@ -178,51 +200,49 @@ const Packs = () => {
   }, []);
 
   return (
-    <Container variant="sm" sx={{ paddingTop: "8.75rem" }}>
-      <Flex fDirection={"column"}>
-        {isLoading && (
-          <div className={styles.preventSending}>
-            <Preloader />
-          </div>
-        )}
-        <PacksHeader
-          removeSort={removeSort}
-          changeRangeHandler={changeRangeHandler}
-          packName={packName}
-          changeSearchHandler={changeSearchHandler}
-          isMyPack={isMyPack}
-          max={max}
-          min={min}
-          maxCardsCount={maxCardsCount}
-          minCardsCount={minCardsCount}
-          handlerIsMyPack={handlerIsMyPack}
-          params={params}
-        />
-        {/*TABLE*/}
-        <PacksTable
-          id={user._id}
-          cardPacks={cardPacks}
-          changeSort={changeSort}
-          showSortIcon={showSortIcon}
-          removePack={removePack}
-          isMyPack={isMyPack}
-          isLoading={isLoading}
-        />
-        <Pagination
-          selectProps={{
-            options: selectOptions,
-            selected: pageCount.toString(),
-            onChange: handleChangeRowsPerPage,
-            endIcon: <MdKeyboardArrowDown />,
-          }}
-          label="Packs"
-          changePage={changePage}
-          currentPage={page}
-          totalPages={totalPageCount}
-        />
-        <PacksModals />
-      </Flex>
-    </Container>
+    <Box
+      sx={{
+        position: "relative",
+        padding: "6rem 2rem",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      {isLoading && (
+        <div className={styles.preventSending}>
+          <Preloader />
+        </div>
+      )}
+      <PacksHeader
+        removeSort={removeSort}
+        changeRangeHandler={changeRangeHandler}
+        packName={packName}
+        changeSearchHandler={changeSearchHandler}
+        isMyPack={isMyPack}
+        max={max}
+        min={min}
+        maxCardsCount={maxCardsCount}
+        minCardsCount={minCardsCount}
+        handlerIsMyPack={handlerIsMyPack}
+      />
+      {/*TABLE*/}
+      <PacksTable
+        id={user._id}
+        cardPacks={cardPacks}
+        totalPageCount={totalPageCount}
+        pageCount={pageCount}
+        page={page}
+        changePage={changePage}
+        handleChangeRowsPerPage={handleChangeRowsPerPage}
+        changeSort={changeSort}
+        showSortIcon={showSortIcon}
+        removePack={removePack}
+        isMyPack={isMyPack}
+        isLoading={isLoading}
+      />
+
+      <PacksModals />
+    </Box>
   );
 };
 
