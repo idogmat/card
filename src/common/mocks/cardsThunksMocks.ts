@@ -6,6 +6,7 @@ import {
   IUpdateGradeResponse,
 } from "features/Cards/cardsAPI";
 import { IDeleteCardData, IUpdateCardData } from "features/Cards/cardsThunks";
+import { ICard } from "../models";
 
 export const mockGetCardsModel: IGetCardsRequest = {
   cardAnswer: "",
@@ -18,7 +19,7 @@ export const mockGetCardsModel: IGetCardsRequest = {
   pageCount: 1,
 };
 
-export const mockCard = {
+export const mockCard: ICard = {
   answer: "",
   question: "",
   cardsPack_id: "",

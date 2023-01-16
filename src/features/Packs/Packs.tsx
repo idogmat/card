@@ -140,18 +140,6 @@ const Packs = () => {
     [params, packsAC.setPacksSort]
   );
 
-  // const optDebounce = useCallback(
-  //   debounce((valueRange: number[]) => {
-  //     console.log("settings params");
-  //     setSearchParams({
-  //       ...params,
-  //       min: valueRange[0].toString(),
-  //       max: valueRange[1].toString(),
-  //     });
-  //   }, 700),
-  //   [params]
-  // );
-
   const optDebounce = useCallback(
     useDebounce((valueRange: number[]) => {
       setSearchParams({
@@ -171,20 +159,6 @@ const Packs = () => {
     },
     [dispatch, optDebounce]
   );
-
-  //
-  // const optDebounce = debounce((valueRange: number[]) => {
-  //   setSearchParams({
-  //     ...params,
-  //     min: valueRange[0].toString(),
-  //     max: valueRange[1].toString(),
-  //   });
-  // }, 1000);
-  //
-  // const changeRangeHandler = (valueRange: number[]) => {
-  //   optDebounce(valueRange);
-  //   dispatch(packsAC.setRangeValue({ range: valueRange }));
-  // };
 
   const showSortIcon = (field: string) => {
     return sortPacks.field === field ? (
@@ -229,11 +203,6 @@ const Packs = () => {
       <PacksTable
         id={user._id}
         cardPacks={cardPacks}
-        totalPageCount={totalPageCount}
-        pageCount={pageCount}
-        page={page}
-        changePage={changePage}
-        handleChangeRowsPerPage={handleChangeRowsPerPage}
         changeSort={changeSort}
         showSortIcon={showSortIcon}
         removePack={removePack}

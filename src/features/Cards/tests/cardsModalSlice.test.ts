@@ -6,6 +6,7 @@ import {
 
 import { FieldFormatsEnum } from "../components/modals/FormatSelect";
 import { ICard } from "common/models";
+import { mockCard } from "../../../common/mocks/cardsThunksMocks";
 
 describe("cards modal slice", () => {
   test("should return default state when passed an empty action", () => {
@@ -51,17 +52,15 @@ describe("cards modal slice", () => {
   });
 
   test('should set cardID & cardName to deleteCardModal with "setDeleteCardData"', () => {
-    const cardID = "placeholder";
-    const cardName = "placeholder";
     const action = {
       type: CardsModalsAC.setDeleteCardData.type,
-      payload: { cardID, cardName },
+      payload: { card: mockCard },
     };
 
     const result = cardsModalsReducer(cardsModalsInitialState, action);
 
-    expect(result.deleteCard.cardID).toEqual(cardID);
-    expect(result.deleteCard.cardName).toEqual(cardName);
+    expect(result.deleteCard.card._id).toEqual(mockCard._id);
+    expect(result.deleteCard.card.question).toEqual(mockCard.question);
   });
 
   test('should set update model to updateCardModal with "setUpdateCardData"', () => {

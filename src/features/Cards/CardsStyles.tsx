@@ -1,12 +1,12 @@
 import styled, { keyframes } from "styled-components";
 
 import { Button } from "common/ui-kit/Button/Button";
-import { DropdownItem } from "common/ui-kit/Dropdown/Dropdown";
 import { Flex } from "common/ui-kit/Flex/Flex";
 import { MdPhoneIphone } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { TableWrapper } from "common/ui-kit/Table/Table";
 import { Typography } from "common/ui-kit/Text/Typography";
+import { StyledComponent } from "../../common/ui-kit/types";
 
 const swipeRight = keyframes`
 	0% {
@@ -109,10 +109,12 @@ export const CardsTableImg = styled.img`
   border: 1px solid var(--color-blue);
 `;
 
-export const CardsCoverPreview = styled.img`
+export const CardsCoverPreview = styled.img<StyledComponent<{}>>`
   width: 100%;
   height: 9.2rem;
   object-fit: cover;
   border-radius: var(--radius);
   border: 1px solid var(--color-blue);
+
+  ${({ sx }) => ({ ...sx })}
 `;

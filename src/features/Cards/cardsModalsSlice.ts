@@ -27,8 +27,7 @@ const initialState = {
   },
   deleteCard: {
     isOpen: false,
-    cardID: "",
-    cardName: "",
+    card: {} as ICard,
   },
 };
 
@@ -80,12 +79,8 @@ const cardsModalsSlice = createSlice({
     ) => {
       state.updateCard = { ...state.updateCard, ...action.payload.model };
     },
-    setDeleteCardData: (
-      draft,
-      action: PayloadAction<{ cardID: string; cardName: string }>
-    ) => {
-      draft.deleteCard.cardID = action.payload.cardID;
-      draft.deleteCard.cardName = action.payload.cardName;
+    setDeleteCardData: (draft, action: PayloadAction<{ card: ICard }>) => {
+      draft.deleteCard.card = action.payload.card;
     },
   },
 });
