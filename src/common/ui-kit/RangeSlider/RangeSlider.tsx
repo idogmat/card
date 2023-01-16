@@ -4,8 +4,8 @@ import { StyledComponent } from "../types";
 import { getTrackBackground } from "react-range";
 interface IRangeLineBG {
   range: number[];
-  minCardsCount: number;
-  maxCardsCount: number;
+  min: number;
+  max: number;
 }
 interface IThumbDragged {
   isDragged: boolean;
@@ -15,6 +15,7 @@ export const RangeField = styled.div<StyledComponent<Partial<IRangeLineBG>>>`
   justify-content: center;
   flex-wrap: wrap;
   height: 36px;
+  padding: 0 0.5rem;
   width: 100%;
   margin: auto 0;
   ${(p) => ({ ...p.style })};
@@ -25,17 +26,17 @@ export const RangeLine = styled.div<StyledComponent<Partial<IRangeLineBG>>>`
   border-radius: 4px;
   background: ${(p) =>
     getTrackBackground({
-      values: !!p.range ? p.range : [0, 100],
+      values: !!p.range ? p.range : [0, 53],
       colors: ["#8f8e8e", "var(--color-blue)", "#8F8E8EFF"],
-      min: !!p.minCardsCount ? p.minCardsCount : 0,
-      max: !!p.maxCardsCount ? p.maxCardsCount : 100,
+      min: !!p.min ? p.min : 0,
+      max: !!p.max ? p.max : 53,
     })};
   align-self: center;
   ${(p) => ({ ...p.style })};
 `;
 export const Thumb = styled.div<StyledComponent<Partial<IRangeLineBG>>>`
-  height: 12px;
-  width: 12px;
+  height: 16px;
+  width: 16px;
   border-radius: 4px;
   background-color: #fff;
   display: flex;

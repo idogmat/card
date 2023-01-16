@@ -3,7 +3,6 @@ import { Search } from "../../../common/components/Search/Search";
 import { useAppDispatch } from "../../../common/hooks";
 import { packsModalsAC } from "../packsModalsSlice";
 import RangeSlider from "../../../common/components/RangeSlider/RangeSlider";
-import { IParams } from "../packsThunks";
 import { Button } from "../../../common/ui-kit/Button/Button";
 import { MyPackButton } from "../PacksStyle";
 import { MdOutlineSearch } from "react-icons/md";
@@ -15,8 +14,6 @@ interface IHeaderProps {
   changeSearchHandler: (s: string) => void;
   isMyPack: boolean;
   handlerIsMyPack: (param: boolean) => void;
-  minCardsCount: number;
-  maxCardsCount: number;
   max: number | string;
   min: number | string;
   changeRangeHandler: (valueRange: number[]) => void;
@@ -31,8 +28,6 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
     isMyPack,
     max,
     min,
-    maxCardsCount,
-    minCardsCount,
     handlerIsMyPack,
   }) => {
     const dispatch = useAppDispatch();
@@ -60,13 +55,7 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
           </MyPackButton>
         </Flex>
 
-        <RangeSlider
-          max={max}
-          min={min}
-          minCardsCount={minCardsCount}
-          maxCardsCount={maxCardsCount}
-          onChangeSlider={changeRangeHandler}
-        />
+        <RangeSlider max={max} min={min} onChangeSlider={changeRangeHandler} />
         <Button
           style={{ padding: "0px 5px", margin: "20px 0px" }}
           onClick={modalAddPack}
