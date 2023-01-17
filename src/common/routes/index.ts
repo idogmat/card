@@ -1,5 +1,4 @@
 import { Cards } from "../../features/Cards/Cards";
-import { ErrorPage } from "../../features/404/404";
 import { FC } from "react";
 import { Learn } from "./../../features/Learn/Learn";
 import { Login } from "../../features/Login/Login";
@@ -16,7 +15,6 @@ export interface IRoute {
 }
 
 export enum RoutesEnum {
-  NOT_FINED = "/404",
   LOGIN = "/login",
   PROFILE = "/profile",
   RECOVERY = "/recovery",
@@ -39,11 +37,6 @@ export const authRoutes: IRoute[] = [
     isPage: true,
   },
   {
-    path: RoutesEnum.NOT_FINED,
-    component: ErrorPage,
-    isPage: false,
-  },
-  {
     path: RoutesEnum.CARDS,
     component: Cards,
     isPage: false,
@@ -56,11 +49,6 @@ export const authRoutes: IRoute[] = [
 ];
 
 export const unAuthRoutes: IRoute[] = [
-  {
-    path: RoutesEnum.NOT_FINED,
-    component: ErrorPage,
-    isPage: false,
-  },
   {
     path: RoutesEnum.LOGIN,
     component: Login,

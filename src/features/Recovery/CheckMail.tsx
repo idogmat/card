@@ -1,36 +1,30 @@
 import React from "react";
-import { Grid, Paper, Typography } from "@mui/material";
 import svg from "../../assets/img/mail.svg";
-import Button from "@mui/material/Button/Button";
 import { useNavigate } from "react-router-dom";
+import { Typography } from "../../common/ui-kit/Text/Typography";
+import { Button } from "../../common/ui-kit/Button/Button";
+import {
+  RegisterContent,
+  RegisterForm,
+  RegisterWrapper,
+} from "../Register/RegisterStyles";
+
 interface ICheckMail {
   email: string;
 }
 const CheckMail: React.FC<ICheckMail> = React.memo(({ email }) => {
   const navigate = useNavigate();
   return (
-    <Grid
-      container
-      justifyContent={"center"}
-      alignContent={"center"}
-      sx={{ height: "100vh" }}
-    >
-      <Grid item justifyContent={"center"} xs={3} sx={{ minWidth: "360px" }}>
-        <Paper
-          sx={{
-            padding: "35px",
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-          }}
-        >
+    <RegisterWrapper>
+      <RegisterContent>
+        <RegisterForm>
           <Typography
-            style={{ marginBottom: "1rem" }}
-            variant={"h4"}
-            sx={{ textAlign: "center" }}
+            variant={"title"}
+            sx={{ textAlign: "center", marginBottom: "0.6rem" }}
           >
             Check Email
           </Typography>
+
           <img
             style={{ width: "30%", margin: "auto" }}
             src={svg}
@@ -38,25 +32,21 @@ const CheckMail: React.FC<ICheckMail> = React.memo(({ email }) => {
           />
           <Typography
             style={{ marginBottom: "1rem" }}
-            sx={{ textAlign: "center" }}
+            sx={{ textAlign: "center", marginBottom: "1rem" }}
           >
             <p style={{ opacity: ".7" }}>
               We’ve sent an Email with instructions to {email}
             </p>
           </Typography>
           <Button
-            style={{ marginBottom: "1rem" }}
-            type={"submit"}
-            variant={"contained"}
-            color={"primary"}
             onClick={() => navigate("/login")}
-            sx={{ borderRadius: "30px", marginBottom: "30px" }}
+            sx={{ borderRadius: "30px", margin: "auto" }}
           >
             Back to login
           </Button>
-        </Paper>
-      </Grid>
-    </Grid>
+        </RegisterForm>
+      </RegisterContent>
+    </RegisterWrapper>
   );
 });
 

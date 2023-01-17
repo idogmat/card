@@ -1,16 +1,9 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import {
-  addCardTC,
-  deleteCardTC,
-  getCardsTC,
-  updateCardGradeTC,
-} from "./cardsThunks";
+import { getCardsTC, updateCardGradeTC } from "./cardsThunks";
 
-import { BuildCircleSharp } from "@mui/icons-material";
 import { ICard } from "../../common/models";
-import { updateCardTC } from "features/Cards/cardsThunks";
 
-interface ICardsState {
+export interface ICardsState {
   cards: ICard[];
   cardsTotalCount: number;
   maxGrade: number;
@@ -50,20 +43,22 @@ const cardsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(updateCardGradeTC.fulfilled, (state, action) => {
-      const card = state.cards.find(
-        (card) => card._id === action.payload.card_id
-      );
-      if (card) {
-        card.grade = action.payload.grade;
-        card.shots += 1;
-      }
-    });
-    builder.addCase(getCardsTC.fulfilled, (state, action) => {
-      return action.payload;
-    });
+    builder
+      .addCase(updateCardGradeTC.fulfilled, (state, action) => {
+        const card = state.cards.find(
+          (card) => card._id === action.payload.card_id
+        );
+        if (card) {
+          card.grade = action.payload.grade;
+          card.shots += 1;
+        }
+      })
+      .addCase(getCardsTC.fulfilled, (state, action) => {
+        return action.payload;
+      });
   },
 });
 
 export const cardsReducer = cardsSlice.reducer;
 export const CardsAC = cardsSlice.actions;
+export const cardsInitialState = cardsSlice.getInitialState();

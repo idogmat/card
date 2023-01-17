@@ -12,9 +12,9 @@ export interface IGetCardsRequest {
   pageCount?: string | number;
 }
 
-interface IGetCardsResponse {
+export interface IGetCardsResponse {
   cards: ICard[];
-  cardsTotalCount: 3;
+  cardsTotalCount: number;
   maxGrade: number;
   minGrade: number;
   page: number;
@@ -59,7 +59,7 @@ export interface IUpdateGradeResponse {
 
 export interface IUpdateCardGradeRequest {
   grade: number;
-  card_id: string;
+  card_id: string | undefined;
 }
 
 const getCardsRequest = (data: IGetCardsRequest) => {

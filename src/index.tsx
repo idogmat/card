@@ -1,22 +1,30 @@
-import "./index.css";
+import "./index.scss";
+import "./common/styles/common/null.scss";
 
 import App from "./app/App";
+import { HashRouter } from "react-router-dom";
+import { Provider } from "react-redux";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
-import "./common/styles/null.css";
 import { store } from "./app/store";
-import { HashRouter } from "react-router-dom";
-import { Provider } from "react-redux";
+
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
+// const theme = {
+//   rem: (px: number) => `${px / 16}rem`,
+// };
+
 root.render(
   <Provider store={store}>
+    {/* <ThemeProvider theme={theme}> */}
     <HashRouter>
       <App />
     </HashRouter>
+    {/* </ThemeProvider> */}
   </Provider>
 );
 

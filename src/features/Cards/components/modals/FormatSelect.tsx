@@ -1,5 +1,7 @@
-import { InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { Select } from "common/ui-kit/Select/Select";
+import { Typography } from "common/ui-kit/Text/Typography";
 import React, { FC } from "react";
+import { MdKeyboardArrowDown } from "react-icons/md";
 
 export interface IFormatSelectOption {
   selectValue: string;
@@ -10,7 +12,7 @@ interface IFormatSelectProps {
   title: string;
   options: IFormatSelectOption[];
   value: FieldFormatsEnum;
-  onChange: (event: SelectChangeEvent) => void;
+  onChange: (option: string) => void;
 }
 
 export enum FieldFormatsEnum {
@@ -26,14 +28,18 @@ export const FormatSelect: FC<IFormatSelectProps> = ({
 }) => {
   return (
     <>
-      <InputLabel>{title}</InputLabel>
-      <Select value={value} onChange={onChange}>
-        {options.map((option) => {
+      <Typography variant="title">{title}</Typography>
+      <Select
+        options={options}
+        onChange={onChange}
+        selected={value}
+        endIcon={<MdKeyboardArrowDown />}
+      />
+      {/* {options.map((option) => {
           return (
             <MenuItem value={option.selectValue}>{option.UIValue}</MenuItem>
           );
-        })}
-      </Select>
+        })} */}
     </>
   );
 };

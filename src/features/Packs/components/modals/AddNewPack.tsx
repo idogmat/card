@@ -1,21 +1,17 @@
-import { Box, Checkbox, FormGroup, IconButton, TextField } from "@mui/material";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useRef, useState } from "react";
 import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
-
-import Button from "@mui/material/Button/Button";
-import { ModalBase } from "../../../../common/components/Modal";
-import { PhotoCamera } from "@mui/icons-material";
+import { Button } from "../../../../common/ui-kit/Button/Button";
 import { addNewModalSelector } from "./modalsSelectors";
 import { addPackTC } from "../../packsThunks";
 import { packsModalsAC } from "../../packsModalsSlice";
-import {
-  _uploadHandler,
-  BACKEND_MAX_IMG_WEIGHT,
-  getImgBase64File,
-} from "../../../../common/utils/base64Converter";
-import { acceptableImgFormats } from "../../../../common/utils/regExp";
+import { getImgBase64File } from "../../../../common/utils/base64Converter";
+import { ModalBase } from "common/components/Modal";
+import { Flex } from "../../../../common/ui-kit/Flex/Flex";
+import { Input } from "../../../../common/ui-kit/Input/Input";
+import { Checkbox } from "../../../../common/ui-kit/Checkbox/Checkbox";
+import { FileLoader } from "../../../../common/components/FileLoader/FileLoader";
 
-interface INewPack {
+export interface INewPack {
   name: string;
   deckCover: string;
   isPrivate: boolean;
@@ -25,7 +21,7 @@ export const AddNewPack = React.memo(() => {
   // Selector & dispatch
   const { isOpen } = useAllSelector(addNewModalSelector);
   const dispatch = useAppDispatch();
-
+  const ref = useRef<HTMLInputElement>(null);
   // Local states
   const [newPackData, setNewPackData] = useState<INewPack>({
     name: "",
@@ -37,6 +33,10 @@ export const AddNewPack = React.memo(() => {
 
   const handleClose = () =>
     dispatch(packsModalsAC.setAddPackState({ status: false }));
+
+  const handleCoverLoad = () => {
+    ref.current?.click();
+  };
 
   const addNewPack = () => {
     if (newPackData.name) {
@@ -54,7 +54,6 @@ export const AddNewPack = React.memo(() => {
   const handleChangeIsPrivate = () => {
     setNewPackData((state) => ({ ...state, isPrivate: !state.isPrivate }));
   };
-  //double
 
   const handleChangeCover = async (e: ChangeEvent<HTMLInputElement>) => {
     const fileAsString = await getImgBase64File(e, dispatch);
@@ -63,13 +62,9 @@ export const AddNewPack = React.memo(() => {
   };
 
   return (
-    <ModalBase
-      open={isOpen}
-      handleClose={handleClose}
-      modalTitle={"Add New Pack"}
-    >
-      <Box>
-        <FormGroup>
+    <ModalBase handleClose={handleClose} modalTitle="Add pack" open={isOpen}>
+      <Flex sx={{ padding: "0.6rem", minWidth: "22.5rem" }}>
+        <Flex fDirection="column" sx={{ gap: "0.6rem", flex: "1 1 auto" }}>
           {newPackData.deckCover && (
             <img
               src={newPackData.deckCover}
@@ -81,45 +76,30 @@ export const AddNewPack = React.memo(() => {
               alt="deckCover"
             />
           )}
-          <TextField
-            label="Name pack"
-            variant="standard"
-            color="primary"
+          <Input
+            type={"text"}
+            error={false}
+            placeholder="Pack name"
             value={newPackData.name}
             onChange={handleChangeName}
           />
-          <Box>
-            Private pack{" "}
-            <Checkbox
-              checked={newPackData.isPrivate}
-              onChange={handleChangeIsPrivate}
-              color="primary"
-            />
-          </Box>
-          <Box>
-            <label>
-              <input
-                style={{ display: "none" }}
-                type="file"
-                accept={"image/*"}
-                onChange={(e) => handleChangeCover(e)}
-              />
-              <IconButton component="span" color={"primary"}>
-                <PhotoCamera />
-              </IconButton>
-            </label>
-          </Box>
-        </FormGroup>
-
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Button onClick={handleClose} color="primary" variant="contained">
-            Cancel
+          <Checkbox
+            checked={newPackData.isPrivate}
+            onChange={handleChangeIsPrivate}
+            children={<span>Private pack</span>}
+          />
+          <Button onClick={handleCoverLoad} sx={{ marginBottom: "0.6rem" }}>
+            Change cover
           </Button>
-          <Button onClick={addNewPack} color="primary" variant="contained">
-            Add Pack
-          </Button>
-        </Box>
-      </Box>
+          <FileLoader link={ref} onFileLoaded={handleChangeCover} />
+          <Flex justify={"space-between"} sx={{ gap: "5px" }}>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={addNewPack}>Add Pack</Button>
+          </Flex>
+        </Flex>
+      </Flex>
     </ModalBase>
   );
 });

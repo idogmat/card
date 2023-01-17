@@ -1,5 +1,7 @@
-import { Box, Typography } from "@mui/material";
 import React, { FC } from "react";
+
+import { Flex } from "common/ui-kit/Flex/Flex";
+import { Typography } from "common/ui-kit/Text/Typography";
 
 interface INotFoundElementsProps {
   title: string;
@@ -8,17 +10,11 @@ interface INotFoundElementsProps {
 export const NotFoundElements: FC<INotFoundElementsProps> = React.memo(
   ({ title }) => {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant={"h2"} component={"h2"}>
+      <Flex justify="center" align="center">
+        <Typography variant={"title"} as="h2" sx={{ fontSize: "2.2rem" }}>
           {title}
         </Typography>
-      </Box>
+      </Flex>
     );
   }
 );

@@ -1,7 +1,6 @@
-import { Box, debounce } from "@mui/material";
-import React, { useCallback, useEffect, useState } from "react";
+import { removePackTC, setPacksTC } from "./packsThunks";
+import React, { useCallback, useEffect } from "react";
 import {
-  appStateSelect,
   packsCardsPacksSelector,
   packsIsMyPackSelector,
   packsMaxCardsPacksSelector,
@@ -13,27 +12,28 @@ import {
   packsPageSelector,
   packsSortPacksSelector,
   packsTotalCardsSelector,
-  userStateSelect,
 } from "./selectors";
-import { removePackTC, setPacksTC } from "./packsThunks";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
-
-import { HorizontalRule } from "@mui/icons-material";
 import PacksHeader from "./components/PacksHeader";
 import PacksModals from "./components/modals/PacksModals";
 import PacksTable from "./components/PacksTable";
-import { Preloader } from "../../common/components/Preloader/Preloader";
-import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
+import { appStateSelector } from "app/selectors";
 import { getSortIcon } from "../../common/utils/assets";
 import { packsAC } from "./packsReducer";
-import styles from "../../common/styles/common.module.css";
 import { useSearchParams } from "react-router-dom";
+import { userStateSelector } from "features/User/selectors";
+import { selectOptions } from "./Packs.data";
+import { Pagination } from "../../common/ui-kit/Pagination/Pagination";
+import { MdKeyboardArrowDown } from "react-icons/md";
+import { Flex } from "../../common/ui-kit/Flex/Flex";
+import { Container } from "../../common/ui-kit/Container/Container";
+import { PacksPreloader } from "./components/PacksPreloader";
+import { useDebounce } from "../../common/hooks/useDebounce";
 
-export type EditModeType = "edit" | "delete" | "idle";
 const Packs = () => {
   // Selectors
-  const user = useAllSelector(userStateSelect);
-  const { isLoading } = useAllSelector(appStateSelect);
+  const user = useAllSelector(userStateSelector);
+  const { isLoading } = useAllSelector(appStateSelector);
   const packName = useAllSelector(packsNameSelector);
   const cardPacks = useAllSelector(packsCardsPacksSelector);
   const page = useAllSelector(packsPageSelector);
@@ -50,38 +50,24 @@ const Packs = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const params = Object.fromEntries(searchParams);
 
-  // Local states
-  const [sort, setSort] = useState({ direction: 0, field: "updated" });
-
   // Utils
   const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
-  const isAsc = sort.direction === 1;
-  const sortIcon = getSortIcon(isAsc);
   const isParamsSet = Object.keys(params).length > 0;
   const dispatch = useAppDispatch();
-
-  const changeRangeQueryParams = useCallback(
-    debounce((valueRange: number[]) => {
-      setSearchParams({
-        ...params,
-        min: valueRange[0].toString(),
-        max: valueRange[1].toString(),
-      });
-    }, 700),
-    []
-  );
-
-  const changeRangeHandler = useCallback((valueRange: number[]) => {
-    changeRangeQueryParams(valueRange);
-    dispatch(packsAC.setRangeValue({ range: valueRange }));
-  }, []);
-
+  const getSortPacks = params.sortPacks
+    ? {
+        direction: +params.sortPacks[0],
+        field: params.sortPacks
+          .split("")
+          .splice(1, params.sortPacks.length - 1)
+          .join(""),
+      }
+    : sortPacks;
   useEffect(() => {
     if (!isParamsSet) {
       dispatch(setPacksTC({}));
       return;
     }
-
     const model = {
       isMyPack: params.isMyPack,
       pageCount: params.showPerPage,
@@ -89,26 +75,25 @@ const Packs = () => {
       max: params.max,
       min: params.min,
       packName: params.packName,
-      sortPacks: sort.field ? `${sort.direction}${sort.field}` : "0updated",
+      sortPacks: getSortPacks,
     };
-
     dispatch(setPacksTC(model));
   }, [searchParams]);
 
   const changePage = useCallback(
-    (event: React.ChangeEvent<unknown>, newPage: number) => {
+    (newPage: number) => {
       dispatch(packsAC.setCurrentPage({ page: newPage }));
       setSearchParams({ ...params, page: `${newPage}` });
     },
-    [page]
+    [params, packsAC.setCurrentPage]
   );
 
   const handleChangeRowsPerPage = useCallback(
-    (event: SelectChangeEvent) => {
-      dispatch(packsAC.setPageCount({ pageCount: +event.target.value }));
-      setSearchParams({ ...params, pageCount: event.target.value });
+    (value: string) => {
+      dispatch(packsAC.setPageCount({ pageCount: +value }));
+      setSearchParams({ ...params, pageCount: value });
     },
-    [pageCount]
+    [params, packsAC.setPageCount]
   );
 
   const removePack = useCallback((id: string) => {
@@ -116,93 +101,125 @@ const Packs = () => {
   }, []);
 
   const setSearchQueryParams = useCallback(
-    debounce((value: string) => {
-      setSearchParams({ ...params, packName: value });
-    }, 700),
-    [packName]
+    useDebounce(
+      (value: string) => setSearchParams({ ...params, packName: value }),
+      1000
+    ),
+    [setSearchParams, useDebounce]
   );
 
-  const changeSearchHandler = useCallback((value: string) => {
-    setSearchQueryParams(value);
-    dispatch(packsAC.setPackName({ packName: value }));
-  }, []);
-
-  const setSortForPacks = useCallback(
-    (type: string) => {
-      dispatch(packsAC.setPacksSort({ type }));
+  const searchChangeHandler = useCallback(
+    (value: string) => {
+      dispatch(packsAC.setPackName({ packName: value }));
+      setSearchQueryParams(value);
     },
-    [sortPacks]
+    [setSearchQueryParams, packsAC.setPackName]
   );
 
-  const handlerIsMyPack = useCallback(
+  const handleChangeIsMyPack = useCallback(
     (param: boolean) => {
       dispatch(packsAC.setPreferencePacks({ isMine: param }));
-      setSearchParams({ ...params, isMyPack: `${param}` });
+      setSearchParams({ isMyPack: `${param}` });
     },
-    [isMyPack]
+    [params, packsAC.setPreferencePacks, setSearchParams]
   );
 
   const changeSort = useCallback(
     (field: string) => {
-      setSort({ direction: sort.direction === 0 ? 1 : 0, field });
-      setSortForPacks((sort.direction + sort.field).toString());
-      setSearchParams((sort.direction + sort.field).toString());
+      dispatch(
+        packsAC.setPacksSort({
+          type: { direction: sortPacks.direction === 1 ? 0 : 1, field },
+        })
+      );
+
+      setSearchParams({
+        ...params,
+        sortPacks: `${sortPacks.direction}${sortPacks.field}`,
+      });
     },
-    [sortPacks]
+    [params, packsAC.setPacksSort]
   );
 
-  const showSortIcon = useCallback((field: string) => {
-    return sort.field === field ? sortIcon : <HorizontalRule />;
-  }, []);
+  const optDebounce = useCallback(
+    useDebounce((valueRange: number[]) => {
+      setSearchParams({
+        ...params,
+        min: valueRange[0].toString(),
+        max: valueRange[1].toString(),
+      });
+    }, 1000),
+    [params]
+  );
+
+  const changeRangeHandler = useCallback(
+    (valueRange: number[]) => {
+      const min = valueRange[0] < minCardsCount ? minCardsCount : valueRange[0];
+      const max = valueRange[1] > maxCardsCount ? maxCardsCount : valueRange[1];
+      const range = [min, max];
+
+      dispatch(packsAC.setRangeValue({ range }));
+      optDebounce(range);
+    },
+    [packsAC.setRangeValue, optDebounce, params]
+  );
+
+  const showSortIcon = (field: string) => {
+    return sortPacks.field === field ? (
+      getSortIcon(sortPacks.direction === 1)
+    ) : (
+      <MdKeyboardArrowDown />
+    );
+  };
 
   const removeSort = useCallback(() => {
+    dispatch(packsAC.clearSettings({}));
     setSearchParams({});
   }, []);
 
   return (
-    <Box
-      sx={{
-        position: "relative",
-        padding: "6rem 2rem",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      {isLoading && (
-        <div className={styles.preventSending}>
-          <Preloader />
-        </div>
+    <Container variant="sm" sx={{ paddingTop: "8.75rem" }}>
+      {!isLoading ? (
+        <Flex fDirection={"column"}>
+          <PacksHeader
+            removeSort={removeSort}
+            changeRangeHandler={changeRangeHandler}
+            packName={packName}
+            changeSearchHandler={searchChangeHandler}
+            isMyPack={isMyPack}
+            max={max}
+            min={min}
+            minCardsCount={minCardsCount}
+            maxCardsCount={maxCardsCount}
+            handlerIsMyPack={handleChangeIsMyPack}
+          />
+          {/*TABLE*/}
+          <PacksTable
+            id={user._id}
+            cardPacks={cardPacks}
+            changeSort={changeSort}
+            showSortIcon={showSortIcon}
+            removePack={removePack}
+            isMyPack={isMyPack}
+            isLoading={isLoading}
+          />
+          <Pagination
+            selectProps={{
+              options: selectOptions,
+              selected: pageCount.toString(),
+              onChange: handleChangeRowsPerPage,
+              endIcon: <MdKeyboardArrowDown />,
+            }}
+            label="Packs"
+            changePage={changePage}
+            currentPage={page}
+            totalPages={totalPageCount}
+          />
+          <PacksModals />
+        </Flex>
+      ) : (
+        <PacksPreloader />
       )}
-      <PacksHeader
-        removeSort={removeSort}
-        changeRangeHandler={changeRangeHandler}
-        packName={packName}
-        changeSearchHandler={changeSearchHandler}
-        isMyPack={isMyPack}
-        max={max}
-        min={min}
-        maxCardsCount={maxCardsCount}
-        minCardsCount={minCardsCount}
-        handlerIsMyPack={handlerIsMyPack}
-      />
-      {/*TABLE*/}
-      <PacksTable
-        id={user._id}
-        cardPacks={cardPacks}
-        totalPageCount={totalPageCount}
-        pageCount={pageCount}
-        page={page}
-        changePage={changePage}
-        handleChangeRowsPerPage={handleChangeRowsPerPage}
-        changeSort={changeSort}
-        showSortIcon={showSortIcon}
-        removePack={removePack}
-        isMyPack={isMyPack}
-        isLoading={isLoading}
-      />
-
-      <PacksModals />
-    </Box>
+    </Container>
   );
 };
 

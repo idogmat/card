@@ -1,11 +1,18 @@
 import React from "react";
-import { Grid, Paper, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
-import Button from "@mui/material/Button/Button";
-import FormControl from "@mui/material/FormControl/FormControl";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "../../common/hooks";
 import { setNewPassword } from "./setNewPasswordThunk";
+import { hasError } from "../../common/utils/errorHandlers";
+import { Typography } from "../../common/ui-kit/Text/Typography";
+import { Input } from "common/ui-kit/Input/Input";
+import { Button } from "../../common/ui-kit/Button/Button";
+import {
+  RegisterContent,
+  RegisterForm,
+  RegisterWrapper,
+} from "../Register/RegisterStyles";
+import { Paper } from "../../common/ui-kit/Paper/Paper";
 
 const SetNewPassword = () => {
   const navigate = useNavigate();
@@ -35,63 +42,42 @@ const SetNewPassword = () => {
     },
   });
   //fix
-  const hasError = (prop: "password") => {
-    return !!setPasswordForm.errors[prop] && !!setPasswordForm.touched[prop];
-  };
+  const setPasswordFormHasError = hasError.bind(null, setPasswordForm);
 
   return (
-    <Grid
-      container
-      justifyContent={"center"}
-      alignContent={"center"}
-      sx={{ height: "100vh" }}
-    >
-      <Grid item justifyContent={"center"} xs={3} sx={{ minWidth: "360px" }}>
-        <Paper sx={{ padding: "35px" }}>
-          <form onSubmit={setPasswordForm.handleSubmit}>
-            <FormControl sx={{ width: "100%", textAlign: "center" }}>
-              <Typography
-                style={{ marginBottom: "3rem" }}
-                variant={"h5"}
-                sx={{ textAlign: "center" }}
-              >
-                Create new password
-              </Typography>
-              <TextField
-                style={{ marginBottom: "3rem" }}
-                error={hasError("password")}
-                label={
-                  hasError("password")
-                    ? setPasswordForm.errors.password
-                    : "Password"
-                }
-                margin={"normal"}
-                variant={"standard"}
-                {...setPasswordForm.getFieldProps("password")}
-              />
-              <Typography
-                style={{ marginBottom: "3rem" }}
-                sx={{ textAlign: "start" }}
-              >
-                <p style={{ opacity: ".7" }}>
-                  Enter your email address and we will send you further
-                  instructions
-                </p>
-              </Typography>
-              <Button
-                type={"submit"}
-                variant={"contained"}
-                disabled={hasError("password")}
-                color={"primary"}
-                sx={{ borderRadius: "30px", marginBottom: "30px" }}
-              >
-                Create new password
-              </Button>
-            </FormControl>
-          </form>
+    <RegisterWrapper>
+      <RegisterContent>
+        <Paper sx={{ margin: "10px" }}>
+          <RegisterForm onSubmit={setPasswordForm.handleSubmit}>
+            <Typography variant={"title"} sx={{ textAlign: "center" }}>
+              Create new password
+            </Typography>
+            <Input
+              error={setPasswordFormHasError("password")}
+              label={
+                setPasswordFormHasError("password")
+                  ? setPasswordForm.errors.password
+                  : "Password"
+              }
+              {...setPasswordForm.getFieldProps("password")}
+            />
+            <Typography
+              style={{ marginBottom: "1rem" }}
+              sx={{ textAlign: "start" }}
+            >
+              <p style={{ opacity: ".7" }}>Enter your new password</p>
+            </Typography>
+            <Button
+              disabled={setPasswordFormHasError("password")}
+              color={"primary"}
+              sx={{ borderRadius: "30px" }}
+            >
+              Create new password
+            </Button>
+          </RegisterForm>
         </Paper>
-      </Grid>
-    </Grid>
+      </RegisterContent>
+    </RegisterWrapper>
   );
 };
 

@@ -1,68 +1,54 @@
-import React, { FC } from "react";
-import { Grid, Link, Paper, TextField, Typography } from "@mui/material";
-import FormControl from "@mui/material/FormControl/FormControl";
-import Button from "@mui/material/Button/Button";
+import React from "react";
 import { FormikProps } from "formik";
 import { hasError } from "../../common/utils/errorHandlers";
+import { Typography } from "../../common/ui-kit/Text/Typography";
+import { Input } from "common/ui-kit/Input/Input";
+import { Link } from "react-router-dom";
+import { Button } from "common/ui-kit/Button/Button";
+import {
+  RegisterContent,
+  RegisterForm,
+  RegisterWrapper,
+} from "../Register/RegisterStyles";
+import { Paper } from "../../common/ui-kit/Paper/Paper";
+
 interface FormValues {
   recoveryForm: FormikProps<{ email: string }>;
 }
-const SendMailForm: FC<FormValues> = React.memo(({ recoveryForm }) => {
+
+const SendMailForm: React.FC<FormValues> = React.memo(({ recoveryForm }) => {
   const sendMailHasError = hasError.bind(null, recoveryForm);
   return (
-    <Grid
-      container
-      justifyContent={"center"}
-      alignContent={"center"}
-      sx={{ height: "100vh" }}
-    >
-      <Grid item justifyContent={"center"} xs={3} sx={{ minWidth: "360px" }}>
-        <Paper sx={{ padding: "35px" }}>
-          <form onSubmit={recoveryForm.handleSubmit}>
-            <FormControl sx={{ width: "100%", textAlign: "center" }}>
-              <Typography variant={"h5"} sx={{ textAlign: "center" }}>
-                Forgot your password?
-              </Typography>
-              <TextField
-                error={sendMailHasError("email")}
-                label={
-                  sendMailHasError("email")
-                    ? recoveryForm.errors.email
-                    : "Email"
-                }
-                margin={"normal"}
-                variant={"standard"}
-                {...recoveryForm.getFieldProps("email")}
-              />
-              <Typography>
-                <p style={{ opacity: ".7" }}>
-                  Enter your email address and we will send you further
-                  instructions
-                </p>
-              </Typography>
-              <Button
-                type={"submit"}
-                variant={"contained"}
-                disabled={sendMailHasError("email")}
-                color={"primary"}
-                sx={{ borderRadius: "30px", marginBottom: "30px" }}
-              >
-                Recovery
-              </Button>
-              <Typography>
-                <p style={{ opacity: ".7" }}>Did you remember your password?</p>
-              </Typography>
-              <Typography
-                style={{ cursor: "pointer" }}
-                sx={{ textAlign: "center" }}
-              >
-                <Link>Try logging in</Link>
-              </Typography>
-            </FormControl>
-          </form>
+    <RegisterWrapper>
+      <RegisterContent>
+        <Paper sx={{ margin: "10px" }}>
+          <RegisterForm onSubmit={recoveryForm.handleSubmit}>
+            <Typography variant={"title"} sx={{ textAlign: "center" }}>
+              Forgot your password?
+            </Typography>
+            <Input
+              label={
+                sendMailHasError("email") ? recoveryForm.errors.email : "Email"
+              }
+              error={sendMailHasError("email")}
+              {...recoveryForm.getFieldProps("email")}
+            />
+            <Typography variant={"sub-title-sm"} sx={{ opacity: ".7" }}>
+              Enter your email address and we will send you further instructions
+            </Typography>
+            <Button type={"submit"} disabled={sendMailHasError("email")}>
+              Recovery
+            </Button>
+            <Typography variant={"sub-title-sm"} sx={{ opacity: ".7" }}>
+              Did you remember your password?
+            </Typography>
+            <Typography variant={"sub-title-sm"} sx={{ color: "#366EFF" }}>
+              <Link to={"/login"}>Sign in</Link>
+            </Typography>
+          </RegisterForm>
         </Paper>
-      </Grid>
-    </Grid>
+      </RegisterContent>
+    </RegisterWrapper>
   );
 });
 

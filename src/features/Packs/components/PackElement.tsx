@@ -1,16 +1,19 @@
-import { DeleteOutline, Edit } from "@mui/icons-material";
 import { NavLink, useSearchParams } from "react-router-dom";
-import { Skeleton, TableCell } from "@mui/material";
-
-import Button from "@mui/material/Button/Button";
+import noCover from "../../../assets/img/no_cover.png";
 import { IPackResponse } from "../packsAPI";
 import React from "react";
-import SchoolIcon from "@mui/icons-material/School";
-import TableRow from "@mui/material/TableRow/TableRow";
 import { formDate } from "../../../common/utils/date";
 import { packsModalsAC } from "../packsModalsSlice";
 import { setItemToLC } from "./../../../common/utils/localStorage";
 import { useAppDispatch } from "../../../common/hooks";
+import {
+  TableBodyItem,
+  TableBodyLine,
+} from "../../../common/ui-kit/Table/Table";
+import { Button } from "../../../common/ui-kit/Button/Button";
+import { AiOutlineAudit, AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
+import { Flex } from "../../../common/ui-kit/Flex/Flex";
+import { Img, TableBodyItemHiddenMaxChars } from "../PacksStyle";
 
 interface IRowProps {
   id: string;
@@ -24,8 +27,8 @@ const PackElement: React.FC<IRowProps> = React.memo(
     const dispatch = useAppDispatch();
 
     // Vars
-    const [params, setSearchParams] = useSearchParams();
-    const backToState = { previousURL: params.toString(), pack: pack };
+    const params = useSearchParams()[0];
+    const backToState = { previousURL: params.toString(), pack };
 
     // Utils
     const modalDelete = () =>
@@ -37,65 +40,54 @@ const PackElement: React.FC<IRowProps> = React.memo(
     const savePackData = () => {
       setItemToLC("backToState", backToState);
     };
+    const shouldDisableActions = pack.user_id !== id;
+    const srcImg = pack.deckCover?.length < 40 ? noCover : pack.deckCover;
 
     return (
-      <>
-        <TableRow key={pack._id} style={{ height: "80px" }}>
-          <TableCell align="center">
-            {isLoading ? (
-              <Skeleton />
-            ) : (
-              pack.deckCover && (
-                <img
-                  src={pack.deckCover}
-                  alt={"cover"}
-                  style={{ width: "80px" }}
-                />
-              )
-            )}
-          </TableCell>
-          <TableCell component="th" scope="row">
-            <NavLink
-              state={backToState}
-              to={`/packs/${pack._id}`}
-              onClick={savePackData}
-            >
-              {isLoading ? <Skeleton /> : pack.name}
-            </NavLink>
-          </TableCell>
-          <TableCell align="center">
-            {isLoading ? <Skeleton /> : pack.cardsCount}
-          </TableCell>
-          <TableCell align="center">
-            {isLoading ? <Skeleton /> : formDate(pack.created)}
-          </TableCell>
-          <TableCell align="center">
-            {isLoading ? <Skeleton /> : pack.user_name}
-          </TableCell>
-          <TableCell align="center">
-            <NavLink
-              to={`/learn/${pack._id}`}
-              state={{ ...backToState, cardsCount: pack.cardsCount }}
-            >
-              {isLoading ? <Skeleton /> : <SchoolIcon />}
-            </NavLink>
-            {isLoading ? (
-              <Skeleton />
-            ) : (
-              <Button disabled={pack.user_id !== id} onClick={modalDelete}>
-                <DeleteOutline />
+      <TableBodyLine cols="100px minmax(100px,300px) 120px 150px minmax(100px,300px) minmax(80px,150px)">
+        <TableBodyItem>
+          {pack.deckCover && <Img src={srcImg} alt={"cover"} />}
+        </TableBodyItem>
+        <TableBodyItemHiddenMaxChars>
+          <NavLink
+            state={backToState}
+            to={`/packs/${pack._id}`}
+            onClick={savePackData}
+          >
+            <Flex sx={{ overflow: "hidden" }}>{pack.name}</Flex>
+          </NavLink>
+        </TableBodyItemHiddenMaxChars>
+        <TableBodyItem>{pack.cardsCount}</TableBodyItem>
+        <TableBodyItem>{formDate(pack.created)}</TableBodyItem>
+        <TableBodyItemHiddenMaxChars>
+          <Flex>{pack.user_name}</Flex>
+        </TableBodyItemHiddenMaxChars>
+        <TableBodyItem>
+          <Flex justify={"center"}>
+            <NavLink to={`/learn/${pack._id}`} state={backToState}>
+              <Button semantic>
+                <AiOutlineAudit />
               </Button>
-            )}
-            {isLoading ? (
-              <Skeleton />
-            ) : (
-              <Button disabled={pack.user_id !== id} onClick={modalEdit}>
-                : <Edit />
-              </Button>
-            )}
-          </TableCell>
-        </TableRow>
-      </>
+            </NavLink>
+
+            <Button
+              semantic
+              disabled={shouldDisableActions}
+              onClick={modalDelete}
+            >
+              <AiOutlineDelete />
+            </Button>
+
+            <Button
+              semantic
+              disabled={shouldDisableActions}
+              onClick={modalEdit}
+            >
+              <AiOutlineEdit />
+            </Button>
+          </Flex>
+        </TableBodyItem>
+      </TableBodyLine>
     );
   }
 );

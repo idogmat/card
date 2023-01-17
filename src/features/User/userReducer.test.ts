@@ -1,68 +1,67 @@
-import { IUser } from "../../common/models";
-import { UserAC, userReducer } from "./userReducer";
-import { IUpdatedUserInfo } from "../Profile/profileAPI";
-import { IUserFields, loginTC } from "../Login/loginThunks";
+import {
+  mockAuthMeUser,
+  mockNewUser,
+  mockUpdateUserFields,
+  mockUpdatedUser,
+  mockUserFields,
+} from "./test/mock";
+import { userInitialState, userReducer } from "./userReducer";
 
-const initialState: IUser = {
-  name: "",
-  email: "",
-  _id: "",
-  avatar: null,
-  created: new Date(),
-  updated: new Date(),
-  isAdmin: false,
-  publicCardPacksCount: 0,
-  verified: false,
-};
+import { authMeTC } from "features/Auth/authThunks";
+import { loginTC } from "../Login/loginThunks";
+import { updateUserInfoTC } from "features/Profile/profileThunks";
 
-test("new user should be set", () => {
-  const newUser: IUser = {
-    name: "Eddie",
-    email: "eddie@gmail.com",
-    _id: "2",
-    avatar: null,
-    created: new Date(),
-    updated: new Date(),
-    isAdmin: true,
-    publicCardPacksCount: 23,
-    verified: true,
-  };
-  const userFields: IUserFields = {
-    email: "eddie@gmail.com",
-    password: "111111111",
-    rememberMe: true,
-  };
-  const finalState = userReducer(
-    initialState,
-    loginTC.fulfilled({ user: newUser }, "ddddd", userFields)
-  );
-  expect(finalState.name).toBe(newUser.name);
-  expect(finalState.email).toBe(newUser.email);
-  expect(finalState._id).toBe(newUser._id);
-  expect(finalState.avatar).toBe(newUser.avatar);
-  expect(finalState.created).toBe(newUser.created);
-  expect(finalState.updated).toBe(newUser.updated);
-  expect(finalState.isAdmin).toBe(newUser.isAdmin);
-  expect(finalState.publicCardPacksCount).toBe(newUser.publicCardPacksCount);
-  expect(finalState.verified).toBe(newUser.verified);
-});
+describe("user slice", () => {
+  test("should return default state when passed an empty action", () => {
+    const action = { type: "", payload: "" };
 
-test("user's name should be updated", () => {
-  const name = "name placeholder";
-  const model: IUpdatedUserInfo = {
-    name,
-    avatar: null,
-  };
-  const finalState = userReducer(initialState, UserAC.updateUser({ model }));
-  expect(finalState.name).toBe(name);
-});
+    const result = userReducer(undefined, action);
 
-test("user's avatar should be updated", () => {
-  const avatar = "avatar link";
-  const model: IUpdatedUserInfo = {
-    name: "name",
-    avatar,
-  };
-  const finalState = userReducer(initialState, UserAC.updateUser({ model }));
-  expect(finalState.avatar).toBe(avatar);
+    expect(result).toEqual(userInitialState);
+  });
+
+  test("should set new user with 'loginTC.fulfilled' action", () => {
+    const finalState = userReducer(
+      userInitialState,
+      loginTC.fulfilled({ user: mockNewUser }, "", mockUserFields)
+    );
+
+    expect(finalState.name).toBe(mockNewUser.name);
+    expect(finalState.email).toBe(mockNewUser.email);
+    expect(finalState._id).toBe(mockNewUser._id);
+    expect(finalState.avatar).toBe(mockNewUser.avatar);
+    expect(finalState.created).toBe(mockNewUser.created);
+    expect(finalState.updated).toBe(mockNewUser.updated);
+    expect(finalState.isAdmin).toBe(mockNewUser.isAdmin);
+    expect(finalState.publicCardPacksCount).toBe(
+      mockNewUser.publicCardPacksCount
+    );
+    expect(finalState.verified).toBe(mockNewUser.verified);
+  });
+
+  test("should set new user info with 'updateUserInfoTC.fulfilled'", () => {
+    const finalState = userReducer(
+      userInitialState,
+      updateUserInfoTC.fulfilled(mockUpdatedUser, "", mockUpdateUserFields)
+    );
+
+    expect(finalState.avatar).toBe(mockUpdateUserFields.avatar);
+    expect(finalState.name).toBe(mockUpdateUserFields.name);
+  });
+
+  test("should set new user info with 'AuthMeTC.fulfilled'", () => {
+    const finalState = userReducer(
+      userInitialState,
+      authMeTC.fulfilled(mockAuthMeUser, "")
+    );
+
+    expect(finalState.name).toEqual(mockAuthMeUser.name);
+    expect(finalState.avatar).toEqual(mockAuthMeUser.avatar);
+    expect(finalState.email).toEqual(mockAuthMeUser.email);
+    expect(finalState.verified).toEqual(mockAuthMeUser.verified);
+    expect(finalState.isAdmin).toEqual(mockAuthMeUser.isAdmin);
+    expect(finalState.publicCardPacksCount).toEqual(
+      mockAuthMeUser.publicCardPacksCount
+    );
+  });
 });

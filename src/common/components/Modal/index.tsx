@@ -1,9 +1,7 @@
 import { FC, ReactElement } from "react";
 
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
 import { ModalHeader } from "./ModalHeader";
-import { modalStyle } from "./style";
+import { Modal } from "common/ui-kit/Modal/Modal";
 
 interface IModalBaseProps {
   open: boolean;
@@ -26,10 +24,8 @@ export const ModalBase: FC<IModalBaseProps> = ({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={modalStyle}>
-          <ModalHeader title={modalTitle} handleClose={handleClose} />
-          {children}
-        </Box>
+        <ModalHeader title={modalTitle} handleClose={handleClose} />
+        {children}
       </Modal>
     </>
   );

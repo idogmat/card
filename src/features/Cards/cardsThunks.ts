@@ -6,25 +6,26 @@ import {
   cardsAPI,
 } from "./cardsAPI";
 
-import { AppAC } from "../../app/appReducer";
+import { AppAC } from "../../app/appSlice";
 import { createAppAsyncThunk } from "./../../common/utils/AsyncThunk";
 import { errorHandlingThunk } from "./../../common/utils/errorHandlers";
 
-interface IDeleteCardData {
+export interface IDeleteCardData {
   cardID: string;
   packID: string;
 }
 
-interface IUpdateCardData {
+export interface IUpdateCardData {
   packID: string;
   model: IUpdateCardRequest;
 }
 
 export const getCardsTC = createAppAsyncThunk(
   "cards/getCards",
-  async (model: IGetCardsRequest, { dispatch, getState }) => {
-    return errorHandlingThunk({ dispatch, getState }, async () => {
+  async (model: IGetCardsRequest, { dispatch, rejectWithValue }) => {
+    return errorHandlingThunk({ dispatch, rejectWithValue }, async () => {
       const { data } = await cardsAPI.getCardsRequest(model);
+
       return { ...data, cardQuestion: model.cardQuestion };
     });
   }
@@ -32,52 +33,67 @@ export const getCardsTC = createAppAsyncThunk(
 
 export const addCardTC = createAppAsyncThunk(
   "cards/addCard",
-  async (card: IAddCardRequest, { dispatch, getState }) => {
-    return errorHandlingThunk({ dispatch, getState }, async () => {
-      const { page, pageCount } = getState().cards;
-      const cardsRequestConfig = {
-        page,
-        pageCount,
-        cardsPack_id: card.card.cardsPack_id,
-      };
-      await cardsAPI.addCardRequest(card);
-      dispatch(getCardsTC(cardsRequestConfig));
-      dispatch(AppAC.setSuccessMessage({ message: "Successfully added" }));
-    });
+  async (card: IAddCardRequest, { dispatch, getState, rejectWithValue }) => {
+    return errorHandlingThunk(
+      { dispatch, getState, rejectWithValue },
+      async () => {
+        const { page, pageCount } = getState().cards;
+        const cardsRequestConfig = {
+          page,
+          pageCount,
+          cardsPack_id: card.card.cardsPack_id,
+        };
+        await cardsAPI.addCardRequest(card);
+        dispatch(getCardsTC(cardsRequestConfig));
+        dispatch(AppAC.setSuccessMessage({ message: "Successfully added" }));
+      }
+    );
   }
 );
 
 export const deleteCardTC = createAppAsyncThunk(
   "cards/deleteCard",
-  async (cardData: IDeleteCardData, { dispatch, getState }) => {
-    return errorHandlingThunk({ dispatch, getState }, async () => {
-      const { page, pageCount } = getState().cards;
-      const cardsRequestConfig = {
-        page,
-        pageCount,
-        cardsPack_id: cardData.packID,
-      };
-      await cardsAPI.deleteCardRequest(cardData.cardID);
-      dispatch(getCardsTC(cardsRequestConfig));
-      dispatch(AppAC.setSuccessMessage({ message: "Successfully deleted" }));
-    });
+  async (
+    cardData: IDeleteCardData,
+    { dispatch, getState, rejectWithValue }
+  ) => {
+    return errorHandlingThunk(
+      { dispatch, getState, rejectWithValue },
+      async () => {
+        const { page, pageCount } = getState().cards;
+        const cardsRequestConfig = {
+          page,
+          pageCount,
+          cardsPack_id: cardData.packID,
+        };
+        await cardsAPI.deleteCardRequest(cardData.cardID);
+        dispatch(getCardsTC(cardsRequestConfig));
+        dispatch(AppAC.setSuccessMessage({ message: "Successfully deleted" }));
+      }
+    );
   }
 );
 
 export const updateCardTC = createAppAsyncThunk(
   "cards/updateCard",
-  async (updateData: IUpdateCardData, { dispatch, getState }) => {
-    return errorHandlingThunk({ dispatch, getState }, async () => {
-      const { page, pageCount } = getState().cards;
-      const cardsRequestConfig = {
-        cardsPack_id: updateData.packID,
-        page,
-        pageCount,
-      };
-      const res = await cardsAPI.updateCardRequest(updateData.model);
-      dispatch(getCardsTC(cardsRequestConfig));
-      dispatch(AppAC.setSuccessMessage({ message: "Successfully updated" }));
-    });
+  async (
+    updateData: IUpdateCardData,
+    { dispatch, getState, rejectWithValue }
+  ) => {
+    return errorHandlingThunk(
+      { dispatch, getState, rejectWithValue },
+      async () => {
+        const { page, pageCount } = getState().cards;
+        const cardsRequestConfig = {
+          cardsPack_id: updateData.packID,
+          page,
+          pageCount,
+        };
+        await cardsAPI.updateCardRequest(updateData.model);
+        dispatch(getCardsTC(cardsRequestConfig));
+        dispatch(AppAC.setSuccessMessage({ message: "Successfully updated" }));
+      }
+    );
   }
 );
 

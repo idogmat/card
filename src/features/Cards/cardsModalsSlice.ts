@@ -1,8 +1,6 @@
-import { Drafts } from "@mui/icons-material";
 import { FieldFormatsEnum } from "./components/modals/FormatSelect";
 import { ICard } from "common/models";
-import { PayloadAction } from "@reduxjs/toolkit";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface IUpdateCardData {
   answer: string;
@@ -29,8 +27,7 @@ const initialState = {
   },
   deleteCard: {
     isOpen: false,
-    cardID: "",
-    cardName: "",
+    card: {} as ICard,
   },
 };
 
@@ -82,15 +79,12 @@ const cardsModalsSlice = createSlice({
     ) => {
       state.updateCard = { ...state.updateCard, ...action.payload.model };
     },
-    setDeleteCardData: (
-      draft,
-      action: PayloadAction<{ cardID: string; cardName: string }>
-    ) => {
-      draft.deleteCard.cardID = action.payload.cardID;
-      draft.deleteCard.cardName = action.payload.cardName;
+    setDeleteCardData: (draft, action: PayloadAction<{ card: ICard }>) => {
+      draft.deleteCard.card = action.payload.card;
     },
   },
 });
 
 export const cardsModalsReducer = cardsModalsSlice.reducer;
 export const CardsModalsAC = cardsModalsSlice.actions;
+export const cardsModalsInitialState = cardsModalsSlice.getInitialState();

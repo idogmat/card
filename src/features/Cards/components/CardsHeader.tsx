@@ -1,20 +1,21 @@
 import {
-  Box,
-  Button,
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-} from "@mui/material";
-import { DeleteOutline, Edit, MoreHoriz, School } from "@mui/icons-material";
-import React, { FC, useState } from "react";
+  CardBanner,
+  CardTitle,
+  CardsHeaderInfo,
+  CardsHeaderWrapper,
+} from "../CardsStyles";
+import React, { FC } from "react";
 
+import { Button } from "common/ui-kit/Button/Button";
 import { CardsModalsAC } from "features/Cards/cardsModalsSlice";
+import { CardsPackMenu } from "../CardsPackMenu";
+import { Flex } from "common/ui-kit/Flex/Flex";
 import { IPackResponse } from "./../../Packs/packsAPI";
-import { NavLink } from "react-router-dom";
-import { Search } from "../../../common/components/Search/Search";
-import { packsModalsAC } from "./../../Packs/packsModalsSlice";
+import { MdMoreHoriz } from "react-icons/md";
+// import { Search } from "../../../common/components/Search/Search";
 import { useAppDispatch } from "common/hooks";
+import { useComponentVisible } from "common/hooks/isComponentVisible";
+import { Search } from "common/ui-kit/Search/Search";
 
 interface ICardsHeaderProps {
   isPackMine: boolean;
@@ -30,120 +31,48 @@ const CardsHeader: FC<ICardsHeaderProps> = React.memo(
     const dispatch = useAppDispatch();
 
     // Local States & Vars
-    const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
-    const isMenuOpen = !!menuAnchor;
+    const { ref, isComponentVisible, setIsComponentVisible } =
+      useComponentVisible(false);
 
     // Utils
     const openMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
-      setMenuAnchor(e.currentTarget);
-    };
-
-    const closeMenu = () => {
-      setMenuAnchor(null);
+      setIsComponentVisible(true);
     };
 
     const openAddNewCardModal = () => {
       dispatch(CardsModalsAC.setAddCardState({ state: true }));
     };
 
-    const openEditPackModal = () => {
-      dispatch(packsModalsAC.setUpdatePackState({ status: true, pack }));
-    };
-
-    const openDeletePackModal = () => {
-      dispatch(packsModalsAC.setDeletePackState({ status: true, pack }));
-    };
-
     return (
       <>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            gap: 2,
-            alignItems: "center",
-            marginBottom: 5,
-          }}
-        >
-          <Typography
-            variant={"h3"}
-            component={"h3"}
-            sx={{ display: "flex", alignItems: "center", maxWidth: "100%" }}
-          >
-            {pack.name}
+        <CardsHeaderWrapper>
+          <CardsHeaderInfo>
+            <CardTitle>{pack.name}</CardTitle>
             {isPackMine && (
               <>
-                <IconButton onClick={openMenu}>
-                  <MoreHoriz />
-                </IconButton>
-                <Menu
-                  open={isMenuOpen}
-                  onClose={closeMenu}
-                  anchorEl={menuAnchor}
-                  sx={{
-                    "& .menu-text-icon": {
-                      display: "flex",
-                      gap: 1,
-                      alignItems: "center",
-                    },
-                  }}
-                >
-                  <MenuItem>
-                    <Typography
-                      className={"menu-text-icon"}
-                      onClick={openEditPackModal}
-                    >
-                      <Edit />
-                      Edit
-                    </Typography>
-                  </MenuItem>
-                  <MenuItem>
-                    <Typography
-                      className={"menu-text-icon"}
-                      onClick={openDeletePackModal}
-                    >
-                      <DeleteOutline />
-                      Delete
-                    </Typography>
-                  </MenuItem>
-                  <MenuItem>
-                    <Typography className={"menu-text-icon"}>
-                      <NavLink
-                        to={`/learn/${pack._id}`}
-                        state={{ previousURL: previousURL, pack }}
-                      >
-                        <School />
-                        Learn
-                      </NavLink>
-                    </Typography>
-                  </MenuItem>
-                </Menu>
+                <Button ref={ref} onClick={openMenu} semantic>
+                  <MdMoreHoriz fontSize={"1.25rem"} />
+                </Button>
+                <CardsPackMenu
+                  open={isComponentVisible}
+                  posSettings={{ bottom: "0", right: "0" }}
+                  pack={pack}
+                />
               </>
             )}
-          </Typography>
-          {pack.deckCover && (
-            <img
-              src={pack.deckCover}
-              alt=""
-              style={{ width: "300px", height: "100px", objectFit: "cover" }}
-            />
-          )}
+          </CardsHeaderInfo>
+          {pack.deckCover && <CardBanner src={pack.deckCover} alt="" />}
           {isPackMine && (
-            <Button
-              sx={{ borderRadius: "24px" }}
-              variant={"contained"}
-              onClick={openAddNewCardModal}
-            >
-              Add new card
-            </Button>
+            <Button onClick={openAddNewCardModal}>Add new card</Button>
           )}
-        </Box>
-        <Box sx={{ marginBottom: 2 }}>
+        </CardsHeaderWrapper>
+        <Flex sx={{ marginBottom: "1.25rem" }}>
           <Search
-            searchChangeHandler={setSearchRequest}
-            searchValue={searchValue}
+            onChange={setSearchRequest}
+            value={searchValue}
+            btnDisabled={true}
           />
-        </Box>
+        </Flex>
       </>
     );
   }

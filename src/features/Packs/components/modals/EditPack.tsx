@@ -1,26 +1,16 @@
-import { Box, Checkbox, FormGroup, IconButton, TextField } from "@mui/material";
-import { ChangeEvent, memo, useEffect, useState } from "react";
+import { getImgBase64File } from "../../../../common/utils/base64Converter";
+import React, { ChangeEvent, memo, useRef } from "react";
 import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
-
-import Button from "@mui/material/Button/Button";
-import { IPackResponse } from "../../packsAPI";
-import { ModalBase } from "../../../../common/components/Modal";
-import { PhotoCamera } from "@mui/icons-material";
 import { packsModalsAC } from "../../packsModalsSlice";
 import { updateModalSelector } from "./modalsSelectors";
 import { updatePackTC } from "../../packsThunks";
-import {
-  _uploadHandler,
-  BACKEND_MAX_IMG_WEIGHT,
-  getImgBase64File,
-} from "../../../../common/utils/base64Converter";
-import { acceptableImgFormats } from "../../../../common/utils/regExp";
-
-interface IUpdatePack {
-  name: string;
-  deckCover: string;
-  isPrivate: boolean;
-}
+import { Flex } from "../../../../common/ui-kit/Flex/Flex";
+import { Checkbox } from "../../../../common/ui-kit/Checkbox/Checkbox";
+import { Input } from "../../../../common/ui-kit/Input/Input";
+import { Button } from "../../../../common/ui-kit/Button/Button";
+import { ModalBase } from "../../../../common/components/Modal";
+import { FileLoader } from "../../../../common/components/FileLoader/FileLoader";
+import { Img } from "../../PacksStyle";
 
 export const EditPack = memo(() => {
   // Dispatch & selectors
@@ -29,15 +19,16 @@ export const EditPack = memo(() => {
     state.packs.cardPacks.find((p) => p._id === pack._id)
   );
   const dispatch = useAppDispatch();
-
-  // Local state
-
   // Utils
+  const ref = useRef<HTMLInputElement>(null);
+  const handleCoverLoad = () => {
+    ref.current?.click();
+  };
   const handleClose = () =>
     dispatch(
       packsModalsAC.setUpdatePackState({
         status: false,
-        pack: {} as IPackResponse,
+        pack: pack,
       })
     );
 
@@ -69,59 +60,38 @@ export const EditPack = memo(() => {
       );
   };
   return (
-    <ModalBase open={isOpen} handleClose={handleClose} modalTitle={"Edit Pack"}>
-      <Box>
-        <FormGroup>
-          <img
-            src={pack.deckCover}
-            style={{
-              width: "100%",
-              height: "9.375rem",
-              objectFit: "cover",
-            }}
-            alt="deckCover"
-          />
-          <TextField
-            label="Name pack"
-            variant="standard"
-            color="primary"
+    <ModalBase handleClose={handleClose} modalTitle="Edit pack" open={isOpen}>
+      <Flex sx={{ padding: "0.6rem", minWidth: "22.5rem" }}>
+        <Flex fDirection="column" sx={{ gap: "0.6rem", flex: "1 1 auto" }}>
+          {pack.deckCover && (
+            <Img
+              width={"100px"}
+              height={"100px"}
+              src={pack.deckCover}
+              alt="deckCover"
+            />
+          )}
+          <Input
+            label="Pack name"
             value={pack.name}
+            error={false}
             onChange={handleChangeName}
           />
-          <Box>
-            Private pack{" "}
-            <Checkbox
-              checked={pack.private}
-              onChange={handleChangeIsPrivate}
-              color="primary"
-            />
-          </Box>
-          <Box>
-            <label>
-              <input
-                style={{ display: "none" }}
-                type="file"
-                accept={"image/*"}
-                onChange={(e) => handleChangeCover(e)}
-              />
-              <IconButton component="span" color={"primary"}>
-                <PhotoCamera />
-              </IconButton>
-            </label>
-          </Box>
-        </FormGroup>
-
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Button onClick={handleClose} color="primary" variant="contained">
-            Cancel
+          <Checkbox
+            checked={pack.private}
+            onChange={handleChangeIsPrivate}
+            children={<span>Private pack</span>}
+          />
+          <Button onClick={handleCoverLoad} sx={{ marginBottom: "0.6rem" }}>
+            Change cover
           </Button>
-          <Button onClick={updatePack} color="primary" variant="contained">
-            Save pack
-          </Button>
-        </Box>
-      </Box>
+          <FileLoader link={ref} onFileLoaded={handleChangeCover} />
+          <Flex justify={"space-between"}>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={updatePack}>Save pack</Button>
+          </Flex>
+        </Flex>
+      </Flex>
     </ModalBase>
   );
 });
-
-export default EditPack;

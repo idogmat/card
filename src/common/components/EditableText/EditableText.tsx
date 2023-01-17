@@ -1,16 +1,13 @@
 import React, { FC, useEffect, useState } from "react";
-import {
-  Button,
-  InputAdornment,
-  TextField,
-  Typography,
-  TypographyProps,
-} from "@mui/material";
+
+import { EditableTextSaveBtn } from "./EditableTextStyles";
+import { Typography } from "common/ui-kit/Text/Typography";
+import { Input } from "common/ui-kit/Input/Input";
 
 interface IEditableTextProps {
   valueToDisplay: string;
   onChangeText: (value: string) => void;
-  displayProps?: TypographyProps;
+  displayProps?: string;
   disabled: boolean;
 }
 
@@ -41,34 +38,26 @@ export const EditableText: FC<IEditableTextProps> = ({
   };
 
   return !editMode ? (
-    <Typography onDoubleClick={doubleClickHandler} {...displayProps}>
+    <Typography variant="title" onDoubleClick={doubleClickHandler}>
       {valueToDisplay}
     </Typography>
   ) : (
-    <TextField
-      variant={"standard"}
-      label={"Nickname"}
+    <Input
+      error={false}
       value={fieldText}
-      autoFocus
       onChange={fieldTextChangeHandler}
       onBlur={submitChanges}
-      InputProps={{
-        endAdornment: (
-          <InputAdornment
-            position={"end"}
-            sx={{ padding: "10px", marginBottom: "10px" }}
-          >
-            <Button
-              variant={"contained"}
-              onClick={submitChanges}
-              sx={{ fontSize: "12px", padding: "5px 10px", margin: "5px 0px" }}
-              disabled={disabled}
-            >
-              Save
-            </Button>
-          </InputAdornment>
-        ),
-      }}
+      autoFocus
+      label={"Nickname"}
+      endItem={
+        <EditableTextSaveBtn
+          disabled={disabled}
+          onClick={submitChanges}
+          sx={{ fontSize: "12px" }}
+        >
+          Save
+        </EditableTextSaveBtn>
+      }
     />
   );
 };

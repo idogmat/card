@@ -13,7 +13,7 @@ export const registerTC = createAppAsyncThunk(
   async ({ email, password }: IRegisterData, thunkAPI) => {
     return errorHandlingThunk(thunkAPI, async () => {
       const payload = { email, password };
-      const { data } = await registerAPI.sendRegisterRequest(payload);
+      await registerAPI.sendRegisterRequest(payload);
       thunkAPI.dispatch(loginTC(payload));
     });
   }

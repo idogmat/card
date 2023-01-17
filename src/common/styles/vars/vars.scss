@@ -1,0 +1,32 @@
+:root {
+	// Page settings
+	--container-mw-sm: 1200px;
+	--container-mw-md: 1400px;
+
+	// Fonts
+	--family: "Montserrat";
+	--fw-regular: 400;
+	--fw-bold: 600;
+	--fw-black: 900;
+	--fs-sm: 14px;
+	--fs-md: 16px;
+	--fs-big: 20px;
+
+	// Other
+	--radius: 12px;
+	--color-blue: #bfd2ff;
+	--color-darker-blue: #4d82ff;
+	--color-success: #bfffd2;
+	--color-error: #ff988d;
+	--color-gray: #c8c8c8;
+}
+
+body[data-theme="dark"] {
+	--color-primary: #fff;
+	--color-secondary: #000;
+}
+
+body[data-theme="light"] {
+	--color-primary: #000;
+	--color-secondary: #fff;
+}

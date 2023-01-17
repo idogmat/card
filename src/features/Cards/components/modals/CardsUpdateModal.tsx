@@ -1,20 +1,17 @@
 import { ChangeEvent, FC, useRef } from "react";
-import { _uploadHandler, getImgBase64File } from "common/utils/base64Converter";
+import { getImgBase64File } from "common/utils/base64Converter";
 import { useAllSelector, useAppDispatch } from "common/hooks";
 
-import Box from "@mui/material/Box/Box";
-import Button from "@mui/material/Button/Button";
 import { CardsModalsAC } from "features/Cards/cardsModalsSlice";
 import { FieldFormatsEnum } from "./FormatSelect";
-import FormControl from "@mui/material/FormControl/FormControl";
-import FormGroup from "@mui/material/FormGroup/FormGroup";
 import { ModalBase } from "common/components/Modal";
-import { SelectChangeEvent } from "@mui/material";
 import { SelectTypeField } from "./SelectTypeField";
 import { formatSelectOptions } from "./CardsModals.data";
 import { openFileSelector } from "./utils";
 import { updateCardModalSelector } from "features/Cards/components/modals/modalsSelectors";
 import { updateCardTC } from "features/Cards/cardsThunks";
+import { Flex } from "common/ui-kit/Flex/Flex";
+import { Button } from "common/ui-kit/Button/Button";
 
 interface IUpdateCardModalProps {
   packID: string;
@@ -57,6 +54,8 @@ export const CardsUpdateModal: FC<IUpdateCardModalProps> = ({ packID }) => {
   const isQuestionPicture = isFieldPicture(questionFieldType);
   const isAnswerPicture = isFieldPicture(answerFieldType);
 
+  const btnError = (!question && !questionImg) || (!answer && answerImg);
+
   // Utils
 
   const handleClose = () =>
@@ -76,8 +75,8 @@ export const CardsUpdateModal: FC<IUpdateCardModalProps> = ({ packID }) => {
     );
   };
 
-  const changeQuestionFormat = (e: SelectChangeEvent) => {
-    const questionFieldType = e.target.value as FieldFormatsEnum;
+  const changeQuestionFormat = (option: string) => {
+    const questionFieldType = option as FieldFormatsEnum;
     dispatch(
       CardsModalsAC.setUpdateCardData({
         model: { ...updateModal, questionFieldType },
@@ -85,8 +84,8 @@ export const CardsUpdateModal: FC<IUpdateCardModalProps> = ({ packID }) => {
     );
   };
 
-  const changeAnswerFormat = (e: SelectChangeEvent) => {
-    const answerFieldType = e.target.value as FieldFormatsEnum;
+  const changeAnswerFormat = (option: string) => {
+    const answerFieldType = option as FieldFormatsEnum;
     dispatch(
       CardsModalsAC.setUpdateCardData({
         model: { ...updateModal, answerFieldType },
@@ -147,8 +146,8 @@ export const CardsUpdateModal: FC<IUpdateCardModalProps> = ({ packID }) => {
   return (
     <div>
       <ModalBase handleClose={handleClose} modalTitle="Edit card" open={isOpen}>
-        <Box sx={{ padding: 2 }}>
-          <FormGroup sx={{ display: "grid", gap: 1 }}>
+        <Flex sx={{ padding: "0.6rem", minWidth: "22.5rem" }}>
+          <Flex fDirection="column" sx={{ gap: "0.6rem", flex: "1 1 auto" }}>
             <SelectTypeField
               selectTitle={"Choose question format"}
               options={formatSelectOptions}
@@ -173,17 +172,17 @@ export const CardsUpdateModal: FC<IUpdateCardModalProps> = ({ packID }) => {
               changeTextFieldValue={setAnswer}
               handleFileUpload={changeAnswerCover}
             />
-            <FormControl>
+            <Flex>
               <Button
-                variant="contained"
+                disabled={!!btnError}
                 sx={{ alignSelf: "start" }}
                 onClick={updateCardHandler}
               >
                 Confirm edit
               </Button>
-            </FormControl>
-          </FormGroup>
-        </Box>
+            </Flex>
+          </Flex>
+        </Flex>
       </ModalBase>
     </div>
   );

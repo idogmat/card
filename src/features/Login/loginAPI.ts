@@ -1,5 +1,5 @@
+import { ILoginUser } from "../../common/api/types";
 import { IUserFields } from "./loginThunks";
-import { LoginUserType } from "../../common/api/types";
 import { configuredAxios } from "../../common/api/baseAPI";
 
 export interface ISetPWD {
@@ -18,7 +18,7 @@ export interface ISetPWD {
 }
 
 const login = (user: IUserFields) => {
-  return configuredAxios.post<LoginUserType>("auth/login", user);
+  return configuredAxios.post<ILoginUser>("auth/login", user);
 };
 
 const recoveryPassword = (requestData: IRecoveryRequest) => {

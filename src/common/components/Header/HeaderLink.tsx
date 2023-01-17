@@ -1,6 +1,6 @@
 import React, { FC, ReactElement } from "react";
 
-import { MenuItem } from "@mui/material";
+import { DropdownItem } from "common/ui-kit/Dropdown/Dropdown";
 import { NavLink } from "react-router-dom";
 import styles from "./HeaderLink.module.css";
 
@@ -12,11 +12,11 @@ interface IHeaderLinkProps {
 export const HeaderLink: FC<IHeaderLinkProps> = ({ page, icon }) => {
   const formattedPageName = page[0].toUpperCase() + page.slice(1);
   return (
-    <MenuItem sx={{ justifyContent: "center" }}>
+    <DropdownItem>
       <NavLink to={`/${page}`} className={styles.link}>
         {icon && icon}
         {formattedPageName}
       </NavLink>
-    </MenuItem>
+    </DropdownItem>
   );
 };
