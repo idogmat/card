@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+// import { Search } from "../../../common/components/Search/Search";
 import { useAppDispatch } from "../../../common/hooks";
 import { packsModalsAC } from "../packsModalsSlice";
 import RangeSlider from "../../../common/components/RangeSlider/RangeSlider";
@@ -36,7 +37,7 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
     const modalAddPack = () =>
       dispatch(packsModalsAC.setAddPackState({ status: true }));
     return (
-      <Flex justify={"space-between"} fWrap={"wrap"}>
+      <Flex justify={"space-between"} fWrap={"wrap"} sx={{ gap: "1rem" }}>
         {/*<Search*/}
         {/*  searchValue={packName}*/}
         {/*  searchChangeHandler={changeSearchHandler}*/}

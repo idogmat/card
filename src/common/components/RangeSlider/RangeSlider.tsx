@@ -28,7 +28,7 @@ const RangeSlider: React.FC<ISuperRangeProps> = React.memo(
     };
 
     return (
-      <Flex sx={{ minWidth: "45%", maxWidth: "100%" }}>
+      <Flex sx={{ minWidth: "40%", maxWidth: "45%" }}>
         <output style={{ margin: "auto 5px" }} id="output1">
           {minCardsCount.toFixed(0)}
         </output>
