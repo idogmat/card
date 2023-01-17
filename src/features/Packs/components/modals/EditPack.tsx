@@ -8,7 +8,7 @@ import { updatePackTC } from "../../packsThunks";
 import { FormInModal, Modal } from "../../../../common/ui-kit/Modal/Modal";
 import { Flex } from "../../../../common/ui-kit/Flex/Flex";
 import { Checkbox } from "../../../../common/ui-kit/Checkbox/Checkbox";
-import { Input } from "../../../../common/ui-kit/_Input/_Input";
+import { Input } from "../../../../common/ui-kit/Input/Input";
 import { Button } from "../../../../common/ui-kit/Button/Button";
 import { MdPhotoCamera } from "react-icons/md";
 

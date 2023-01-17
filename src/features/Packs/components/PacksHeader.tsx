@@ -1,11 +1,9 @@
 import React, { FC } from "react";
-import { Search } from "../../../common/components/Search/Search";
 import { useAppDispatch } from "../../../common/hooks";
 import { packsModalsAC } from "../packsModalsSlice";
 import RangeSlider from "../../../common/components/RangeSlider/RangeSlider";
 import { Button } from "../../../common/ui-kit/Button/Button";
 import { MyPackButton } from "../PacksStyle";
-import { MdOutlineSearch } from "react-icons/md";
 import { Flex } from "../../../common/ui-kit/Flex/Flex";
 import { IoTrashBin } from "react-icons/io5";
 
@@ -39,11 +37,11 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
       dispatch(packsModalsAC.setAddPackState({ status: true }));
     return (
       <Flex justify={"space-between"} fWrap={"wrap"}>
-        <Search
-          searchValue={packName}
-          searchChangeHandler={changeSearchHandler}
-          endItem={<MdOutlineSearch />}
-        />
+        {/*<Search*/}
+        {/*  searchValue={packName}*/}
+        {/*  searchChangeHandler={changeSearchHandler}*/}
+        {/*  endItem={<MdOutlineSearch />}*/}
+        {/*/>*/}
         <Flex sx={{ gap: "1rem" }}>
           <MyPackButton
             selected={isMyPack}

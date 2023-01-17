@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAllSelector, useAppDispatch } from "../../common/hooks";
-import { Input } from "common/ui-kit/_Input/_Input";
+import { Input } from "common/ui-kit/Input/Input";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 
 import { Link } from "react-router-dom";
@@ -27,26 +27,14 @@ export interface IRegisterFormErrors {
   confirmPassword: string;
 }
 
+// validate an email with regex
+
 export const Register = () => {
   const dispatch = useAppDispatch();
   const { isLoading } = useAllSelector(appStateSelector);
   const [showPassword, setShowPassword] = useState(false);
 
   const registerForm = useFormik({
-    // validate: (values) => {
-    //   const errors = {} as IRegisterFormErrors;
-    //   if (values.password.length < 8) {
-    //     errors.password = "Incorrect password";
-    //   }
-    //
-    //   if (values.confirmPassword !== values.password) {
-    //     errors.confirmPassword = "Different password";
-    //   }
-    //   if (!values.email.length || !validMail.test(values.email)) {
-    //     errors.email = "Enter the correct email";
-    //   }
-    //   return errors;
-    // },
     validationSchema: registerSchema,
     initialValues: {
       email: "",

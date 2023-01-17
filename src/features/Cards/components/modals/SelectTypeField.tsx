@@ -2,7 +2,7 @@ import { FileLoader } from "common/components/FileLoader/FileLoader";
 import { Button } from "common/ui-kit/Button/Button";
 import { Flex } from "common/ui-kit/Flex/Flex";
 import { Typography } from "common/ui-kit/Text/Typography";
-import { Input } from "common/ui-kit/_Input/_Input";
+import { Input } from "common/ui-kit/Input/Input";
 import { CardsCoverPreview } from "features/Cards/CardsStyles";
 import { ChangeEvent, FC, RefObject } from "react";
 import {

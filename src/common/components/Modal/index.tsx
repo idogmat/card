@@ -1,7 +1,7 @@
 import { FC, ReactElement } from "react";
 
 import { ModalHeader } from "./ModalHeader";
-import { Modal } from "common/ui-kit/_Modal/_Modal";
+import { Modal } from "common/ui-kit/Modal/Modal";
 
 interface IModalBaseProps {
   open: boolean;

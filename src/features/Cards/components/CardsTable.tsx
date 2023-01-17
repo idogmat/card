@@ -8,9 +8,6 @@ import { ICard } from "../../../common/models";
 import { IFieldSort } from "../Cards";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { getSortIcon } from "../../../common/utils/assets";
-import { Input } from "common/ui-kit/_Input/_Input";
-import { Button } from "common/ui-kit/Button/Button";
-import { Notification } from "common/ui-kit/Notification/Notification";
 
 interface ICardsTableProps {
   cards: ICard[];

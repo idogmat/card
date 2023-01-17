@@ -2,7 +2,7 @@ import React from "react";
 import { FormikProps } from "formik";
 import { hasError } from "../../common/utils/errorHandlers";
 import { Typography } from "../../common/ui-kit/Text/Typography";
-import { Input } from "common/ui-kit/_Input/_Input";
+import { Input } from "common/ui-kit/Input/Input";
 import { Link } from "react-router-dom";
 import { Button } from "common/ui-kit/Button/Button";
 import {

@@ -5,7 +5,7 @@ import { useAppDispatch } from "../../common/hooks";
 import { setNewPassword } from "./setNewPasswordThunk";
 import { hasError } from "../../common/utils/errorHandlers";
 import { Typography } from "../../common/ui-kit/Text/Typography";
-import { Input } from "common/ui-kit/_Input/_Input";
+import { Input } from "common/ui-kit/Input/Input";
 import { Button } from "../../common/ui-kit/Button/Button";
 import {
   RegisterContent,

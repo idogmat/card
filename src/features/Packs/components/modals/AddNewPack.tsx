@@ -8,7 +8,7 @@ import { packsModalsAC } from "../../packsModalsSlice";
 import { getImgBase64File } from "../../../../common/utils/base64Converter";
 import { FormInModal, Modal } from "../../../../common/ui-kit/Modal/Modal";
 import { Flex } from "../../../../common/ui-kit/Flex/Flex";
-import { Input } from "../../../../common/ui-kit/_Input/_Input";
+import { Input } from "../../../../common/ui-kit/Input/Input";
 import { Checkbox } from "../../../../common/ui-kit/Checkbox/Checkbox";
 
 export interface INewPack {

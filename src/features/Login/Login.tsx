@@ -7,8 +7,7 @@ import { hasError } from "../../common/utils/errorHandlers";
 import { loginTC } from "./loginThunks";
 import styles from "../../common/styles/common/common.module.scss";
 import { useFormik } from "formik";
-import { validMail } from "../../common/utils/regExp";
-import { Input } from "common/ui-kit/_Input/_Input";
+import { Input } from "common/ui-kit/Input/Input";
 import { Checkbox } from "../../common/ui-kit/Checkbox/Checkbox";
 import { Typography } from "../../common/ui-kit/Text/Typography";
 import { Button } from "../../common/ui-kit/Button/Button";
@@ -21,6 +20,7 @@ import {
 } from "../Register/RegisterStyles";
 import { Paper } from "../../common/ui-kit/Paper/Paper";
 import * as yup from "yup";
+
 interface ILoginErrorType {
   email?: string;
   password?: string;

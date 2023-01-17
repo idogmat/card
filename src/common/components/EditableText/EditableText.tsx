@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 
 import { EditableTextSaveBtn } from "./EditableTextStyles";
 import { Typography } from "common/ui-kit/Text/Typography";
-import { Input } from "common/ui-kit/_Input/_Input";
+import { Input } from "common/ui-kit/Input/Input";
 
 interface IEditableTextProps {
   valueToDisplay: string;
