@@ -4,7 +4,6 @@ import { deleteModalSelector } from "./modalsSelectors";
 import React, { memo } from "react";
 import { packsModalsAC } from "../../packsModalsSlice";
 import { removePackTC } from "../../packsThunks";
-import { FormInModal, Modal } from "../../../../common/ui-kit/Modal/Modal";
 import { Flex } from "../../../../common/ui-kit/Flex/Flex";
 import { Typography } from "../../../../common/ui-kit/Text/Typography";
 import { Button } from "../../../../common/ui-kit/Button/Button";
@@ -36,15 +35,16 @@ export const DeletePack = memo(() => {
           <Typography>
             Do you really want to remove <b>{pack.name}</b>
           </Typography>
-          <Flex
-            justify={"space-between"}
-            fDirection={"row"}
-            sx={{ margin: "auto", gap: "5px", paddingTop: "10px" }}
-          >
-            <Button onClick={handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={deletePack} color="primary">
+          <Flex justify={"space-between"} sx={{ paddingTop: "10px" }}>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button
+              sx={{
+                alignSelf: "start",
+                backgroundColor: "var(--color-error)",
+                color: "#fff",
+              }}
+              onClick={deletePack}
+            >
               Delete
             </Button>
           </Flex>

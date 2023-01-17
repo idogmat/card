@@ -1,7 +1,6 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useRef, useState } from "react";
 import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
 import { Button } from "../../../../common/ui-kit/Button/Button";
-import { MdPhotoCamera } from "react-icons/md";
 import { addNewModalSelector } from "./modalsSelectors";
 import { addPackTC } from "../../packsThunks";
 import { packsModalsAC } from "../../packsModalsSlice";
@@ -10,6 +9,7 @@ import { ModalBase } from "common/components/Modal";
 import { Flex } from "../../../../common/ui-kit/Flex/Flex";
 import { Input } from "../../../../common/ui-kit/Input/Input";
 import { Checkbox } from "../../../../common/ui-kit/Checkbox/Checkbox";
+import { FileLoader } from "../../../../common/components/FileLoader/FileLoader";
 
 export interface INewPack {
   name: string;
@@ -21,7 +21,7 @@ export const AddNewPack = React.memo(() => {
   // Selector & dispatch
   const { isOpen } = useAllSelector(addNewModalSelector);
   const dispatch = useAppDispatch();
-
+  const ref = useRef<HTMLInputElement>(null);
   // Local states
   const [newPackData, setNewPackData] = useState<INewPack>({
     name: "",
@@ -33,6 +33,10 @@ export const AddNewPack = React.memo(() => {
 
   const handleClose = () =>
     dispatch(packsModalsAC.setAddPackState({ status: false }));
+
+  const handleCoverLoad = () => {
+    ref.current?.click();
+  };
 
   const addNewPack = () => {
     if (newPackData.name) {
@@ -72,50 +76,27 @@ export const AddNewPack = React.memo(() => {
               alt="deckCover"
             />
           )}
-
           <Input
             type={"text"}
-            style={{ margin: "auto" }}
             error={false}
             placeholder="Pack name"
             value={newPackData.name}
             onChange={handleChangeName}
           />
-
           <Checkbox
             checked={newPackData.isPrivate}
             onChange={handleChangeIsPrivate}
             children={<span>Private pack</span>}
           />
-          <label
-            style={{
-              textAlign: "center",
-              display: "inline-flex",
-            }}
-          >
-            <Input
-              style={{ display: "none" }}
-              type="file"
-              error={false}
-              onChange={(e) => handleChangeCover(e)}
-              endItem={
-                <div>
-                  <MdPhotoCamera /> Add Cover
-                </div>
-              }
-            />
-          </label>
-          <Flex
-            justify={"space-between"}
-            fDirection={"row"}
-            sx={{ margin: "auto", gap: "5px" }}
-          >
+          <Button onClick={handleCoverLoad} sx={{ marginBottom: "0.6rem" }}>
+            Change cover
+          </Button>
+          <FileLoader link={ref} onFileLoaded={handleChangeCover} />
+          <Flex justify={"space-between"} sx={{ gap: "5px" }}>
             <Button onClick={handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={addNewPack} color="primary">
-              Add Pack
-            </Button>
+            <Button onClick={addNewPack}>Add Pack</Button>
           </Flex>
         </Flex>
       </Flex>

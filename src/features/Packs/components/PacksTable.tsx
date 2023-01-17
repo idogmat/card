@@ -37,7 +37,7 @@ const PacksTable: React.FC<ITableProps> = React.memo(
               {showSortIcon("updated")}
             </Flex>
             <Flex align={"center"}>Author Name</Flex>
-            <Flex align={"center"} style={{ margin: "auto" }}>
+            <Flex align={"center"} sx={{ margin: "auto" }}>
               Actions
             </Flex>
           </TableHeader>

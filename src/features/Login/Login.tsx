@@ -19,29 +19,8 @@ import {
   RegisterWrapper,
 } from "../Register/RegisterStyles";
 import { Paper } from "../../common/ui-kit/Paper/Paper";
-import * as yup from "yup";
-<<<<<<< HEAD
+import { basicSchema } from "./loginSchema";
 
-interface ILoginErrorType {
-  email?: string;
-  password?: string;
-  rememberMe?: boolean;
-}
-=======
->>>>>>> 595551e41050557024c0fa270337819a576f9941
-
-export const basicSchema = yup.object().shape({
-  email: yup.string().email("Enter valid Email").required("Required"),
-  password: yup.string().min(8, "Password is too short").required("Required"),
-});
-// export const basicSchema2 = yup.object().shape({
-//   email: yup.string().email("Enter valid Email").required("Required"),
-//   password: yup.string().min(8, "Password is too short").required("Required"),
-//   confirmPassword: yup
-//     .string()
-//     .oneOf([yup.ref("password"), null])
-//     .required("Required"),
-// });
 export const Login = () => {
   // Dispatch & selectors
   const dispatch = useAppDispatch();
@@ -51,6 +30,7 @@ export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const passwordIcon = showPassword ? <MdVisibility /> : <MdVisibilityOff />;
   // Formik
+
   const loginForm = useFormik({
     initialValues: {
       email: "",
@@ -68,7 +48,6 @@ export const Login = () => {
 
   // Utils
   const changePasswordFieldType = () => setShowPassword((prev) => !prev);
-  // console.log(ReviewSchema.isValid({ email: loginForm.values.email }));
   return (
     <RegisterWrapper>
       <RegisterContent>
@@ -130,8 +109,6 @@ export const Login = () => {
             <Button
               type={"submit"}
               disabled={loginHasError("email") || loginHasError("password")}
-              color={"primary"}
-              sx={{ borderRadius: "30px", marginBottom: "30px" }}
             >
               Sign in
             </Button>
@@ -140,9 +117,7 @@ export const Login = () => {
                 Haven't account?
               </Typography>
               <Typography sx={{ fontSize: "16px", color: "#366EFF" }}>
-                <Link to={"/register"} style={{ color: "inherit" }}>
-                  Sign up
-                </Link>
+                <Link to={"/register"}>Sign up</Link>
               </Typography>
             </RegisterOffer>
           </RegisterForm>

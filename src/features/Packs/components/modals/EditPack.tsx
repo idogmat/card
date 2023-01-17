@@ -1,17 +1,16 @@
 import { getImgBase64File } from "../../../../common/utils/base64Converter";
-import React, { ChangeEvent, memo } from "react";
+import React, { ChangeEvent, memo, useRef } from "react";
 import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
-import { IPackResponse } from "../../packsAPI";
 import { packsModalsAC } from "../../packsModalsSlice";
 import { updateModalSelector } from "./modalsSelectors";
 import { updatePackTC } from "../../packsThunks";
-import { FormInModal, Modal } from "../../../../common/ui-kit/Modal/Modal";
 import { Flex } from "../../../../common/ui-kit/Flex/Flex";
 import { Checkbox } from "../../../../common/ui-kit/Checkbox/Checkbox";
 import { Input } from "../../../../common/ui-kit/Input/Input";
 import { Button } from "../../../../common/ui-kit/Button/Button";
-import { MdPhotoCamera } from "react-icons/md";
 import { ModalBase } from "../../../../common/components/Modal";
+import { FileLoader } from "../../../../common/components/FileLoader/FileLoader";
+import { Img } from "../../PacksStyle";
 
 export const EditPack = memo(() => {
   // Dispatch & selectors
@@ -21,11 +20,15 @@ export const EditPack = memo(() => {
   );
   const dispatch = useAppDispatch();
   // Utils
+  const ref = useRef<HTMLInputElement>(null);
+  const handleCoverLoad = () => {
+    ref.current?.click();
+  };
   const handleClose = () =>
     dispatch(
       packsModalsAC.setUpdatePackState({
         status: false,
-        pack: {} as IPackResponse,
+        pack: pack,
       })
     );
 
@@ -61,13 +64,10 @@ export const EditPack = memo(() => {
       <Flex sx={{ padding: "0.6rem", minWidth: "22.5rem" }}>
         <Flex fDirection="column" sx={{ gap: "0.6rem", flex: "1 1 auto" }}>
           {pack.deckCover && (
-            <img
+            <Img
+              width={"100px"}
+              height={"100px"}
               src={pack.deckCover}
-              style={{
-                width: "100%",
-                height: "9.375rem",
-                objectFit: "cover",
-              }}
               alt="deckCover"
             />
           )}
@@ -82,36 +82,13 @@ export const EditPack = memo(() => {
             onChange={handleChangeIsPrivate}
             children={<span>Private pack</span>}
           />
-          <label
-            style={{
-              textAlign: "center",
-              display: "inline-flex",
-            }}
-          >
-            <Input
-              style={{ display: "none" }}
-              type="file"
-              accept={"image/*"}
-              error={false}
-              onChange={(e) => handleChangeCover(e)}
-              endItem={
-                <div>
-                  <MdPhotoCamera /> Add Cover
-                </div>
-              }
-            />
-          </label>
-          <Flex
-            justify={"space-between"}
-            fDirection={"row"}
-            sx={{ margin: "auto", gap: "5px" }}
-          >
-            <Button onClick={handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={updatePack} color="primary">
-              Save pack
-            </Button>
+          <Button onClick={handleCoverLoad} sx={{ marginBottom: "0.6rem" }}>
+            Change cover
+          </Button>
+          <FileLoader link={ref} onFileLoaded={handleChangeCover} />
+          <Flex justify={"space-between"}>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={updatePack}>Save pack</Button>
           </Flex>
         </Flex>
       </Flex>

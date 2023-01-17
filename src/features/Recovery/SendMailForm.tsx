@@ -28,31 +28,22 @@ const SendMailForm: React.FC<FormValues> = React.memo(({ recoveryForm }) => {
             </Typography>
             <Input
               label={
-                sendMailHasError("confirmPassword")
-                  ? recoveryForm.errors.email
-                  : "Confirm password"
+                sendMailHasError("email") ? recoveryForm.errors.email : "Email"
               }
               error={sendMailHasError("email")}
               {...recoveryForm.getFieldProps("email")}
             />
-            <Typography sx={{ opacity: ".7" }}>
+            <Typography variant={"sub-title-sm"} sx={{ opacity: ".7" }}>
               Enter your email address and we will send you further instructions
             </Typography>
-            <Button
-              type={"submit"}
-              disabled={sendMailHasError("email")}
-              color={"primary"}
-              sx={{ borderRadius: "30px", marginBottom: "30px" }}
-            >
+            <Button type={"submit"} disabled={sendMailHasError("email")}>
               Recovery
             </Button>
-            <Typography sx={{ opacity: ".7" }}>
+            <Typography variant={"sub-title-sm"} sx={{ opacity: ".7" }}>
               Did you remember your password?
             </Typography>
-            <Typography sx={{ fontSize: "16px", color: "#366EFF" }}>
-              <Link to={"/login"} style={{ color: "inherit" }}>
-                Sign in
-              </Link>
+            <Typography variant={"sub-title-sm"} sx={{ color: "#366EFF" }}>
+              <Link to={"/login"}>Sign in</Link>
             </Typography>
           </RegisterForm>
         </Paper>

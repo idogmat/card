@@ -1,4 +1,3 @@
-import { HorizontalRule } from "@mui/icons-material";
 import { removePackTC, setPacksTC } from "./packsThunks";
 import React, { useCallback, useEffect } from "react";
 import {
@@ -168,7 +167,7 @@ const Packs = () => {
     return sortPacks.field === field ? (
       getSortIcon(sortPacks.direction === 1)
     ) : (
-      <HorizontalRule />
+      <MdKeyboardArrowDown />
     );
   };
 

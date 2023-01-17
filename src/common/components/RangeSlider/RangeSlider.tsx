@@ -8,6 +8,7 @@ import {
   ThumbDot,
   ThumbView,
 } from "../../ui-kit/RangeSlider/RangeSlider";
+import { Output } from "../../../features/Packs/PacksStyle";
 
 interface ISuperRangeProps {
   onChangeSlider: (valueRange: number[]) => void;
@@ -29,9 +30,7 @@ const RangeSlider: React.FC<ISuperRangeProps> = React.memo(
 
     return (
       <Flex sx={{ minWidth: "40%", maxWidth: "45%" }}>
-        <output style={{ margin: "auto 5px" }} id="output1">
-          {minCardsCount.toFixed(0)}
-        </output>
+        <Output id="output1">{minCardsCount.toFixed(0)}</Output>
         {values.length && (
           <Range
             step={1}
@@ -62,9 +61,7 @@ const RangeSlider: React.FC<ISuperRangeProps> = React.memo(
             )}
           />
         )}
-        <output style={{ margin: "auto 5px" }} id="output2">
-          {maxCardsCount.toFixed(0)}
-        </output>
+        <Output id="output2">{maxCardsCount.toFixed(0)}</Output>
       </Flex>
     );
   }

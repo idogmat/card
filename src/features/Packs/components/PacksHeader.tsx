@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-// import { Search } from "../../../common/components/Search/Search";
+
 import { useAppDispatch } from "../../../common/hooks";
 import { packsModalsAC } from "../packsModalsSlice";
 import RangeSlider from "../../../common/components/RangeSlider/RangeSlider";
@@ -7,6 +7,7 @@ import { Button } from "../../../common/ui-kit/Button/Button";
 import { MyPackButton } from "../PacksStyle";
 import { Flex } from "../../../common/ui-kit/Flex/Flex";
 import { IoTrashBin } from "react-icons/io5";
+import { Search } from "../../../common/ui-kit/Search/Search";
 
 interface IHeaderProps {
   packName: string;
@@ -37,13 +38,13 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
     const modalAddPack = () =>
       dispatch(packsModalsAC.setAddPackState({ status: true }));
     return (
-      <Flex justify={"space-between"} fWrap={"wrap"} sx={{ gap: "1rem" }}>
-        {/*<Search*/}
-        {/*  searchValue={packName}*/}
-        {/*  searchChangeHandler={changeSearchHandler}*/}
-        {/*  endItem={<MdOutlineSearch />}*/}
-        {/*/>*/}
-        <Flex sx={{ gap: "1rem" }}>
+      <Flex
+        justify={"space-between"}
+        fWrap={"wrap"}
+        sx={{ gap: "1rem", marginBottom: ".6rem" }}
+      >
+        <Search value={packName} onChange={changeSearchHandler} btnDisabled />
+        <Flex align={"center"} sx={{ gap: "1rem" }}>
           <MyPackButton
             selected={isMyPack}
             onClick={() => handlerIsMyPack(true)}
@@ -65,17 +66,8 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
           min={min}
           onChangeSlider={changeRangeHandler}
         />
-        <Button
-          style={{ padding: "0px 5px", margin: "20px 0px" }}
-          onClick={modalAddPack}
-        >
-          Add new Pack
-        </Button>
-        <Button
-          semantic
-          onClick={() => removeSort()}
-          style={{ margin: "20px 0", padding: "10px 5px" }}
-        >
+        <Button onClick={modalAddPack}>Add new Pack</Button>
+        <Button semantic onClick={() => removeSort()}>
           <IoTrashBin />
         </Button>
       </Flex>

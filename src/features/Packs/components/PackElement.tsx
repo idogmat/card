@@ -13,6 +13,7 @@ import {
 import { Button } from "../../../common/ui-kit/Button/Button";
 import { AiOutlineAudit, AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import { Flex } from "../../../common/ui-kit/Flex/Flex";
+import { Img, TableBodyItemHiddenMaxChars } from "../PacksStyle";
 
 interface IRowProps {
   id: string;
@@ -26,7 +27,7 @@ const PackElement: React.FC<IRowProps> = React.memo(
     const dispatch = useAppDispatch();
 
     // Vars
-    const [params, setSearchParams] = useSearchParams();
+    const params = useSearchParams()[0];
     const backToState = { previousURL: params.toString(), pack };
 
     // Utils
@@ -39,51 +40,52 @@ const PackElement: React.FC<IRowProps> = React.memo(
     const savePackData = () => {
       setItemToLC("backToState", backToState);
     };
+    const shouldDisableActions = pack.user_id !== id;
+    const srcImg = pack.deckCover?.length < 40 ? noCover : pack.deckCover;
 
     return (
       <TableBodyLine cols="100px minmax(100px,300px) 120px 150px minmax(100px,300px) minmax(80px,150px)">
         <TableBodyItem>
-          {pack.deckCover && (
-            <img
-              src={pack.deckCover.length < 40 ? noCover : pack.deckCover}
-              alt={"cover"}
-              style={{ width: "50px", height: "20px", borderRadius: "5px" }}
-            />
-          )}
+          {pack.deckCover && <Img src={srcImg} alt={"cover"} />}
         </TableBodyItem>
-        <TableBodyItem>
-          <Flex style={{ overflow: "hidden" }}>
-            <NavLink
-              state={backToState}
-              to={`/packs/${pack._id}`}
-              onClick={savePackData}
-              style={{ overflow: "hidden" }}
-            >
-              {pack.name}
-            </NavLink>
-          </Flex>
-        </TableBodyItem>
-        <TableBodyItem style={{ margin: "auto" }}>
-          {pack.cardsCount}
-        </TableBodyItem>
-        <TableBodyItem>{formDate(pack.created)}</TableBodyItem>
-        <TableBodyItem style={{ width: "100%" }}>
-          <Flex style={{ overflow: "hidden" }}>{pack.user_name}</Flex>
-        </TableBodyItem>
-        <TableBodyItem style={{ margin: "auto" }}>
-          <NavLink to={`/learn/${pack._id}`} state={backToState}>
-            <Button semantic>
-              <AiOutlineAudit />
-            </Button>
+        <TableBodyItemHiddenMaxChars>
+          <NavLink
+            state={backToState}
+            to={`/packs/${pack._id}`}
+            onClick={savePackData}
+          >
+            <Flex sx={{ overflow: "hidden" }}>{pack.name}</Flex>
           </NavLink>
+        </TableBodyItemHiddenMaxChars>
+        <TableBodyItem>{pack.cardsCount}</TableBodyItem>
+        <TableBodyItem>{formDate(pack.created)}</TableBodyItem>
+        <TableBodyItemHiddenMaxChars>
+          <Flex>{pack.user_name}</Flex>
+        </TableBodyItemHiddenMaxChars>
+        <TableBodyItem>
+          <Flex justify={"center"}>
+            <NavLink to={`/learn/${pack._id}`} state={backToState}>
+              <Button semantic>
+                <AiOutlineAudit />
+              </Button>
+            </NavLink>
 
-          <Button semantic disabled={pack.user_id !== id} onClick={modalDelete}>
-            <AiOutlineDelete />
-          </Button>
+            <Button
+              semantic
+              disabled={shouldDisableActions}
+              onClick={modalDelete}
+            >
+              <AiOutlineDelete />
+            </Button>
 
-          <Button semantic disabled={pack.user_id !== id} onClick={modalEdit}>
-            <AiOutlineEdit />
-          </Button>
+            <Button
+              semantic
+              disabled={shouldDisableActions}
+              onClick={modalEdit}
+            >
+              <AiOutlineEdit />
+            </Button>
+          </Flex>
         </TableBodyItem>
       </TableBodyLine>
     );
