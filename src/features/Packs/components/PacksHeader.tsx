@@ -38,7 +38,7 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
     const modalAddPack = () =>
       dispatch(packsModalsAC.setAddPackState({ status: true }));
     return (
-      <Flex justify={"space-between"} fWrap={"wrap"}>
+      <Flex justify={"space-between"} fWrap={"wrap"} sx={{ gap: "1rem" }}>
         <Search
           searchValue={packName}
           searchChangeHandler={changeSearchHandler}

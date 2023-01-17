@@ -1,6 +1,7 @@
 import { NavLink, useSearchParams } from "react-router-dom";
 import { Skeleton } from "@mui/material";
-
+// @ts-ignore
+import noCover from "../../../assets/img/no_cover.png";
 import { IPackResponse } from "../packsAPI";
 import React from "react";
 import { formDate } from "../../../common/utils/date";
@@ -44,16 +45,12 @@ const PackElement: React.FC<IRowProps> = React.memo(
     return (
       <TableBodyLine cols="100px minmax(100px,300px) 120px 150px minmax(100px,300px) minmax(80px,150px)">
         <TableBodyItem>
-          {isLoading ? (
-            <Skeleton />
-          ) : (
-            pack.deckCover && (
-              <img
-                src={pack.deckCover}
-                alt={"cover"}
-                style={{ width: "80px", borderRadius: "10px" }}
-              />
-            )
+          {pack.deckCover && (
+            <img
+              src={pack.deckCover.length < 40 ? noCover : pack.deckCover}
+              alt={"cover"}
+              style={{ width: "50px", borderRadius: "10px" }}
+            />
           )}
         </TableBodyItem>
         <TableBodyItem>

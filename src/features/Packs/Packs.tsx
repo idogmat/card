@@ -55,7 +55,15 @@ const Packs = () => {
   const totalPageCount = Math.ceil(cardPacksTotalCount / pageCount);
   const isParamsSet = Object.keys(params).length > 0;
   const dispatch = useAppDispatch();
-
+  const getSortPacks = params.sortPacks
+    ? {
+        direction: +params.sortPacks[0],
+        field: params.sortPacks
+          .split("")
+          .splice(1, params.sortPacks.length - 1)
+          .join(""),
+      }
+    : sortPacks;
   useEffect(() => {
     if (!isParamsSet) {
       dispatch(setPacksTC({}));
@@ -68,15 +76,7 @@ const Packs = () => {
       max: params.max,
       min: params.min,
       packName: params.packName,
-      sortPacks: params.sortPacks
-        ? {
-            direction: +params.sortPacks[0],
-            field: params.sortPacks
-              .split("")
-              .splice(1, params.sortPacks.length - 1)
-              .join(""),
-          }
-        : sortPacks,
+      sortPacks: getSortPacks,
     };
     dispatch(setPacksTC(model));
   }, [searchParams]);

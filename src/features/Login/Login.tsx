@@ -21,24 +21,19 @@ import {
 } from "../Register/RegisterStyles";
 import { Paper } from "../../common/ui-kit/Paper/Paper";
 import * as yup from "yup";
-interface ILoginErrorType {
-  email?: string;
-  password?: string;
-  rememberMe?: boolean;
-}
 
 export const basicSchema = yup.object().shape({
   email: yup.string().email("Enter valid Email").required("Required"),
-  password: yup.string().min(8).required("Required"),
+  password: yup.string().min(8, "Password is too short").required("Required"),
 });
-export const basicSchema2 = yup.object().shape({
-  email: yup.string().email("Enter valid Email").required("Required"),
-  password: yup.string().min(8).required("Required"),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref("password"), null])
-    .required("Required"),
-});
+// export const basicSchema2 = yup.object().shape({
+//   email: yup.string().email("Enter valid Email").required("Required"),
+//   password: yup.string().min(8, "Password is too short").required("Required"),
+//   confirmPassword: yup
+//     .string()
+//     .oneOf([yup.ref("password"), null])
+//     .required("Required"),
+// });
 export const Login = () => {
   // Dispatch & selectors
   const dispatch = useAppDispatch();
@@ -55,18 +50,6 @@ export const Login = () => {
       rememberMe: false,
     },
     validationSchema: basicSchema,
-    // validate: (values) => {
-    //   const errors: ILoginErrorType = {};
-    //   if (!values.email) {
-    //     errors.email = "Required field";
-    //   } else if (!validMail.test(values.email)) {
-    //     errors.email = "Invalid email address";
-    //   }
-    //   if (values.password.length < 8) {
-    //     errors.password = "Invalid password length";
-    //   }
-    //   return errors;
-    // },
     onSubmit: (values, { resetForm }) => {
       dispatch(loginTC(values));
     },
@@ -95,6 +78,7 @@ export const Login = () => {
           </Typography>
           <RegisterForm onSubmit={loginForm.handleSubmit}>
             <Input
+              type={"text"}
               error={loginHasError("email")}
               label={loginHasError("email") ? loginForm.errors.email : "Email"}
               {...loginForm.getFieldProps("email")}
@@ -103,7 +87,7 @@ export const Login = () => {
               type={showPassword ? "text" : "password"}
               error={loginHasError("password")}
               label={
-                loginHasError("confirmPassword")
+                loginHasError("password")
                   ? loginForm.errors.password
                   : "Password"
               }
