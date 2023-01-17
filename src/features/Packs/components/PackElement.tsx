@@ -1,6 +1,4 @@
 import { NavLink, useSearchParams } from "react-router-dom";
-import { Skeleton } from "@mui/material";
-// @ts-ignore
 import noCover from "../../../assets/img/no_cover.png";
 import { IPackResponse } from "../packsAPI";
 import React from "react";
@@ -49,7 +47,7 @@ const PackElement: React.FC<IRowProps> = React.memo(
             <img
               src={pack.deckCover.length < 40 ? noCover : pack.deckCover}
               alt={"cover"}
-              style={{ width: "50px", borderRadius: "10px" }}
+              style={{ width: "50px", height: "20px", borderRadius: "5px" }}
             />
           )}
         </TableBodyItem>

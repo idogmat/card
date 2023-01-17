@@ -194,7 +194,6 @@ const Packs = () => {
             handlerIsMyPack={handleChangeIsMyPack}
           />
           {/*TABLE*/}
-
           <PacksTable
             id={user._id}
             cardPacks={cardPacks}

@@ -11,6 +11,7 @@ import { Checkbox } from "../../../../common/ui-kit/Checkbox/Checkbox";
 import { Input } from "../../../../common/ui-kit/_Input/_Input";
 import { Button } from "../../../../common/ui-kit/Button/Button";
 import { MdPhotoCamera } from "react-icons/md";
+import { ModalBase } from "../../../../common/components/Modal";
 
 export const EditPack = memo(() => {
   // Dispatch & selectors
@@ -56,14 +57,9 @@ export const EditPack = memo(() => {
       );
   };
   return (
-    <Modal open={isOpen} close={handleClose}>
-      <FormInModal>
-        <Flex
-          align={"center"}
-          justify={"center"}
-          fDirection={"column"}
-          sx={{ margin: "auto", gap: "10px", padding: "5px" }}
-        >
+    <ModalBase handleClose={handleClose} modalTitle="Edit pack" open={isOpen}>
+      <Flex sx={{ padding: "0.6rem", minWidth: "22.5rem" }}>
+        <Flex fDirection="column" sx={{ gap: "0.6rem", flex: "1 1 auto" }}>
           {pack.deckCover && (
             <img
               src={pack.deckCover}
@@ -118,7 +114,7 @@ export const EditPack = memo(() => {
             </Button>
           </Flex>
         </Flex>
-      </FormInModal>
-    </Modal>
+      </Flex>
+    </ModalBase>
   );
 });

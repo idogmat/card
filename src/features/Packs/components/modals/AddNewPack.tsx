@@ -6,7 +6,7 @@ import { addNewModalSelector } from "./modalsSelectors";
 import { addPackTC } from "../../packsThunks";
 import { packsModalsAC } from "../../packsModalsSlice";
 import { getImgBase64File } from "../../../../common/utils/base64Converter";
-import { FormInModal, Modal } from "../../../../common/ui-kit/Modal/Modal";
+import { ModalBase } from "common/components/Modal";
 import { Flex } from "../../../../common/ui-kit/Flex/Flex";
 import { Input } from "../../../../common/ui-kit/_Input/_Input";
 import { Checkbox } from "../../../../common/ui-kit/Checkbox/Checkbox";
@@ -58,14 +58,9 @@ export const AddNewPack = React.memo(() => {
   };
 
   return (
-    <Modal open={isOpen} close={handleClose}>
-      <FormInModal>
-        <Flex
-          align={"center"}
-          justify={"center"}
-          fDirection={"column"}
-          sx={{ margin: "auto", gap: "10px", padding: "5px" }}
-        >
+    <ModalBase handleClose={handleClose} modalTitle="Add pack" open={isOpen}>
+      <Flex sx={{ padding: "0.6rem", minWidth: "22.5rem" }}>
+        <Flex fDirection="column" sx={{ gap: "0.6rem", flex: "1 1 auto" }}>
           {newPackData.deckCover && (
             <img
               src={newPackData.deckCover}
@@ -123,7 +118,7 @@ export const AddNewPack = React.memo(() => {
             </Button>
           </Flex>
         </Flex>
-      </FormInModal>
-    </Modal>
+      </Flex>
+    </ModalBase>
   );
 });

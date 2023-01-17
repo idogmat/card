@@ -1,13 +1,14 @@
 import { useAllSelector, useAppDispatch } from "../../../../common/hooks";
 import { IPackResponse } from "../../packsAPI";
 import { deleteModalSelector } from "./modalsSelectors";
-import { memo } from "react";
+import React, { memo } from "react";
 import { packsModalsAC } from "../../packsModalsSlice";
 import { removePackTC } from "../../packsThunks";
 import { FormInModal, Modal } from "../../../../common/ui-kit/Modal/Modal";
 import { Flex } from "../../../../common/ui-kit/Flex/Flex";
 import { Typography } from "../../../../common/ui-kit/Text/Typography";
 import { Button } from "../../../../common/ui-kit/Button/Button";
+import { ModalBase } from "../../../../common/components/Modal";
 
 export const DeletePack = memo(() => {
   // Dispatch & selectors
@@ -29,13 +30,9 @@ export const DeletePack = memo(() => {
   };
 
   return (
-    <Modal open={isOpen} close={handleClose}>
-      <FormInModal size={"30%"}>
-        <Flex
-          align={"center"}
-          justify={"center"}
-          sx={{ margin: "auto", display: "flex", flexDirection: "column" }}
-        >
+    <ModalBase handleClose={handleClose} modalTitle="delete pack" open={isOpen}>
+      <Flex sx={{ padding: "0.6rem", minWidth: "22.5rem" }}>
+        <Flex fDirection="column" sx={{ gap: "0.6rem", flex: "1 1 auto" }}>
           <Typography>
             Do you really want to remove <b>{pack.name}</b>
           </Typography>
@@ -52,7 +49,7 @@ export const DeletePack = memo(() => {
             </Button>
           </Flex>
         </Flex>
-      </FormInModal>
-    </Modal>
+      </Flex>
+    </ModalBase>
   );
 });
