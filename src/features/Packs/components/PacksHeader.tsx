@@ -20,6 +20,7 @@ interface IHeaderProps {
   maxCardsCount: number;
   changeRangeHandler: (valueRange: number[]) => void;
   removeSort: () => void;
+  cardPacksTotalCount: number;
 }
 const PacksHeader: FC<IHeaderProps> = React.memo(
   ({
@@ -33,6 +34,7 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
     handlerIsMyPack,
     minCardsCount,
     maxCardsCount,
+    cardPacksTotalCount,
   }) => {
     const dispatch = useAppDispatch();
     const modalAddPack = () =>
@@ -59,13 +61,15 @@ const PacksHeader: FC<IHeaderProps> = React.memo(
           </MyPackButton>
         </Flex>
 
-        <RangeSlider
-          minCardsCount={minCardsCount}
-          maxCardsCount={maxCardsCount}
-          max={max}
-          min={min}
-          onChangeSlider={changeRangeHandler}
-        />
+        {max && (
+          <RangeSlider
+            minCardsCount={minCardsCount}
+            maxCardsCount={maxCardsCount}
+            max={max}
+            min={min}
+            onChangeSlider={changeRangeHandler}
+          />
+        )}
         <Button onClick={modalAddPack}>Add new Pack</Button>
         <Button semantic onClick={() => removeSort()}>
           <IoTrashBin />

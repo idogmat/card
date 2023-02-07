@@ -48,8 +48,8 @@ export const setPacksTC = createAppAsyncThunk(
         });
         return {
           packs: res.data,
-          min: model.min || min,
-          max: model.max || max,
+          min: model.min || res.data.minCardsCount,
+          max: model.max || res.data.maxCardsCount,
           packName: model.packName || packName,
           isMyPack: model.isMyPack === "true",
           sortPacks: sortPacks,

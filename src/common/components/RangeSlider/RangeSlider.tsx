@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Range } from "react-range";
 import { Flex } from "../../ui-kit/Flex/Flex";
 import {
@@ -9,6 +9,7 @@ import {
   ThumbView,
 } from "../../ui-kit/RangeSlider/RangeSlider";
 import { Output } from "../../../features/Packs/PacksStyle";
+import { useAppDispatch } from "../../hooks";
 
 interface ISuperRangeProps {
   onChangeSlider: (valueRange: number[]) => void;

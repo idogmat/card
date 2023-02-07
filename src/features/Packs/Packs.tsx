@@ -191,6 +191,7 @@ const Packs = () => {
             minCardsCount={minCardsCount}
             maxCardsCount={maxCardsCount}
             handlerIsMyPack={handleChangeIsMyPack}
+            cardPacksTotalCount={cardPacksTotalCount}
           />
           {/*TABLE*/}
           <PacksTable
