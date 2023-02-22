@@ -2,7 +2,7 @@
   "name": "fd",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://expppirience.github.io/cards/",
+  "homepage": "https://idogmat.github.io/cards",
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
