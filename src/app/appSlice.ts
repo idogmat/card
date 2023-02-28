@@ -20,17 +20,17 @@ const appSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
-    setIsLoading: (draft, action: PayloadAction<{ isLoading: boolean }>) => {
-      draft.isLoading = action.payload.isLoading;
+    setIsLoading: (state, action: PayloadAction<{ isLoading: boolean }>) => {
+      state.isLoading = action.payload.isLoading;
     },
-    setError: (draft, action: PayloadAction<{ error: string | null }>) => {
-      draft.error = action.payload.error;
+    setError: (state, action: PayloadAction<{ error: string | null }>) => {
+      state.error = action.payload.error;
     },
     setSuccessMessage: (
-      draft,
+      state,
       action: PayloadAction<{ message: string | null }>
     ) => {
-      draft.successMessage = action.payload.message;
+      state.successMessage = action.payload.message;
     },
   },
   extraReducers: (builder) => {
