@@ -28,7 +28,7 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(loginTC.fulfilled, (state, action) => {
-        return action.payload.user;
+        return action && (action.payload.user as IUser);
       })
       .addCase(logOutTC.fulfilled, (state, action) => {
         return {} as IUser;

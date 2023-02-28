@@ -7,7 +7,10 @@ export function hasError(form: FormikProps<any>, prop: string): boolean {
   return !!form.errors[prop] && !!form.touched[prop];
 }
 
-export const errorHandlingThunk = async (thunkAPI: any, logic: Function) => {
+export const errorHandlingThunk = async (
+  thunkAPI: any,
+  logic: (a?: unknown) => any
+) => {
   thunkAPI.dispatch(AppAC.setIsLoading({ isLoading: true }));
   try {
     return await logic();

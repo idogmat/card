@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react";
 
-export const useEscapeKey = (handleClose: Function) => {
+export const useEscapeKey = (handleClose: () => void) => {
   const handleEscPress = useCallback(
     (event: KeyboardEvent) => {
       if (event.key === "Escape") handleClose();

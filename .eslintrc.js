@@ -1,0 +1,100 @@
+module.exports = {
+  env: {
+    browser: true,
+    es6: true,
+    node: true,
+    mocha: true,
+  },
+  parserOptions: {
+    sourceType: "module",
+    ecmaVersion: "latest",
+  },
+  overrides: [
+    {
+      files: "wdio.conf.js",
+      extends: ["eslint:recommended"],
+      rules: {
+        "max-len": "off",
+      },
+    },
+    {
+      files: ["test/e2e/*.js"],
+      globals: {
+        $: false,
+        browser: false,
+      },
+      extends: ["eslint:recommended"],
+      rules: {
+        "comma-dangle": [
+          "error",
+          {
+            arrays: "always-multiline",
+            objects: "always-multiline",
+            imports: "always-multiline",
+            exports: "always-multiline",
+            functions: "never",
+          },
+        ],
+        indent: ["error", 2],
+        "no-invalid-this": "off",
+        "max-len": [
+          2,
+          {
+            ignorePattern:
+              "^\\s*import|= require\\(|^\\s*it\\(|^\\s*describe\\(",
+            ignoreUrls: true,
+          },
+        ],
+        "space-before-function-paren": [
+          "error",
+          {
+            anonymous: "always",
+            named: "never",
+            asyncArrow: "always",
+          },
+        ],
+      },
+    },
+    {
+      files: "src/**/*.ts",
+      parser: "@typescript-eslint/parser",
+      extends: ["plugin:@typescript-eslint/recommended"],
+      rules: {
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/no-use-before-define": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/camelcase": "off",
+        "comma-dangle": [
+          "error",
+          {
+            arrays: "always-multiline",
+            objects: "always-multiline",
+            imports: "always-multiline",
+            exports: "always-multiline",
+            functions: "never",
+          },
+        ],
+        indent: ["error", 2],
+        "node/no-missing-import": "off",
+        "node/no-unsupported-features/es-syntax": "off",
+        "node/no-missing-require": "off",
+        "node/shebang": "off",
+        "no-dupe-class-members": "off",
+        "space-before-function-paren": [
+          "error",
+          {
+            anonymous: "always",
+            named: "never",
+            asyncArrow: "always",
+          },
+        ],
+      },
+      parserOptions: {
+        ecmaVersion: 2018,
+        sourceType: "module",
+      },
+    },
+  ],
+};

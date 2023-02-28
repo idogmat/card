@@ -1,5 +1,5 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { logOutTC, loginTC } from "../Login/loginThunks";
+import { createSlice } from "@reduxjs/toolkit";
+import { loginTC, logOutTC } from "../Login/loginThunks";
 
 import { authMeTC } from "./authThunks";
 

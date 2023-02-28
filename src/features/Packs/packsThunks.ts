@@ -21,7 +21,7 @@ export const setPacksTC = createAppAsyncThunk(
   "packs/setPacks",
   async (model: Partial<IGetModel>, thunkAPI) => {
     return errorHandlingThunk(thunkAPI, async () => {
-      const { pageCount, page, min, max, sortPacks, packName, isMyPack } =
+      const { pageCount, page, min, max, sortPacks, packName } =
         thunkAPI.getState().packs;
       if (Object.keys(model).length === 0) {
         const res = await PacksAPI.getPacks({});

@@ -1,7 +1,4 @@
-import {
-  packsModalsAC,
-  packsModalsReducer,
-} from "../features/Packs/packsModalsSlice";
+import { packsModalsReducer } from "../features/Packs/packsModalsSlice";
 
 import { appReducer } from "./appSlice";
 import { authReducer } from "../features/Auth/authSlice";
