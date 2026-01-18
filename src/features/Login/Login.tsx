@@ -66,8 +66,7 @@ export const Login = () => {
           <RegisterForm onSubmit={loginForm.handleSubmit}>
             <Input
               type={"text"}
-              error={loginHasError("email")}
-              label={loginHasError("email") ? loginForm.errors.email : "Email"}
+              error={false}
               {...loginForm.getFieldProps("email")}
             ></Input>
             <Input
@@ -108,7 +107,7 @@ export const Login = () => {
             </Typography>
             <Button
               type={"submit"}
-              disabled={loginHasError("email") || loginHasError("password")}
+              disabled={loginHasError("password")}
             >
               Sign in
             </Button>

@@ -17,8 +17,13 @@ export interface ISetPWD {
   resetPasswordToken: string;
 }
 
-const login = (user: IUserFields) => {
-  return configuredAxios.post<ILoginUser>("auth/login", user);
+const login = async (user: IUserFields) => {
+  // console.log('ok')
+  // const res = await fetch('http://localhost:3000/')
+  // console.log(res)
+  // const result = await configuredAxios.get<any>("/");
+  // console.log(result)
+  return configuredAxios.post<ILoginUser>("auth/login", { email: user.email, password: user.password });
 };
 
 const recoveryPassword = (requestData: IRecoveryRequest) => {
